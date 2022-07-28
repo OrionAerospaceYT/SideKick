@@ -53,6 +53,8 @@ Copy-Item -LiteralPath $config -Destination $target -Force
 
 arduino-cli core install teensy:avr
 
+Set-Location $exec_dir
+
 $exe_base = "\src"
 $exe_target = Join-Path $exec_dir $exe_base
 $documents = Join-Path $base $uservar
