@@ -58,16 +58,15 @@ Set-Location $exec_dir
 $exe_base = "\src"
 $exe_target = Join-Path $exec_dir $exe_base
 $documents = Join-Path $base $uservar
-$docs_exten = "\Documents\SideKick"
+$docs_exten = "\Documents\src"
 $documents_final = Join-Path $documents $docs_exten
 Write-Output $exe_target
 Write-Output $documents_final
-
-#Move-Item -LiteralPath $exe_target -Destination $documents_final
-#$current = Join-Path $documents_final $exe_base
-#$new_name = "\SideKick"
-#$final = Join-Path $documents $new_name
-#Rename-Item -Path $current -NewName $final
+Move-Item -LiteralPath $exe_target -Destination $documents_final
+$current = Join-Path $documents_final $exe_base
+$new_name = "\SideKick"
+$final = Join-Path $documents $new_name
+Rename-Item -Path $current -NewName $final
 
 $new_exe = "\Sidekick.exe"
 $comb_exe = Join-Path $final $new_exe
