@@ -35,10 +35,10 @@ class FileManager():
     def add_new_project(self, name):
         if name in os.listdir(f'./Projects'):
             return 0 # Used for error handling, if this is returned red html is displayed
-        source  = f'./ConsciOSs/Source'
+        source  = f'./ConsciOS/Source'
         destination = f'./Projects/{name}'
         shutil.copytree(source, destination)
-        lib_source = f'./ConsciOSs/Libraries'
+        lib_source = f'./ConsciOS/Libraries'
         lib_destination = f'./Projects/{name}/Libraries'
         shutil.copytree(lib_source, lib_destination)
         os.rename(f'./Projects/{name}/PROJECT.ino', f'./Projects/{name}/{name}.ino')
