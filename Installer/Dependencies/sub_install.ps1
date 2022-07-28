@@ -57,7 +57,7 @@ Set-Location $exec_dir
 
 $exe_base = "\src"
 $exe_target = Join-Path $exec_dir $exe_base
-$documents = Join-Path $base $uservar
+$documents = Join-Path $base $usr_var
 $docs_exten = "\Documents\"
 $documents_final = Join-Path $documents $docs_exten
 Write-Output $exe_target
