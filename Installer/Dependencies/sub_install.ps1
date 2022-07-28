@@ -52,3 +52,27 @@ Move-Item -LiteralPath package_teensy_index.json -Destination $target -Force
 Copy-Item -LiteralPath $config -Destination $target -Force
 
 arduino-cli core install teensy:avr
+
+$exe_base = "\src"
+$exe_target = Join-Path $exec_dir $exe_base
+$documents = Join-Path $base $uservar
+$docs_exten = "\Documents"
+$documents_final = Join-Path $documents $docs_exten
+Move-Item -LiteralPath $exe_target -Destination $documents_final
+$current = Join-Path $documents_final $exe_base
+$new_name = "\SideKick"
+$final = Join-Path $documents $new_name
+Rename-Item -Path $current -NewName $final
+
+$new_exe = "\Sidekick.exe"
+$comb_exe = Join-Path $final $new_exe
+
+$SourceExe = $comb_exe
+$desktop = "\Desktop"
+$desktop_final = Join-Path $base $usr_var
+$DestinationPath = Join-Path $desktop_final $desktop
+
+$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut($DestinationPath)
+$Shortcut.TargetPath = $SourceExe
+$Shortcut.Save()
