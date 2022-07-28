@@ -62,10 +62,10 @@ $docs_exten = "\Documents\"
 $documents_final = Join-Path $documents $docs_exten
 Write-Output $exe_target
 Write-Output $documents_final
-Move-Item -Path $exe_target -Destination $documents_final
+Get-ChildItem -Path $exe_target -Recurse | Move-Item -Path $exe_target -Destination $documents_final
 $current = Join-Path $documents_final $exe_base
 $new_name = "\SideKick"
-$final = Join-Path $documents $new_name
+$final = Join-Path $documents_final $new_name
 Rename-Item -Path $current -NewName $final
 
 $new_exe = "\Sidekick.exe"
