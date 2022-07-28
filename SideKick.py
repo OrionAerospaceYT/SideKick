@@ -1,16 +1,3 @@
-#
-# Version 2.2 - OpenGL and PyQTGraphing
-#
-# Graphing and Terminal are finished!
-# Backend needs to be sped up... very slow
-#
-# Author - Alexander Armitage
-#
-# Sidekick - GUI
-#
-# 08/05/2022
-#
-
 from Graphing import Graphing
 from Backend import DataHandler
 from FileManager import FileManager
