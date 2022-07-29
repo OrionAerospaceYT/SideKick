@@ -25,5 +25,4 @@ def install():
     source = "./Dependencies/src"
     destination = f"C:/Users/{user}/Documents/SideKick"
     shutil.copytree(source, destination)
-
-    os.rmdir("./Dependencies/src")
+    shutil.rmtree("./Dependencies/src")

@@ -33,9 +33,9 @@ class Install(qtw.QMainWindow):
 
         #print(SK_Script.is_admin)
         if is_admin:
-            self.i += 0.2
+            self.i += 1
             if self.i < 96:
-                self.ui.progressBar.setValue(self.i)
+                self.ui.progressBar.setValue(int(self.i))
             elif not len(threading.enumerate()) > 2:
                 self.ui.progressBar.setValue(100)
                 if self.i > 120:
