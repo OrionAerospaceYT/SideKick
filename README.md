@@ -18,7 +18,7 @@ Currently this entire ecosystem is ina "pre-alpha"
 
 # Hardware
 
-Custom SideKick Hardware will be availabile for purchase soon! Register Interest <a href = https://docs.google.com/forms/d/e/1FAIpQLSd36gO5EY-KUUJ7Ppadt0nrD7Khohj1LoGKAEagtOyS_skXQg/viewform?usp=sf_link>HERE</a>
+Custom SideKick Hardware will be availabile for purchase soon! Register Interest <a href = 'https://docs.google.com/forms/d/e/1FAIpQLSd36gO5EY-KUUJ7Ppadt0nrD7Khohj1LoGKAEagtOyS_skXQg/viewform?usp=sf_link'>HERE</a>
 
 Currently all Arduino, Teensy boards are supported and most SAMD boards by ConsciOS and the GUI.    
 
