@@ -33,7 +33,7 @@ class Install(qtw.QMainWindow):
 
         #print(SK_Script.is_admin)
         if is_admin:
-            self.i += 1
+            self.i += 0.1
             if self.i < 96:
                 self.ui.progressBar.setValue(int(self.i))
             elif not len(threading.enumerate()) > 2:
@@ -50,7 +50,7 @@ class Install(qtw.QMainWindow):
             elif self.i < 95:
                 self.ui.installing.setHtml("<p align=\"center\" style=\" margin-top:40px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">Downloading SideKick...</span></p>")
             else:
-                self.ui.installing.setHtml("<p align=\"center\" style=\" margin-top:40px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">Done!</span></p>")
+                self.ui.installing.setHtml("<p align=\"center\" style=\" margin-top:40px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">Moving SideKick...</span></p>")
 
 if __name__ == "__main__":
     install_script = threading.Thread(target=SK_Script.install)

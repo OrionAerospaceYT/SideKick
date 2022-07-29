@@ -19,7 +19,10 @@ def install():
             sys.exit()
 
     p = subprocess.run(["powershell.exe",
-              "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass \n ./Dependencies/sub_install.ps1"], stdin=subprocess.DEVNULL, capture_output=True, text=True)
+              "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass"])
+
+    p = subprocess.run(["powershell.exe",
+              "./Dependencies/sub_install.ps1"])
 
     user = os.getlogin()
     source = "./Dependencies/src"
