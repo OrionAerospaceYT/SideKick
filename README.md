@@ -8,6 +8,7 @@ Table of Contents
 *[Getting Started?](#Getting-Started)
 *[What is SideKick GUI?](#SideKick-GUI)
 *[What is ConsciOS?](#ConsciOS)
+---
 
 # What is SideKick
 
