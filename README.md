@@ -1,4 +1,4 @@
-#SideKick
+# SideKick
 <img src = https://i.imgur.com/AurZtde.png> </img>
 
 
