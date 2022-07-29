@@ -3,16 +3,25 @@
 
 Table of Contents 
 ====================
-* [What is SideKick?](#What-is-SideKick)
+* [What is SideKick?](#What-is-SideKick?)
 * [What does it run on?](#Hardware)
 * [Getting Started?](#Getting-Started)
 * [What is SideKick GUI?](#SideKick-GUI)
 * [What is ConsciOS?](#ConsciOS)
 ---
 
-# What is SideKick
+# What is SideKick?
+
+An expansion/offshoot of the <a href = https://www.arduino.cc/>Arduino</a> ecosystem geared towards more advanced robotics projects. We got tired of using breadboards and rewriting similar code for various robotics projects, so we started working on SideKick -- An advanced framework and ecosystem designed to make the prototyping process for robotics faster.
+
+Currently this entire ecosystem is ina "pre-alpha"
 
 # Hardware
+
+Custom SideKick Hardware will be availabile for purchase soon!<a href = https://docs.google.com/forms/d/e/1FAIpQLSd36gO5EY-KUUJ7Ppadt0nrD7Khohj1LoGKAEagtOyS_skXQg/viewform?usp=sf_link> >>Register Interest NOW<< </a>
+
+Currently all Arduino, Teensy boards are supported and most SAMD boards by ConsciOS and the GUI.    
+
 
 # SideKick GUI
 
@@ -106,3 +115,4 @@ pip install PyQt5
 pip install serial
 pip install pyqtgraph
 ```
+# ConsciOS
