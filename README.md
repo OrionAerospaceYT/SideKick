@@ -1,6 +1,17 @@
 # SideKick
 <img src = https://i.imgur.com/AurZtde.png> </img>
 
+Table of Contents 
+====================
+*[What is SideKick?](#What-is-SideKick)
+*[What does it run on?](#Hardware)
+*[Getting Started?](#Getting-Started)
+*[What is SideKick GUI?](#SideKick-GUI)
+*[What is ConsciOS?](#ConsciOS)
+
+# What is SideKick
+
+# Hardware
 
 # SideKick GUI
 
