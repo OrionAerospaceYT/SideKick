@@ -53,30 +53,30 @@ Copy-Item -LiteralPath $config -Destination $target -Force
 
 arduino-cli core install teensy:avr
 
-Set-Location $exec_dir
+#Set-Location $exec_dir
 
-$exe_base = "\src"
-$exe_target = Join-Path $exec_dir $exe_base
-$documents = Join-Path $base $usr_var
-$docs_exten = "\Documents\"
-$documents_final = Join-Path $documents $docs_exten
-Write-Output $exe_target
-Write-Output $documents_final
-Get-ChildItem -Path $exe_target -Recurse | Move-Item -Path $exe_target -Destination $documents_final
-$current = Join-Path $documents_final $exe_base
-$new_name = "\SideKick"
-$final = Join-Path $documents_final $new_name
-Rename-Item -Path $current -NewName $final
+#$exe_base = "\src"
+#$exe_target = Join-Path $exec_dir $exe_base
+#$documents = Join-Path $base $usr_var
+#$docs_exten = "\Documents\"
+#$documents_final = Join-Path $documents $docs_exten
+#Write-Output $exe_target
+#Write-Output $documents_final
+#Get-ChildItem -Path $exe_target -Recurse | Move-Item -Path $exe_target -Destination $documents_final
+#$current = Join-Path $documents_final $exe_base
+#$new_name = "\SideKick"
+#$final = Join-Path $documents_final $new_name
+#Rename-Item -Path $current -NewName $final
 
-$new_exe = "\Sidekick.exe"
-$comb_exe = Join-Path $final $new_exe
+#$new_exe = "\Sidekick.exe"
+#$comb_exe = Join-Path $final $new_exe
 
-$SourceExe = $comb_exe
-$desktop = "\Desktop"
-$desktop_final = Join-Path $base $usr_var
-$DestinationPath = Join-Path $desktop_final $desktop
+#$SourceExe = $comb_exe
+#$desktop = "\Desktop"
+#$desktop_final = Join-Path $base $usr_var
+#$DestinationPath = Join-Path $desktop_final $desktop
 
-$WshShell = New-Object -comObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut($DestinationPath)
-$Shortcut.TargetPath = $SourceExe
-$Shortcut.Save()
+#$WshShell = New-Object -comObject WScript.Shell
+#$Shortcut = $WshShell.CreateShortcut($DestinationPath)
+#$Shortcut.TargetPath = $SourceExe
+#$Shortcut.Save()
