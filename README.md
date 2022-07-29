@@ -1,3 +1,7 @@
+#SideKick
+<img src = https://i.imgur.com/AurZtde.png> </img>
+
+
 # SideKick GUI
 
 <img src = https://i.imgur.com/7que6wv.png></img>
