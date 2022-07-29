@@ -3,11 +3,11 @@
 
 Table of Contents 
 ====================
-*[What is SideKick?](#What-is-SideKick)
-*[What does it run on?](#Hardware)
-*[Getting Started?](#Getting-Started)
-*[What is SideKick GUI?](#SideKick-GUI)
-*[What is ConsciOS?](#ConsciOS)
+* [What is SideKick?](#What-is-SideKick)
+* [What does it run on?](#Hardware)
+* [Getting Started?](#Getting-Started)
+* [What is SideKick GUI?](#SideKick-GUI)
+* [What is ConsciOS?](#ConsciOS)
 ---
 
 # What is SideKick
