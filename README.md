@@ -122,5 +122,6 @@ However for the python code you will need to:
 pip install PyQt5
 pip install serial
 pip install pyqtgraph
+pip install threading
 ```
 # ConsciOS
