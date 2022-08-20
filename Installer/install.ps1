@@ -56,7 +56,7 @@ if ($sidekick_dir -eq 0) {
     ## TO DO:
 }
 if ($teensy_package_installed -eq 0 ) {
-    # Downloads the teensy package - can probably be deleted
+    # Downloads the teensy package 
     Invoke-WebRequest https://www.pjrc.com/teensy/td_156/package_teensy_index.json -O package_teensy_index.json
     # Edit the provided yaml config changing temp user to username
     (Get-Content -path $config_dir -Raw) -replace 'REPLACE_USER', $username
