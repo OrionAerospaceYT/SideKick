@@ -1,4 +1,4 @@
-## NOTE: Checks to be done throughout runtime
+```## NOTE: Checks to be done throughout runtime
 
 # Define static environment variables
 $username = [system.environment]::username
@@ -15,7 +15,9 @@ $teensy_package_name = "\AppData\Local\Arduino15\package_teensy_index.json"
 $teensy_package = Join-Path $users_path $teensy_package_name
 
 $execution_dir = (Get-Item .).FullName
-/opt
+
+$config_file = "\arduino-cli.yaml"
+$config_dir =  Join-Path $execution_dir $config_file
 
 # Boolean variables for checks
 $arduino_cli_installed = 0
@@ -24,7 +26,7 @@ $teensy_package_installed = 0
 
 # Check if dependencies are installed
 if (Test-Path -Path $arduino_cli_dir) {
-    $arduino_cli_installed = 1
+    #$arduino_cli_installed = 1
     echo "arduino cli found"
 }
 if (Test-Path -Path $sidekick_dir) {
@@ -40,10 +42,13 @@ if (Test-Path -Path $teensy_package) {
 if ($arduino_cli_installed -eq 0) {
     # Downloads the arduino cli
     Invoke-WebRequest https://downloads.arduino.cc/arduino-cli/nightly/arduino-cli_nightly-latest_Windows_64bit.zip -O arduino-cli.zip
+    # Unzips the arduino-cli download
     Expand-Archive -LiteralPath arduino-cli.zip -DestinationPath arduino-cli
+    # Deletes the arduino-cli.zip
     Remove-Item ./arduino-cli.zip
     # Runs arduino-cli commands
     ./arduino-cli/arduino-cli.exe core update-index
+    ./arduino-cli/arduino-cli.exe config init
     ./arduino-cli/arduino-cli.exe core install arduino:avr
     ./arduino-cli/arduino-cli.exe core install arduino:samd
 }
@@ -51,14 +56,13 @@ if ($sidekick_dir -eq 0) {
     ## TO DO:
 }
 if ($teensy_package_installed -eq 0 ) {
-    # Downloads the teensy package
+    # Downloads the teensy package - can probably be deleted
     Invoke-WebRequest https://www.pjrc.com/teensy/td_156/package_teensy_index.json -O package_teensy_index.json
-    # Move the provided yaml to the arduino15 dir 
-    Move-Item -LiteralPath arduino-cli.yaml -Destination $arduino_cli_dir 
-    # Edit the provided yaml config changing temp user to username  
-    (Get-Content -path $config -Raw) -replace 'REPLACE_USER', $username
-
-    ./arduino-cli/arduino-cli.exe core install teensy
+    # Edit the provided yaml config changing temp user to username
+    (Get-Content -path $config_dir -Raw) -replace 'REPLACE_USER', $username
+    # Move the provided yaml to the arduino15 dir
+    Move-Item -LiteralPath $config_dir -Destination $arduino_cli_dir -Force
+    ./arduino-cli/arduino-cli.exe core install teensy:avr
 }
 
 # Defines variables for downloads
@@ -71,3 +75,5 @@ if ($teensy_package_installed -eq 0 ) {
 
 # Finished outputs
 #./arduino-cli/arduino-cli.exe board listall
+```
+```
