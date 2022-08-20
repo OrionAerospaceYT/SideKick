@@ -15,6 +15,7 @@ $teensy_package_name = "\AppData\Local\Arduino15\package_teensy_index.json"
 $teensy_package = Join-Path $users_path $teensy_package_name
 
 $execution_dir = (Get-Item .).FullName
+/opt
 
 # Boolean variables for checks
 $arduino_cli_installed = 0
@@ -52,7 +53,11 @@ if ($sidekick_dir -eq 0) {
 if ($teensy_package_installed -eq 0 ) {
     # Downloads the teensy package
     Invoke-WebRequest https://www.pjrc.com/teensy/td_156/package_teensy_index.json -O package_teensy_index.json
-    ./arduino-cli/arduino-cli.exe config init
+    # Move the provided yaml to the arduino15 dir 
+    Move-Item -LiteralPath arduino-cli.yaml -Destination $arduino_cli_dir 
+    # Edit the provided yaml config changing temp user to username  
+    (Get-Content -path $config -Raw) -replace 'REPLACE_USER', $username
+
     ./arduino-cli/arduino-cli.exe core install teensy
 }
 
