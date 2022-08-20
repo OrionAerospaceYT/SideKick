@@ -1,4 +1,4 @@
-```## NOTE: Checks to be done throughout runtime
+## NOTE: Checks to be done throughout runtime
 
 # Define static environment variables
 $username = [system.environment]::username
@@ -75,5 +75,3 @@ if ($teensy_package_installed -eq 0 ) {
 
 # Finished outputs
 #./arduino-cli/arduino-cli.exe board listall
-```
-```
