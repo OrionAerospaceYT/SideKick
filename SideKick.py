@@ -20,7 +20,7 @@ class EventHandler():
     def launchGraphing(self, value=None, parent=None):
         app = qtw.QApplication(sys.argv)
         app.setStyleSheet(open("Ui/Style.css", "r").read())
-        app_icon = qtg.QIcon("Ui/Orion.ico")
+        app_icon = qtg.QIcon("Ui/SideKick.ico")
         app.setWindowIcon(app_icon)
         self.graphing = Graphing(parent)
         self.graphing.show()

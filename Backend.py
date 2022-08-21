@@ -70,13 +70,7 @@ class DataHandler():
             for item in output[x]:
                 value = item
 
-                # .isnumeric() doesnt work on - in string so i had to add this code
-                if item[0] == "-":
-                    value = value.replace("-", "")
-                    if value.isnumeric():
-                        item = -float(item) # makes float negative again
-
-                # checks if the data is a number
+                ## checks if the data is a number
                 if value.isnumeric():
                     item = float(item)
 
@@ -204,12 +198,11 @@ class DataHandler():
         # Checks if device has been defined and if it has, gets the data from the serial device
         if self.device != None:
             self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
-
         # Keeps buffer size small to save memory.
         # Saves two lines as one is complete and the other may be incomplete.
-        if len(self.buffer_string.split("\n")) > 2:
-            raw_data = self.buffer_string.split("\n")[-2]
-            self.buffer_string = self.buffer_string.split("\n")[-2]
+        if len(self.buffer_string.split("\r")) > 3:
+            raw_data = self.buffer_string.split("\r")[-3]
+            self.buffer_string = self.buffer_string.split("\r")[-3]
         else:
             raw_data = ""
 
@@ -290,12 +283,12 @@ class DataHandler():
             board = __main__.supported_devices[__main__.eventHandler.graphing.ui.device.currentText()]
 
             # Compiles the coad before upload and gets errors:
-            compile_cmd = f'arduino-cli compile --fqbn {board} {project}.ino'
-            self.compile_output = subprocess.run(compile_cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True).stdout.strip("\n")
+            compile_cmd = f'\"C:/Program Files/SideKick/arduino-cli/arduino-cli.exe\" compile --fqbn {board} {project}.ino'
+            self.compile_output = os.popen(compile_cmd).read()
 
             # Uploads the code and gets errors.
-            upload_cmd = f'arduino-cli upload -p {port} --fqbn {board} {project}.ino'
-            self.upload_output = subprocess.run(upload_cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True).stdout.strip("\n")
+            upload_cmd = f'\"C:/Program Files/SideKick/arduino-cli/arduino-cli.exe\" upload -p {port} --fqbn {board} {project}.ino'
+            self.upload_output = os.popen(upload_cmd).read()
 
         # If no board is selected, displays error.
         else:
@@ -304,34 +297,12 @@ class DataHandler():
 
     # Returns the HTML for the errors to be displayed.
     def process_errors(self):
-
-        # Splits upload messages into errors
-        terminal_message = []
-        errors = self.compile_output.split("error: ")
-        i = 0
-
-        # Removes the parts of the error message not to be displayed.
-        for error in errors:
-            if i >= 1:
-                if "In file included" in error:
-                    error = error.split("In file included")
-                elif ".[" in error:
-                    error = error.split("[")
-                else:
-                    error = error.split("C:")
-                terminal_message.append("Error: " + error[0])
-            i += 1
-
-        # Returns 0 if there are no errors.
-        if len(terminal_message) == 0:
-            return 0
-
-        # Sets the HTML to be displayed on screen.
-        self.compile_output = ""
-        for item in terminal_message:
-            self.compile_output += f"""<p><font color="#FF0C0C">{item.strip()}<br></p?"""
-
-        return 1
+        print(self.compile_output)
+        if "error" in self.compile_output:
+            self.compile_output = f"""<font color="#FF0C0C">{self.compile_output}<br>"""
+            return True
+        else:
+            return False
 
     # This code runs upload on another thread to keep GUI on main thread
     def upload(self, port, project):
@@ -340,7 +311,7 @@ class DataHandler():
         self.compile_and_upload(port, project)
 
         # Parses Errors for the GUI to display.
-        if self.process_errors() == 1:
+        if self.process_errors():
             self.errors = True
         else:
             __main__.eventHandler.update_com(port)

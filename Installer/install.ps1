@@ -19,6 +19,16 @@ $execution_dir = (Get-Item .).FullName
 $config_file = "\arduino-cli.yaml"
 $config_dir =  Join-Path $execution_dir $config_file
 $cli_congif_dir = Join-Path $arduino_cli_dir $config_file
+
+$arduino_cli_exe = "\arduino-cli"
+$arduino_cli_exe_dir = Join-Path $execution_dir $arduino_cli_exe
+
+$local_teensy_package_name = "\package_teensy_index.json"
+$local_teensy_package = Join-Path $execution_dir $local_teensy_package_name
+
+# Changes the arduino-cli.yaml file's user to current user
+(Get-Content $config_dir) -Replace 'REPLACE_USER', $username | Set-Content $config_dir
+
 # Boolean variables for checks
 $arduino_cli_installed = 0
 $sidekick_dir_installed = 0
@@ -26,7 +36,7 @@ $teensy_package_installed = 0
 
 # Check if dependencies are installed
 if (Test-Path -Path $arduino_cli_dir) {
-    #$arduino_cli_installed = 1
+    $arduino_cli_installed = 1
     echo "arduino cli found"
 }
 if (Test-Path -Path $sidekick_dir) {
@@ -43,7 +53,7 @@ if ($arduino_cli_installed -eq 0) {
     # Downloads the arduino cli
     Invoke-WebRequest https://downloads.arduino.cc/arduino-cli/nightly/arduino-cli_nightly-latest_Windows_64bit.zip -O arduino-cli.zip
     # Unzips the arduino-cli download
-    Expand-Archive -LiteralPath arduino-cli.zip -DestinationPath arduino-cli
+    Expand-Archive -LiteralPath arduino-cli.zip -DestinationPath arduino-cli -Force
     # Deletes the arduino-cli.zip
     Remove-Item ./arduino-cli.zip
     # Runs arduino-cli commands
@@ -56,22 +66,18 @@ if ($sidekick_dir -eq 0) {
     ## TO DO:
 }
 if ($teensy_package_installed -eq 0 ) {
-    # Downloads the teensy package 
+    # Downloads the teensy package
     Invoke-WebRequest https://www.pjrc.com/teensy/td_156/package_teensy_index.json -O package_teensy_index.json
-    # Edit the provided yaml config changing temp user to username
-    (Get-Content -path $config_dir -Raw) -replace 'REPLACE_USER', $username
     # Move the provided yaml to the arduino15 dir
-    Move-Item -LiteralPath $config_dir -Destination $cli_congif_dir -Force
+    Copy-Item -LiteralPath $config_dir -Destination $cli_congif_dir -Force
+    # Installs teensy boards
     ./arduino-cli/arduino-cli.exe core install teensy:avr
+    # Removes the package_teensy_index.json
+    Remove-Item -Path $local_teensy_package -Force
 }
 
-# Defines variables for downloads
-
-# File managment and create SideKick directory
-
-# Download installation
+# Lists all boards installed
+./arduino-cli/arduino-cli.exe board listall
 
 # Move arduino-cli into sidekick
-
-# Finished outputs
-#./arduino-cli/arduino-cli.exe board listall
+Move-Item -LiteralPath $arduino_cli_exe_dir -Destination $sidekick_dir -Force
