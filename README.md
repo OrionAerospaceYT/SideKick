@@ -41,8 +41,10 @@ The SideKick app is designed to be used the SideKick C++ framework.<br/>
 ## Installation
 
 1) To install the App as an executable for normal use go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and download.<br/>
-2) Then double click the SK_Install.exe.
-3) The files will go to Documents/SideKick.
+2) Then unzip the downloaded file.
+3) Double click the SideKick Setup.exe
+4) Follow the instructions on the setup wizard.
+5) If you selected desktop shortcut then you may run the app from your desktop.
 
 ## Instructions
 
