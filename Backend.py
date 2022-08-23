@@ -130,7 +130,7 @@ class DataHandler():
 
     def transpose(self, list):
 
-        list = np.array(list)
+        list = np.array(list, dtype=object)
         transpose = list.T
 
         return transpose.tolist()
@@ -200,12 +200,11 @@ class DataHandler():
             self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
         # Keeps buffer size small to save memory.
         # Saves two lines as one is complete and the other may be incomplete.
-        if len(self.buffer_string.split("\r")) > 3:
-            raw_data = self.buffer_string.split("\r")[-3]
-            self.buffer_string = self.buffer_string.split("\r")[-3]
+        if len(self.buffer_string.split("\n")) > 3:
+            raw_data = self.buffer_string.split("\n")[-3]
+            self.buffer_string = self.buffer_string.split("\n")[-3]
         else:
             raw_data = ""
-
         # Keeps trying to connect to serial device if none is connected
         try:
             if self.device == None:
@@ -284,24 +283,18 @@ class DataHandler():
 
             cwd = os.getcwd()
             # Compiles the coad before upload and gets errors:
-            compile_cmd = f'"{cwd}/Externals/arduino-cli.exe" compile --fqbn {board} {project}.ino'
+            compile_cmd = f'"{cwd}/Externals/arduino-cli.exe" compile --fqbn {board} {project}'
             compile = subprocess.Popen(compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             self.compile_output, error = compile.communicate()
 
-            print(compile_cmd)
-            print(self.compile_output)
-
             # Uploads the code and gets errors.
-            upload_cmd = f'"{cwd}/Externals/arduino-cli.exe" upload -p {port} --fqbn {board} {project}.ino'
+            upload_cmd = f'"{cwd}/Externals/arduino-cli.exe" upload -p {port} --fqbn {board} {project}'
             upload = subprocess.Popen(upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             self.upload_output, error = upload.communicate()
 
-            print(upload_cmd)
-            print(self.upload_output)
         # If no board is selected, displays error.
         else:
-            __main__.data.html_header = f"""<h1><b><font color="#00f0c3">Terminal</b></h1><body>
-                                           <p><font color="#FF0C0C">Please select a board.</p>"""
+            self.compile_output = b"error: No Board selected!"
 
     # Returns the HTML for the errors to be displayed.
     def process_errors(self):

@@ -7,6 +7,8 @@ __pycache__/
 # Ignore Saves And Projects
 Projects/
 SavedData/
+dist/
+Installer/SideKick Setup.ifp
 # VI ignores
 *.swp
 *.swo

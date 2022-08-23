@@ -72,7 +72,7 @@ class EventHandler():
         com = data.com_port
         self.disconnect_device()
         self.graphing.debug = True
-        project_path = f'./Projects/{self.graphing.ui.project_paths.currentText()}/{self.graphing.ui.project_paths.currentText()}'
+        project_path = f'"C:/Users/{fileManager.user}/Documents/SideKick/SK Projects/{self.graphing.ui.project_paths.currentText()}/{self.graphing.ui.project_paths.currentText()}.ino"'
 
         # Creates upload on another thread and sets Html.
         upload = threading.Thread(target=data.upload, args=(com, project_path,))
