@@ -29,7 +29,7 @@ Video Tutorials coming soon!
 
 It is reccomended you have basic experience with Arduino, C++, or ROS before jumping in, but fresh start tutorials will be available. 
 
-Go to LINK and Download 
+Go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and Download 
 
 # SideKick GUI
 
@@ -40,7 +40,7 @@ The SideKick app is designed to be used the SideKick C++ framework.<br/>
 
 ## Installation
 
-1) To install the App as an executable for normal use go to *link* and download.<br/>
+1) To install the App as an executable for normal use go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and download.<br/>
 2) Then double click the SK_Install.exe.
 3) The files will go to Documents/SideKick.
 
