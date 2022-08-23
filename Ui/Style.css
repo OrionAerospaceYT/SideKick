@@ -136,7 +136,7 @@ QTextBrowser {
 font-size: 15px;
 border: none;
 padding-left: 40px;
-border-image: url(Ui/Schematic.png) 0 0 0 0 strech strech;
+/*border-image: url(Ui/Schematic.png) 0 0 0 0 strech strech;*/
 }
 
 QMenuBar {
