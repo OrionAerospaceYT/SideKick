@@ -282,24 +282,65 @@ class DataHandler():
         if __main__.eventHandler.graphing.ui.device.currentText() != "Select Board":
             board = __main__.supported_devices[__main__.eventHandler.graphing.ui.device.currentText()]
 
+            cwd = os.getcwd()
             # Compiles the coad before upload and gets errors:
-            compile_cmd = f'\"C:/Program Files/SideKick/arduino-cli/arduino-cli.exe\" compile --fqbn {board} {project}.ino'
-            self.compile_output = os.popen(compile_cmd).read()
+            compile_cmd = f'"{cwd}/Externals/arduino-cli.exe" compile --fqbn {board} {project}.ino'
+            compile = subprocess.Popen(compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            self.compile_output, error = compile.communicate()
+
+            print(compile_cmd)
+            print(self.compile_output)
 
             # Uploads the code and gets errors.
-            upload_cmd = f'\"C:/Program Files/SideKick/arduino-cli/arduino-cli.exe\" upload -p {port} --fqbn {board} {project}.ino'
-            self.upload_output = os.popen(upload_cmd).read()
+            upload_cmd = f'"{cwd}/Externals/arduino-cli.exe" upload -p {port} --fqbn {board} {project}.ino'
+            upload = subprocess.Popen(upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            self.upload_output, error = upload.communicate()
 
+            print(upload_cmd)
+            print(self.upload_output)
         # If no board is selected, displays error.
         else:
-            __main__data.html_header = f"""<h1><b><font color="#00f0c3">Terminal</b></h1><body>
+            __main__.data.html_header = f"""<h1><b><font color="#00f0c3">Terminal</b></h1><body>
                                            <p><font color="#FF0C0C">Please select a board.</p>"""
 
     # Returns the HTML for the errors to be displayed.
     def process_errors(self):
-        print(self.compile_output)
-        if "error" in self.compile_output:
-            self.compile_output = f"""<font color="#FF0C0C">{self.compile_output}<br>"""
+        if "error" in str(self.compile_output):
+            # Formats the output for html rather than python
+            output = self.compile_output.decode('utf-8').replace("\r\n", "<br>")
+
+            # Defines temporary variables
+            error = False
+            warning = False
+            self.compile_output = ""
+
+            # Defines colours
+            error_colour = "#ff003c"
+            warning_colour = "#ff7300"
+            default_colour = "#00c0f0"
+
+            # Iterates through each line to check for error
+            for item in output.split("<br>"):
+                # Checks for errors
+                if "error" in item:
+                    item = f"""<font color={error_colour}>{item}<font color="#00f0c3">"""
+                    error = True
+                elif error:
+                    item = f"""<font color={error_colour}>{item}<font color="#00f0c3">"""
+                    if "^" in item:
+                        error = False
+                # Checks for warnings
+                elif "warning" in item:
+                    item = f"""<font color={warning_colour}>{item}<font color="#00f0c3">"""
+                    warning = True
+                elif warning:
+                    item = f"""<font color={warning_colour}>{item}<font color="#00f0c3">"""
+                    if "^" in item:
+                        warning = False
+                # Information lines are default
+                else:
+                    item = f"""<font color={default_colour}>{item}<font color="#00f0c3">"""
+                self.compile_output += item
             return True
         else:
             return False

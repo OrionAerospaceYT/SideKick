@@ -86,8 +86,7 @@ class EventHandler():
             fileManager.start_new_save()
 
     def display_error(self):
-        self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1>{data.compile_output}
-                               <p><font color="#FF0C0C">{data.upload_output}</p>""")
+        self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1>{data.compile_output}""")
     # Loads up Orion Aerospace youtube channel
     def help(self):
         webbrowser.open("https://www.youtube.com/c/OrionAerospace", autoraise=True)
