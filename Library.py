@@ -55,6 +55,7 @@ class Library(qtw.QMainWindow):
         self.ui.install.clicked.connect(self.install)
 
     def install(self, arg):
+
         # Iterates through every Check Box to check if it is checked
         for item in self.checkBoxes:
             # Finds out if checked

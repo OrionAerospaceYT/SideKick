@@ -146,3 +146,8 @@ QMenuBar {
 QScrollArea {
   border: none;
 }
+
+/*QCheckBox styling ( the text size is too small by default )*/
+QCheckBox {
+  font-size: 15px;
+}

@@ -68,7 +68,7 @@ class Graphing(qtw.QMainWindow):
         self.ui.send.clicked.connect(__main__.eventHandler.send_serial_input_to_device)
         self.ui.record.clicked.connect(__main__.eventHandler.record)
         self.ui.lib_manager.clicked.connect(__main__.eventHandler.launchLibrary)
-
+        self.ui.update.clicked.connect(__main__.eventHandler.update_warning)
         # Adds placeholder text
         self.ui.project_name.setPlaceholderText("Enter projct name here.")
 

@@ -30,9 +30,29 @@ class EventHandler():
         self.graphing.show()
         app.exec_()
 
+    # Launches the library manager window
     def launchLibrary(self):
         self.library = Library(self.graphing)
         self.library.show()
+
+    def update_warning(self):
+        # Creates a warning pop-up
+        warning = qtw.QMessageBox()
+        # Creats a warning icon
+        warning.setIcon(qtw.QMessageBox.Warning)
+        # Sets the text of the window
+        warning.setText("Warning: ")
+        warning.setInformativeText("Library syntax may change with update\nCurrent projects may not work with new code!")
+        warning.setWindowTitle("Update Warning")
+        # Adds the OK button
+        warning.setStandardButtons(qtw.QMessageBox.Ok)
+        warning.buttonClicked.connect(self.test)
+        warning.exec_()
+
+    # Updates the ConsciOS libraries
+    def update_consciOS(self):
+        ## TODO: 
+        pass
 
     # Sends the text from terminal to device
     def send_serial_input_to_device(self):
