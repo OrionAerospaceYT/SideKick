@@ -1,3 +1,7 @@
+board_manager:
+  additional_urls: [
+https://www.pjrc.com/teensy/td_156/package_teensy_index.json
+]
 daemon:
   port: "50051"
 directories:

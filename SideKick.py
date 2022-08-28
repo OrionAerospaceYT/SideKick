@@ -1,4 +1,5 @@
 from Graphing import Graphing
+from Library import Library
 from Backend import DataHandler
 from FileManager import FileManager
 from PyQt5 import QtWidgets as qtw
@@ -8,23 +9,30 @@ import threading
 import sys
 import os
 
+# Colours are defined here
 colour_order = ["#FF0C0C", "#31f78e", "#02acf5","#fc7703","#9d03fc","#fce803","#fc03b1"]
 accent_colour = "#252530"
 text_colour = "#00f0c3"
 
+# Definition to be appended to
 supported_devices = {}
 
 class EventHandler():
 
+    # The Graphing window is ALWAYS the parent window
     # Launches the main graphing window, CSS is also used here
-    def launchGraphing(self, value=None, parent=None):
+    def launchGraphing(self):
         app = qtw.QApplication(sys.argv)
         app.setStyleSheet(open("Ui/Style.css", "r").read())
         app_icon = qtg.QIcon("Ui/SideKick.ico")
         app.setWindowIcon(app_icon)
-        self.graphing = Graphing(parent)
+        self.graphing = Graphing()
         self.graphing.show()
         app.exec_()
+
+    def launchLibrary(self):
+        self.library = Library(self.graphing)
+        self.library.show()
 
     # Sends the text from terminal to device
     def send_serial_input_to_device(self):
@@ -56,15 +64,12 @@ class EventHandler():
         if self.graphing.ui.project_name.text() == "" or self.graphing.ui.project_name.text() == "Project Name":
             data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>
                              <p><font color="#FF0C0C">Please enter a project name!</p>"""
-            self.graphing.ui.project_name.setText("Project Name")
             return 0
         if fileManager.add_new_project(self.graphing.ui.project_name.text()) == 0:
             data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>
                              <p><font color="#FF0C0C">A project with that name already exists!</p>"""
-            self.graphing.ui.project_name.setText("Project Name")
             return 0
         data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>"""
-        self.graphing.ui.project_name.setText("Project Name")
 
     # Compiles and Uploads current project
     def upload(self):

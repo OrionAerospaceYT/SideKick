@@ -310,7 +310,7 @@ class DataHandler():
             # Defines colours
             error_colour = "#ff003c"
             warning_colour = "#ff7300"
-            default_colour = "#00c0f0"
+            default_colour = "#71d9c6"
 
             # Iterates through each line to check for error
             for item in output.split("<br>"):
