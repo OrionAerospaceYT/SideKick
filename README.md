@@ -33,7 +33,6 @@ Go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases<
 
 # SideKick GUI
 
-<img src = https://i.imgur.com/7que6wv.png></img>
 This is the official SideKick app, designed to be used with SideKick hardware but may also be used with other hardware!<br/>
 The SideKick app is to be used for debugging, uploading and managing projects.<br/>
 The SideKick app is designed to be used the SideKick C++ framework.<br/>
