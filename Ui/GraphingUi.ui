@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
-    <height>560</height>
+    <width>956</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SideKick</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -91,7 +91,7 @@
       <item row="1" column="1" colspan="2">
        <widget class="QLineEdit" name="project_name">
         <property name="text">
-         <string>Project Name</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -132,7 +132,7 @@
       <item row="2" column="1">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>SideKick</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -169,6 +169,13 @@
         </property>
         <property name="text">
          <string>Upload</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QPushButton" name="lib_manager">
+        <property name="text">
+         <string>Library Manager</string>
         </property>
        </widget>
       </item>

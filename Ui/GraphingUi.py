@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 600)
+        MainWindow.resize(956, 627)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 538))
         self.centralwidget.setObjectName("centralwidget")
@@ -47,6 +47,7 @@ class Ui_MainWindow(object):
         self.baud_rate.addItem("")
         self.gridLayout.addWidget(self.baud_rate, 0, 2, 1, 1)
         self.project_name = QtWidgets.QLineEdit(self.centralwidget)
+        self.project_name.setText("")
         self.project_name.setObjectName("project_name")
         self.gridLayout.addWidget(self.project_name, 1, 1, 1, 2)
         self.top_widget = QtWidgets.QWidget(self.centralwidget)
@@ -68,6 +69,7 @@ class Ui_MainWindow(object):
         self.record.setObjectName("record")
         self.gridLayout.addWidget(self.record, 2, 0, 1, 1)
         self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setText("")
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 2, 1, 1, 1)
         self.com_ports = QtWidgets.QComboBox(self.centralwidget)
@@ -87,6 +89,9 @@ class Ui_MainWindow(object):
         self.upload.setStyleSheet("")
         self.upload.setObjectName("upload")
         self.gridLayout.addWidget(self.upload, 1, 4, 1, 1)
+        self.lib_manager = QtWidgets.QPushButton(self.centralwidget)
+        self.lib_manager.setObjectName("lib_manager")
+        self.gridLayout.addWidget(self.lib_manager, 2, 3, 1, 1)
         self.gridLayout.setColumnStretch(0, 4)
         self.gridLayout.setColumnStretch(1, 2)
         self.gridLayout.setColumnStretch(2, 2)
@@ -103,7 +108,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "SideKick"))
         self.send.setText(_translate("MainWindow", "Send"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
@@ -114,16 +119,15 @@ class Ui_MainWindow(object):
         self.baud_rate.setItemText(6, _translate("MainWindow", "256000 "))
         self.baud_rate.setItemText(7, _translate("MainWindow", "512000"))
         self.baud_rate.setItemText(8, _translate("MainWindow", "1024000"))
-        self.project_name.setText(_translate("MainWindow", "Project Name"))
         self.new_project.setText(_translate("MainWindow", "New Project"))
         self.render.setText(_translate("MainWindow", "Render"))
         self.COM.setText(_translate("MainWindow", "NC"))
         self.record.setText(_translate("MainWindow", "Record Terminal"))
-        self.label.setText(_translate("MainWindow", "SideKick"))
         self.com_ports.setItemText(0, _translate("MainWindow", "Select COM"))
         self.disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.help.setText(_translate("MainWindow", "Help"))
         self.upload.setText(_translate("MainWindow", "Upload"))
+        self.lib_manager.setText(_translate("MainWindow", "Library Manager"))
 
 
 if __name__ == "__main__":

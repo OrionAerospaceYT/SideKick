@@ -22,6 +22,10 @@ class Graphing(qtw.QMainWindow):
         for name in __main__.supported_devices:
             self.ui.device.addItem(name)
 
+        cursor = self.ui.terminal.textCursor()
+        cursor.clearSelection()
+        self.ui.terminal.setTextCursor(cursor)
+
         # Set pyqtPlot to the top widget.
         self.gui_top_graph = pg.PlotWidget()
         self.ui.gui_top_graph = qtw.QVBoxLayout()
@@ -63,6 +67,10 @@ class Graphing(qtw.QMainWindow):
         self.ui.disconnect.clicked.connect(__main__.eventHandler.disconnect_device)
         self.ui.send.clicked.connect(__main__.eventHandler.send_serial_input_to_device)
         self.ui.record.clicked.connect(__main__.eventHandler.record)
+        self.ui.lib_manager.clicked.connect(__main__.eventHandler.launchLibrary)
+
+        # Adds placeholder text
+        self.ui.project_name.setPlaceholderText("Enter projct name here.")
 
         # Timings for repeating tasks such as getting data or updating graphs.
         timer = qtc.QTimer(self)
