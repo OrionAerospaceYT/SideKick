@@ -1,5 +1,5 @@
 # SideKick
-<img src = https://imgur.com/NduHZHs> </img>
+<img src = https://i.imgur.com/NduHZHs.png> </img>
 
 Table of Contents 
 ====================
