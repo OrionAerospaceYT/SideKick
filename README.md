@@ -1,4 +1,3 @@
-# SideKick
 <img src = https://i.imgur.com/NduHZHs.png> </img>
 
 Table of Contents 
