@@ -26,7 +26,7 @@ Currently all <b>Arduino</b>, <b>Teensy</b> boards are supported and most SAMD b
 
 Video Tutorials coming soon! 
 
-It is reccomended you have basic experience with Arduino, C++, or ROS before jumping in, but fresh start tutorials will be available. 
+It is recommended to have basic experience with Arduino, C++, or ROS before jumping in, but fresh start tutorials will be available. 
 
 Go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and Download 
 
