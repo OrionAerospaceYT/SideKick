@@ -7,7 +7,7 @@ daemon:
 directories:
   data: C:\Users\REPLACE_USER\AppData\Local\Arduino15
   downloads: C:\Users\REPLACE_USER\AppData\Local\Arduino15\staging
-  user: C:\Users\REPLACE_USER\Documents\Arduino
+  user: C:\Users\REPLACE_USER\Documents\SideKick\Libraries
 library:
   enable_unsafe_install: false
 logging:

@@ -294,6 +294,7 @@ class DataHandler():
 
         # If no board is selected, displays error.
         else:
+            print(self.com_port)
             self.compile_output = b"error: No Board selected!"
 
     # Returns the HTML for the errors to be displayed.
@@ -346,6 +347,6 @@ class DataHandler():
 
         # Parses Errors for the GUI to display.
         if self.process_errors():
-            self.errors = True
+            self.errors = 1
         else:
             __main__.eventHandler.update_com(port)

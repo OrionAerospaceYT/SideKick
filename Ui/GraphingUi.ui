@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
-    <height>560</height>
+    <width>985</width>
+    <height>558</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -112,13 +112,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
-       <widget class="QPushButton" name="lib_manager">
-        <property name="text">
-         <string>Library Manager</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -172,17 +165,17 @@
       <item row="1" column="3" colspan="2">
        <widget class="QComboBox" name="project_paths"/>
       </item>
-      <item row="2" column="3">
-       <widget class="QPushButton" name="update">
-        <property name="text">
-         <string>Update</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2">
        <widget class="QLabel" name="COM">
         <property name="text">
          <string>NC</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" colspan="2">
+       <widget class="QPushButton" name="lib_manager">
+        <property name="text">
+         <string>Library Manager</string>
         </property>
        </widget>
       </item>

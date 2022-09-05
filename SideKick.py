@@ -1,3 +1,4 @@
+## TODO: Updates not working - GitHub HTML changes each startup
 from Graphing import Graphing
 from Library import Library
 from Backend import DataHandler
@@ -6,6 +7,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 import webbrowser
 import threading
+import time
 import sys
 import os
 
@@ -18,6 +20,9 @@ text_colour = "#00f0c3"
 supported_devices = {}
 
 class EventHandler():
+
+    def __init__(self):
+        pass
 
     # The Graphing window is ALWAYS the parent window
     # Launches the main graphing window, CSS is also used here
@@ -51,7 +56,7 @@ class EventHandler():
 
     # Updates the ConsciOS libraries
     def update_consciOS(self):
-        ## TODO: 
+        ## TODO:
         pass
 
     # Sends the text from terminal to device
@@ -81,22 +86,22 @@ class EventHandler():
 
     # Creates a new project and handles the errors given
     def new_project(self):
-        if self.graphing.ui.project_name.text() == "" or self.graphing.ui.project_name.text() == "Project Name":
-            data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>
-                             <p><font color="#FF0C0C">Please enter a project name!</p>"""
+        if self.graphing.ui.project_name.text() == "":
+            self.disconnect_device()
+            self.project_error = """<font color="#ff003c">Please enter a project name!"""
+            data.errors = 2
             return 0
         if fileManager.add_new_project(self.graphing.ui.project_name.text()) == 0:
-            data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>
-                             <p><font color="#FF0C0C">A project with that name already exists!</p>"""
+            self.disconnect_device()
+            self.project_error = """<font color="#ff003c">A project with that name already exists!"""
+            data.errors = 2
             return 0
-        data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>"""
 
     # Compiles and Uploads current project
     def upload(self):
         # Disconnects everything and gets the project path.
         com = data.com_port
         self.disconnect_device()
-        self.graphing.debug = True
         project_path = f'"C:/Users/{fileManager.user}/Documents/SideKick/SK Projects/{self.graphing.ui.project_paths.currentText()}/{self.graphing.ui.project_paths.currentText()}.ino"'
 
         # Creates upload on another thread and sets Html.
@@ -111,7 +116,11 @@ class EventHandler():
             fileManager.start_new_save()
 
     def display_error(self):
-        self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1>{data.compile_output}""")
+        self.graphing.debug = True
+        if data.errors == 1:
+            self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1>{data.compile_output}""")
+        if data.errors == 2:
+            self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Terminal</b></h1>{self.project_error}""")
     # Loads up Orion Aerospace youtube channel
     def help(self):
         webbrowser.open("https://www.youtube.com/c/OrionAerospace", autoraise=True)

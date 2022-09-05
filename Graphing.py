@@ -68,7 +68,8 @@ class Graphing(qtw.QMainWindow):
         self.ui.send.clicked.connect(__main__.eventHandler.send_serial_input_to_device)
         self.ui.record.clicked.connect(__main__.eventHandler.record)
         self.ui.lib_manager.clicked.connect(__main__.eventHandler.launchLibrary)
-        self.ui.update.clicked.connect(__main__.eventHandler.update_warning)
+        #self.ui.update.clicked.connect(__main__.eventHandler.update_warning)
+
         # Adds placeholder text
         self.ui.project_name.setPlaceholderText("Enter projct name here.")
 
@@ -87,7 +88,7 @@ class Graphing(qtw.QMainWindow):
         self.update_com()
         self.blink_record()
 
-        if __main__.data.errors:
+        if __main__.data.errors >= 1:
             __main__.eventHandler.display_error()
             __main__.data.errors = False
 
