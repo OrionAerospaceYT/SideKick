@@ -8,8 +8,7 @@ __pycache__/
 Projects/
 SavedData/
 dist/
-Installer/SideKick/Setup.ifp
-Installer/ SideKickSetupV0.4.zip
+*.ifp
 Installer/SideKickInstaller
 
 # VI ignores
