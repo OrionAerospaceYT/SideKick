@@ -19,10 +19,12 @@ class FileManager():
         self.user = os.getlogin()
         self.cwd = os.getcwd()
 
+        # Creates the SideKick directory in documents
         directories = os.listdir(f"C:/Users/{self.user}/Documents")
         if "SideKick" not in directories:
             os.mkdir(f"C:/Users/{self.user}/Documents/SideKick")
 
+        # Creats SideKick sub directories
         directories = os.listdir(f"C:/Users/{self.user}/Documents/SideKick")
         if "SK Projects" not in directories:
             os.mkdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
@@ -30,8 +32,9 @@ class FileManager():
             os.mkdir(f'C:/Users/{self.user}/Documents/SideKick/SavedData')
         if "Libraries" not in directories:
             os.mkdir(f'C:/Users/{self.user}/Documents/SideKick/Libraries')
-            src = f'./ConsciOS/libraries'
-            des = f'C:/Users/{self.user}/Documents/SideKick/Libraries'
+            # Copies ConsciOS libraries into SideKick libraries
+            source = f'./ConsciOS/libraries'
+            destination = f'C:/Users/{self.user}/Documents/SideKick/Libraries/libraries'
             shutil.copytree(source, destination)
 
     def is_admin(self):
@@ -91,13 +94,13 @@ class FileManager():
     def add_new_project(self, name):
         if name in os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects"):
             return 0 # Used for error handling, if this is returned red html is displayed
-        print("Continuing anyway")
-
+        # Copys the source into a new project
         source  = f'./ConsciOS/Source'
         destination = f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}'
         shutil.copytree(source, destination)
-
-        os.rename(f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/PROJECT.ino', f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/{name}.ino')
+        # Renames the .ino file to match the folder
+        os.rename(f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/Source.ino', f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/{name}.ino')
+        return 1
 
     # Starts a new save file, should be called each time a new device is connected
     def start_new_save(self):
