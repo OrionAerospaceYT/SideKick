@@ -38,7 +38,7 @@ class DataHandler():
         self.com_port_range = 0
         self.html_terminal_text  = self.html_header + self.html_footer
         self.serial_port = []
-        self.errors = False
+        self.errors = 0
 
     # Goes through raw terminal input and outputs the graphing values in a list.
     # The list has a format of [name, 1 for top - 2 for bottom, data]
@@ -197,7 +197,11 @@ class DataHandler():
     def get_data(self):
         # Checks if device has been defined and if it has, gets the data from the serial device
         if self.device != None:
-            self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
+            try:
+                self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
+            except:
+                __main__.eventHandler.disconnect_device()
+                
         # Keeps buffer size small to save memory.
         # Saves two lines as one is complete and the other may be incomplete.
         if len(self.buffer_string.split("\n")) > 3:
@@ -294,7 +298,6 @@ class DataHandler():
 
         # If no board is selected, displays error.
         else:
-            print(self.com_port)
             self.compile_output = b"error: No Board selected!"
 
     # Returns the HTML for the errors to be displayed.

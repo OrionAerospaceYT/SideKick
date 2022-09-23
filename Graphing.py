@@ -12,7 +12,7 @@ class Graphing(qtw.QMainWindow):
         self.debug = False
         self.com_port = 0
         self.i = 0
-        self.blink = False
+        self.blink = 0
         super(Graphing, self).__init__(parent=parent)
 
         # Define the gui.
@@ -89,8 +89,8 @@ class Graphing(qtw.QMainWindow):
         self.blink_record()
 
         if __main__.data.errors >= 1:
-            __main__.eventHandler.display_error()
-            __main__.data.errors = False
+            __main__.eventHandler.display_message()
+            __main__.data.errors = 0
 
     # Updates the com ports drop down to all avaliable com ports
     def update_com(self):

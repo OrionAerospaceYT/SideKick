@@ -102,12 +102,14 @@ class EventHandler():
         # Disconnects everything and gets the project path.
         com = data.com_port
         self.disconnect_device()
+        data.debug = True
+
         project_path = f'"C:/Users/{fileManager.user}/Documents/SideKick/SK Projects/{self.graphing.ui.project_paths.currentText()}/{self.graphing.ui.project_paths.currentText()}.ino"'
 
         # Creates upload on another thread and sets Html.
         upload = threading.Thread(target=data.upload, args=(com, project_path,))
         upload.start()
-        self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Uploading...</b></h1>""")
+        self.display_message("Uploading...")
 
     # Stops and starts recordings.
     def record(self):
@@ -115,12 +117,22 @@ class EventHandler():
         if data.save_data:
             fileManager.start_new_save()
 
-    def display_error(self):
-        self.graphing.debug = True
+    def display_message(self, message=""):
+
         if data.errors == 1:
-            self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1>{data.compile_output}""")
-        if data.errors == 2:
-            self.graphing.ui.terminal.setHtml(f"""<h1><b><font color="#00f0c3">Terminal</b></h1>{self.project_error}""")
+            message = f"""<h1><b><font color="#00f0c3">Upload Failed</b></h1><p>{data.compile_output}</p>"""
+        elif data.errors == 2:
+            message = f"""<h1><b><font color="#00f0c3">Terminal</b></h1><p>{self.project_error}</p>"""
+        else:
+            message = f"""<h1><b><font color="#00f0c3">{message}</b></h1>"""
+
+        self.graphing.debug = True
+
+        self.disconnect_device()
+
+        print(message)
+        self.graphing.ui.terminal.setHtml(message)
+
     # Loads up Orion Aerospace youtube channel
     def help(self):
         webbrowser.open("https://www.youtube.com/c/OrionAerospace", autoraise=True)
