@@ -199,9 +199,10 @@ class DataHandler():
         if self.device != None:
             try:
                 self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
+                print(self.device.read(self.device.inWaiting()).decode().strip())
             except:
                 __main__.eventHandler.disconnect_device()
-                
+
         # Keeps buffer size small to save memory.
         # Saves two lines as one is complete and the other may be incomplete.
         if len(self.buffer_string.split("\n")) > 3:
