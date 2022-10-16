@@ -22,6 +22,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint main.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
-        pylint backend.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+        pylint message_handler.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
         pylint file_manager.py --disable=C0116,C0115,C2801,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
         pylint device_manager.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>

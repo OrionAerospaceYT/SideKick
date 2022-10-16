@@ -4,6 +4,8 @@ and serial devices.
 It uses pySerial and has a loop running on a thread.
 """
 
+import glob
+import sys
 import threading
 
 import serial
@@ -31,11 +33,24 @@ class DeviceManager():
         if the device is connected
         """
 
-        self.device = serial.Serial(port, baud, timeout=0, rtscts=False)
+        self.terminate_device()
+
+        try:
+            self.device = serial.Serial(port, baud, timeout=0, rtscts=False)
+        except serial.SerialException:
+            self.device = None
+
         while self.device is not None:
-            raw_data = self.device.readline().decode("utf-8")
+            try:
+                raw_data = self.device.readline().decode("utf-8")
+            except serial.SerialException:
+                self.terminate_device()
+                break
+
             if "\n" in raw_data:
                 self.raw_data = raw_data
+
+            print(self.raw_data)
 
     def decode_graph_data(self):
         """
@@ -109,6 +124,35 @@ class DeviceManager():
         self.get_data = threading.Thread(
             target=self.threaded_get_raw_data, args=(port, baud),)
         self.get_data.start()
+
+    def scan_avaliable_ports(self):
+        """
+        iterates through each com port and checks if it can be opened or not
+
+        https://stackoverflow.com/questions/12090503/listing-available-com-ports-with-python
+
+        """
+
+        if sys.platform.startswith('win'):
+            ports = [f'COM{i}' for i in range(256)]
+        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+            # this excludes your current terminal "/dev/tty"
+            ports = glob.glob('/dev/tty[A-Za-z]*')
+        elif sys.platform.startswith('darwin'):
+            ports = glob.glob('/dev/tty.*')
+        else:
+            raise EnvironmentError('Unsupported platform')
+
+        result = ["Select COM"]
+        for port in ports:
+            try:
+                serial_port = serial.Serial(port)
+                serial_port.close()
+                result.append(port)
+            except (OSError, serial.SerialException):
+                pass
+
+        return result
 
 
 if __name__ == "__main__":

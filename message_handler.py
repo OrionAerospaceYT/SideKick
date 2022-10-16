@@ -15,3 +15,18 @@ class MessageHandler():
 
         self.top_graph_data = []
         self.bottom_graph_data = []
+
+    def get_new_terminal_data(self, new_data):
+        """
+        this function grabs new terminal data
+        """
+
+        self.terminal_string += f"{new_data}\n"
+
+    def get_new_graph_data(self, top_graph_data, bottom_graph_data):
+        """
+        this functions grabs new data for both graphs
+        """
+
+        self.top_graph_data.append(top_graph_data)
+        self.bottom_graph_data.append(bottom_graph_data)

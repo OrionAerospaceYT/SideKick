@@ -5,8 +5,10 @@ This file also holds the
 """
 
 import sys
+import threading
 
 import pyqtgraph as pg
+from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
 
@@ -26,6 +28,8 @@ class Graphing(qtw.QMainWindow):
         self.main_ui = graphing()
         self.main_ui.setupUi(self)
 
+        self.running = True
+
         self.top_legend = None
         self.top_plots = None
         self.main_ui_top_graph = None
@@ -43,6 +47,11 @@ class Graphing(qtw.QMainWindow):
         self.connect_buttons()
 
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
+
+        timer = qtc.QTimer(self)
+        timer.setInterval(15)
+        timer.timeout.connect(self.update)
+        timer.start()
 
     def map_top_graph(self):
         """
@@ -108,6 +117,27 @@ class Graphing(qtw.QMainWindow):
 
         self.main_ui.render.setDisabled(True)
         self.main_ui.new_project.clicked.connect(event_handler.new_project)
+        self.main_ui.com_ports.activated[str].connect(
+            event_handler.connect_device)
+        self.main_ui.disconnect.clicked.connect(
+            event_handler.disconnect_device)
+
+    def update(self):
+        """
+        deals with updating the information on the gui each frame
+        """
+
+        gui_ports = [self.main_ui.com_ports.itemText(
+            i) for i in range(self.main_ui.com_ports.count())]
+
+        for port in event_handler.avaliable_port_list:
+            if port not in gui_ports:
+                self.main_ui.com_ports.addItem(port)
+
+        for port in gui_ports:
+            if port not in event_handler.avaliable_port_list:
+                target = self.main_ui.com_ports.findText(port)
+                self.main_ui.com_ports.removeItem(target)
 
 
 class EventHandler():
@@ -117,7 +147,12 @@ class EventHandler():
     """
 
     def __init__(self):
-        self.i = 0
+        self.avaliable_port_list = []
+        self.current_projects = []
+
+        self.threaded_loop = threading.Thread(
+            target=self.backend_loop, args=(),)
+        self.threaded_loop.start()
 
     def new_project(self):
         """
@@ -134,6 +169,41 @@ class EventHandler():
 
         project_name = graphing.main_ui.project_name.setText("")
 
+        print(self.avaliable_port_list)
+
+    def connect_device(self, port):
+        """
+        connects new devices through device manager and updates com port in
+        message_handler
+        """
+
+        baud = graphing.main_ui.baud_rate.itemText(0)
+
+        print(port, baud)
+
+        if port == "Select COM":
+            return
+
+        device_manager.connect_device(port, baud)
+
+    def disconnect_device(self):
+        """
+        disconnects the sidekick/teensy/arduino device
+        """
+
+        device_manager.terminate_device()
+
+    def backend_loop(self):
+        """
+        any code to be looped on a thread goes here
+        """
+
+        while RUNNING:
+            self.avaliable_port_list = device_manager.scan_avaliable_ports()
+            self.current_projects = file_manager.get_all_projects()
+
+
+RUNNING = True
 
 device_manager = DeviceManager()
 file_manager = FileManager()
@@ -151,3 +221,5 @@ if __name__ == "__main__":
     graphing = Graphing()
     graphing.show()
     app.exec_()
+
+    RUNNING = False
