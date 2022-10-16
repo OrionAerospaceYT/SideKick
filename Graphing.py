@@ -1,4 +1,3 @@
-from Ui.GraphingUi import Ui_MainWindow as graphing
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets as qtw
@@ -6,9 +5,12 @@ from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import __main__
 
+from Ui.GraphingUi import Ui_MainWindow as graphing
+
+
 class Graphing(qtw.QMainWindow):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.debug = False
         self.com_port = 0
         self.i = 0
@@ -39,15 +41,16 @@ class Graphing(qtw.QMainWindow):
         self.top_legend.setLabelTextColor("#FFFFFF")
         self.gui_top_graph.getAxis('left').setPen(pg.mkPen(color='#FFFFFF'))
         self.gui_top_graph.getAxis('bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.gui_top_graph.getAxis("left").setTextPen((255,255,255))
-        self.gui_top_graph.getAxis("bottom").setTextPen((255,255,255))
+        self.gui_top_graph.getAxis("left").setTextPen((255, 255, 255))
+        self.gui_top_graph.getAxis("bottom").setTextPen((255, 255, 255))
 
         # Set pyqtPlot lib to the bottom widget.
         self.gui_bottom_graph = pg.PlotWidget()
-        self.gui_bottom_graph.getAxis("left").setTextPen((255,255,255))
-        self.gui_bottom_graph.getAxis("bottom").setTextPen((255,255,255))
+        self.gui_bottom_graph.getAxis("left").setTextPen((255, 255, 255))
+        self.gui_bottom_graph.getAxis("bottom").setTextPen((255, 255, 255))
         self.gui_bottom_graph.getAxis('left').setPen(pg.mkPen(color='#FFFFFF'))
-        self.gui_bottom_graph.getAxis('bottom').setPen(pg.mkPen(color='#FFFFFF'))
+        self.gui_bottom_graph.getAxis(
+            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
         self.ui.gui_bottom_graph = qtw.QVBoxLayout()
         self.ui.bottom_widget.setLayout(self.ui.gui_bottom_graph)
         self.ui.gui_bottom_graph.addWidget(self.gui_bottom_graph)
@@ -58,17 +61,21 @@ class Graphing(qtw.QMainWindow):
         self.bottom_plots = []
 
         # Connect buttons to their function in event handler.
-        #self.ui.projects.clicked.connect(__main__.eventHandler.launchProjects)
+        # self.ui.projects.clicked.connect(__main__.eventHandler.launchProjects)
         self.ui.render.setDisabled(True)
-        self.ui.help.clicked.connect(__main__.eventHandler.help)
-        self.ui.new_project.clicked.connect(__main__.eventHandler.new_project)
-        self.ui.upload.clicked.connect(__main__.eventHandler.upload)
-        self.ui.com_ports.activated[str].connect(__main__.eventHandler.update_com)
-        self.ui.disconnect.clicked.connect(__main__.eventHandler.disconnect_device)
-        self.ui.send.clicked.connect(__main__.eventHandler.send_serial_input_to_device)
-        self.ui.record.clicked.connect(__main__.eventHandler.record)
-        self.ui.lib_manager.clicked.connect(__main__.eventHandler.launchLibrary)
-        #self.ui.update.clicked.connect(__main__.eventHandler.update_warning)
+        self.ui.help.clicked.connect(__main__.event_handler.help)
+        self.ui.new_project.clicked.connect(__main__.event_handler.new_project)
+        self.ui.upload.clicked.connect(__main__.event_handler.upload)
+        self.ui.com_ports.activated[str].connect(
+            __main__.event_handler.update_com)
+        self.ui.disconnect.clicked.connect(
+            __main__.event_handler.disconnect_device)
+        self.ui.send.clicked.connect(
+            __main__.event_handler.send_serial_input_to_device)
+        self.ui.record.clicked.connect(__main__.event_handler.record)
+        self.ui.lib_manager.clicked.connect(
+            __main__.event_handler.launch_library)
+        # self.ui.update.clicked.connect(__main__.eventHandler.update_warning)
 
         # Adds placeholder text
         self.ui.project_name.setPlaceholderText("Enter projct name here.")
@@ -116,7 +123,8 @@ class Graphing(qtw.QMainWindow):
     def update_data(self):
         __main__.data.get_data()
         height_of_terminal = self.ui.centralwidget.height()
-        __main__.data.number_of_lines_displayed_on_terminal = int((height_of_terminal - 328) / 28)
+        __main__.data.number_of_lines_displayed_on_terminal = int(
+            (height_of_terminal - 328) / 28)
         if not self.debug:
             self.ui.terminal.setHtml(__main__.data.html_terminal_text)
 
@@ -134,7 +142,8 @@ class Graphing(qtw.QMainWindow):
 
                 pen = pg.mkPen("#FFFFFF", width=1)
 
-                self.top_plots.append(self.gui_top_graph.plot([0],[0],name=__main__.data.labels[0][i], pen=pen))
+                self.top_plots.append(self.gui_top_graph.plot(
+                    [0], [0], name=__main__.data.labels[0][i], pen=pen))
 
     def add_bottom_plots(self):
         for i in range(0, len(self.bottom_plots)):
@@ -150,7 +159,8 @@ class Graphing(qtw.QMainWindow):
 
                 pen = pg.mkPen("#FFFFFF", width=1)
 
-                self.bottom_plots.append(self.gui_bottom_graph.plot([0],[0],name=__main__.data.labels[1][i], pen=pen))
+                self.bottom_plots.append(self.gui_bottom_graph.plot(
+                    [0], [0], name=__main__.data.labels[1][i], pen=pen))
 
     def update_top_plot(self):
         if len(self.top_plots) != __main__.data.num_of_top_plots:
@@ -159,8 +169,10 @@ class Graphing(qtw.QMainWindow):
         # Updates the Y axis data.
         try:
             for i in range(0, len(self.top_plots)):
-                pen = pg.mkPen(color=__main__.colour_order[i%len(__main__.colour_order)])
-                self.top_plots[i].setData(__main__.data.top_plots_data[i], pen=pen)
+                pen = pg.mkPen(
+                    color=__main__.COLOUR_ORDER[i % len(__main__.COLOUR_ORDER)])
+                self.top_plots[i].setData(
+                    __main__.data.top_plots_data[i], pen=pen)
         except:
             pass
 
@@ -171,8 +183,10 @@ class Graphing(qtw.QMainWindow):
         # Updates the Y axis data.
         try:
             for i in range(0, len(self.bottom_plots)):
-                pen = pg.mkPen(color=__main__.colour_order[i%len(__main__.colour_order)])
-                self.bottom_plots[i].setData(__main__.data.bottom_plots_data[i], pen=pen)
+                pen = pg.mkPen(
+                    color=__main__.COLOUR_ORDER[i % len(__main__.COLOUR_ORDER)])
+                self.bottom_plots[i].setData(
+                    __main__.data.bottom_plots_data[i], pen=pen)
         except:
             pass
 

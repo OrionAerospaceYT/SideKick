@@ -1,6 +1,5 @@
-from distutils.command.upload import upload
-import numpy as np
 from datetime import datetime
+import numpy as np
 import random
 import time
 import sys
@@ -10,6 +9,7 @@ import glob
 import serial
 import __main__
 
+
 class DataHandler():
 
     def __init__(self):
@@ -18,7 +18,7 @@ class DataHandler():
         self.com_port = ""
         self.com = False
         self.device = None
-        self.labels =[[],[]]
+        self.labels = [[], []]
         self.num_of_top_plots = 0
         self.num_of_bottom_plots = 0
         self.top_plots_raw_data = []
@@ -36,7 +36,7 @@ class DataHandler():
         self.html_footer = "</font></body>"
         self.save_data = False
         self.com_port_range = 0
-        self.html_terminal_text  = self.html_header + self.html_footer
+        self.html_terminal_text = self.html_header + self.html_footer
         self.serial_port = []
         self.errors = 0
 
@@ -70,7 +70,7 @@ class DataHandler():
             for item in output[x]:
                 value = item
 
-                ## checks if the data is a number
+                # checks if the data is a number
                 if value.isnumeric():
                     item = float(item)
 
@@ -80,12 +80,12 @@ class DataHandler():
             graph_data.append(i)
 
         # checks for all inputs to graphs to be numerical
-        for x in range(0,len(graph_data)):
+        for x in range(0, len(graph_data)):
             for y in range(1, len(graph_data[0])):
                 try:  # .isnumeric wont work on already numeric numbers
                     float(graph_data[x][y])
                 except:
-                    del graph_data[x] # deletes item with unwanted data
+                    del graph_data[x]  # deletes item with unwanted data
 
         return graph_data
 
@@ -104,29 +104,9 @@ class DataHandler():
                     if "g(" not in data and "r(" not in data:
                         if data != "" and "\r" not in data:
                             terminal_output.append(data)
-        #__main__.fileManager.save_terminal_data(terminal_output)
+        # __main__.fileManager.save_terminal_data(terminal_output)
 
         return terminal_output
-
-    # Returns list of [x, y, z] orientation
-    def decode_orientation(self, input):
-        # orientation section of decoding
-        orientation_output = input.split("r(")
-
-        for item in orientation_output:
-
-            # finds which seperation the orientation is in
-            if item != '':
-                item = item.split(")")
-                for item in item:
-                    if "g(" not in item and "t(" not in item:
-                        orientation_output = item
-                        break
-
-        if len(orientation_output.split(",")) == 3:
-            return orientation_output.split(",")
-        else:
-            return [0,0,0]
 
     def transpose(self, list):
 
@@ -156,7 +136,8 @@ class DataHandler():
         # For each line, makes the time as white and data as #00f0c3
         for mesage in self.terminal_data:
             text_for_terminal_and_time = mesage.split(",")
-            self.html_terminal_text += (f"""<p><font color="white">{text_for_terminal_and_time[0]}>$ <font color="#00f0c3">{text_for_terminal_and_time[1]}</p>""")
+            self.html_terminal_text += (
+                f"""<p><font color="white">{text_for_terminal_and_time[0]}>$ <font color="#00f0c3">{text_for_terminal_and_time[1]}</p>""")
 
         # Ends the html
         self.html_terminal_text += self.html_footer
@@ -198,10 +179,10 @@ class DataHandler():
         # Checks if device has been defined and if it has, gets the data from the serial device
         if self.device != None:
             try:
-                self.buffer_string = self.buffer_string + self.device.read(self.device.inWaiting()).decode().strip()
-                print(self.device.read(self.device.inWaiting()).decode().strip())
+                self.buffer_string = self.buffer_string + \
+                    self.device.read(self.device.inWaiting()).decode().strip()
             except:
-                __main__.eventHandler.disconnect_device()
+                __main__.event_handler.disconnect_device()
 
         # Keeps buffer size small to save memory.
         # Saves two lines as one is complete and the other may be incomplete.
@@ -213,7 +194,8 @@ class DataHandler():
         # Keeps trying to connect to serial device if none is connected
         try:
             if self.device == None:
-                self.device = serial.Serial(self.com_port, __main__.eventHandler.graphing.ui.baud_rate.currentText(), rtscts=False)
+                self.device = serial.Serial(
+                    self.com_port, __main__.event_handler.graphing.ui.baud_rate.currentText(), rtscts=False)
         except:
             pass
 
@@ -227,7 +209,6 @@ class DataHandler():
         # Parses all of the data seperately: graph, terminal and orientation.
         graph_data = self.decode_graph(raw_data)
         terminal_output = self.decode_terminal(raw_data)
-        orientation_output = self.decode_orientation(raw_data)
 
         # Formats the html for the terminal data.
         self.organise_terminal_data(terminal_output)
@@ -236,18 +217,16 @@ class DataHandler():
         if self.save_data:
             for item in terminal_output:
                 __main__.fileManager.save_terminal_data(item)
-        # Sets the orientation equal to the latest
-        self.x , self.y , self.z = orientation_output[0], orientation_output[1], orientation_output[2]
 
         # Defines the temporary list that we append data to
-        top_temp , bottom_temp = [], []
+        top_temp, bottom_temp = [], []
 
         # Starts off with no plots on top or bottom...
         # We use this to ensure that the displayed number of plots equals
         # the number of input plots.
         self.num_of_top_plots, self.num_of_bottom_plots = 0, 0
 
-        self.labels = [[],[]]
+        self.labels = [[], []]
 
         # Goes through graph data and checks which graph, the label and values
         for item in graph_data:
@@ -283,18 +262,21 @@ class DataHandler():
     def compile_and_upload(self, port, project):
 
         # Gets the board from the board selected in drop down.
-        if __main__.eventHandler.graphing.ui.device.currentText() != "Select Board":
-            board = __main__.supported_devices[__main__.eventHandler.graphing.ui.device.currentText()]
+        if __main__.event_handler.graphing.ui.device.currentText() != "Select Board":
+            board = __main__.supported_devices[__main__.event_handler.graphing.ui.device.currentText(
+            )]
 
             cwd = os.getcwd()
             # Compiles the coad before upload and gets errors:
             compile_cmd = f'"{cwd}/Externals/arduino-cli.exe" compile --fqbn {board} {project}'
-            compile = subprocess.Popen(compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            compile = subprocess.Popen(
+                compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             self.compile_output, error = compile.communicate()
 
             # Uploads the code and gets errors.
             upload_cmd = f'"{cwd}/Externals/arduino-cli.exe" upload -p {port} --fqbn {board} {project}'
-            upload = subprocess.Popen(upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            upload = subprocess.Popen(
+                upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             self.upload_output, error = upload.communicate()
 
         # If no board is selected, displays error.
@@ -305,7 +287,8 @@ class DataHandler():
     def process_errors(self):
         if "error" in str(self.compile_output):
             # Formats the output for html rather than python
-            output = self.compile_output.decode('utf-8').replace("\r\n", "<br>")
+            output = self.compile_output.decode(
+                'utf-8').replace("\r\n", "<br>")
 
             # Defines temporary variables
             error = False
@@ -353,4 +336,4 @@ class DataHandler():
         if self.process_errors():
             self.errors = 1
         else:
-            __main__.eventHandler.update_com(port)
+            __main__.event_handler.update_com(port)
