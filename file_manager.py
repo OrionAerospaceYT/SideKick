@@ -1,5 +1,6 @@
 """
-This file!
+This file is responsible for handling all creation and
+deletion of files.
 """
 
 import os
@@ -9,6 +10,7 @@ import shutil
 class FileManager():
     """
     This class deals with creating and deleting files
+
     """
 
     def __init__(self):
@@ -20,16 +22,21 @@ class FileManager():
         self.create_sub_sidekick_files()
 
     def create_sidekick_file(self):
-        """Creates the SideKick directory in documents"""
+        """
+        Creates the SideKick directory in documents if it dos not exist
+        """
 
         directories = os.listdir(f"C:/Users/{self.user}/Documents")
         if "SideKick" not in directories:
             os.mkdir(f"C:/Users/{self.user}/Documents/SideKick")
 
     def create_sub_sidekick_files(self):
-        """Creats SideKick sub directories"""
+        """
+        Creates SideKick sub directories (SK Projects, SavedData, Libraries)
+        """
 
         directories = os.listdir(f"C:/Users/{self.user}/Documents/SideKick")
+
         if "SK Projects" not in directories:
             os.mkdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
         if "SavedData" not in directories:
@@ -42,7 +49,10 @@ class FileManager():
             shutil.copytree(source, destination)
 
     def get_all_boards(self):
-        """Returns dictionary of devices"""
+        """
+        Returns dictionary of valid devices
+        Based off of the boards.csv file
+        """
 
         board_dict = {}
         with open("./Ui/boards.csv", "r", encoding='UTF-8') as boards:
@@ -55,15 +65,16 @@ class FileManager():
     def get_all_projects(self):
         """Returns all project directories except for Libraries"""
 
-        projects = os.listdir(
-            f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
-        return projects
+        return os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
 
     def add_new_project(self, name):
-        """"Adds new projects when "new project"""
+        """
+        Adds new projects when new project is clicked.
+        Creates a new file, copies the source reference, then renames the .ino file
+        """
 
         if name in os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects"):
-            return 0
+            return
 
         source = './ConsciOS/Source'
         destination = f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}'
@@ -71,10 +82,12 @@ class FileManager():
 
         os.rename(f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/Source.ino',
                   f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/{name}.ino')
-        return 1
 
     def start_new_save(self):
-        """Starts a new save file, should be called each time a new device is connected"""
+        """
+        Starts a new save file, saves are called save[indx] and is a text file
+        Files are saved in the users documents folder under Documents/SideKick/SavedData
+        """
 
         num_of_saves = len(os.listdir(
             f'C:/Users/{self.user}/Documents/SideKick/SavedData'))
@@ -86,4 +99,5 @@ class FileManager():
 
     def save_terminal_data(self, data):
         """Saves data to file for users to read later"""
+
         self.file.write(f'{data}\n')

@@ -1,6 +1,9 @@
 """
-License
+This file is responsible for handling the COM ports
+and serial devices.
+It uses pySerial and has a loop running on a thread.
 """
+
 import threading
 
 import serial
@@ -74,6 +77,13 @@ class DeviceManager():
 
         return self.terminal_data
 
+    def get_num_of_graphs(self):
+        """
+        returns a list [num_of_top_plots, num_of_bottom_plots]
+        """
+
+        return [len(self.graph_top_data), len(self.graph_bottom_data)]
+
     def terminate_device(self):
         """
         terminates the while True loop to disconnect the device
@@ -101,8 +111,6 @@ class DeviceManager():
         self.get_data.start()
 
 
-# only runs if this is the file being run
-# the unit test will go here
 if __name__ == "__main__":
 
     deviceManager = DeviceManager()
@@ -111,7 +119,6 @@ if __name__ == "__main__":
 
     deviceManager.raw_data = "g(name,1,1)t(text)g(name,1,2)t(text)g(name,2,3)t(text)"
 
-    # checks the terminal output
     EXPECTED = ' text text text'
     output = deviceManager.decode_terminal_data()
 
@@ -120,7 +127,6 @@ if __name__ == "__main__":
     else:
         print(f"TEST 1: FAIL - Got ({output}) when expecting ({EXPECTED})!")
 
-    # checks grpah output
     EXPECTED = (["1", "2"], ["3"])
     output = deviceManager.decode_graph_data()
 

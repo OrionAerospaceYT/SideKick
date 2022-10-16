@@ -1,152 +1,153 @@
-import threading
+"""
+This is the main python file responsible for having
+the debugging window open.
+This file also holds the
+"""
+
 import sys
-import webbrowser
 
-from PyQt5 import QtWidgets as qtw
+import pyqtgraph as pg
 from PyQt5 import QtGui as qtg
+from PyQt5 import QtWidgets as qtw
 
-from graphing import Graphing
-from Library import Library
-from backend import DataHandler
+from device_manager import DeviceManager
 from file_manager import FileManager
+from Ui.GraphingUi import Ui_MainWindow as graphing
 
-# Colours are defined here
-COLOUR_ORDER = ["#FF0C0C",
-                "#31f78e",
-                "#02acf5",
-                "#fc7703",
-                "#9d03fc",
-                "#fce803",
-                "#fc03b1"]
-ACCENT_COLOUR = "#252530"
-TEXT_COLOUR = "#00f0c3"
 
-# Definition to be appended to
-supported_devices = {}
+class Graphing(qtw.QMainWindow):
+    """
+    Launches the main window (debugging window)
+    """
+
+    def __init__(self, parent=None):
+        super(Graphing, self).__init__(parent=parent)
+
+        self.main_ui = graphing()
+        self.main_ui.setupUi(self)
+
+        self.top_legend = None
+        self.top_plots = None
+        self.main_ui_top_graph = None
+
+        self.bottom_legend = None
+        self.bottom_plots = None
+        self.main_ui_bottom_graph = None
+
+        self.map_top_graph()
+        self.style_top_graph()
+
+        self.map_bottom_graph()
+        self.style_bottom_graph()
+
+        self.connect_buttons()
+
+        self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
+
+    def map_top_graph(self):
+        """
+        Set pyqtPlot to the top widget
+        """
+
+        self.main_ui_top_graph = pg.PlotWidget()
+        self.main_ui.main_ui_top_graph = qtw.QVBoxLayout()
+
+        self.main_ui.top_widget.setLayout(self.main_ui.main_ui_top_graph)
+        self.main_ui.main_ui_top_graph.addWidget(self.main_ui_top_graph)
+        self.top_legend = self.main_ui_top_graph.addLegend()
+        self.top_plots = []
+
+    def style_top_graph(self):
+        """
+        Sets the style for pyqtPlot top widget
+        """
+
+        self.main_ui_top_graph.setBackground('#32323C')
+        self.top_legend.setLabelTextColor("#FFFFFF")
+        self.main_ui_top_graph.getAxis(
+            'left').setPen(pg.mkPen(color='#FFFFFF'))
+        self.main_ui_top_graph.getAxis(
+            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
+        self.main_ui_top_graph.getAxis("left").setTextPen((255, 255, 255))
+        self.main_ui_top_graph.getAxis("bottom").setTextPen((255, 255, 255))
+
+    def map_bottom_graph(self):
+        """
+        Set pyqtPlot lib to the bottom widget
+        """
+
+        self.main_ui_bottom_graph = pg.PlotWidget()
+        self.main_ui.main_ui_bottom_graph = qtw.QVBoxLayout()
+
+        self.main_ui.bottom_widget.setLayout(
+            self.main_ui.main_ui_bottom_graph)
+        self.main_ui.main_ui_bottom_graph.addWidget(
+            self.main_ui_bottom_graph)
+        self.bottom_legend = self.main_ui_bottom_graph.addLegend()
+        self.bottom_plots = []
+
+    def style_bottom_graph(self):
+        """
+        Sets the style for pyqtPlot bottom widget
+        """
+
+        self.main_ui_bottom_graph.getAxis(
+            'left').setPen(pg.mkPen(color='#FFFFFF'))
+        self.main_ui_bottom_graph.getAxis(
+            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
+        self.main_ui_bottom_graph.setBackground('#32323C')
+        self.bottom_legend.setLabelTextColor("#FFFFFF")
+        self.main_ui_bottom_graph.getAxis("left").setTextPen((255, 255, 255))
+        self.main_ui_bottom_graph.getAxis(
+            "bottom").setTextPen((255, 255, 255))
+
+    def connect_buttons(self):
+        """
+        Connects the buttons on the gui to python functions
+        """
+
+        self.main_ui.render.setDisabled(True)
+        self.main_ui.new_project.clicked.connect(event_handler.new_project)
 
 
 class EventHandler():
-    """Deals with all events from the frontend"""
+    """
+    This class deals with all events on the gui and connects
+    them to python functions
+    """
 
     def __init__(self):
-        self.graphing = None
-        self.library = None
-        self.project_error = ""
-
-    def launch_graphing(self):
-        """
-        The Graphing window is ALWAYS the parent window
-        Launches the main graphing window, CSS is also used here
-        """
-        app = qtw.QApplication(sys.argv)
-        app.setStyleSheet(open("Ui/Style.css", "r").read())
-        app_icon = qtg.QIcon("Ui/SideKick.ico")
-        app.setWindowIcon(app_icon)
-        self.graphing = Graphing()
-        self.graphing.show()
-        app.exec_()
-
-    def launch_library(self):
-        """Launches the library manager window"""
-        self.library = Library(self.graphing)
-        self.library.show()
-
-    def send_serial_input_to_device(self):
-        """ Sends the text from terminal to device"""
-        if data.device is not None:
-            data.device.write(bytes(self.graphing.ui.lineEdit.text(), 'utf-8'))
-        self.graphing.ui.lineEdit.setText("")
-
-    def update_com(self, value):
-        """Changes the COM port beign used"""
-        self.disconnect_device()
-        if value == "Select COM":
-            return 0
-        self.graphing.ui.COM.setText(value)
-        data.device = None
-        data.com_port = value
-        data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>"""
-        self.graphing.ui.com_ports.setCurrentText("Select COM")
-        self.graphing.debug = False
-
-    def disconnect_device(self):
-        """Discconects the SideKick device"""
-        global data
-        self.graphing.ui.COM.setText("")
-        data.device = None
-        data.com_port = None
-        data = DataHandler()
+        self.i = 0
 
     def new_project(self):
-        """Creates a new project and handles the errors given"""
-        if self.graphing.ui.project_name.text() == "":
-            self.disconnect_device()
-            self.project_error = """<font color="#ff003c">Please enter a project name!"""
-            data.errors = 2
-            return 0
-        if fileManager.add_new_project(self.graphing.ui.project_name.text()) == 0:
-            self.disconnect_device()
-            self.project_error = """<font color="#ff003c">\
-                                A project with that name already exists!"""
-            data.errors = 2
-            return 0
+        """
+        creates the new project in the SK Projects folder
+        sends a message to the screen if no name is entered or an invalid one
+        sets the text of the project_name entry to ""
+        """
 
-    def upload(self):
-        """Compiles and Uploads current project"""
-        com = data.com_port
-        self.disconnect_device()
-        data.debug = True
+        project_name = graphing.main_ui.project_name.text()
+        if project_name == "":
+            print(project_name)
+        if project_name in file_manager.get_all_projects():
+            print(project_name)
 
-        project_path = f'"C:/Users/{fileManager.user}\
-                        /Documents/SideKick/SK Projects/{self.graphing.ui.project_paths.currentText()}\
-                        /{self.graphing.ui.project_paths.currentText()}.ino"'
+        project_name = graphing.main_ui.project_name.setText("")
 
-        upload = threading.Thread(
-            target=data.upload, args=(com, project_path,))
-        upload.start()
-        self.display_message("Uploading...")
 
-    def record(self):
-        """Stops and starts recordings."""
-        data.save_data = not data.save_data
-        if data.save_data:
-            fileManager.start_new_save()
-
-    def display_message(self, message=""):
-        """"Displays error messages"""
-        if data.errors == 1:
-            message = f"""<h1><b><font color="#00f0c3">Upload Failed</b>\
-                        </h1><p>{data.compile_output}</p>"""
-        elif data.errors == 2:
-            message = f"""<h1><b><font color="#00f0c3">Terminal</b></h1>\
-                        <p>{self.project_error}</p>"""
-        else:
-            message = f"""<h1><b><font color="#00f0c3">{message}</b></h1>"""
-
-        self.graphing.debug = True
-
-        self.disconnect_device()
-
-        self.graphing.ui.terminal.setHtml(message)
-
-    def help(self):
-        """Loads up Orion Aerospace youtube channel"""
-
-        webbrowser.open(
-            "https://www.youtube.com/c/OrionAerospace", autoraise=True)
-
-    def test(self, value=""):
-        """A spare function to test connectiions to buttons"""
-
-        print("This button works" + str(value))
-
+device_manager = DeviceManager()
+file_manager = FileManager()
+event_handler = EventHandler()
 
 if __name__ == "__main__":
 
-    data = DataHandler()
-    fileManager = FileManager()
-    event_handler = EventHandler()
+    app = qtw.QApplication(sys.argv)
 
-    supported_devices = fileManager.get_all_boards()
+    with open("Ui/Style.css", "r", encoding="UTF-8") as style_sheet:
+        app.setStyleSheet(style_sheet.read())
 
-    event_handler.launch_graphing()
+    app_icon = qtg.QIcon("Ui/SideKick.ico")
+    app.setWindowIcon(app_icon)
+    graphing = Graphing()
+    graphing.show()
+    app.exec_()
