@@ -48,7 +48,8 @@ class DeviceManager():
                 self.terminate_device()
                 break
 
-            if "\n" in raw_data:
+            # uses "(" as a bracket is in every message
+            if "(" in raw_data:
                 self.raw_data.append(raw_data)
 
                 if len(self.raw_data) > 1000:

@@ -21,6 +21,9 @@ class MessageHandler():
     """
 
     def __init__(self):
+
+        self.raw_data = []
+
         self.terminal_string = ""
         self.error_string = ""
 
@@ -39,20 +42,21 @@ class MessageHandler():
         while len(self.terminal_data_list) >= 50:
             self.terminal_data_list.pop(0)
 
-    def get_new_graph_data(self, top_graph_data, bottom_graph_data):
+    def organise_terminal_data(self):
         """
-        this functions grabs new data for both graphs
-        """
-
-        self.top_graph_data.append(top_graph_data)
-        self.bottom_graph_data.append(bottom_graph_data)
-
-    def get_terminal_string(self, screen_height=0):
-        """
-        gets the terminal strings and displays them on the screen
+        organises the terminal data into valid HTML
         """
 
-        return screen_height
+        self.terminal_string = ""
+
+        amount_of_data = 30
+
+        if len(self.raw_data) < 30:
+            amount_of_data = len(self.raw_data)
+
+        for i in range(1, amount_of_data):
+            terminal_data = self.decode_terminal_data(self.raw_data[-i])
+            self.terminal_string += terminal_data + "<br>"
 
     def decode_graph_data(self, raw_input):
         """

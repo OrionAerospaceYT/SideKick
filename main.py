@@ -197,7 +197,8 @@ class Graphing(qtw.QMainWindow):
 
         self.update_ports()
         self.update_projects()
-        message_handler.get_terminal_string(1)
+
+        self.main_ui.terminal.setHtml(message_handler.terminal_string)
 
 
 class EventHandler():
@@ -300,7 +301,11 @@ class EventHandler():
         while RUNNING:
             self.avaliable_port_list = device_manager.scan_avaliable_ports()
             self.current_projects = file_manager.get_all_projects()
-            print(len(device_manager.raw_data))
+            message_handler.raw_data = device_manager.raw_data
+
+            message_handler.organise_terminal_data()
+
+            time.sleep(0.5)
 
 
 RUNNING = True
@@ -327,4 +332,6 @@ if __name__ == "__main__":
     graphing.show()
     app.exec_()
 
+    # Stops all threads from running at program quit
     RUNNING = False
+    device_manager.terminate_device()
