@@ -41,6 +41,7 @@ class DeviceManager():
             self.device = None
 
         while self.device is not None:
+
             try:
                 raw_data = self.device.readline().decode("utf-8")
             except serial.SerialException:
@@ -49,8 +50,6 @@ class DeviceManager():
 
             if "\n" in raw_data:
                 self.raw_data = raw_data
-
-            print(self.raw_data)
 
     def decode_graph_data(self):
         """

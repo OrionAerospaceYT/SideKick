@@ -4,16 +4,20 @@ the debugging window open.
 This file also holds the
 """
 
+from email import message
 import sys
 import threading
+import time
 
 import pyqtgraph as pg
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
+from torch import device
 
 from device_manager import DeviceManager
 from file_manager import FileManager
+from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as graphing
 
 
@@ -29,6 +33,7 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.setupUi(self)
 
         self.running = True
+        self.supported_boards = {}
 
         self.top_legend = None
         self.top_plots = None
@@ -37,6 +42,8 @@ class Graphing(qtw.QMainWindow):
         self.bottom_legend = None
         self.bottom_plots = None
         self.main_ui_bottom_graph = None
+
+        self.get_supported_boards()
 
         self.map_top_graph()
         self.style_top_graph()
@@ -47,11 +54,24 @@ class Graphing(qtw.QMainWindow):
         self.connect_buttons()
 
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
+        self.main_ui.lineEdit.setPlaceholderText("Enter message here.")
 
         timer = qtc.QTimer(self)
         timer.setInterval(15)
         timer.timeout.connect(self.update)
         timer.start()
+
+    def get_supported_boards(self):
+        """
+        gets all supported boards for the drop down option
+        from the boards.csv file in the ./Ui directory
+        """
+
+        self.supported_boards = file_manager.get_all_boards()
+        boards = list(self.supported_boards.keys())
+
+        for board in boards:
+            self.main_ui.device.addItem(board)
 
     def map_top_graph(self):
         """
@@ -59,6 +79,7 @@ class Graphing(qtw.QMainWindow):
         """
 
         self.main_ui_top_graph = pg.PlotWidget()
+        self.main_ui_top_graph.setMenuEnabled(False)
         self.main_ui.main_ui_top_graph = qtw.QVBoxLayout()
 
         self.main_ui.top_widget.setLayout(self.main_ui.main_ui_top_graph)
@@ -86,6 +107,7 @@ class Graphing(qtw.QMainWindow):
         """
 
         self.main_ui_bottom_graph = pg.PlotWidget()
+        self.main_ui_bottom_graph.setMenuEnabled(False)
         self.main_ui.main_ui_bottom_graph = qtw.QVBoxLayout()
 
         self.main_ui.bottom_widget.setLayout(
@@ -121,6 +143,7 @@ class Graphing(qtw.QMainWindow):
             event_handler.connect_device)
         self.main_ui.disconnect.clicked.connect(
             event_handler.disconnect_device)
+        self.main_ui.record.clicked.connect(event_handler.record_data)
 
     def update_ports(self):
         """
@@ -156,6 +179,19 @@ class Graphing(qtw.QMainWindow):
                 target = self.main_ui.project_paths.findText(project)
                 self.main_ui.project_paths.removeItem(target)
 
+    def turn_on_rec_light(self, is_on):
+        """
+        turns on or off the blinking record light
+        """
+
+        if is_on:
+            self.main_ui.record.setStyleSheet("""image: url(Ui/Record.png);
+                                                image-position: left;
+                                                padding-left: 10px;
+                                                width: 10px""")
+        else:
+            self.main_ui.record.setStyleSheet("")
+
     def update(self):
         """
         calls all update functions
@@ -163,7 +199,9 @@ class Graphing(qtw.QMainWindow):
 
         self.update_ports()
         self.update_projects()
-        
+        message_handler.get_terminal_string(1)
+
+
 class EventHandler():
     """
     This class deals with all events on the gui and connects
@@ -171,12 +209,20 @@ class EventHandler():
     """
 
     def __init__(self):
+        self.recording = False
+        self.light_on = False
+
         self.avaliable_port_list = []
         self.current_projects = []
+        self.supported_boards = []
 
-        self.threaded_loop = threading.Thread(
-            target=self.backend_loop, args=(),)
-        self.threaded_loop.start()
+        self.threaded_blinking_record = threading.Thread(
+            target=self.blinking_record, args=(),)
+        self.threaded_blinking_record.start()
+
+        self.threaded_backend_loop = threading.Thread(
+            target=self.threaded_backend, args=(),)
+        self.threaded_backend_loop.start()
 
     def new_project(self):
         """
@@ -187,13 +233,13 @@ class EventHandler():
 
         project_name = graphing.main_ui.project_name.text()
         if project_name == "":
-            print(project_name)
+            return
         if project_name in file_manager.get_all_projects():
-            print(project_name)
+            return
+
+        file_manager.add_new_project(project_name)
 
         project_name = graphing.main_ui.project_name.setText("")
-
-        print(self.avaliable_port_list)
 
     def connect_device(self, port):
         """
@@ -217,20 +263,55 @@ class EventHandler():
 
         device_manager.terminate_device()
 
-    def backend_loop(self):
+    def record_data(self):
+        """
+        blinks the record light and saves the data
+        """
+
+        # TODO
+        self.recording = not self.recording
+
+    def blinking_record(self):
+        """
+        the code associated with the blinking record light goes here
+        """
+
+        while SETTING_UP:
+            pass
+
+        while RUNNING:
+
+            if not self.recording:
+                graphing.turn_on_rec_light(True)
+
+            if self.recording:
+                graphing.turn_on_rec_light(self.light_on)
+                self.light_on = not self.light_on
+
+            # delay so that graphing is defined by the time the code runs
+            time.sleep(1)
+
+    def threaded_backend(self):
         """
         any code to be looped on a thread goes here
+        waits until all variables are declared to loop
         """
+
+        while SETTING_UP:
+            pass
 
         while RUNNING:
             self.avaliable_port_list = device_manager.scan_avaliable_ports()
             self.current_projects = file_manager.get_all_projects()
 
+
 RUNNING = True
+SETTING_UP = True
 
 device_manager = DeviceManager()
 file_manager = FileManager()
 event_handler = EventHandler()
+message_handler = MessageHandler()
 
 if __name__ == "__main__":
 
@@ -242,6 +323,9 @@ if __name__ == "__main__":
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
     graphing = Graphing()
+
+    SETTING_UP = False
+
     graphing.show()
     app.exec_()
 
