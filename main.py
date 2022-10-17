@@ -4,7 +4,6 @@ the debugging window open.
 This file also holds the
 """
 
-from email import message
 import sys
 import threading
 import time
@@ -13,7 +12,6 @@ import pyqtgraph as pg
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
-from torch import device
 
 from device_manager import DeviceManager
 from file_manager import FileManager
@@ -288,7 +286,6 @@ class EventHandler():
                 graphing.turn_on_rec_light(self.light_on)
                 self.light_on = not self.light_on
 
-            # delay so that graphing is defined by the time the code runs
             time.sleep(1)
 
     def threaded_backend(self):
@@ -303,6 +300,7 @@ class EventHandler():
         while RUNNING:
             self.avaliable_port_list = device_manager.scan_avaliable_ports()
             self.current_projects = file_manager.get_all_projects()
+            print(len(device_manager.raw_data))
 
 
 RUNNING = True

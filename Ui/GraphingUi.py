@@ -113,7 +113,7 @@ class Ui_MainWindow(object):
         self.baud_rate.setItemText(3, _translate("MainWindow", "9600"))
         self.render.setText(_translate("MainWindow", "Render"))
         self.com_ports.setItemText(0, _translate("MainWindow", "Select COM"))
-        self.record.setText(_translate("MainWindow", "Record Terminal"))
+        self.record.setText(_translate("MainWindow", "Record"))
         self.disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.upload.setText(_translate("MainWindow", "Upload"))
         self.help.setText(_translate("MainWindow", "Help"))
