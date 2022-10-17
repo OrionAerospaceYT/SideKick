@@ -122,9 +122,9 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.disconnect.clicked.connect(
             event_handler.disconnect_device)
 
-    def update(self):
+    def update_ports(self):
         """
-        deals with updating the information on the gui each frame
+        deals with updating the com ports that are avaliable on the GUI
         """
 
         gui_ports = [self.main_ui.com_ports.itemText(
@@ -139,7 +139,31 @@ class Graphing(qtw.QMainWindow):
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
 
+    def update_projects(self):
+        """
+        deals with updating the projects avaliable in the SK Projects folder
+        """
 
+        gui_ports = [self.main_ui.project_paths.itemText(
+            i) for i in range(self.main_ui.project_paths.count())]
+
+        for project in event_handler.current_projects:
+            if project not in gui_ports:
+                self.main_ui.project_paths.addItem(project)
+
+        for project in gui_ports:
+            if project not in event_handler.current_projects:
+                target = self.main_ui.project_paths.findText(project)
+                self.main_ui.project_paths.removeItem(target)
+
+    def update(self):
+        """
+        calls all update functions
+        """
+
+        self.update_ports()
+        self.update_projects()
+        
 class EventHandler():
     """
     This class deals with all events on the gui and connects
@@ -201,7 +225,6 @@ class EventHandler():
         while RUNNING:
             self.avaliable_port_list = device_manager.scan_avaliable_ports()
             self.current_projects = file_manager.get_all_projects()
-
 
 RUNNING = True
 
