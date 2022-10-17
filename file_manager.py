@@ -10,7 +10,6 @@ import shutil
 class FileManager():
     """
     This class deals with creating and deleting files
-
     """
 
     def __init__(self):
@@ -20,6 +19,9 @@ class FileManager():
 
         self.create_sidekick_file()
         self.create_sub_sidekick_files()
+
+        if len(os.listdir(f'C:/Users/{self.user}/Documents/SideKick/Libraries')) <= 0:
+            self.move_libraries()
 
     def create_sidekick_file(self):
         """
@@ -44,9 +46,20 @@ class FileManager():
         if "Libraries" not in directories:
             os.mkdir(f'C:/Users/{self.user}/Documents/SideKick/Libraries')
 
-            source = './ConsciOS/libraries'
-            destination = f'C:/Users/{self.user}/Documents/SideKick/Libraries/libraries'
-            shutil.copytree(source, destination)
+    def move_libraries(self):
+        """
+        Copies the sidekick ConsciOS to the libraries folder
+        """
+
+        conscios_folder = len(os.listdir("./ConsciOS"))
+
+        if not conscios_folder:
+            print("ERROR: The ConsciOS is non-existent!")
+            return
+
+        source = './ConsciOS/libraries'
+        destination = f'C:/Users/{self.user}/Documents/SideKick/Libraries/libraries'
+        shutil.copytree(source, destination)
 
     def get_all_boards(self):
         """
@@ -55,6 +68,7 @@ class FileManager():
         """
 
         board_dict = {}
+
         with open("./Ui/boards.csv", "r", encoding='UTF-8') as boards:
             for line in boards:
                 names = line.split(", ")
