@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>483</height>
+    <width>841</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -31,75 +31,46 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" rowstretch="2,1,4,1,4,1" columnstretch="1,4,4,4,1,12,4,1">
-      <item row="0" column="5">
-       <spacer name="horizontalSpacer">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0" columnstretch="0,2,2,1,5,2,0,20,1,0">
+      <item row="2" column="0" colspan="10">
+       <widget class="Line" name="top_bar">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="6">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Rec</string>
-        </property>
        </widget>
       </item>
-      <item row="0" column="3" colspan="2">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Help</string>
-        </property>
-       </widget>
+      <item row="3" column="1" rowspan="3" colspan="5">
+       <widget class="QTextBrowser" name="terminal"/>
       </item>
-      <item row="5" column="3">
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string>Send</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" rowspan="3" colspan="3">
-       <widget class="QTextBrowser" name="textBrowser"/>
-      </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-      <item row="2" column="5" colspan="2">
-       <widget class="QWidget" name="widget" native="true"/>
-      </item>
-      <item row="4" column="5" colspan="2">
-       <widget class="QWidget" name="widget_2" native="true"/>
-      </item>
-      <item row="5" column="0">
-       <spacer name="horizontalSpacer_2">
+      <item row="4" column="7" colspan="2">
+       <widget class="Line" name="horizontal_divider">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-      <item row="2" column="4" rowspan="4">
-       <widget class="Line" name="line_2">
+      <item row="3" column="6" rowspan="3">
+       <widget class="Line" name="terminal_divider">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
        </widget>
       </item>
-      <item row="0" column="7">
-       <spacer name="horizontalSpacer_3">
+      <item row="5" column="7" colspan="2">
+       <widget class="QWidget" name="bottom_widget" native="true"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="device">
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="7" colspan="2">
+       <widget class="QWidget" name="top_widget" native="true"/>
+      </item>
+      <item row="6" column="0">
+       <spacer name="left_spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -111,31 +82,67 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" colspan="8">
-       <widget class="Line" name="line">
+      <item row="0" column="9">
+       <spacer name="right_spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
-      </item>
-      <item row="3" column="5" colspan="3">
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="pushButton_4">
-        <property name="text">
-         <string>Device</string>
-        </property>
-       </widget>
+       </spacer>
       </item>
       <item row="0" column="1">
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="file">
         <property name="text">
          <string>File</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <spacer name="button_spacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Upload</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="QPushButton" name="help">
+        <property name="text">
+         <string>Help</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="5">
+       <widget class="QPushButton" name="send">
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" colspan="4">
+       <widget class="QLineEdit" name="message"/>
+      </item>
+      <item row="0" column="4" colspan="2">
+       <widget class="QPushButton" name="record">
+        <property name="text">
+         <string>Rec</string>
         </property>
        </widget>
       </item>

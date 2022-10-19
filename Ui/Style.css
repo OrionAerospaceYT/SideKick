@@ -11,52 +11,14 @@ QPushButton {
   font-size: 15px;
   text-align: center;
   outline: none;
-  color: #00f0c3;
-  background-color: #252535;
+  
   border: none;
-  border-radius: 10px;
-}
-QPushButton#upload {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 20px;
-}
-QPushButton#send {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 20px;
-}
-QPushButton#help {
-  image: url(Ui/Help.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#new_project {
-  image: url(Ui/Folder.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#render {
-  image: url(Ui/SideKick_White.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 20px;
 }
 QPushButton:pressed {
-  background-color: #000;
+  color: #00745a;
 }
 QPushButton:hover:!pressed{
-  background-color: #151525;
+  color: #00745a;
 }
 
 /*Combo Box Styling*/
@@ -65,10 +27,9 @@ QComboBox {
   font-size: 15px;
   text-align: center;
   outline: none;
-  color: #00f0c3;
+  
   background-color: #252535;
   border: none;
-  border-radius: 10px;
   height: 20px;
 }
 QComboBox:pressed {
@@ -90,7 +51,7 @@ QComboBox::drop-down {
   subcontrol-origin: padding;
   subcontrol-position: top right;
   border-left: none;
-  color: #00f0c3;
+  
 }
 QComboBox::down-arrow {
   image: url(Ui/D_Arrow.png);
@@ -102,7 +63,6 @@ QComboBox::down-arrow {
 QComboBox QAbstractItemView {
   background: #252535;
   border: none;
-  color: #00f0c3;
 }
 
 /*Line Edit Styling*/
@@ -110,11 +70,9 @@ QLineEdit {
   padding: 10px 10px;
   font-size: 15px;
   text-align: center;
-  outline: none;
-  color: #00f0c3;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
+  border-color: #000000;
+  border-radius: 2px;
+  border-width: 2px;
   height: 20px;
 }
 QLineEdit:hover:!pressed{
@@ -125,7 +83,7 @@ QLineEdit:hover:!pressed{
 QLabel {
   font-size: 20px;
   font-weight: bold;
-  color: #00f0c3;
+  
   text-align: center;
   padding-left: 6px;
 }

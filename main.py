@@ -9,7 +9,6 @@ import threading
 import time
 
 import pyqtgraph as pg
-from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
 
@@ -41,8 +40,6 @@ class Graphing(qtw.QMainWindow):
         self.bottom_plots = None
         self.main_ui_bottom_graph = None
 
-        self.get_supported_boards()
-
         self.map_top_graph()
         self.style_top_graph()
 
@@ -51,25 +48,15 @@ class Graphing(qtw.QMainWindow):
 
         self.connect_buttons()
 
-        self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
-        self.main_ui.lineEdit.setPlaceholderText("Enter message here.")
+        #self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
+        self.main_ui.message.setPlaceholderText("Enter message here.")
 
-        timer = qtc.QTimer(self)
-        timer.setInterval(15)
-        timer.timeout.connect(self.update)
-        timer.start()
+        # self.main_ui.bottom_widget.setMinimumWidth(600)
 
-    def get_supported_boards(self):
-        """
-        gets all supported boards for the drop down option
-        from the boards.csv file in the ./Ui directory
-        """
-
-        self.supported_boards = file_manager.get_all_boards()
-        boards = list(self.supported_boards.keys())
-
-        for board in boards:
-            self.main_ui.device.addItem(board)
+        #timer = qtc.QTimer(self)
+        # timer.setInterval(15)
+        # timer.timeout.connect(self.update)
+        # timer.start()
 
     def map_top_graph(self):
         """
@@ -135,47 +122,7 @@ class Graphing(qtw.QMainWindow):
         Connects the buttons on the gui to python functions
         """
 
-        self.main_ui.render.setDisabled(True)
-        self.main_ui.new_project.clicked.connect(event_handler.new_project)
-        self.main_ui.com_ports.activated[str].connect(
-            event_handler.connect_device)
-        self.main_ui.disconnect.clicked.connect(
-            event_handler.disconnect_device)
         self.main_ui.record.clicked.connect(event_handler.record_data)
-
-    def update_ports(self):
-        """
-        deals with updating the com ports that are avaliable on the GUI
-        """
-
-        gui_ports = [self.main_ui.com_ports.itemText(
-            i) for i in range(self.main_ui.com_ports.count())]
-
-        for port in event_handler.avaliable_port_list:
-            if port not in gui_ports:
-                self.main_ui.com_ports.addItem(port)
-
-        for port in gui_ports:
-            if port not in event_handler.avaliable_port_list:
-                target = self.main_ui.com_ports.findText(port)
-                self.main_ui.com_ports.removeItem(target)
-
-    def update_projects(self):
-        """
-        deals with updating the projects avaliable in the SK Projects folder
-        """
-
-        gui_ports = [self.main_ui.project_paths.itemText(
-            i) for i in range(self.main_ui.project_paths.count())]
-
-        for project in event_handler.current_projects:
-            if project not in gui_ports:
-                self.main_ui.project_paths.addItem(project)
-
-        for project in gui_ports:
-            if project not in event_handler.current_projects:
-                target = self.main_ui.project_paths.findText(project)
-                self.main_ui.project_paths.removeItem(target)
 
     def turn_on_rec_light(self, is_on):
         """
@@ -184,8 +131,8 @@ class Graphing(qtw.QMainWindow):
 
         if is_on:
             self.main_ui.record.setStyleSheet("""image: url(Ui/Record.png);
-                                                image-position: left;
-                                                padding-left: 10px;
+                                                image-position: right;
+                                                padding-right: 10px;
                                                 width: 10px""")
         else:
             self.main_ui.record.setStyleSheet("")
@@ -287,7 +234,7 @@ class EventHandler():
                 graphing.turn_on_rec_light(self.light_on)
                 self.light_on = not self.light_on
 
-            time.sleep(1)
+            time.sleep(2)
 
     def threaded_backend(self):
         """
@@ -305,7 +252,7 @@ class EventHandler():
 
             message_handler.organise_terminal_data()
 
-            time.sleep(0.5)
+            time.sleep(1)
 
 
 RUNNING = True
