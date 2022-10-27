@@ -32,60 +32,17 @@ QComboBox {
   border: none;
   height: 20px;
 }
-QComboBox:pressed {
-  background-color: #000;
-}
-QComboBox:hover:!pressed{
-  background-color: #151525;
-}
-QComboBox:editable {
-  background: #252535;
-}
-  QComboBox:!editable,
-  QComboBox::drop-down:editable,
-  QComboBox:!editable:on,
-  QComboBox::drop-down:editable:on {
-  background: #252535;
-}
-QComboBox::drop-down {
-  subcontrol-origin: padding;
-  subcontrol-position: top right;
-  border-left: none;
-  
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
-}
-QComboBox QAbstractItemView {
-  background: #252535;
-  border: none;
-}
 
 /*Line Edit Styling*/
 QLineEdit {
   padding: 10px 10px;
   font-size: 15px;
   text-align: center;
-  border-color: #000000;
-  border-radius: 2px;
-  border-width: 2px;
+  border-color: #FFF;
   height: 20px;
 }
 QLineEdit:hover:!pressed{
   background-color: #151525;
-}
-
-/*Label Styling*/
-QLabel {
-  font-size: 20px;
-  font-weight: bold;
-  
-  text-align: center;
-  padding-left: 6px;
 }
 
 /*Text Box Styling*/
@@ -96,16 +53,7 @@ QTextBrowser {
   /*border-image: url(Ui/Schematic.png) 0 0 0 0 strech strech;*/
 }
 
-QMenuBar {
-  background-color: #151525;
-}
-
 /*Removes the border from the scroll area*/
 QScrollArea {
   border: none;
-}
-
-/*QCheckBox styling ( the text size is too small by default )*/
-QCheckBox {
-  font-size: 15px;
 }
