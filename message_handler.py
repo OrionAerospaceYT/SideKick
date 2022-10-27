@@ -24,6 +24,7 @@ class MessageHandler():
 
         self.raw_data = []
 
+        self.terminal_header = """<h1><p style="color:#00f0c3;font-size:30px">Terminal</p></h1>"""
         self.terminal_string = ""
         self.error_string = ""
 
@@ -31,32 +32,6 @@ class MessageHandler():
         self.bottom_graph_data = []
 
         self.terminal_data_list = []
-
-    def get_new_terminal_data(self, new_data):
-        """
-        this function grabs new terminal data
-        """
-
-        self.terminal_data_list.append(f"{new_data}<br>")
-
-        while len(self.terminal_data_list) >= 50:
-            self.terminal_data_list.pop(0)
-
-    def organise_terminal_data(self):
-        """
-        organises the terminal data into valid HTML
-        """
-
-        self.terminal_string = ""
-
-        amount_of_data = 30
-
-        if len(self.raw_data) < 30:
-            amount_of_data = len(self.raw_data)
-
-        for i in range(1, amount_of_data):
-            terminal_data = self.decode_terminal_data(self.raw_data[-i])
-            self.terminal_string += terminal_data + "<br>"
 
     def decode_graph_data(self, raw_input):
         """

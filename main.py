@@ -126,8 +126,13 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.file.clicked.connect(event_handler.open_file_manager)
         self.main_ui.device.clicked.connect(event_handler.open_device_manager)
         self.main_ui.new_project.clicked.connect(event_handler.new_project)
+
         self.main_ui.select_project.activated[str].connect(
             event_handler.open_file_manager)
+
+        self.main_ui.com_ports.activated[str].connect(
+            event_handler.connect_device)
+
         self.main_ui.disconnect.clicked.connect(
             event_handler.disconnect_device)
 
@@ -137,12 +142,11 @@ class Graphing(qtw.QMainWindow):
         """
 
         if is_on:
-            self.main_ui.record.setStyleSheet("""image: url(Ui/Record.png);
-                                                image-position: right;
-                                                padding-right: 10px;
-                                                width: 10px""")
+            self.main_ui.record_light.setStyleSheet("""image: url(Ui/Record.png);
+                                                    image-position: center;
+                                                    """)
         else:
-            self.main_ui.record.setStyleSheet("")
+            self.main_ui.record_light.setStyleSheet("")
 
     def update_projects(self):
         """
@@ -159,15 +163,29 @@ class Graphing(qtw.QMainWindow):
                 target = self.main_ui.select_project.findText(project)
                 self.main_ui.select_project.removeItem(target)
 
+    def update_ports(self):
+        """
+        Updates all avaliable ports, removes unavaliable one
+        """
+
+        ports_on_gui = [self.main_ui.com_ports.itemText(
+            i) for i in range(self.main_ui.com_ports.count())]
+        for port in event_handler.avaliable_port_list:
+            if port not in ports_on_gui:
+                self.main_ui.com_ports.addItem(port)
+        for port in ports_on_gui:
+            if port not in event_handler.avaliable_port_list:
+                target = self.main_ui.com_ports.findText(port)
+                self.main_ui.com_ports.removeItem(target)
+
     def update(self):
         """
         calls all update functions
         """
 
-        # self.update_ports()
+        self.update_ports()
         self.update_projects()
 
-        # self.main_ui.terminal.setHtml(message_handler.terminal_string)
         if self.menu_width == 0:
             self.main_ui.file_layout.setVisible(False)
             self.main_ui.device_layout.setVisible(False)
@@ -179,6 +197,8 @@ class Graphing(qtw.QMainWindow):
             self.main_ui.file_layout.setVisible(True)
             self.main_ui.file_layout.setMinimumWidth(self.menu_width)
             self.main_ui.device_layout.setVisible(False)
+
+        self.main_ui.terminal.setHtml(message_handler.terminal_header)
 
 
 class EventHandler():
@@ -228,13 +248,12 @@ class EventHandler():
         message_handler
         """
 
-        #baud = graphing.main_ui.baud_rate.itemText(0)
+        baud = graphing.main_ui.baud_rate.itemText(0)
 
-        # if port == "Select COM":
-        #    return
+        if port == "Select COM":
+            return
 
-        #device_manager.connect_device(port, baud)
-        pass
+        device_manager.connect_device(port, baud)
 
     def disconnect_device(self):
         """
@@ -289,7 +308,7 @@ class EventHandler():
                 graphing.turn_on_rec_light(self.light_on)
                 self.light_on = not self.light_on
 
-            time.sleep(1)
+            time.sleep(0.5)
 
     def threaded_backend(self):
         """
@@ -305,7 +324,7 @@ class EventHandler():
             self.current_projects = file_manager.get_all_projects()
             message_handler.raw_data = device_manager.raw_data
 
-            message_handler.organise_terminal_data()
+            print(message_handler.raw_data)
 
             if not self.file_manager and not self.device_manager:
                 graphing.menu_width = 0
