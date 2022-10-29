@@ -12,6 +12,7 @@ import pyqtgraph as pg
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
+from PyQt5.QtCore import Qt
 
 from device_manager import DeviceManager
 from file_manager import FileManager
@@ -52,6 +53,10 @@ class Graphing(qtw.QMainWindow):
 
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
         self.main_ui.message.setPlaceholderText("Enter message here.")
+
+        self.main_ui.bottom_update.setAlignment(Qt.AlignRight)
+        self.main_ui.upload.setMinimumWidth(80)
+        self.main_ui.help.setMinimumWidth(80)
 
         timer = qtc.QTimer(self)
         timer.setInterval(15)
@@ -127,6 +132,8 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.device.clicked.connect(event_handler.open_device_manager)
         self.main_ui.new_project.clicked.connect(event_handler.new_project)
 
+        self.main_ui.message.returnPressed.connect(event_handler.send)
+
         self.main_ui.select_project.activated[str].connect(
             event_handler.open_file_manager)
 
@@ -198,7 +205,13 @@ class Graphing(qtw.QMainWindow):
             self.main_ui.file_layout.setMinimumWidth(self.menu_width)
             self.main_ui.device_layout.setVisible(False)
 
-        self.main_ui.terminal.setHtml(message_handler.terminal_header)
+        self.main_ui.terminal.setHtml(message_handler.terminal_html)
+
+        if device_manager.port is not None:
+            self.main_ui.bottom_update.setText(
+                "Connected: " + device_manager.port)
+        else:
+            self.main_ui.bottom_update.setText("Not Connected")
 
 
 class EventHandler():
@@ -254,6 +267,15 @@ class EventHandler():
             return
 
         device_manager.connect_device(port, baud)
+
+    def send(self):
+        """
+        sends the message from the line edit to the connected device
+        """
+
+        device_manager.send(graphing.main_ui.message.text())
+
+        graphing.main_ui.message.setText("")
 
     def disconnect_device(self):
         """
@@ -324,7 +346,8 @@ class EventHandler():
             self.current_projects = file_manager.get_all_projects()
             message_handler.raw_data = device_manager.raw_data
 
-            print(message_handler.raw_data)
+            message_handler.terminal_output_html(
+                graphing.main_ui.terminal.height())
 
             if not self.file_manager and not self.device_manager:
                 graphing.menu_width = 0
@@ -344,10 +367,6 @@ message_handler = MessageHandler()
 if __name__ == "__main__":
 
     app = qtw.QApplication(sys.argv)
-
-    with open("Ui/Style.css", "r", encoding="UTF-8") as style_sheet:
-        app.setStyleSheet(style_sheet.read())
-
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
     graphing = Graphing()

@@ -24,9 +24,12 @@ class MessageHandler():
 
         self.raw_data = []
 
-        self.terminal_header = """<h1><p style="color:#00f0c3;font-size:30px">Terminal</p></h1>"""
-        self.terminal_string = ""
+        self.terminal_header = """<h1><p style="color:#00f0c3;font-size:30px">Terminal</p></h1><br>"""
+        self.terminal_html = ""
         self.error_string = ""
+
+        self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
+        self.ending = "</p>"
 
         self.top_graph_data = []
         self.bottom_graph_data = []
@@ -76,3 +79,25 @@ class MessageHandler():
                 terminal_data += " " + data[0]
 
         return terminal_data
+
+    def terminal_output_html(self, height):
+        """
+        goes through the latest points of data and converts it
+        into html for the terminal on the gui
+        """
+        decoded_data = []
+
+        amount_of_data = int(height / 30)
+
+        for i in range(1, amount_of_data):
+            if i > len(self.raw_data):
+                break
+            decoded_string = self.decode_terminal_data(self.raw_data[-i])
+            decoded_data.append(decoded_string)
+
+        terminal_html = self.terminal_header
+
+        for data in decoded_data:
+            terminal_html += self.beginning + data + self.ending
+
+        self.terminal_html = terminal_html

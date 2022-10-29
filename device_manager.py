@@ -20,11 +20,20 @@ class DeviceManager():
     def __init__(self):
         self.device = None
         self.get_data = None
+        self.port = None
         self.raw_data = []
 
         self.terminal_data = ""
         self.graph_top_data = []
         self.graph_bottom_data = []
+
+    def send(self, message):
+        """
+        sends the message given from the gui to the
+        connected device
+        """
+
+        self.device.write(message.encode("UTF-8"))
 
     def threaded_get_raw_data(self, port, baud):
         """
@@ -33,6 +42,7 @@ class DeviceManager():
         if the device is connected
         """
 
+        self.port = port
         self.terminate_device()
 
         try:
@@ -50,17 +60,12 @@ class DeviceManager():
 
             # uses "(" as a bracket is in every message
             if "(" in raw_data:
-                self.raw_data.append(raw_data)
+                self.raw_data.append(raw_data.strip())
 
                 if len(self.raw_data) > 1000:
                     self.raw_data.pop(0)
 
-    def get_num_of_graphs(self):
-        """
-        returns a list [num_of_top_plots, num_of_bottom_plots]
-        """
-
-        return [len(self.graph_top_data), len(self.graph_bottom_data)]
+        self.port = None
 
     def terminate_device(self):
         """
