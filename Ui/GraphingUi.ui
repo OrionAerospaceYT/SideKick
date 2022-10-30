@@ -141,14 +141,15 @@ QLineEdit:hover:!pressed{
 QLabel {
   font-size: 20px;
   font-weight: bold;
-  padding-left: 6px;
 }
 
 /*Text Box Styling*/
 QTextBrowser {
-  border: none;
-  padding-left: 40px;
-  background-color: #303040;
+  border: none; 
+  padding-left:10px; 
+  padding-top:10px;
+  background-color: #252535;
+  border-radius: 10px;
 }
 
 QMenuBar {
@@ -175,49 +176,512 @@ QScrollArea {
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1,0,1,0" columnstretch="0,0,1,1,0,3,0">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1,1,0,0" columnstretch="0,0,0,0,3,0,5,0,0">
       <property name="leftMargin">
-       <number>10</number>
+       <number>0</number>
       </property>
       <property name="topMargin">
-       <number>10</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>10</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
-       <number>10</number>
+       <number>0</number>
       </property>
-      <item row="2" column="2" rowspan="3" colspan="2">
+      <item row="3" column="6" colspan="2">
+       <widget class="QWidget" name="bottom_widget" native="true"/>
+      </item>
+      <item row="4" column="4" colspan="2">
+       <widget class="QLineEdit" name="message"/>
+      </item>
+      <item row="4" column="6" colspan="2">
+       <widget class="QLabel" name="bottom_update">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0" colspan="9">
+       <widget class="QFrame" name="horizontalFrame">
+        <property name="styleSheet">
+         <string notr="true">/*General Styling*/
+* {
+	
+	font: 8pt &quot;MS Gothic&quot;;
+  font-size: 14px;
+  background-color: #252535;
+  color: #FFFFFF;
+}
+
+/*Button Styling*/
+QPushButton {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+}
+QPushButton#upload {
+  image: url(Ui/U_Arrow.png);
+  image-position: left;
+  text-align: right;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#send {
+  image: url(Ui/U_Arrow.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#help {
+  image: url(Ui/Help.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#new_project {
+  image: url(Ui/Folder.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#disconnect {
+  image: url(Ui/Plug.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#render {
+  image: url(Ui/SideKick_White.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 20px;
+}
+QPushButton:pressed {
+  background-color: #000;
+}
+QPushButton:hover:!pressed{
+  background-color: #151525;
+}
+
+/*Combo Box Styling*/
+QComboBox {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+  height: 20px;
+}
+QComboBox:pressed {
+  background-color: #000;
+}
+QComboBox:hover:!pressed{
+  background-color: #151525;
+}
+QComboBox:editable {
+  background: #252535;
+}
+  QComboBox:!editable,
+  QComboBox::drop-down:editable,
+  QComboBox:!editable:on,
+  QComboBox::drop-down:editable:on {
+  background: #252535;
+}
+QComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  border-left: none;
+  color: #00f0c3;
+}
+QComboBox::down-arrow {
+  image: url(Ui/D_Arrow.png);
+  image-position: right;
+  padding-right: 50px;
+  width: 50px;
+  height: 20px;
+}
+QComboBox QAbstractItemView {
+  background: #252535;
+  border: none;
+  color: #00f0c3;
+}
+
+/*Line Edit Styling*/
+QLineEdit {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+  height: 20px;
+}
+QLineEdit:hover:!pressed{
+  background-color: #151525;
+}
+
+/*Label Styling*/
+QLabel {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 6px;
+}
+
+/*Text Box Styling*/
+QTextBrowser {
+  border: none;
+  padding-left: 40px;
+  background-color: #171727;
+}
+
+QMenuBar {
+  background-color: #151525;
+}
+
+/*Removes the border from the scroll area*/
+QScrollArea {
+  border: none;
+}</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="file">
+           <property name="text">
+            <string>File</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="device">
+           <property name="text">
+            <string>Device</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="upload">
+           <property name="text">
+            <string>Upload</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="record">
+           <property name="text">
+            <string>Record</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="record_light">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="top_update">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="help">
+           <property name="text">
+            <string>Help</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>5</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="8">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="6" rowspan="2" colspan="2">
+       <widget class="QWidget" name="top_widget" native="true"/>
+      </item>
+      <item row="1" column="4" rowspan="3" colspan="2">
        <widget class="QTextBrowser" name="terminal">
         <property name="styleSheet">
          <string notr="true"/>
         </property>
        </widget>
       </item>
-      <item row="2" column="4" rowspan="3">
-       <widget class="Line" name="terminal_divider">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+      <item row="1" column="1" rowspan="4">
+       <widget class="QFrame" name="file_layout">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/*General Styling*/
+* {
+font: 8pt &quot;MS Gothic&quot;;
+  font-size: 14px;
+  background-color: #2b2b3b;
+  color: #FFFFFF;
+  border: none;
+  border-radius:10px;
+}
+
+/*Button Styling*/
+QPushButton {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+}
+QPushButton#upload {
+  image: url(Ui/U_Arrow.png);
+  image-position: left;
+  text-align: right;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#send {
+  image: url(Ui/U_Arrow.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#help {
+  image: url(Ui/Help.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#new_project {
+  image: url(Ui/Folder.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#disconnect {
+  image: url(Ui/Plug.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton#render {
+  image: url(Ui/SideKick_White.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 20px;
+}
+QPushButton:pressed {
+  background-color: #000;
+}
+QPushButton:hover:!pressed{
+  background-color: #151525;
+}
+
+/*Combo Box Styling*/
+QComboBox {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+  height: 20px;
+}
+QComboBox:pressed {
+  background-color: #000;
+}
+QComboBox:hover:!pressed{
+  background-color: #151525;
+}
+QComboBox:editable {
+  background: #252535;
+}
+  QComboBox:!editable,
+  QComboBox::drop-down:editable,
+  QComboBox:!editable:on,
+  QComboBox::drop-down:editable:on {
+  background: #252535;
+}
+QComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  border-left: none;
+  color: #00f0c3;
+}
+QComboBox::down-arrow {
+  image: url(Ui/D_Arrow.png);
+  image-position: right;
+  padding-right: 50px;
+  width: 50px;
+  height: 20px;
+}
+QComboBox QAbstractItemView {
+  background: #252535;
+  border: none;
+  color: #00f0c3;
+}
+
+/*Line Edit Styling*/
+QLineEdit {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #252535;
+  border: none;
+  border-radius: 10px;
+  height: 20px;
+}
+QLineEdit:hover:!pressed{
+  background-color: #151525;
+}
+
+/*Label Styling*/
+QLabel {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 6px;
+}
+
+/*Text Box Styling*/
+QTextBrowser {
+  border: none;
+  padding-left: 40px;
+  /*border-image: url(Ui/Schematic.png) 0 0 0 0 strech strech;*/
+}
+
+QMenuBar {
+  background-color: #151525;
+}
+
+/*Removes the border from the scroll area*/
+QScrollArea {
+  border: none;
+}</string>
+        </property>
+        <layout class="QVBoxLayout" name="file_menu">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
+         </property>
+         <property name="leftMargin">
+          <number>20</number>
+         </property>
+         <property name="rightMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="project_name"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="select_project">
+           <item>
+            <property name="text">
+             <string>Select Project</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="new_project">
+           <property name="text">
+            <string>New Project</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="delete_project">
+           <property name="text">
+            <string>Delete Project</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </widget>
       </item>
-      <item row="1" column="2" colspan="5">
-       <widget class="Line" name="top_bar">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" rowspan="6">
+      <item row="1" column="2" rowspan="4">
        <widget class="QFrame" name="device_layout">
         <property name="styleSheet">
          <string notr="true">/*General Styling*/
 * {
   font: 8pt &quot;MS Gothic&quot;;
   font-size: 14px;
-  background-color: #32323C;
+  background-color: #2b2b3b;
   color: #FFFFFF;
+  border:none;
+  border-radius:10px;
 }
 
 /*Button Styling*/
@@ -417,447 +881,6 @@ QScrollArea {
             </size>
            </property>
           </spacer>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="0" rowspan="6">
-       <widget class="QFrame" name="file_layout">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">/*General Styling*/
-* {
-font: 8pt &quot;MS Gothic&quot;;
-  font-size: 14px;
-  background-color: #32323C;
-  color: #FFFFFF;
-}
-
-/*Button Styling*/
-QPushButton {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-}
-QPushButton#upload {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  text-align: right;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#send {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#help {
-  image: url(Ui/Help.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#new_project {
-  image: url(Ui/Folder.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#render {
-  image: url(Ui/SideKick_White.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 20px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
-QPushButton:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Combo Box Styling*/
-QComboBox {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QComboBox:pressed {
-  background-color: #000;
-}
-QComboBox:hover:!pressed{
-  background-color: #151525;
-}
-QComboBox:editable {
-  background: #252535;
-}
-  QComboBox:!editable,
-  QComboBox::drop-down:editable,
-  QComboBox:!editable:on,
-  QComboBox::drop-down:editable:on {
-  background: #252535;
-}
-QComboBox::drop-down {
-  subcontrol-origin: padding;
-  subcontrol-position: top right;
-  border-left: none;
-  color: #00f0c3;
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
-}
-QComboBox QAbstractItemView {
-  background: #252535;
-  border: none;
-  color: #00f0c3;
-}
-
-/*Line Edit Styling*/
-QLineEdit {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QLineEdit:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Label Styling*/
-QLabel {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 6px;
-}
-
-/*Text Box Styling*/
-QTextBrowser {
-  border: none;
-  padding-left: 40px;
-  /*border-image: url(Ui/Schematic.png) 0 0 0 0 strech strech;*/
-}
-
-QMenuBar {
-  background-color: #151525;
-}
-
-/*Removes the border from the scroll area*/
-QScrollArea {
-  border: none;
-}</string>
-        </property>
-        <layout class="QVBoxLayout" name="file_menu">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <property name="leftMargin">
-          <number>20</number>
-         </property>
-         <property name="rightMargin">
-          <number>20</number>
-         </property>
-         <item>
-          <widget class="QLineEdit" name="project_name"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="select_project">
-           <item>
-            <property name="text">
-             <string>Select Project</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="new_project">
-           <property name="text">
-            <string>New Project</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="delete_project">
-           <property name="text">
-            <string>Delete Project</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="4" column="5" colspan="2">
-       <widget class="QWidget" name="bottom_widget" native="true"/>
-      </item>
-      <item row="3" column="5" colspan="2">
-       <widget class="Line" name="horizontal_divider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2" colspan="2">
-       <widget class="QLineEdit" name="message"/>
-      </item>
-      <item row="5" column="5" colspan="2">
-       <widget class="QLabel" name="bottom_update">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5" colspan="2">
-       <widget class="QWidget" name="top_widget" native="true"/>
-      </item>
-      <item row="0" column="2" colspan="5">
-       <widget class="QFrame" name="horizontalFrame">
-        <property name="styleSheet">
-         <string notr="true">/*General Styling*/
-* {
-	
-	font: 8pt &quot;MS Gothic&quot;;
-  font-size: 14px;
-  background-color: #272737;
-  color: #FFFFFF;
-}
-
-/*Button Styling*/
-QPushButton {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-}
-QPushButton#upload {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  text-align: right;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#send {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#help {
-  image: url(Ui/Help.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#new_project {
-  image: url(Ui/Folder.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#render {
-  image: url(Ui/SideKick_White.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 20px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
-QPushButton:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Combo Box Styling*/
-QComboBox {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QComboBox:pressed {
-  background-color: #000;
-}
-QComboBox:hover:!pressed{
-  background-color: #151525;
-}
-QComboBox:editable {
-  background: #252535;
-}
-  QComboBox:!editable,
-  QComboBox::drop-down:editable,
-  QComboBox:!editable:on,
-  QComboBox::drop-down:editable:on {
-  background: #252535;
-}
-QComboBox::drop-down {
-  subcontrol-origin: padding;
-  subcontrol-position: top right;
-  border-left: none;
-  color: #00f0c3;
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
-}
-QComboBox QAbstractItemView {
-  background: #252535;
-  border: none;
-  color: #00f0c3;
-}
-
-/*Line Edit Styling*/
-QLineEdit {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QLineEdit:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Label Styling*/
-QLabel {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 6px;
-}
-
-/*Text Box Styling*/
-QTextBrowser {
-  border: none;
-  padding-left: 40px;
-  background-color: #303040;
-}
-
-QMenuBar {
-  background-color: #151525;
-}
-
-/*Removes the border from the scroll area*/
-QScrollArea {
-  border: none;
-}</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="file">
-           <property name="text">
-            <string>File</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="device">
-           <property name="text">
-            <string>Device</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="upload">
-           <property name="text">
-            <string>Upload</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="record">
-           <property name="text">
-            <string>Record</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="record_light">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="top_update">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="help">
-           <property name="text">
-            <string>Help</string>
-           </property>
-          </widget>
          </item>
         </layout>
        </widget>

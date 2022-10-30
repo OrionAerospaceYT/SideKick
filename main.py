@@ -193,16 +193,14 @@ class Graphing(qtw.QMainWindow):
         self.update_ports()
         self.update_projects()
 
-        if self.menu_width == 0:
-            self.main_ui.file_layout.setVisible(False)
-            self.main_ui.device_layout.setVisible(False)
-        elif event_handler.device_manager:
+        if event_handler.device_manager:
             self.main_ui.device_layout.setVisible(True)
-            self.main_ui.device_layout.setMinimumWidth(self.menu_width)
             self.main_ui.file_layout.setVisible(False)
         elif event_handler.file_manager:
             self.main_ui.file_layout.setVisible(True)
-            self.main_ui.file_layout.setMinimumWidth(self.menu_width)
+            self.main_ui.device_layout.setVisible(False)
+        else:
+            self.main_ui.file_layout.setVisible(False)
             self.main_ui.device_layout.setVisible(False)
 
         self.main_ui.terminal.setHtml(message_handler.terminal_html)
@@ -348,12 +346,6 @@ class EventHandler():
 
             message_handler.terminal_output_html(
                 graphing.main_ui.terminal.height())
-
-            if not self.file_manager and not self.device_manager:
-                graphing.menu_width = 0
-            else:
-                graphing.menu_width = int(
-                    (graphing.main_ui.top_bar.width() / 3)) - 50
 
 
 RUNNING = True
