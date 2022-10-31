@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
-    <height>663</height>
+    <width>825</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -159,6 +159,18 @@ QMenuBar {
 /*Removes the border from the scroll area*/
 QScrollArea {
   border: none;
+}
+
+/*Changes the graphs colours*/
+QWidget #top_widget{
+  border: none;
+  border-radius: 10px;
+  background-color: #252535;
+}
+QWidget #bottom_widget{
+  border: none;
+  border-radius: 10px;
+  background-color: #252535;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -470,8 +482,14 @@ QScrollArea {
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>200</width>
           <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -673,6 +691,18 @@ QScrollArea {
       </item>
       <item row="1" column="2" rowspan="4">
        <widget class="QFrame" name="device_layout">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">/*General Styling*/
 * {
