@@ -50,13 +50,15 @@ class Graphing(qtw.QMainWindow):
         self.style_bottom_graph()
 
         self.connect_buttons()
+        self.connect_keyboard_shortcuts()
 
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
         self.main_ui.message.setPlaceholderText("Enter message here.")
 
-        self.main_ui.bottom_update.setAlignment(Qt.AlignRight)
-        self.main_ui.upload.setMinimumWidth(80)
-        self.main_ui.help.setMinimumWidth(80)
+        self.main_ui.bottom_update.setAlignment(
+            Qt.AlignRight | Qt.AlignVCenter)
+        self.main_ui.upload.setMinimumWidth(100)
+        self.main_ui.help.setMinimumWidth(100)
 
         timer = qtc.QTimer(self)
         timer.setInterval(15)
@@ -82,7 +84,7 @@ class Graphing(qtw.QMainWindow):
         Sets the style for pyqtPlot top widget
         """
 
-        self.main_ui_top_graph.setBackground('#252535')
+        self.main_ui_top_graph.setBackground('#2b2b35')
         self.top_legend.setLabelTextColor("#FFFFFF")
         self.main_ui_top_graph.getAxis(
             'left').setPen(pg.mkPen(color='#FFFFFF'))
@@ -116,7 +118,7 @@ class Graphing(qtw.QMainWindow):
             'left').setPen(pg.mkPen(color='#FFFFFF'))
         self.main_ui_bottom_graph.getAxis(
             'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_bottom_graph.setBackground('#252535')
+        self.main_ui_bottom_graph.setBackground('#2b2b35')
         self.bottom_legend.setLabelTextColor("#FFFFFF")
         self.main_ui_bottom_graph.getAxis("left").setTextPen((255, 255, 255))
         self.main_ui_bottom_graph.getAxis(
@@ -142,6 +144,31 @@ class Graphing(qtw.QMainWindow):
 
         self.main_ui.disconnect.clicked.connect(
             event_handler.disconnect_device)
+
+    def connect_keyboard_shortcuts(self):
+        """
+        Connects keyboard shortcuts to their respective functions:
+            ctrl + x (disconnect)
+            ctrl + r (verify/compile)
+            ctrl + u (upload)
+            ctrl + s (record)
+            ctrl + h (help)
+        """
+
+        disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
+        disconnect.activated.connect(event_handler.disconnect_device)
+
+        compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
+        compile_code.activated.connect(event_handler.demo_function)
+
+        upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
+        upload.activated.connect(event_handler.demo_function)
+
+        record = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
+        record.activated.connect(event_handler.record_data)
+
+        help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
+        help_website.activated.connect(event_handler.demo_function)
 
     def turn_on_rec_light(self, is_on):
         """
@@ -310,6 +337,13 @@ class EventHandler():
 
         if self.device_manager and self.file_manager:
             self.file_manager = False
+
+    def demo_function(self):
+        """
+        prints "Hello world!"
+        this is used to demo connected buttons
+        """
+        print("Hello world!")
 
     def blinking_record(self):
         """
