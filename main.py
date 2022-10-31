@@ -82,7 +82,7 @@ class Graphing(qtw.QMainWindow):
         Sets the style for pyqtPlot top widget
         """
 
-        self.main_ui_top_graph.setBackground('#32323C')
+        self.main_ui_top_graph.setBackground('#252535')
         self.top_legend.setLabelTextColor("#FFFFFF")
         self.main_ui_top_graph.getAxis(
             'left').setPen(pg.mkPen(color='#FFFFFF'))
@@ -116,7 +116,7 @@ class Graphing(qtw.QMainWindow):
             'left').setPen(pg.mkPen(color='#FFFFFF'))
         self.main_ui_bottom_graph.getAxis(
             'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_bottom_graph.setBackground('#32323C')
+        self.main_ui_bottom_graph.setBackground('#252535')
         self.bottom_legend.setLabelTextColor("#FFFFFF")
         self.main_ui_bottom_graph.getAxis("left").setTextPen((255, 255, 255))
         self.main_ui_bottom_graph.getAxis(
