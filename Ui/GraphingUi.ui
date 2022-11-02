@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1026</width>
-    <height>536</height>
+    <height>638</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -128,7 +128,7 @@ QLineEdit {
   padding: 10px 10px;
   text-align: center;
   outline: none;
-  background-color: #25252f;
+  background-color: #21212a;
   border: none;
   border-radius: 20px;
   height: 20px;
@@ -504,7 +504,7 @@ QPushButton {
   padding: 10px 10px;
   text-align: center;
   outline: none;
-  background-color: #25252f;
+  background-color: #21212a;
   border: none;
   border-radius: 10px;
 }
@@ -557,7 +557,7 @@ QComboBox {
   padding: 10px 10px;
   text-align: center;
   outline: none;
-  background-color: #25252f;
+  background-color: #21212a;
   border: none;
   border-radius: 10px;
   height: 20px;
@@ -569,13 +569,13 @@ QComboBox:hover:!pressed{
   background-color: #151525;
 }
 QComboBox:editable {
-  background: #25252f;
+  background: #21212a;
 }
   QComboBox:!editable,
   QComboBox::drop-down:editable,
   QComboBox:!editable:on,
   QComboBox::drop-down:editable:on {
-  background: #25252f;
+  background: #21212a;
 }
 QComboBox::drop-down {
   subcontrol-origin: padding;
@@ -601,7 +601,7 @@ QLineEdit {
   padding: 10px 10px;
   text-align: center;
   outline: none;
-  background-color: #25252f;
+  background-color: #21212a;
   border: none;
   border-radius: 10px;
   height: 20px;
@@ -825,18 +825,20 @@ QLabel {
        </widget>
       </item>
       <item row="4" column="4" colspan="4">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0">
-         <widget class="QTextBrowser" name="textBrowser"/>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>x</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QFrame" name="debugger">
+        <layout class="QGridLayout" name="debugger_1">
+         <item row="1" column="0">
+          <widget class="QTextBrowser" name="debug_log"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="quit">
+           <property name="text">
+            <string>x</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </item>

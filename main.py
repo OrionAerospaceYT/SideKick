@@ -60,6 +60,26 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.upload.setMinimumWidth(100)
         self.main_ui.help.setMinimumWidth(100)
 
+        # Definitions for event handling goes here
+
+        self.recording = False
+        self.light_on = False
+        self.file_manager = False
+        self.device_manager = False
+        self.debug_window = False
+
+        self.avaliable_port_list = []
+        self.current_projects = []
+        self.supported_boards = []
+
+        self.threaded_blinking_record = threading.Thread(
+            target=self.blinking_record, args=(),)
+        self.threaded_blinking_record.start()
+
+        self.threaded_backend_loop = threading.Thread(
+            target=self.threaded_backend, args=(),)
+        self.threaded_backend_loop.start()
+
         timer = qtc.QTimer(self)
         timer.setInterval(15)
         timer.timeout.connect(self.update)
@@ -129,21 +149,22 @@ class Graphing(qtw.QMainWindow):
         Connects the buttons on the gui to python functions
         """
 
-        self.main_ui.record.clicked.connect(event_handler.record_data)
-        self.main_ui.file.clicked.connect(event_handler.open_file_manager)
-        self.main_ui.device.clicked.connect(event_handler.open_device_manager)
-        self.main_ui.new_project.clicked.connect(event_handler.new_project)
+        self.main_ui.record.clicked.connect(self.record_data)
+        self.main_ui.file.clicked.connect(self.open_file_manager)
+        self.main_ui.device.clicked.connect(self.open_device_manager)
+        self.main_ui.new_project.clicked.connect(self.new_project)
+        self.main_ui.upload.clicked.connect(self.upload_project)
 
-        self.main_ui.message.returnPressed.connect(event_handler.send)
+        self.main_ui.message.returnPressed.connect(self.send)
 
         self.main_ui.select_project.activated[str].connect(
-            event_handler.open_file_manager)
+            self.open_file_manager)
 
         self.main_ui.com_ports.activated[str].connect(
-            event_handler.connect_device)
+            self.connect_device)
 
         self.main_ui.disconnect.clicked.connect(
-            event_handler.disconnect_device)
+            self.disconnect_device)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -156,19 +177,19 @@ class Graphing(qtw.QMainWindow):
         """
 
         disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
-        disconnect.activated.connect(event_handler.disconnect_device)
+        disconnect.activated.connect(self.disconnect_device)
 
         compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
-        compile_code.activated.connect(event_handler.demo_function)
+        compile_code.activated.connect(self.demo_function)
 
         upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
-        upload.activated.connect(event_handler.demo_function)
+        upload.activated.connect(self.upload_project)
 
         record = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
-        record.activated.connect(event_handler.record_data)
+        record.activated.connect(self.record_data)
 
         help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
-        help_website.activated.connect(event_handler.demo_function)
+        help_website.activated.connect(self.demo_function)
 
     def turn_on_rec_light(self, is_on):
         """
@@ -189,11 +210,11 @@ class Graphing(qtw.QMainWindow):
 
         projects_on_gui = [self.main_ui.select_project.itemText(
             i) for i in range(self.main_ui.select_project.count())]
-        for project in event_handler.current_projects:
+        for project in self.current_projects:
             if project not in projects_on_gui:
                 self.main_ui.select_project.addItem(project)
         for project in projects_on_gui:
-            if project not in event_handler.current_projects:
+            if project not in self.current_projects:
                 target = self.main_ui.select_project.findText(project)
                 self.main_ui.select_project.removeItem(target)
 
@@ -204,11 +225,11 @@ class Graphing(qtw.QMainWindow):
 
         ports_on_gui = [self.main_ui.com_ports.itemText(
             i) for i in range(self.main_ui.com_ports.count())]
-        for port in event_handler.avaliable_port_list:
+        for port in self.avaliable_port_list:
             if port not in ports_on_gui:
                 self.main_ui.com_ports.addItem(port)
         for port in ports_on_gui:
-            if port not in event_handler.avaliable_port_list:
+            if port not in self.avaliable_port_list:
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
 
@@ -220,10 +241,15 @@ class Graphing(qtw.QMainWindow):
         self.update_ports()
         self.update_projects()
 
-        if event_handler.device_manager:
+        if self.debug_window:
+            self.main_ui.debugger.setVisible(True)
+        else:
+            self.main_ui.debugger.setVisible(False)
+
+        if self.device_manager:
             self.main_ui.device_layout.setVisible(True)
             self.main_ui.file_layout.setVisible(False)
-        elif event_handler.file_manager:
+        elif self.file_manager:
             self.main_ui.file_layout.setVisible(True)
             self.main_ui.device_layout.setVisible(False)
         else:
@@ -238,31 +264,6 @@ class Graphing(qtw.QMainWindow):
         else:
             self.main_ui.bottom_update.setText("Not Connected")
 
-
-class EventHandler():
-    """
-    This class deals with all events on the gui and connects
-    them to python functions
-    """
-
-    def __init__(self):
-        self.recording = False
-        self.light_on = False
-        self.file_manager = False
-        self.device_manager = False
-
-        self.avaliable_port_list = []
-        self.current_projects = []
-        self.supported_boards = []
-
-        self.threaded_blinking_record = threading.Thread(
-            target=self.blinking_record, args=(),)
-        self.threaded_blinking_record.start()
-
-        self.threaded_backend_loop = threading.Thread(
-            target=self.threaded_backend, args=(),)
-        self.threaded_backend_loop.start()
-
     def new_project(self):
         """
         creates the new project in the SK Projects folder
@@ -270,7 +271,7 @@ class EventHandler():
         sets the text of the project_name entry to ""
         """
 
-        project_name = graphing.main_ui.project_name.text()
+        project_name = self.main_ui.project_name.text()
         if project_name == "":
             return
         if project_name in file_manager.get_all_projects():
@@ -278,7 +279,7 @@ class EventHandler():
 
         file_manager.add_new_project(project_name)
 
-        project_name = graphing.main_ui.project_name.setText("")
+        project_name = self.main_ui.project_name.setText("")
 
     def connect_device(self, port):
         """
@@ -286,7 +287,7 @@ class EventHandler():
         message_handler
         """
 
-        baud = graphing.main_ui.baud_rate.itemText(0)
+        baud = self.main_ui.baud_rate.itemText(0)
 
         if port == "Select COM":
             return
@@ -298,9 +299,9 @@ class EventHandler():
         sends the message from the line edit to the connected device
         """
 
-        device_manager.send(graphing.main_ui.message.text())
+        device_manager.send(self.main_ui.message.text())
 
-        graphing.main_ui.message.setText("")
+        self.main_ui.message.setText("")
 
     def disconnect_device(self):
         """
@@ -338,6 +339,17 @@ class EventHandler():
         if self.device_manager and self.file_manager:
             self.file_manager = False
 
+    def upload_project(self):
+        """
+        Gets selected board to upload to
+        Checks if a device is connected to the gui
+        Disconnects the device to upload
+        Compiles the script and then uploads the script
+        Reconnects the device - or - Displays error on the screen
+        """
+
+        self.debug_window = not self.debug_window
+
     def demo_function(self):
         """
         prints "Hello world!"
@@ -350,16 +362,12 @@ class EventHandler():
         the code associated with the blinking record light goes here
         """
 
-        while SETTING_UP:
-            pass
-
         while RUNNING:
-
             if not self.recording:
-                graphing.turn_on_rec_light(True)
+                self.turn_on_rec_light(True)
 
             if self.recording:
-                graphing.turn_on_rec_light(self.light_on)
+                self.turn_on_rec_light(self.light_on)
                 self.light_on = not self.light_on
 
             time.sleep(0.5)
@@ -370,25 +378,20 @@ class EventHandler():
         waits until all variables are declared to loop
         """
 
-        while SETTING_UP:
-            pass
-
         while RUNNING:
             self.avaliable_port_list = device_manager.scan_avaliable_ports()
             self.current_projects = file_manager.get_all_projects()
             message_handler.raw_data = device_manager.raw_data
 
             message_handler.terminal_output_html(
-                graphing.main_ui.terminal.height())
+                self.main_ui.terminal.height())
 
-
-RUNNING = True
-SETTING_UP = True
 
 device_manager = DeviceManager()
 file_manager = FileManager()
-event_handler = EventHandler()
 message_handler = MessageHandler()
+
+RUNNING = True
 
 if __name__ == "__main__":
 
@@ -397,11 +400,8 @@ if __name__ == "__main__":
     app.setWindowIcon(app_icon)
     graphing = Graphing()
 
-    SETTING_UP = False
-
     graphing.show()
     app.exec_()
 
-    # Stops all threads from running at program quit
-    RUNNING = False
     device_manager.terminate_device()
+    RUNNING = False
