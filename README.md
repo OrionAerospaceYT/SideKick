@@ -1,5 +1,7 @@
 <img src = https://i.imgur.com/NduHZHs.png> </img>
 
+[![Pylint](https://github.com/OrionAerospaceYT/SideKick/dev/actions/workflows/pylint.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/dev/actions/workflows/pylint.yml)
+
 Table of Contents 
 ====================
 * [What is SideKick?](#What-is-SideKick)
