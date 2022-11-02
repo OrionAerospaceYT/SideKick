@@ -51,13 +51,13 @@ class FileManager():
         Copies the sidekick ConsciOS to the libraries folder
         """
 
-        conscios_folder = len(os.listdir("./ConsciOS"))
+        conscios_folder = len(os.listdir("ConsciOS"))
 
         if not conscios_folder:
             print("ERROR: The ConsciOS is non-existent!")
             return
 
-        source = './ConsciOS/libraries'
+        source = 'ConsciOS/libraries'
         destination = f'C:/Users/{self.user}/Documents/SideKick/Libraries/libraries'
         shutil.copytree(source, destination)
 
