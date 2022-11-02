@@ -170,22 +170,22 @@ class Graphing(qtw.QMainWindow):
         """
         Connects keyboard shortcuts to their respective functions:
             ctrl + x (disconnect)
-            ctrl + r (verify/compile)
+            ctrl + s (verify/compile)
             ctrl + u (upload)
-            ctrl + s (record)
+            ctrl + r (record)
             ctrl + h (help)
         """
 
         disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
         disconnect.activated.connect(self.disconnect_device)
 
-        compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
+        compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
         compile_code.activated.connect(self.demo_function)
 
         upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
         upload.activated.connect(self.upload_project)
 
-        record = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
+        record = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
         record.activated.connect(self.record_data)
 
         help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
