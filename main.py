@@ -29,7 +29,7 @@ class Graphing(qtw.QMainWindow):
         super(Graphing, self).__init__(parent=parent)
 
         # Definitions for gui initialisation go here
-        
+
         self.main_ui = graphing()
         self.main_ui.setupUi(self)
 
@@ -352,6 +352,11 @@ class Graphing(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
+        project = self.main_ui.select_project.currentText()
+        board = self.main_ui.supported_boards.currentText()
+        port = device_manager.port
+
+        print(file_manager.compile_and_upload_commands(port, project, board))
         self.debug_window = True
 
     def close_debug_window(self):

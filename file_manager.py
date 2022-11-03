@@ -115,3 +115,26 @@ class FileManager():
         """Saves data to file for users to read later"""
 
         self.file.write(f'{data}\n')
+
+    def compile_and_upload_commands(self, port, project, board):
+        """
+        Compiles and uploads the script
+
+        Args:
+            port (string): the com port the device is connected to e.g. "COM1"
+            board (string): the type of sidekick/teensy/arduino board
+            project (string): the name of the project to upload
+        Returns:
+            list: with [compile (string), upload (string)]
+        """
+
+        project_path = f"C:/Users/{self.user}/Documents/SideKick/SK Projects/\
+                    {project}/{project}.ino"
+
+        compile_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" compile --fqbn\
+                    {board} {project_path}"
+
+        upload_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\"\
+                upload -p {port} --fqbn {board} {project_path}"
+
+        return [compile_msg, upload_msg]

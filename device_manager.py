@@ -31,6 +31,9 @@ class DeviceManager():
         """
         sends the message given from the gui to the
         connected device
+
+        Args:
+            message (binary string): the message to send to the device
         """
 
         self.device.write(message.encode("UTF-8"))
@@ -40,6 +43,10 @@ class DeviceManager():
         this function runs on a thread and only gets the
         raw input data from the com port as a binary string
         if the device is connected
+
+        Args:
+            port (string): the port to connect to
+            baud (int): the baud rate of the connected device
         """
 
         self.port = port
@@ -87,6 +94,10 @@ class DeviceManager():
         from the SideKick/Teensy/Arduino
         also stars the thread to get the data from the newly connected
         device
+
+        Args:
+            port (string): the com port the device is connected to e.g. "COM1"
+            baud (int): the baud rate of the connected board
         """
 
         self.get_data = threading.Thread(
@@ -99,6 +110,8 @@ class DeviceManager():
 
         https://stackoverflow.com/questions/12090503/listing-available-com-ports-with-python
 
+        Returns:
+            list: avaliable com ports for pyserial
         """
 
         if sys.platform.startswith('win'):
@@ -121,3 +134,17 @@ class DeviceManager():
                 pass
 
         return result
+
+    def upload_script(self, port, board, project):
+        """
+        Compiles and uploads the script
+
+        Args:
+            port (string): the com port the device is connected to e.g. "COM1"
+            board (string): the type of sidekick/teensy/arduino board
+            project (string): the name of the project to upload
+        Return:
+            boolean: status of wether upload was success or not
+        """
+
+        return True
