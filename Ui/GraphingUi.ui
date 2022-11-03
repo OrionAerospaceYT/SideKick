@@ -826,6 +826,11 @@ QLabel {
       </item>
       <item row="4" column="4" colspan="4">
        <widget class="QFrame" name="debugger">
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+	background-color: #aa0100;
+}</string>
+        </property>
         <layout class="QGridLayout" name="debugger_1">
          <item row="1" column="0">
           <widget class="QTextBrowser" name="debug_log"/>

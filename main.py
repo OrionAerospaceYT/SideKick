@@ -28,6 +28,8 @@ class Graphing(qtw.QMainWindow):
     def __init__(self, parent=None):
         super(Graphing, self).__init__(parent=parent)
 
+        # Definitions for gui initialisation go here
+        
         self.main_ui = graphing()
         self.main_ui.setupUi(self)
 
@@ -154,7 +156,7 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.device.clicked.connect(self.open_device_manager)
         self.main_ui.new_project.clicked.connect(self.new_project)
         self.main_ui.upload.clicked.connect(self.upload_project)
-
+        self.main_ui.quit.clicked.connect(self.close_debug_window)
         self.main_ui.message.returnPressed.connect(self.send)
 
         self.main_ui.select_project.activated[str].connect(
@@ -341,6 +343,8 @@ class Graphing(qtw.QMainWindow):
 
     def upload_project(self):
         """
+        TODO:
+
         Gets selected board to upload to
         Checks if a device is connected to the gui
         Disconnects the device to upload
@@ -348,7 +352,14 @@ class Graphing(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
-        self.debug_window = not self.debug_window
+        self.debug_window = True
+
+    def close_debug_window(self):
+        """
+        Closes the bottom pop up layout
+        """
+
+        self.debug_window = False
 
     def demo_function(self):
         """
