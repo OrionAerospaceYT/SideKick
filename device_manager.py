@@ -7,7 +7,7 @@ It uses pySerial and has a loop running on a thread.
 import glob
 import sys
 import threading
-
+import subprocess
 import serial
 
 
@@ -135,16 +135,28 @@ class DeviceManager():
 
         return result
 
-    def upload_script(self, port, board, project):
+    def upload_script(self, compile_cmd, upload_cmd):
         """
         Compiles and uploads the script
 
         Args:
-            port (string): the com port the device is connected to e.g. "COM1"
-            board (string): the type of sidekick/teensy/arduino board
-            project (string): the name of the project to upload
+            compile_cmd (string): the command to compile the script with arduino-cli
+            upload_cmd (string): the command to upload the script with arduino-cli
         Return:
             boolean: status of wether upload was success or not
         """
+
+        compile_process = subprocess.Popen(
+            compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        compile_output = compile_process.communicate()
+
+        if "Error during build" not in compile_output:
+            upload_process = subprocess.Popen(
+                upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            upload_output = upload_process.communicate()
+
+            print(upload_output)
+
+        print(compile_output)
 
         return True

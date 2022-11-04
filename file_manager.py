@@ -129,12 +129,12 @@ class FileManager():
         """
 
         project_path = f"C:/Users/{self.user}/Documents/SideKick/SK Projects/\
-                    {project}/{project}.ino"
+{project}/{project}.ino"
 
-        compile_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" compile --fqbn\
-                    {board} {project_path}"
+        compile_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" compile --fqbn \
+{board} \"{project_path}\""
 
-        upload_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\"\
-                upload -p {port} --fqbn {board} {project_path}"
+        upload_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" \
+upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]

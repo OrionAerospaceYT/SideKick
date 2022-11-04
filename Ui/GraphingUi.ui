@@ -72,6 +72,9 @@ QPushButton#render {
   padding-left: 10px;
   width: 20px;
 }
+QPushButton#quit{
+  background-color: #2b2b35;
+}
 QPushButton:pressed {
   background-color: #000;
 }
@@ -827,8 +830,16 @@ QLabel {
       <item row="4" column="4" colspan="4">
        <widget class="QFrame" name="debugger">
         <property name="styleSheet">
-         <string notr="true">QPushButton{
-	background-color: #aa0100;
+         <string notr="true">QFrame{
+   font: 10pt &quot;Roboto &quot;;
+  font-size: 14px;
+  background-color: #2b2b35;
+  color: #FFFFFF;
+  border:none;
+  border-radius:10px;
+}
+QPushButton:hover:!pressed{
+  background-color: #ff0000;
 }</string>
         </property>
         <layout class="QGridLayout" name="debugger_1">

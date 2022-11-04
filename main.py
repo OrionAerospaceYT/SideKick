@@ -62,6 +62,8 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.upload.setMinimumWidth(100)
         self.main_ui.help.setMinimumWidth(100)
 
+        self.add_supported_boards()
+
         # Definitions for event handling goes here
 
         self.recording = False
@@ -69,6 +71,9 @@ class Graphing(qtw.QMainWindow):
         self.file_manager = False
         self.device_manager = False
         self.debug_window = False
+        self.upload = False
+
+        self.commands = []
 
         self.avaliable_port_list = []
         self.current_projects = []
@@ -86,6 +91,18 @@ class Graphing(qtw.QMainWindow):
         timer.setInterval(15)
         timer.timeout.connect(self.update)
         timer.start()
+
+    def add_supported_boards(self):
+        """
+        Adds the supported boards to the drop down so that
+        they can be selected for uploads.
+        """
+
+        boards = list(file_manager.get_all_boards().keys())
+
+        for board in boards:
+
+            self.main_ui.supported_boards.addItem(board)
 
     def map_top_graph(self):
         """
@@ -353,10 +370,15 @@ class Graphing(qtw.QMainWindow):
         """
 
         project = self.main_ui.select_project.currentText()
-        board = self.main_ui.supported_boards.currentText()
+        boards_dictionary = file_manager.get_all_boards()
+        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = device_manager.port
 
-        print(file_manager.compile_and_upload_commands(port, project, board))
+        self.commands = file_manager.compile_and_upload_commands(
+            port, project, board)
+
+        self.upload = True
+
         self.debug_window = True
 
     def close_debug_window(self):
@@ -401,6 +423,12 @@ class Graphing(qtw.QMainWindow):
 
             message_handler.terminal_output_html(
                 self.main_ui.terminal.height())
+
+            if self.upload:
+                self.upload = False
+
+                device_manager.upload_script(
+                    self.commands[0], self.commands[1])
 
 
 device_manager = DeviceManager()
