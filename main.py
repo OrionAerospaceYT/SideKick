@@ -61,6 +61,7 @@ class Graphing(qtw.QMainWindow):
             Qt.AlignRight | Qt.AlignVCenter)
         self.main_ui.upload.setMinimumWidth(100)
         self.main_ui.help.setMinimumWidth(100)
+        self.main_ui.compile.setMinimumWidth(100)
 
         self.add_supported_boards()
 
@@ -71,7 +72,9 @@ class Graphing(qtw.QMainWindow):
         self.file_manager = False
         self.device_manager = False
         self.debug_window = False
+        self.prev_debug_window = True
         self.upload = False
+        self.compile = False
 
         self.commands = []
 
@@ -165,7 +168,7 @@ class Graphing(qtw.QMainWindow):
 
     def connect_buttons(self):
         """
-        Connects the buttons on the gui to python functions
+        Connects the buttons/drop-downs on the gui to python functions
         """
 
         self.main_ui.record.clicked.connect(self.record_data)
@@ -175,15 +178,12 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.upload.clicked.connect(self.upload_project)
         self.main_ui.quit.clicked.connect(self.close_debug_window)
         self.main_ui.message.returnPressed.connect(self.send)
+        self.main_ui.compile.clicked.connect(self.compile_project)
+        self.main_ui.com_ports.activated[str].connect(self.connect_device)
+        self.main_ui.disconnect.clicked.connect(self.disconnect_device)
 
         self.main_ui.select_project.activated[str].connect(
             self.open_file_manager)
-
-        self.main_ui.com_ports.activated[str].connect(
-            self.connect_device)
-
-        self.main_ui.disconnect.clicked.connect(
-            self.disconnect_device)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -199,7 +199,7 @@ class Graphing(qtw.QMainWindow):
         disconnect.activated.connect(self.disconnect_device)
 
         compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
-        compile_code.activated.connect(self.demo_function)
+        compile_code.activated.connect(self.compile_project)
 
         upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
         upload.activated.connect(self.upload_project)
@@ -212,7 +212,10 @@ class Graphing(qtw.QMainWindow):
 
     def turn_on_rec_light(self, is_on):
         """
-        turns on or off the blinking record light
+        Turns on or off the blinking record light
+
+        Args:
+            is_on (boolean): either shows or hides the record light
         """
 
         if is_on:
@@ -260,10 +263,12 @@ class Graphing(qtw.QMainWindow):
         self.update_ports()
         self.update_projects()
 
-        if self.debug_window:
-            self.main_ui.debugger.setVisible(True)
-        else:
-            self.main_ui.debugger.setVisible(False)
+        if self.prev_debug_window != self.debug_window:
+            if self.debug_window:
+                self.main_ui.debugger.setVisible(True)
+                self.main_ui.debug_log.setHtml(message_handler.debug_html)
+            else:
+                self.main_ui.debugger.setVisible(False)
 
         if self.device_manager:
             self.main_ui.device_layout.setVisible(True)
@@ -282,6 +287,8 @@ class Graphing(qtw.QMainWindow):
                 "Connected: " + device_manager.port)
         else:
             self.main_ui.bottom_update.setText("Not Connected")
+
+        self.prev_debug_window = self.debug_window
 
     def new_project(self):
         """
@@ -302,8 +309,11 @@ class Graphing(qtw.QMainWindow):
 
     def connect_device(self, port):
         """
-        connects new devices through device manager and updates com port in
+        Connects new devices through device manager and updates com port in
         message_handler
+
+        Args:
+            port (string): the com port selected in the gui
         """
 
         baud = self.main_ui.baud_rate.itemText(0)
@@ -315,7 +325,7 @@ class Graphing(qtw.QMainWindow):
 
     def send(self):
         """
-        sends the message from the line edit to the connected device
+        Sends the message from the line edit to the connected device
         """
 
         device_manager.send(self.main_ui.message.text())
@@ -324,22 +334,22 @@ class Graphing(qtw.QMainWindow):
 
     def disconnect_device(self):
         """
-        disconnects the sidekick/teensy/arduino device
+        Disconnects the sidekick/teensy/arduino device
         """
 
         device_manager.terminate_device()
 
     def record_data(self):
         """
-        blinks the record light and saves the data
+        Blinks the record light and saves the data
         """
 
         self.recording = not self.recording
 
     def open_file_manager(self):
         """
-        opens/closes the file menu
-        also closes device manager if they are both open at the same time
+        Opens/closes the file menu
+        Closes device manager if they are both open at the same time
         """
 
         self.file_manager = not self.file_manager
@@ -349,8 +359,8 @@ class Graphing(qtw.QMainWindow):
 
     def open_device_manager(self):
         """
-        opens/closes the device menu
-        also closes file manager if they are both open at the same time
+        Opens/closes the device menu
+        Closes file manager if they are both open at the same time
         """
 
         self.device_manager = not self.device_manager
@@ -379,7 +389,20 @@ class Graphing(qtw.QMainWindow):
 
         self.upload = True
 
-        self.debug_window = True
+    def compile_project(self):
+        """
+        Compiles the script
+        """
+
+        project = self.main_ui.select_project.currentText()
+        boards_dictionary = file_manager.get_all_boards()
+        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+        port = device_manager.port
+
+        self.commands = file_manager.compile_and_upload_commands(
+            port, project, board)
+
+        self.compile = True
 
     def close_debug_window(self):
         """
@@ -390,14 +413,14 @@ class Graphing(qtw.QMainWindow):
 
     def demo_function(self):
         """
-        prints "Hello world!"
-        this is used to demo connected buttons
+        Prints "Hello world!"
+        Used to demo connected buttons
         """
         print("Hello world!")
 
     def blinking_record(self):
         """
-        the code associated with the blinking record light goes here
+        Non-blocking function to perform functions over a time interval
         """
 
         while RUNNING:
@@ -412,8 +435,7 @@ class Graphing(qtw.QMainWindow):
 
     def threaded_backend(self):
         """
-        any code to be looped on a thread goes here
-        waits until all variables are declared to loop
+        All backend tasks that need to be performed continually
         """
 
         while RUNNING:
@@ -424,9 +446,14 @@ class Graphing(qtw.QMainWindow):
             message_handler.terminal_output_html(
                 self.main_ui.terminal.height())
 
+            if self.compile:
+                self.compile = False
+                error = device_manager.compile_script(self.commands[0])
+                message_handler.decode_debug_message(error)
+                self.debug_window = True
+
             if self.upload:
                 self.upload = False
-
                 device_manager.upload_script(
                     self.commands[0], self.commands[1])
 

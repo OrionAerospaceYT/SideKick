@@ -9,7 +9,11 @@ import shutil
 
 class FileManager():
     """
-    This class deals with creating and deleting files
+    Handles all files and operating system
+        Current working directory
+        Checking for all sidekick files
+        Saves data
+        Creates new projects
     """
 
     def __init__(self):
@@ -77,7 +81,9 @@ class FileManager():
         return board_dict
 
     def get_all_projects(self):
-        """Returns all project directories except for Libraries"""
+        """
+        Returns all project directories except for Libraries
+        """
 
         return os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
 
@@ -85,6 +91,9 @@ class FileManager():
         """
         Adds new projects when new project is clicked.
         Creates a new file, copies the source reference, then renames the .ino file
+
+        Args:
+            name (string): the name of the new project from the line edit
         """
 
         if name in os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects"):
@@ -112,7 +121,12 @@ class FileManager():
             encoding='UTF-8')
 
     def save_terminal_data(self, data):
-        """Saves data to file for users to read later"""
+        """
+        Saves data to file for users to read later
+
+        Args:
+            data (string): the data to be saved to the new save file
+        """
 
         self.file.write(f'{data}\n')
 

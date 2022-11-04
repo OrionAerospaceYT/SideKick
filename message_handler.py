@@ -24,9 +24,10 @@ class MessageHandler():
 
         self.raw_data = []
 
-        self.terminal_header = """<h1><p style="color:#00f0c3;font-size:30px">Terminal</p></h1><br>"""
+        self.terminal_header = "<h1><p style=\"color:#00f0c3;font-size:30px\">Terminal</p></h1><br>"
         self.terminal_html = ""
         self.error_string = ""
+        self.debug_html = ""
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>"
@@ -38,12 +39,13 @@ class MessageHandler():
 
     def decode_graph_data(self, raw_input):
         """
-        parses the raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
-        to graph_top_data, graph_bottom_data which are lists
-        example graph output would be: [[1,2,3,4,5,],[5,4,3,2,1],[2,5,4,1,3]]
+        Picks out the graph data from the raw data
 
-        this data still needs to be processed as it is in string form
-        the processing will go in the main backend
+        Args:
+            raw_input (string): raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
+        Returns:
+            graph_top_data (list): holds the values for the top graph
+            graph_bottom_data (list): holds the values for the bottom graph
         """
 
         graph_top_data = []
@@ -65,9 +67,12 @@ class MessageHandler():
 
     def decode_terminal_data(self, raw_input):
         """
-        parses the raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
-        to terminal_data which is a string
-        all terminal data from one output is put into a single line
+        Combines all terminals in one message to a single line for terminal
+
+        Args:
+            raw_input (string): raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
+        Returns:
+            terminal_data (strig): a single line string to have html added to it later
         """
 
         raw_list = raw_input.split("t(")
@@ -82,8 +87,11 @@ class MessageHandler():
 
     def terminal_output_html(self, height):
         """
-        goes through the latest points of data and converts it
-        into html for the terminal on the gui
+        Calculates the amount of lines the terminal can displaye at
+        once (TODO)
+
+        Args:
+            height (int): the height of the terminal
         """
         decoded_data = []
 
@@ -101,3 +109,71 @@ class MessageHandler():
             terminal_html += self.beginning + data + self.ending
 
         self.terminal_html = terminal_html
+
+    def decode_debug_message(self, error):
+        """
+        Converts the dull default compile/upload output to nice coloured html
+        for easy debugging in the debug window
+
+        Args:
+            error (string): the error from the compile/upload from arduino-cli
+        """
+
+        # intial change
+        error = error.replace("\n", "<br>")
+
+        is_error = False
+        is_warning = False
+        is_note = False
+
+        debug_output = ""
+
+        # colouring error/warnings
+        for line in error.split("<br>"):
+            if "error" in line:
+                line = line.replace("error", "<font color=#E21919>error")
+                is_error = True
+            elif is_error and "In file" in line:
+                line = line.replace(
+                    "In file", "<font color=#FFFFFF>In file")
+                is_error = False
+            elif is_error and r"C:\Users" in line:
+                line = line.replace(
+                    r"C:\Users", r"<font color=#FFFFFF>C:\Users")
+                is_error = False
+
+            if "warning" in line:
+                line = line.replace(
+                    "warning", "<font color=#D6790F>warning")
+                is_warning = True
+            elif is_warning and "In file" in line:
+                line = line.replace(
+                    "In file", "<font color=#FFFFFF>In file")
+                is_warning = False
+            elif is_warning and r"C:\Users" in line:
+                line = line.replace(
+                    r"C:\Users", r"<font color=#FFFFFF>C:\Users")
+                is_warning = False
+
+            if "note" in line:
+                line = line.replace("note", "<font color=#00f0c3>note")
+                is_note = True
+            elif is_note and "In file" in line:
+                line = line.replace(
+                    "In file", "<font color=#FFFFFF>In file")
+                is_note = False
+            elif is_note and r"C:\Users" in line:
+                line = line.replace(
+                    r"C:\Users", r"<font color=#FFFFFF>C:\Users")
+                is_note = False
+
+            debug_output += line + "<br>"
+
+        # trailing sections
+        debug_output = debug_output.replace("[0m", "<font color=\"#ffffff\">")
+        debug_output = debug_output.replace(
+            "[90m", "<font color=\"#D6790F\">")
+        debug_output = debug_output.replace(
+            "[92m", "<font color=\"#00f0c3\">")
+        self.debug_html = debug_output.replace(
+            "[93m", "<font color=\"#00f0c3\">")

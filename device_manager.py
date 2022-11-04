@@ -13,8 +13,13 @@ import serial
 
 class DeviceManager():
     """
-    the class for dealing with getting data from
-    COM ports for the main backend
+    Handles all of the serial communications:
+        Uploads
+        Compiles
+        Reads
+        Writes
+        Connect
+        Disconnect
     """
 
     def __init__(self):
@@ -29,7 +34,7 @@ class DeviceManager():
 
     def send(self, message):
         """
-        sends the message given from the gui to the
+        Sends the message given from the gui to the
         connected device
 
         Args:
@@ -40,9 +45,9 @@ class DeviceManager():
 
     def threaded_get_raw_data(self, port, baud):
         """
-        this function runs on a thread and only gets the
-        raw input data from the com port as a binary string
-        if the device is connected
+        Raw input data from the serial device
+        Connects device and then while loops with no time.sleep
+        Checks for "(" in the data as all sidekick messages will have one
 
         Args:
             port (string): the port to connect to
@@ -65,7 +70,6 @@ class DeviceManager():
                 self.terminate_device()
                 break
 
-            # uses "(" as a bracket is in every message
             if "(" in raw_data:
                 self.raw_data.append(raw_data.strip())
 
@@ -111,13 +115,12 @@ class DeviceManager():
         https://stackoverflow.com/questions/12090503/listing-available-com-ports-with-python
 
         Returns:
-            list: avaliable com ports for pyserial
+            result (list): avaliable com ports for pyserial
         """
 
         if sys.platform.startswith('win'):
             ports = [f'COM{i}' for i in range(256)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            # this excludes your current terminal "/dev/tty"
             ports = glob.glob('/dev/tty[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
             ports = glob.glob('/dev/tty.*')
@@ -135,6 +138,22 @@ class DeviceManager():
 
         return result
 
+    def compile_script(self, compile_cmd):
+        """
+        Compiles the selected script
+
+        Args:
+            compile_cmd (string): the command t ocompile the script with arduino-cli
+        Returns:
+            compile_output[0] (string): the error string to be parsed
+        """
+
+        compile_process = subprocess.Popen(
+            compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        compile_output = compile_process.communicate()
+
+        return compile_output[0].decode("UTF-8")
+
     def upload_script(self, compile_cmd, upload_cmd):
         """
         Compiles and uploads the script
@@ -142,7 +161,7 @@ class DeviceManager():
         Args:
             compile_cmd (string): the command to compile the script with arduino-cli
             upload_cmd (string): the command to upload the script with arduino-cli
-        Return:
+        Returns:
             boolean: status of wether upload was success or not
         """
 

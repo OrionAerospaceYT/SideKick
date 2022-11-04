@@ -211,41 +211,24 @@ class Ui_MainWindow(object):
 "  border-radius: 10px;\n"
 "}\n"
 "QPushButton#upload {\n"
-"  image: url(Ui/U_Arrow.png);\n"
-"  image-position: left;\n"
-"  text-align: right;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
-"QPushButton#send {\n"
-"  image: url(Ui/U_Arrow.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
+"      image: url(Ui/U_Arrow.png);\n"
+"      image-position: left;      \n"
+"    text-align: right;\n"
+"      padding-left: 10px;\n"
+"      width: 10px;\n"
 "}\n"
 "QPushButton#help {\n"
-"  image: url(Ui/Help.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
+"      image: url(Ui/Help.png);\n"
+"      image-position: left;\n"
+"      padding-left: 10px;    \n"
+"      width: 10px;\n"
 "}\n"
-"QPushButton#new_project {\n"
-"  image: url(Ui/Folder.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
-"QPushButton#disconnect {\n"
-"  image: url(Ui/Plug.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
-"QPushButton#render {\n"
-"  image: url(Ui/SideKick_White.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 20px;\n"
+"QPushButton#compile {\n"
+"    image: url(Ui/tick.png);\n"
+"    image-position: left;\n"
+"    padding-left: 10px;\n"
+"    text-align: right;\n"
+"    width: 20px;\n"
 "}\n"
 "QPushButton:pressed {\n"
 "  background-color: #000;\n"
@@ -346,6 +329,9 @@ class Ui_MainWindow(object):
         self.upload = QtWidgets.QPushButton(self.horizontalFrame)
         self.upload.setObjectName("upload")
         self.horizontalLayout.addWidget(self.upload)
+        self.compile = QtWidgets.QPushButton(self.horizontalFrame)
+        self.compile.setObjectName("compile")
+        self.horizontalLayout.addWidget(self.compile)
         self.record = QtWidgets.QPushButton(self.horizontalFrame)
         self.record.setObjectName("record")
         self.horizontalLayout.addWidget(self.record)
@@ -547,10 +533,9 @@ class Ui_MainWindow(object):
         self.device_layout.setStyleSheet("/*General Styling*/\n"
 "* {\n"
 "   font: 10pt \"Roboto \";\n"
-"  font-size: 14px;\n"
 "  background-color: #2b2b35;\n"
 "  color: #FFFFFF;\n"
-"  border:none;\n"
+"  border: none;\n"
 "  border-radius:10px;\n"
 "}\n"
 "\n"
@@ -664,6 +649,7 @@ class Ui_MainWindow(object):
         self.file.setText(_translate("MainWindow", "File"))
         self.device.setText(_translate("MainWindow", "Device"))
         self.upload.setText(_translate("MainWindow", "Upload"))
+        self.compile.setText(_translate("MainWindow", "Compile"))
         self.record.setText(_translate("MainWindow", "Record"))
         self.help.setText(_translate("MainWindow", "Help"))
         self.select_project.setItemText(0, _translate("MainWindow", "Select Project"))
