@@ -119,7 +119,6 @@ class MessageHandler():
             error (string): the error from the compile/upload from arduino-cli
         """
 
-        # intial change
         error = error.replace("\n", "<br>")
 
         is_error = False
@@ -128,7 +127,6 @@ class MessageHandler():
 
         debug_output = ""
 
-        # colouring error/warnings
         for line in error.split("<br>"):
             if "error" in line:
                 line = line.replace("error", "<font color=#E21919>error")
@@ -169,11 +167,11 @@ class MessageHandler():
 
             debug_output += line + "<br>"
 
-        # trailing sections
-        debug_output = debug_output.replace("[0m", "<font color=\"#ffffff\">")
         debug_output = debug_output.replace(
-            "[90m", "<font color=\"#D6790F\">")
+            "\x1B[0m", "<font color=\"#ffffff\">")
         debug_output = debug_output.replace(
-            "[92m", "<font color=\"#00f0c3\">")
+            "\x1B[90m", "<font color=\"#D6790F\">")
+        debug_output = debug_output.replace(
+            "\x1B[92m", "<font color=\"#00f0c3\">")
         self.debug_html = debug_output.replace(
-            "[93m", "<font color=\"#00f0c3\">")
+            "\x1B[93m", "<font color=\"#00f0c3\">")
