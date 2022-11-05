@@ -162,20 +162,27 @@ class DeviceManager():
             compile_cmd (string): the command to compile the script with arduino-cli
             upload_cmd (string): the command to upload the script with arduino-cli
         Returns:
+            error_output (string): the report to display on debug
             boolean: status of wether upload was success or not
         """
+        upload_output = ""
 
         compile_process = subprocess.Popen(
             compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         compile_output = compile_process.communicate()
 
-        if "Error during build" not in compile_output:
+        compile_output = compile_output[0].decode("UTF-8")
+
+        if "error:" not in compile_output:
             upload_process = subprocess.Popen(
                 upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             upload_output = upload_process.communicate()
+            upload_output = upload_output[0].decode("UTF-8")
 
             print(upload_output)
 
-        print(compile_output)
+            return None, True
 
-        return True
+        error_output = compile_output+upload_output
+
+        return error_output, False

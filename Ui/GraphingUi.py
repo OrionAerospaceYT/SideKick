@@ -342,6 +342,7 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.top_update = QtWidgets.QLabel(self.horizontalFrame)
+        self.top_update.setMinimumSize(QtCore.QSize(200, 0))
         self.top_update.setText("")
         self.top_update.setObjectName("top_update")
         self.horizontalLayout.addWidget(self.top_update)

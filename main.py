@@ -270,6 +270,15 @@ class Graphing(qtw.QMainWindow):
             else:
                 self.main_ui.debugger.setVisible(False)
 
+        if self.compile:
+            self.main_ui.top_update.setText(
+                message_handler.get_status("Compiling"))
+        elif self.upload:
+            self.main_ui.top_update.setText(
+                message_handler.get_status("Uploading"))
+        else:
+            self.main_ui.top_update.setText("Done!")
+
         if self.device_manager:
             self.main_ui.device_layout.setVisible(True)
             self.main_ui.file_layout.setVisible(False)
@@ -431,6 +440,11 @@ class Graphing(qtw.QMainWindow):
                 self.turn_on_rec_light(self.light_on)
                 self.light_on = not self.light_on
 
+            if self.compile:
+                message_handler.update_ellipsis()
+            if self.upload:
+                message_handler.update_ellipsis()
+
             time.sleep(0.5)
 
     def threaded_backend(self):
@@ -448,16 +462,31 @@ class Graphing(qtw.QMainWindow):
 
             if self.compile:
                 self.debug_window = False
-                self.compile = False
+
                 error = device_manager.compile_script(self.commands[0])
                 message_handler.decode_debug_message(error)
+
                 self.debug_window = True
+                self.compile = False
 
             if self.upload:
+
                 self.debug_window = False
-                self.upload = False
-                device_manager.upload_script(
+
+                port = device_manager.port
+                device_manager.terminate_device()
+
+                error, success = device_manager.upload_script(
                     self.commands[0], self.commands[1])
+
+                if not success:
+                    message_handler.decode_debug_message(error)
+                    self.debug_window = True
+
+                time.sleep(0.25)
+                self.connect_device(port)
+
+                self.upload = False
 
 
 device_manager = DeviceManager()

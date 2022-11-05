@@ -29,6 +29,9 @@ class MessageHandler():
         self.error_string = ""
         self.debug_html = ""
 
+        self.status_trail = [".", ".", "."]
+        self.status_increasing = False
+
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>"
 
@@ -124,12 +127,12 @@ class MessageHandler():
         debug_output = ""
 
         for line in error.split("<br>"):
-            line = line.replace("error", "<font color=#E21919>error")
+            line = line.replace("error:", "<font color=#E21919>error:")
 
             line = line.replace(
-                "warning", "<font color=#D6790F>warning")
+                "warning:", "<font color=#D6790F>warning:")
 
-            line = line.replace("note", "<font color=#00f0c3>note")
+            line = line.replace("note:", "<font color=#00f0c3>note:")
 
             line = line.replace(
                 "In file", "<font color=#FFFFFF>In file")
@@ -147,3 +150,36 @@ class MessageHandler():
             "\x1B[92m", "<font color=\"#00f0c3\">")
         self.debug_html = debug_output.replace(
             "\x1B[93m", "<font color=\"#00f0c3\">")
+
+    def update_ellipsis(self):
+        """
+        Either increases or decreases the number of dots at the end of the uploading
+        or compiling message to show that the gui is working.
+        """
+
+        length = len(self.status_trail)
+
+        if length <= 1 and not self.status_increasing:
+            self.status_increasing = True
+        elif length >= 3 and self.status_increasing:
+            self.status_increasing = False
+
+        if self.status_increasing:
+            self.status_trail.append(".")
+        else:
+            self.status_trail.pop(0)
+
+    def get_status(self, status):
+        """
+        Puts self.compile and self.status into a signle screen
+
+        Args:
+            status (string): the string to add the ellipsis to
+        Returns:
+            status (string): the input with the elipsis on the end
+        """
+
+        for item in enumerate(self.status_trail):
+            status += item[1]
+
+        return status
