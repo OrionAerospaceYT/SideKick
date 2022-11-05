@@ -447,12 +447,14 @@ class Graphing(qtw.QMainWindow):
                 self.main_ui.terminal.height())
 
             if self.compile:
+                self.debug_window = False
                 self.compile = False
                 error = device_manager.compile_script(self.commands[0])
                 message_handler.decode_debug_message(error)
                 self.debug_window = True
 
             if self.upload:
+                self.debug_window = False
                 self.upload = False
                 device_manager.upload_script(
                     self.commands[0], self.commands[1])
