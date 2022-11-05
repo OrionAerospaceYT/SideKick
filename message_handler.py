@@ -159,7 +159,7 @@ class MessageHandler():
 
         length = len(self.status_trail)
 
-        if length <= 1 and not self.status_increasing:
+        if length <= 0 and not self.status_increasing:
             self.status_increasing = True
         elif length >= 3 and self.status_increasing:
             self.status_increasing = False
