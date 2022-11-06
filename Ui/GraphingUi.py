@@ -242,31 +242,9 @@ class Ui_MainWindow(object):
 "  padding: 10px 10px;\n"
 "  text-align: center;\n"
 "  outline: none;\n"
-"  background-color: #252535;\n"
 "  border: none;\n"
 "  border-radius: 10px;\n"
 "  height: 20px;\n"
-"}\n"
-"QComboBox:pressed {\n"
-"  background-color: #000;\n"
-"}\n"
-"QComboBox:hover:!pressed{\n"
-"  background-color: #151525;\n"
-"}\n"
-"QComboBox:editable {\n"
-"  background: #252535;\n"
-"}\n"
-"  QComboBox:!editable,\n"
-"  QComboBox::drop-down:editable,\n"
-"  QComboBox:!editable:on,\n"
-"  QComboBox::drop-down:editable:on {\n"
-"  background: #252535;\n"
-"}\n"
-"QComboBox::drop-down {\n"
-"  subcontrol-origin: padding;\n"
-"  subcontrol-position: top right;\n"
-"  border-left: none;\n"
-"  color: #00f0c3;\n"
 "}\n"
 "QComboBox::down-arrow {\n"
 "  image: url(Ui/D_Arrow.png);\n"
@@ -275,10 +253,8 @@ class Ui_MainWindow(object):
 "  width: 50px;\n"
 "  height: 20px;\n"
 "}\n"
-"QComboBox QAbstractItemView {\n"
-"  background: #252535;\n"
-"  border: none;\n"
-"  color: #00f0c3;\n"
+"QPushButton:hover:!pressed{\n"
+"  background-color: #151525;\n"
 "}\n"
 "\n"
 "/*Line Edit Styling*/\n"
@@ -321,18 +297,27 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalFrame)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.file = QtWidgets.QPushButton(self.horizontalFrame)
+        self.file.setMinimumSize(QtCore.QSize(50, 0))
         self.file.setObjectName("file")
         self.horizontalLayout.addWidget(self.file)
         self.device = QtWidgets.QPushButton(self.horizontalFrame)
+        self.device.setMinimumSize(QtCore.QSize(75, 0))
         self.device.setObjectName("device")
         self.horizontalLayout.addWidget(self.device)
         self.upload = QtWidgets.QPushButton(self.horizontalFrame)
+        self.upload.setMinimumSize(QtCore.QSize(100, 0))
         self.upload.setObjectName("upload")
         self.horizontalLayout.addWidget(self.upload)
         self.compile = QtWidgets.QPushButton(self.horizontalFrame)
+        self.compile.setMinimumSize(QtCore.QSize(100, 0))
         self.compile.setObjectName("compile")
         self.horizontalLayout.addWidget(self.compile)
+        self.com_ports = QtWidgets.QComboBox(self.horizontalFrame)
+        self.com_ports.setMinimumSize(QtCore.QSize(125, 0))
+        self.com_ports.setObjectName("com_ports")
+        self.horizontalLayout.addWidget(self.com_ports)
         self.record = QtWidgets.QPushButton(self.horizontalFrame)
+        self.record.setMinimumSize(QtCore.QSize(75, 0))
         self.record.setObjectName("record")
         self.horizontalLayout.addWidget(self.record)
         self.record_light = QtWidgets.QLabel(self.horizontalFrame)
@@ -342,11 +327,13 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.top_update = QtWidgets.QLabel(self.horizontalFrame)
-        self.top_update.setMinimumSize(QtCore.QSize(200, 0))
+        self.top_update.setMinimumSize(QtCore.QSize(150, 0))
+        self.top_update.setMaximumSize(QtCore.QSize(150, 16777215))
         self.top_update.setText("")
         self.top_update.setObjectName("top_update")
         self.horizontalLayout.addWidget(self.top_update)
         self.help = QtWidgets.QPushButton(self.horizontalFrame)
+        self.help.setMinimumSize(QtCore.QSize(100, 0))
         self.help.setObjectName("help")
         self.horizontalLayout.addWidget(self.help)
         self.gridLayout.addWidget(self.horizontalFrame, 0, 0, 1, 9)
@@ -590,9 +577,6 @@ class Ui_MainWindow(object):
         self.dhsgd = QtWidgets.QVBoxLayout(self.device_layout)
         self.dhsgd.setContentsMargins(20, -1, 20, -1)
         self.dhsgd.setObjectName("dhsgd")
-        self.com_ports = QtWidgets.QComboBox(self.device_layout)
-        self.com_ports.setObjectName("com_ports")
-        self.dhsgd.addWidget(self.com_ports)
         self.baud_rate = QtWidgets.QComboBox(self.device_layout)
         self.baud_rate.setObjectName("baud_rate")
         self.baud_rate.addItem("")

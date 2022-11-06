@@ -59,9 +59,6 @@ class Graphing(qtw.QMainWindow):
 
         self.main_ui.bottom_update.setAlignment(
             Qt.AlignRight | Qt.AlignVCenter)
-        self.main_ui.upload.setMinimumWidth(100)
-        self.main_ui.help.setMinimumWidth(100)
-        self.main_ui.compile.setMinimumWidth(100)
 
         self.add_supported_boards()
 
@@ -89,6 +86,11 @@ class Graphing(qtw.QMainWindow):
         self.threaded_backend_loop = threading.Thread(
             target=self.threaded_backend, args=(),)
         self.threaded_backend_loop.start()
+
+        self.board, self.project = file_manager.load_options()
+
+        self.main_ui.supported_boards.setCurrentText(self.board)
+        self.main_ui.select_project.setCurrentText(self.project)
 
         timer = qtc.QTimer(self)
         timer.setInterval(15)
@@ -239,6 +241,8 @@ class Graphing(qtw.QMainWindow):
             if project not in self.current_projects:
                 target = self.main_ui.select_project.findText(project)
                 self.main_ui.select_project.removeItem(target)
+
+        self.main_ui.select_project.setCurrentText(self.project)
 
     def update_ports(self):
         """
@@ -507,3 +511,8 @@ if __name__ == "__main__":
 
     device_manager.terminate_device()
     RUNNING = False
+
+    project = graphing.main_ui.select_project.currentText()
+    board = graphing.main_ui.supported_boards.currentText()
+
+    file_manager.save_options(board, project)

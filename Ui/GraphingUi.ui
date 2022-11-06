@@ -280,31 +280,9 @@ QComboBox {
   padding: 10px 10px;
   text-align: center;
   outline: none;
-  background-color: #252535;
   border: none;
   border-radius: 10px;
   height: 20px;
-}
-QComboBox:pressed {
-  background-color: #000;
-}
-QComboBox:hover:!pressed{
-  background-color: #151525;
-}
-QComboBox:editable {
-  background: #252535;
-}
-  QComboBox:!editable,
-  QComboBox::drop-down:editable,
-  QComboBox:!editable:on,
-  QComboBox::drop-down:editable:on {
-  background: #252535;
-}
-QComboBox::drop-down {
-  subcontrol-origin: padding;
-  subcontrol-position: top right;
-  border-left: none;
-  color: #00f0c3;
 }
 QComboBox::down-arrow {
   image: url(Ui/D_Arrow.png);
@@ -313,10 +291,8 @@ QComboBox::down-arrow {
   width: 50px;
   height: 20px;
 }
-QComboBox QAbstractItemView {
-  background: #252535;
-  border: none;
-  color: #00f0c3;
+QPushButton:hover:!pressed{
+  background-color: #151525;
 }
 
 /*Line Edit Styling*/
@@ -359,6 +335,12 @@ QScrollArea {
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="file">
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>File</string>
            </property>
@@ -366,6 +348,12 @@ QScrollArea {
          </item>
          <item>
           <widget class="QPushButton" name="device">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Device</string>
            </property>
@@ -373,6 +361,12 @@ QScrollArea {
          </item>
          <item>
           <widget class="QPushButton" name="upload">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Upload</string>
            </property>
@@ -380,13 +374,35 @@ QScrollArea {
          </item>
          <item>
           <widget class="QPushButton" name="compile">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Compile</string>
            </property>
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="com_ports">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="record">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Record</string>
            </property>
@@ -416,8 +432,14 @@ QScrollArea {
           <widget class="QLabel" name="top_update">
            <property name="minimumSize">
             <size>
-             <width>200</width>
+             <width>150</width>
              <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
@@ -427,6 +449,12 @@ QScrollArea {
          </item>
          <item>
           <widget class="QPushButton" name="help">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Help</string>
            </property>
@@ -762,9 +790,6 @@ QLabel {
          <property name="rightMargin">
           <number>20</number>
          </property>
-         <item>
-          <widget class="QComboBox" name="com_ports"/>
-         </item>
          <item>
           <widget class="QComboBox" name="baud_rate">
            <item>

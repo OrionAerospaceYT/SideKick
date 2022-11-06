@@ -152,3 +152,62 @@ class FileManager():
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]
+
+    def save_options(self, board, project):
+        """
+        Saves selected options in drop downs to the settings.txt file so
+        that the user doesn't need to keep selecting drop downs on startup
+
+        Args:
+            board (string): the board type e.g. SK_Stem, Teensy4.1
+            project (string): the current project selected
+        """
+
+        with open("settings.txt", "r", encoding="UTF-8") as settings_file:
+
+            settings = settings_file.readlines()
+
+        for item in settings:
+
+            if "Board: " in item:
+                board_index = settings.index(item)
+
+            if "Project: " in item:
+                project_index = settings.index(item)
+
+        settings[board_index] = f"Board: {board}\n"
+        settings[project_index] = f"Project: {project}\n"
+
+        with open("settings.txt", "w", encoding="UTF-8") as settings_file:
+            settings_file.writelines(settings)
+
+    def load_options(self):
+        """
+        Loads the saved options to set the drop down box items
+
+        Returns:
+            board (string): the board type e.g. SK_Stem, Teensy4.1
+            project (string): the current project selected
+        """
+
+        board = None
+        project = None
+
+        in_drop_down_section = False
+
+        with open("settings.txt", "r", encoding="UTF-8") as settings:
+
+            for line in settings:
+
+                if "Drop down options:" in line:
+                    in_drop_down_section = True
+
+                if in_drop_down_section:
+                    if "Board: " in line:
+                        board = line.replace("Board: ", "")
+                        board = board.strip()
+                    if "Project: " in line:
+                        project = line.replace("Project: ", "")
+                        project = project.strip()
+
+        return board, project
