@@ -280,8 +280,6 @@ class Graphing(qtw.QMainWindow):
         elif self.upload:
             self.main_ui.top_update.setText(
                 message_handler.get_status("Uploading"))
-        else:
-            self.main_ui.top_update.setText("Done!")
 
         if self.device_manager:
             self.main_ui.device_layout.setVisible(True)
@@ -296,12 +294,15 @@ class Graphing(qtw.QMainWindow):
         self.main_ui.terminal.setHtml(message_handler.terminal_html)
 
         if device_manager.port is not None:
-            self.main_ui.bottom_update.setText(
-                "Connected: " + device_manager.port)
+            self.main_ui.bottom_update.setText("Connected")
         else:
             self.main_ui.bottom_update.setText("Not Connected")
 
         self.prev_debug_window = self.debug_window
+
+        if device_manager.port is not None:
+
+            self.main_ui.com_ports.setCurrentText(device_manager.port)
 
     def new_project(self):
         """
@@ -330,9 +331,6 @@ class Graphing(qtw.QMainWindow):
         """
 
         baud = self.main_ui.baud_rate.itemText(0)
-
-        if port == "Select COM":
-            return
 
         device_manager.connect_device(port, baud)
 
@@ -457,7 +455,9 @@ class Graphing(qtw.QMainWindow):
         """
 
         while RUNNING:
-            self.avaliable_port_list = device_manager.scan_avaliable_ports()
+            port = device_manager.port
+            self.avaliable_port_list = device_manager.scan_avaliable_ports(
+                port)
             self.current_projects = file_manager.get_all_projects()
             message_handler.raw_data = device_manager.raw_data
 
@@ -512,7 +512,7 @@ if __name__ == "__main__":
     device_manager.terminate_device()
     RUNNING = False
 
-    project = graphing.main_ui.select_project.currentText()
-    board = graphing.main_ui.supported_boards.currentText()
+    project_selected = graphing.main_ui.select_project.currentText()
+    board_selected = graphing.main_ui.supported_boards.currentText()
 
-    file_manager.save_options(board, project)
+    file_manager.save_options(board_selected, project_selected)

@@ -108,11 +108,14 @@ class DeviceManager():
             target=self.threaded_get_raw_data, args=(port, baud),)
         self.get_data.start()
 
-    def scan_avaliable_ports(self):
+    def scan_avaliable_ports(self, port):
         """
         iterates through each com port and checks if it can be opened or not
 
         https://stackoverflow.com/questions/12090503/listing-available-com-ports-with-python
+
+        Args:
+            port (string): the current com port connected to the gui
 
         Returns:
             result (list): avaliable com ports for pyserial
@@ -127,7 +130,10 @@ class DeviceManager():
         else:
             raise EnvironmentError('Unsupported platform')
 
-        result = ["Select COM"]
+        result = []
+        if port is not None:
+            result.append(port)
+
         for port in ports:
             try:
                 serial_port = serial.Serial(port)
