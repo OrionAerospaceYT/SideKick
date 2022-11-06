@@ -280,6 +280,8 @@ class Graphing(qtw.QMainWindow):
         elif self.upload:
             self.main_ui.top_update.setText(
                 message_handler.get_status("Uploading"))
+        else:
+            self.main_ui.top_update.setText("")
 
         if self.device_manager:
             self.main_ui.device_layout.setVisible(True)
