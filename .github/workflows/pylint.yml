@@ -19,9 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
-    - name: Analysing the code with pylint
+    - name: Analysing main.py
       run: |
-        pylint main.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
-        pylint message_handler.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
-        pylint file_manager.py --disable=C0116,C0115,C2801,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
-        pylint device_manager.py --disable=C0116,C0115,C0114,W1514,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+        pylint main.py --disable=I1101,E1136,R1725,R0902,R0904,E0611 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+    - name: Analysing file_manager.py
+      run: |
+        pylint file_manager.py --disable=R0902
