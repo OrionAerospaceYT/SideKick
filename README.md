@@ -1,6 +1,6 @@
 <img src = https://i.imgur.com/NduHZHs.png> </img>
 
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)
 
 Table of Contents 
 ====================
