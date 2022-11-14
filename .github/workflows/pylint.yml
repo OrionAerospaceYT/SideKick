@@ -19,10 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
-    - name: Analysing the code with pylint
+    - name: Analysing main.py
       run: |
-<<<<<<< HEAD
-        pylint main.py --disable=C0116
-=======
-        pylint main.py --disable=C0116,I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
->>>>>>> parent of 99f0e36 (Update pylint.yml)
+        pylint main.py --disable=R1732,R1732,R0902 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+    - name: Analysing file_manager.py
+      run: |
+        pylint file_manager.py --disable=R0902
