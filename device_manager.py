@@ -185,7 +185,9 @@ class DeviceManager():
             upload_output = upload_process.communicate()
             upload_output = upload_output[0].decode("UTF-8")
 
-            return None, True
+            print(upload_output)
+            if "No" not in upload_output:
+                return None, True
 
         error_output = compile_output+upload_output
 

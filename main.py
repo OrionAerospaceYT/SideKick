@@ -242,8 +242,6 @@ class Graphing(qtw.QMainWindow):
                 target = self.main_ui.select_project.findText(project)
                 self.main_ui.select_project.removeItem(target)
 
-        self.main_ui.select_project.setCurrentText(self.project)
-
     def update_ports(self):
         """
         Updates all avaliable ports, removes unavaliable one
