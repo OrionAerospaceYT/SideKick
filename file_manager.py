@@ -106,30 +106,6 @@ class FileManager():
         os.rename(f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/Source.ino',
                   f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/{name}.ino')
 
-    def start_new_save(self):
-        """
-        Starts a new save file, saves are called save[indx] and is a text file
-        Files are saved in the users documents folder under Documents/SideKick/SavedData
-        """
-
-        num_of_saves = len(os.listdir(
-            f'C:/Users/{self.user}/Documents/SideKick/SavedData'))
-
-        self.file = open(
-            f"C:/Users/{self.user}/Documents/SideKick/SavedData/Save{num_of_saves + 1}",
-            'w+',
-            encoding='UTF-8')
-
-    def save_terminal_data(self, data):
-        """
-        Saves data to file for users to read later
-
-        Args:
-            data (string): the data to be saved to the new save file
-        """
-
-        self.file.write(f'{data}\n')
-
     def compile_and_upload_commands(self, port, project, board):
         """
         Compiles and uploads the script
