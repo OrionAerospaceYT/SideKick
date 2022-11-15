@@ -4,7 +4,6 @@
 
 <img scr="https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev"> </img>
 
-![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
 
 Table of Contents 
 ====================
