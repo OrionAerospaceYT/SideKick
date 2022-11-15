@@ -1,8 +1,10 @@
 <p align="center">
-<img src=https://i.imgur.com/NduHZHs.png width=300 height=150> </img>
+<img src=https://i.imgur.com/NduHZHs.png width=300 height=150> 
+[![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)]
+</img>
 </p>
 
-<p align="center"> [![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)]
+[![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)]
 
 Table of Contents 
 ====================
