@@ -134,11 +134,11 @@ class DeviceManager():
         if port is not None:
             result.append(port)
 
-        for port in ports:
+        for sys_port in ports:
             try:
-                serial_port = serial.Serial(port)
+                serial_port = serial.Serial(sys_port)
                 serial_port.close()
-                result.append(port)
+                result.append(sys_port)
             except (OSError, serial.SerialException):
                 pass
 
