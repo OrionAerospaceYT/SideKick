@@ -25,3 +25,9 @@ jobs:
     - name: Analysing file_manager.py
       run: |
         pylint file_manager.py --disable=R0902
+    - name: Analysing message_handler.py
+      run: |
+        pylint message_handler.py --disable=R0902
+    - name: Analysing device_manager.py
+      run: |
+        pylint device_manager.py --disable=R0902
