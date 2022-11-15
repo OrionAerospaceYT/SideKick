@@ -1,6 +1,6 @@
 <img src = https://i.imgur.com/NduHZHs.png> </img>
 
-![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)
+![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
 
 Table of Contents 
 ====================
