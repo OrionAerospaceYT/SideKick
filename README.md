@@ -1,4 +1,4 @@
-<img src = https://i.imgur.com/NduHZHs.png> </img>
+<img src=https://i.imgur.com/NduHZHs.png width=300 height=150> </img>
 
 ![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
 
