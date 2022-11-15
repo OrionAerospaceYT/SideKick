@@ -2,7 +2,7 @@
 <img src=https://i.imgur.com/NduHZHs.png width=300 height=150> </img>
 </p>
 
-<img scr=https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev> </img>
+<img scr="https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev"> </img>
 
 ![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
 
