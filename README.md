@@ -1,6 +1,8 @@
 <p align="center">
 <img src=https://i.imgur.com/NduHZHs.png width=300 height=150> </img>
+</p>
 
+<p align="center">
 ![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
 </p>
 
