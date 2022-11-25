@@ -1,3 +1,3 @@
 Drop down options:
-Board: Teensy3.2/1
-Project: Servo Demo
+Board: Teensy4.1
+Project: Default
