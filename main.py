@@ -17,20 +17,23 @@ from PyQt5.QtCore import Qt
 from device_manager import DeviceManager
 from file_manager import FileManager
 from message_handler import MessageHandler
-from Ui.GraphingUi import Ui_MainWindow as graphing
+from Ui.GraphingUi import Ui_MainWindow as main_window
 
 
-class Graphing(qtw.QMainWindow):
+class MainGUI(qtw.QMainWindow):
     """
     Launches the main window (debugging window)
+
+    this class inherits QMainWindow from PyQt5.QtWidgets as
+    it holds the gui object which we need to modify.
     """
 
     def __init__(self, parent=None):
-        super(Graphing, self).__init__(parent=parent)
+        super(MainGUI, self).__init__(parent=parent)
 
         # Definitions for gui initialisation go here
 
-        self.main_ui = graphing()
+        self.main_ui = main_window()
         self.main_ui.setupUi(self)
 
         self.menu_width = 0
@@ -79,13 +82,13 @@ class Graphing(qtw.QMainWindow):
         self.current_projects = []
         self.supported_boards = []
 
-        self.threaded_blinking_record = threading.Thread(
+        threaded_blinking_record = threading.Thread(
             target=self.blinking_record, args=(),)
-        self.threaded_blinking_record.start()
+        threaded_blinking_record.start()
 
-        self.threaded_backend_loop = threading.Thread(
+        threaded_backend_loop = threading.Thread(
             target=self.threaded_backend, args=(),)
-        self.threaded_backend_loop.start()
+        threaded_backend_loop.start()
 
         self.board, self.project = file_manager.load_options()
 
@@ -504,15 +507,15 @@ if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
-    graphing = Graphing()
+    main_gui = MainGUI()
 
-    graphing.show()
+    main_gui.show()
     app.exec_()
 
     device_manager.terminate_device()
     RUNNING = False
 
-    project_selected = graphing.main_ui.select_project.currentText()
-    board_selected = graphing.main_ui.supported_boards.currentText()
+    project_selected = main_gui.main_ui.select_project.currentText()
+    board_selected = main_gui.main_ui.supported_boards.currentText()
 
     file_manager.save_options(board_selected, project_selected)
