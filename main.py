@@ -50,7 +50,6 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.setupUi(self)
 
         self.menu_width = 0
-        self.running = True
         self.supported_boards = {}
 
         self.top_graph = Graph()
@@ -385,7 +384,7 @@ class MainGUI(qtw.QMainWindow):
         Non-blocking function to perform functions over a time interval
         """
 
-        while running:
+        while RUNNING:
             if not self.recording:
                 self.turn_on_rec_light(True)
 
@@ -405,7 +404,7 @@ class MainGUI(qtw.QMainWindow):
         All backend tasks that need to be performed continually
         """
 
-        while running:
+        while RUNNING:
             port = self.device_manager.port
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(
                 port)
@@ -445,7 +444,7 @@ class MainGUI(qtw.QMainWindow):
 
 if __name__ == "__main__":
 
-    running = True
+    RUNNING = True
 
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
@@ -456,7 +455,7 @@ if __name__ == "__main__":
     app.exec_()
 
     main_gui.device_manager.terminate_device()
-    running = False
+    RUNNING = False
 
     project_selected = main_gui.main_ui.select_project.currentText()
     board_selected = main_gui.main_ui.supported_boards.currentText()
