@@ -8,7 +8,6 @@ import sys
 import threading
 import time
 
-import pyqtgraph as pg
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
