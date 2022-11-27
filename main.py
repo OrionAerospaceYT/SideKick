@@ -2,6 +2,10 @@
 This is the main python file responsible for having
 the debugging window open.
 This file also holds the
+
+TODO make more variables global e.g. self.supported_boards
+TODO finish graphs (display data on graphs)
+TODO fix teensy upload (auto upload mode)
 """
 
 import sys
@@ -24,16 +28,23 @@ class MainGUI(qtw.QMainWindow):
     """
     Launches the main window (debugging window)
 
-    this class inherits QMainWindow from PyQt5.QtWidgets as
+    This class inherits QMainWindow from PyQt5.QtWidgets as
     it holds the gui object which we need to modify.
+
+    This class also usues the Graph class from graphs.py
     """
 
-    def __init__(self, parent=None):
-        super(MainGUI, self).__init__(parent=parent)
+    def __init__(self):
 
-        ######################
-        # GUI Initialisation #
-        ######################
+        super(MainGUI, self).__init__()
+
+        ###########################################
+        # Attributes for the gui are defined here #
+        ###########################################
+
+        self.device_manager = DeviceManager()
+        self.file_manager = FileManager()
+        self.message_handler = MessageHandler()
 
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
@@ -42,40 +53,31 @@ class MainGUI(qtw.QMainWindow):
         self.running = True
         self.supported_boards = {}
 
-        #######################################
-        # TESTING CLASS FOR INDIVIDUAL GRAPHS #
-        #######################################
         self.top_graph = Graph()
-
         self.main_ui.top_graph = qtw.QVBoxLayout()
         self.main_ui.top_graph.addWidget(self.top_graph.graph)
         self.main_ui.top_widget.setLayout(self.main_ui.top_graph)
 
         self.bottom_graph = Graph()
-
         self.main_ui.bottom_graph = qtw.QVBoxLayout()
         self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
         self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
-
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
         self.main_ui.message.setPlaceholderText("Enter message here.")
-
-        self.main_ui.bottom_update.setAlignment(
-            Qt.AlignRight | Qt.AlignVCenter)
-
+        self.main_ui.bottom_update.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.add_supported_boards()
 
-        #######################################
-
-        # Definitions for event handling goes here
+        ##################################################
+        # Attributes for event handling are defined here #
+        ##################################################
 
         self.recording = False
         self.light_on = False
-        self.file_manager = False
-        self.device_manager = False
+        self.file_manager_window = False
+        self.device_manager_window = False
         self.debug_window = False
         self.prev_debug_window = True
         self.upload = False
@@ -95,7 +97,7 @@ class MainGUI(qtw.QMainWindow):
             target=self.threaded_backend, args=(),)
         threaded_backend_loop.start()
 
-        self.board, self.project = file_manager.load_options()
+        self.board, self.project = self.file_manager.load_options()
 
         self.main_ui.supported_boards.setCurrentText(self.board)
         self.main_ui.select_project.setCurrentText(self.project)
@@ -111,7 +113,7 @@ class MainGUI(qtw.QMainWindow):
         they can be selected for uploads.
         """
 
-        boards = list(file_manager.get_all_boards().keys())
+        boards = list(self.file_manager.get_all_boards().keys())
 
         for board in boards:
 
@@ -217,41 +219,41 @@ class MainGUI(qtw.QMainWindow):
         if self.prev_debug_window != self.debug_window:
             if self.debug_window:
                 self.main_ui.debugger.setVisible(True)
-                self.main_ui.debug_log.setHtml(message_handler.debug_html)
+                self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
             else:
                 self.main_ui.debugger.setVisible(False)
 
         if self.compile:
             self.main_ui.top_update.setText(
-                message_handler.get_status("Compiling"))
+                self.message_handler.get_status("Compiling"))
         elif self.upload:
             self.main_ui.top_update.setText(
-                message_handler.get_status("Uploading"))
+                self.message_handler.get_status("Uploading"))
         else:
             self.main_ui.top_update.setText("")
 
-        if self.device_manager:
+        if self.device_manager_window:
             self.main_ui.device_layout.setVisible(True)
             self.main_ui.file_layout.setVisible(False)
-        elif self.file_manager:
+        elif self.file_manager_window:
             self.main_ui.file_layout.setVisible(True)
             self.main_ui.device_layout.setVisible(False)
         else:
             self.main_ui.file_layout.setVisible(False)
             self.main_ui.device_layout.setVisible(False)
 
-        self.main_ui.terminal.setHtml(message_handler.terminal_html)
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
-        if device_manager.port is not None:
+        if self.device_manager.port is not None:
             self.main_ui.bottom_update.setText("Connected")
         else:
             self.main_ui.bottom_update.setText("Not Connected")
 
         self.prev_debug_window = self.debug_window
 
-        if device_manager.port is not None:
+        if self.device_manager.port is not None:
 
-            self.main_ui.com_ports.setCurrentText(device_manager.port)
+            self.main_ui.com_ports.setCurrentText(self.device_manager.port)
 
     def new_project(self):
         """
@@ -263,17 +265,17 @@ class MainGUI(qtw.QMainWindow):
         project_name = self.main_ui.project_name.text()
         if project_name == "":
             return
-        if project_name in file_manager.get_all_projects():
+        if project_name in self.file_manager.get_all_projects():
             return
 
-        file_manager.add_new_project(project_name)
+        self.file_manager.add_new_project(project_name)
 
         project_name = self.main_ui.project_name.setText("")
 
     def connect_device(self, port):
         """
         Connects new devices through device manager and updates com port in
-        message_handler
+        self.message_handler
 
         Args:
             port (string): the com port selected in the gui
@@ -281,14 +283,14 @@ class MainGUI(qtw.QMainWindow):
 
         baud = self.main_ui.baud_rate.itemText(0)
 
-        device_manager.connect_device(port, baud)
+        self.device_manager.connect_device(port, baud)
 
     def send(self):
         """
         Sends the message from the line edit to the connected device
         """
 
-        device_manager.send(self.main_ui.message.text())
+        self.device_manager.send(self.main_ui.message.text())
 
         self.main_ui.message.setText("")
 
@@ -297,7 +299,7 @@ class MainGUI(qtw.QMainWindow):
         Disconnects the sidekick/teensy/arduino device
         """
 
-        device_manager.terminate_device()
+        self.device_manager.terminate_device()
 
     def record_data(self):
         """
@@ -312,10 +314,10 @@ class MainGUI(qtw.QMainWindow):
         Closes device manager if they are both open at the same time
         """
 
-        self.file_manager = not self.file_manager
+        self.file_manager_window = not self.file_manager_window
 
-        if self.device_manager and self.file_manager:
-            self.device_manager = False
+        if self.device_manager_window and self.file_manager_window:
+            self.device_manager_window = False
 
     def open_device_manager(self):
         """
@@ -323,10 +325,10 @@ class MainGUI(qtw.QMainWindow):
         Closes file manager if they are both open at the same time
         """
 
-        self.device_manager = not self.device_manager
+        self.device_manager_window = not self.device_manager_window
 
-        if self.device_manager and self.file_manager:
-            self.file_manager = False
+        if self.device_manager_window and self.file_manager_window:
+            self.file_manager_window = False
 
     def upload_project(self):
         """
@@ -340,11 +342,11 @@ class MainGUI(qtw.QMainWindow):
         """
 
         project = self.main_ui.select_project.currentText()
-        boards_dictionary = file_manager.get_all_boards()
+        boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
-        port = device_manager.port
+        port = self.device_manager.port
 
-        self.commands = file_manager.compile_and_upload_commands(
+        self.commands = self.file_manager.compile_and_upload_commands(
             port, project, board)
 
         self.upload = True
@@ -355,11 +357,11 @@ class MainGUI(qtw.QMainWindow):
         """
 
         project = self.main_ui.select_project.currentText()
-        boards_dictionary = file_manager.get_all_boards()
+        boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
-        port = device_manager.port
+        port = self.device_manager.port
 
-        self.commands = file_manager.compile_and_upload_commands(
+        self.commands = self.file_manager.compile_and_upload_commands(
             port, project, board)
 
         self.compile = True
@@ -383,7 +385,7 @@ class MainGUI(qtw.QMainWindow):
         Non-blocking function to perform functions over a time interval
         """
 
-        while RUNNING:
+        while running:
             if not self.recording:
                 self.turn_on_rec_light(True)
 
@@ -392,9 +394,9 @@ class MainGUI(qtw.QMainWindow):
                 self.light_on = not self.light_on
 
             if self.compile:
-                message_handler.update_ellipsis()
+                self.message_handler.update_ellipsis()
             if self.upload:
-                message_handler.update_ellipsis()
+                self.message_handler.update_ellipsis()
 
             time.sleep(0.5)
 
@@ -403,21 +405,21 @@ class MainGUI(qtw.QMainWindow):
         All backend tasks that need to be performed continually
         """
 
-        while RUNNING:
-            port = device_manager.port
-            self.avaliable_port_list = device_manager.scan_avaliable_ports(
+        while running:
+            port = self.device_manager.port
+            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(
                 port)
-            self.current_projects = file_manager.get_all_projects()
-            message_handler.raw_data = device_manager.raw_data
+            self.current_projects = self.file_manager.get_all_projects()
+            self.message_handler.raw_data = self.device_manager.raw_data
 
-            message_handler.terminal_output_html(
+            self.message_handler.terminal_output_html(
                 self.main_ui.terminal.height())
 
             if self.compile:
                 self.debug_window = False
 
-                error = device_manager.compile_script(self.commands[0])
-                message_handler.decode_debug_message(error)
+                error = self.device_manager.compile_script(self.commands[0])
+                self.message_handler.decode_debug_message(error)
 
                 self.debug_window = True
                 self.compile = False
@@ -426,14 +428,14 @@ class MainGUI(qtw.QMainWindow):
 
                 self.debug_window = False
 
-                port = device_manager.port
-                device_manager.terminate_device()
+                port = self.device_manager.port
+                self.device_manager.terminate_device()
 
-                error, success = device_manager.upload_script(
+                error, success = self.device_manager.upload_script(
                     self.commands[0], self.commands[1])
 
                 if not success:
-                    message_handler.decode_debug_message(error)
+                    self.message_handler.decode_debug_message(error)
                     self.debug_window = True
 
                 time.sleep(0.25)
@@ -441,14 +443,9 @@ class MainGUI(qtw.QMainWindow):
 
                 self.upload = False
 
-
-device_manager = DeviceManager()
-file_manager = FileManager()
-message_handler = MessageHandler()
-
-RUNNING = True
-
 if __name__ == "__main__":
+
+    running = True
 
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
@@ -458,10 +455,10 @@ if __name__ == "__main__":
     main_gui.show()
     app.exec_()
 
-    device_manager.terminate_device()
-    RUNNING = False
+    main_gui.device_manager.terminate_device()
+    running = False
 
     project_selected = main_gui.main_ui.select_project.currentText()
     board_selected = main_gui.main_ui.supported_boards.currentText()
 
-    file_manager.save_options(board_selected, project_selected)
+    main_gui.file_manager.save_options(board_selected, project_selected)
