@@ -16,6 +16,7 @@ from PyQt5.QtCore import Qt
 
 from device_manager import DeviceManager
 from file_manager import FileManager
+from graphs import Graph
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
@@ -40,19 +41,21 @@ class MainGUI(qtw.QMainWindow):
         self.running = True
         self.supported_boards = {}
 
-        self.top_legend = None
-        self.top_plots = None
-        self.main_ui_top_graph = None
+        #######################################
+        # TESTING CLASS FOR INDIVIDUAL GRAPHS #
+        #######################################
+        self.top_graph = Graph()
 
-        self.bottom_legend = None
-        self.bottom_plots = None
-        self.main_ui_bottom_graph = None
+        self.main_ui.top_graph = qtw.QVBoxLayout()
+        self.main_ui.top_graph.addWidget(self.top_graph.graph)
+        self.main_ui.top_widget.setLayout(self.main_ui.top_graph)
 
-        self.map_top_graph()
-        self.style_top_graph()
+        self.bottom_graph = Graph()
 
-        self.map_bottom_graph()
-        self.style_bottom_graph()
+        self.main_ui.bottom_graph = qtw.QVBoxLayout()
+        self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
+        self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
+        #######################################
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
@@ -101,7 +104,7 @@ class MainGUI(qtw.QMainWindow):
         timer.start()
 
     def add_supported_boards(self):
-        """
+        """main_ui_top_graph
         Adds the supported boards to the drop down so that
         they can be selected for uploads.
         """
@@ -111,65 +114,6 @@ class MainGUI(qtw.QMainWindow):
         for board in boards:
 
             self.main_ui.supported_boards.addItem(board)
-
-    def map_top_graph(self):
-        """
-        Set pyqtPlot to the top widget
-        """
-
-        self.main_ui_top_graph = pg.PlotWidget()
-        self.main_ui_top_graph.setMenuEnabled(False)
-        self.main_ui.main_ui_top_graph = qtw.QVBoxLayout()
-
-        self.main_ui.top_widget.setLayout(self.main_ui.main_ui_top_graph)
-        self.main_ui.main_ui_top_graph.addWidget(self.main_ui_top_graph)
-        self.top_legend = self.main_ui_top_graph.addLegend()
-        self.top_plots = []
-
-    def style_top_graph(self):
-        """
-        Sets the style for pyqtPlot top widget
-        """
-
-        self.main_ui_top_graph.setBackground('#2b2b35')
-        self.top_legend.setLabelTextColor("#FFFFFF")
-        self.main_ui_top_graph.getAxis(
-            'left').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_top_graph.getAxis(
-            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_top_graph.getAxis("left").setTextPen((255, 255, 255))
-        self.main_ui_top_graph.getAxis("bottom").setTextPen((255, 255, 255))
-
-    def map_bottom_graph(self):
-        """
-        Set pyqtPlot lib to the bottom widget
-        """
-
-        self.main_ui_bottom_graph = pg.PlotWidget()
-        self.main_ui_bottom_graph.setMenuEnabled(False)
-        self.main_ui.main_ui_bottom_graph = qtw.QVBoxLayout()
-
-        self.main_ui.bottom_widget.setLayout(
-            self.main_ui.main_ui_bottom_graph)
-        self.main_ui.main_ui_bottom_graph.addWidget(
-            self.main_ui_bottom_graph)
-        self.bottom_legend = self.main_ui_bottom_graph.addLegend()
-        self.bottom_plots = []
-
-    def style_bottom_graph(self):
-        """
-        Sets the style for pyqtPlot bottom widget
-        """
-
-        self.main_ui_bottom_graph.getAxis(
-            'left').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_bottom_graph.getAxis(
-            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.main_ui_bottom_graph.setBackground('#2b2b35')
-        self.bottom_legend.setLabelTextColor("#FFFFFF")
-        self.main_ui_bottom_graph.getAxis("left").setTextPen((255, 255, 255))
-        self.main_ui_bottom_graph.getAxis(
-            "bottom").setTextPen((255, 255, 255))
 
     def connect_buttons(self):
         """
