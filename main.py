@@ -31,7 +31,9 @@ class MainGUI(qtw.QMainWindow):
     def __init__(self, parent=None):
         super(MainGUI, self).__init__(parent=parent)
 
-        # Definitions for gui initialisation go here
+        ######################
+        # GUI Initialisation #
+        ######################
 
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
@@ -54,7 +56,6 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.bottom_graph = qtw.QVBoxLayout()
         self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
         self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
-        #######################################
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
@@ -66,6 +67,8 @@ class MainGUI(qtw.QMainWindow):
             Qt.AlignRight | Qt.AlignVCenter)
 
         self.add_supported_boards()
+
+        #######################################
 
         # Definitions for event handling goes here
 
