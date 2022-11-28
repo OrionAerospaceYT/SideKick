@@ -20,7 +20,9 @@ from PyQt5.QtCore import Qt
 
 from device_manager import DeviceManager
 from file_manager import FileManager
-from graphs import Graph
+from widgets import DeviceManagerWindow
+from widgets import FileManagerWindow
+from widgets import Graph
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
