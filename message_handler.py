@@ -24,7 +24,8 @@ class MessageHandler():
 
         self.raw_data = []
 
-        self.terminal_header = "<h1><p style=\"color:#00f0c3;font-size:30px\">Terminal</p></h1><br>"
+        self.terminal_header = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
+>Terminal</p></h1><br>"
         self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
@@ -183,3 +184,10 @@ class MessageHandler():
             status += item[1]
 
         return status
+
+    def get_graph_data(self):
+        
+        for data in self.raw_data:
+            print(data)
+            print(self.decode_graph_data(data))
+    
