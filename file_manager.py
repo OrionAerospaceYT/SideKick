@@ -18,26 +18,35 @@ class FileManager():
     """
 
     def __init__(self):
-        self.file = None
-        self.user = os.getlogin()
-        self.cwd = os.getcwd()
-        self.operating_system = platform.system()
-        if self.operating_system == 'Windows':
-           self.bsfs = '\\' 
-           self.inc = 'C:'
-        elif self.operating_system == 'Darwin':
-            self.bsfs = '/'
-            self.inc = ''
-        elif self.operating_system == 'Linux':
-            self.bsfs = '/'
-            self.inc = ''
-        else:
-            print("invalid os")
-            # Raise error
-        self.create_sidekick_file()
-        self.create_sub_sidekick_files()
 
-        if len(os.listdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries')) <= 0:
+        # Definitions constant for each OS
+        self.user = os.getlogin()
+        self.path = os.path.dirname(os.path.realpath(__file__))
+        self.operating_system = platform.system()
+
+        # Initialise for each OS
+        if self.operating_system == "Windows":
+            self.sep = "\\"
+            inc = "C:"
+        elif self.operating_system == "Darwin":
+            self.sep = "/"
+            inc = ""
+        elif self.operating_system == "Linux":
+            self.sep = "/"
+            inc = ""
+        else:
+            raise Exception("Invalis OS. Shutting down.")
+
+        # Definitions for frequently used paths
+        self.documents_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}Documents"
+        self.sidekick_path = self.documents_path + f"{self.sep}SideKick"
+        self.projects_path = self.sidekick_path + f"{self.sep}SK Projects"
+        self.libraries_path = self.sidekick_path + f"{self.sep}Libraries"
+        self.saves_path = self.sidekick_path + f"{self.sep}SavedData"
+        self.boards_path = f"{self.path}{self.sep}Ui{self.sep}boards.csv"
+
+        # Checks for the SideKick libraries
+        if len(os.listdir(self.libraries_path)) == 0:
             self.move_libraries()
 
     def create_sidekick_file(self):
@@ -45,37 +54,38 @@ class FileManager():
         Creates the SideKick directory in documents if it dos not exist
         """
 
-        directories = os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents")
+        directories = os.listdir(self.documents_path)
         if "SideKick" not in directories:
-            os.mkdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick")
+            os.mkdir(self.sidekick_path)
 
     def create_sub_sidekick_files(self):
         """
-        Creates SideKick sub directories (SK Projects, SavedData, Libraries)
+        Creates SideKick sub directories (SK Projects, SavedData, Libraries) if
+        they do not already exist.
         """
 
-        directories = os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick")
+        directories = os.listdir(self.sidekick_path)
 
         if "SK Projects" not in directories:
-            os.mkdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects")
+            os.mkdir(self.projects_path)
         if "SavedData" not in directories:
-            os.mkdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SavedData')
+            os.mkdir(self.saves_path)
         if "Libraries" not in directories:
-            os.mkdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries')
+            os.mkdir(self.libraries_path)
 
     def move_libraries(self):
         """
         Copies the sidekick ConsciOS to the libraries folder
         """
 
-        conscios_folder = len(os.listdir("ConsciOS"))
+        conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
 
         if not conscios_folder:
             print("ERROR: The ConsciOS is non-existent!")
             return
 
-        source = 'ConsciOS{self.bsfs}libraries'
-        destination = f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries{self.bsfs}libraries'
+        source = f"{self.path}{self.sep}ConsciOS"
+        destination = f"{self.libraries_path}{self.sep}libraries"
         shutil.copytree(source, destination)
 
     def get_all_boards(self):
@@ -86,7 +96,7 @@ class FileManager():
 
         board_dict = {}
 
-        with open(".{self.bsfs}Ui{self.bsfs}boards.csv", "r", encoding='UTF-8') as boards:
+        with open(self.boards_path, "r", encoding="UTF-8") as boards:
             for line in boards:
                 names = line.split(", ")
                 board_dict[names[0]] = names[1].strip()
@@ -98,7 +108,7 @@ class FileManager():
         Returns all project directories except for Libraries
         """
 
-        return os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects")
+        return os.listdir(self.projects_path)
 
     def add_new_project(self, name):
         """
@@ -109,15 +119,15 @@ class FileManager():
             name (string): the name of the new project from the line edit
         """
 
-        if name in os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects"):
+        if name in os.listdir(self.projects_path):
             return
 
-        source = '.{self.bsfs}ConsciOS{self.bsfs}Source'
-        destination = f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}'
+        source = f"{self.path}{self.sep}ConsciOS{self.sep}Source"
+        destination = f"{self.projects_path}{self.sep}{name}"
         shutil.copytree(source, destination)
 
-        os.rename(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}{self.bsfs}Source.ino',
-                  f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}{self.bsfs}{name}.ino')
+        os.rename(f"{self.projects_path}{self.sep}{name}{self.sep}Source.ino",
+                  f"{self.projects_path}{self.sep}{name}{self.sep}{name}.ino")
 
     def compile_and_upload_commands(self, port, project, board):
         """
@@ -131,13 +141,12 @@ class FileManager():
             list: with [compile (string), upload (string)]
         """
 
-        project_path = f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}\
-{project}{self.bsfs}{project}.ino"
+        project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
 
-        compile_msg = f"\"{self.cwd}{self.bsfs}Externals{self.bsfs}arduino-cli.exe\" compile --fqbn \
-{board} \"{project_path}\""
+        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe\" \
+compile --fqbn {board} \"{project_path}\""
 
-        upload_msg = f"\"{self.cwd}{self.bsfs}Externals{self.bsfs}arduino-cli.exe\" \
+        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe\" \
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]
@@ -145,7 +154,7 @@ upload -p {port} --fqbn {board} \"{project_path}\""
     def save_options(self, board, project):
         """
         Saves selected options in drop downs to the settings.txt file so
-        that the user doesn't need to keep selecting drop downs on startup
+        that the user doesn"t need to keep selecting drop downs on startup
 
         Args:
             board (string): the board type e.g. SK_Stem, Teensy4.1
