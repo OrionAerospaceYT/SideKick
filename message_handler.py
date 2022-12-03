@@ -22,8 +22,6 @@ class MessageHandler():
 
     def __init__(self):
 
-        self.raw_data = []
-
         self.terminal_header = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
 >Terminal</p></h1><br>"
         self.terminal_html = ""
@@ -35,39 +33,6 @@ class MessageHandler():
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>"
-
-        self.top_graph_data = []
-        self.bottom_graph_data = []
-
-        self.terminal_data_list = []
-
-    def decode_graph_data(self, raw_input):
-        """
-        Picks out the graph data from the raw data
-
-        Args:
-            raw_input (string): raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
-        Returns:
-            graph_top_data (list): holds the values for the top graph
-            graph_bottom_data (list): holds the values for the bottom graph
-        """
-
-        graph_top_data = []
-        graph_bottom_data = []
-        raw_list = raw_input.split("g(")
-
-        for data in raw_list:
-
-            data = data.split(")")
-
-            if "t(" not in data[0] and data[0] != "" and "\r" not in data[0]:
-                valid_graph_data = data[0].replace(" ", "").split(",")
-                if valid_graph_data[1] == "1":
-                    graph_top_data.append(valid_graph_data[2])
-                else:
-                    graph_bottom_data.append(valid_graph_data[2])
-
-        return graph_top_data, graph_bottom_data
 
     def decode_terminal_data(self, raw_input):
         """
@@ -89,12 +54,13 @@ class MessageHandler():
 
         return terminal_data
 
-    def terminal_output_html(self, height):
+    def get_terminal(self, raw_data, height):
         """
         Calculates the amount of lines the terminal can displaye at
         once (TODO)
 
         Args:
+            raw_data (list): a list of all raw data
             height (int): the height of the terminal
         """
         decoded_data = []
@@ -102,9 +68,9 @@ class MessageHandler():
         amount_of_data = int(height / 30)
 
         for i in range(1, amount_of_data):
-            if i > len(self.raw_data):
+            if i > len(raw_data):
                 break
-            decoded_string = self.decode_terminal_data(self.raw_data[-i])
+            decoded_string = self.decode_terminal_data(raw_data[-i])
             decoded_data.append(decoded_string)
 
         terminal_html = self.terminal_header
@@ -184,10 +150,3 @@ class MessageHandler():
             status += item[1]
 
         return status
-
-    def get_graph_data(self):
-        
-        for data in self.raw_data:
-            print(data)
-            print(self.decode_graph_data(data))
-    
