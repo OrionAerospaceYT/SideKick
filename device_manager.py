@@ -58,25 +58,28 @@ class DeviceManager():
         self.terminate_device()
 
         try:
-            self.device = serial.Serial(port, baud, timeout=0, rtscts=False)
+            self.device = serial.Serial(port, baud, timeout=0, rtscts=True)
         except serial.SerialException:
             self.device = None
+
+        buffer = b""
 
         while self.device is not None:
 
             try:
-                raw_data = self.device.readline().decode("utf-8")
+                raw_data = self.device.read_all()
             except serial.SerialException:
                 self.terminate_device()
                 break
 
-            if "(" in raw_data:
-                self.raw_data.append(raw_data.strip())
-
-                if len(self.raw_data) > 1000:
-                    self.raw_data.pop(0)
+            if raw_data != b"":
+                buffer += raw_data
+                if buffer.count(b"\r\n") > 1:
+                    self.raw_data.append(buffer.split(b"\r\n")[-2].decode("UTF-8"))
+                    buffer = b""
 
         self.port = None
+        self.raw_data = None
 
     def terminate_device(self):
         """
@@ -121,14 +124,12 @@ class DeviceManager():
             result (list): avaliable com ports for pyserial
         """
 
-        if sys.platform.startswith('win'):
-            ports = [f'COM{i}' for i in range(256)]
-        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            ports = glob.glob('/dev/tty[A-Za-z]*')
-        elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/tty.*')
-        else:
-            raise EnvironmentError('Unsupported platform')
+        if sys.platform.startswith("win"):
+            ports = [f"COM{i}" for i in range(256)]
+        elif sys.platform.startswith("linux") or sys.platform.startswith("cygwin"):
+            ports = glob.glob("/dev/tty[A-Za-z]*")
+        elif sys.platform.startswith("darwin"):
+            ports = glob.glob("/dev/tty.*")
 
         result = []
         if port is not None:
