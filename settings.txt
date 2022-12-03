@@ -1,3 +1,0 @@
-Drop down options:
-Board: Teensy4.1
-Project: Default
