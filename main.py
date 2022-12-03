@@ -7,6 +7,7 @@ TODO make more variables global e.g. self.supported_boards
 TODO finish graphs (display data on graphs)
 TODO fix teensy upload (auto upload mode)
 TODO make classes for device manager window and file manager winow
+TODO display COM by default in COM dropdown
 """
 
 import sys
@@ -402,14 +403,21 @@ class MainGUI(qtw.QMainWindow):
         """
 
         while RUNNING:
+            # Com ports
             port = self.device_manager.port
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(
                 port)
+
+            # Projects
             self.current_projects = self.file_manager.get_all_projects()
+
+            # Raw data
             self.message_handler.raw_data = self.device_manager.raw_data
 
             self.message_handler.terminal_output_html(
                 self.main_ui.terminal.height())
+
+            # self.message_handler.get_graph_data()
 
             if self.compile:
                 self.debug_window = False
