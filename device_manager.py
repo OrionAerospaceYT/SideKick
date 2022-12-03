@@ -68,6 +68,7 @@ class DeviceManager():
 
             try:
                 raw_data = self.device.read_all()
+                print(raw_data)
             except serial.SerialException:
                 self.terminate_device()
                 break
@@ -79,7 +80,7 @@ class DeviceManager():
                     buffer = b""
 
         self.port = None
-        self.raw_data = None
+        self.raw_data = []
 
     def terminate_device(self):
         """
