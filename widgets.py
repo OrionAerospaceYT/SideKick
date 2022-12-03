@@ -68,7 +68,7 @@ class DeviceManagerWindow(Widgets):
         self.device = ""
         self.device_list = []
         self.baud = 115200
-      
+
 class FileManagerWindow(Widgets):
     """
     Responsible for data on the file manager widgets.
