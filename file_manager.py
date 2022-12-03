@@ -5,6 +5,7 @@ deletion of files.
 
 import os
 import shutil
+import platform
 
 
 class FileManager():
@@ -20,11 +21,23 @@ class FileManager():
         self.file = None
         self.user = os.getlogin()
         self.cwd = os.getcwd()
-
+        self.operating_system = platform.system()
+        if self.operating_system == 'Windows':
+           self.bsfs = '\\' 
+           self.inc = 'C:'
+        elif self.operating_system == 'Darwin':
+            self.bsfs = '/'
+            self.inc = ''
+        elif self.operating_system == 'Linux':
+            self.bsfs = '/'
+            self.inc = ''
+        else:
+            print("invalid os")
+            # Raise error
         self.create_sidekick_file()
         self.create_sub_sidekick_files()
 
-        if len(os.listdir(f'C:/Users/{self.user}/Documents/SideKick/Libraries')) <= 0:
+        if len(os.listdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries')) <= 0:
             self.move_libraries()
 
     def create_sidekick_file(self):
@@ -32,23 +45,23 @@ class FileManager():
         Creates the SideKick directory in documents if it dos not exist
         """
 
-        directories = os.listdir(f"C:/Users/{self.user}/Documents")
+        directories = os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents")
         if "SideKick" not in directories:
-            os.mkdir(f"C:/Users/{self.user}/Documents/SideKick")
+            os.mkdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick")
 
     def create_sub_sidekick_files(self):
         """
         Creates SideKick sub directories (SK Projects, SavedData, Libraries)
         """
 
-        directories = os.listdir(f"C:/Users/{self.user}/Documents/SideKick")
+        directories = os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick")
 
         if "SK Projects" not in directories:
-            os.mkdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
+            os.mkdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects")
         if "SavedData" not in directories:
-            os.mkdir(f'C:/Users/{self.user}/Documents/SideKick/SavedData')
+            os.mkdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SavedData')
         if "Libraries" not in directories:
-            os.mkdir(f'C:/Users/{self.user}/Documents/SideKick/Libraries')
+            os.mkdir(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries')
 
     def move_libraries(self):
         """
@@ -61,8 +74,8 @@ class FileManager():
             print("ERROR: The ConsciOS is non-existent!")
             return
 
-        source = 'ConsciOS/libraries'
-        destination = f'C:/Users/{self.user}/Documents/SideKick/Libraries/libraries'
+        source = 'ConsciOS{self.bsfs}libraries'
+        destination = f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}Libraries{self.bsfs}libraries'
         shutil.copytree(source, destination)
 
     def get_all_boards(self):
@@ -73,7 +86,7 @@ class FileManager():
 
         board_dict = {}
 
-        with open("./Ui/boards.csv", "r", encoding='UTF-8') as boards:
+        with open(".{self.bsfs}Ui{self.bsfs}boards.csv", "r", encoding='UTF-8') as boards:
             for line in boards:
                 names = line.split(", ")
                 board_dict[names[0]] = names[1].strip()
@@ -85,7 +98,7 @@ class FileManager():
         Returns all project directories except for Libraries
         """
 
-        return os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects")
+        return os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects")
 
     def add_new_project(self, name):
         """
@@ -96,15 +109,15 @@ class FileManager():
             name (string): the name of the new project from the line edit
         """
 
-        if name in os.listdir(f"C:/Users/{self.user}/Documents/SideKick/SK Projects"):
+        if name in os.listdir(f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects"):
             return
 
-        source = './ConsciOS/Source'
-        destination = f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}'
+        source = '.{self.bsfs}ConsciOS{self.bsfs}Source'
+        destination = f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}'
         shutil.copytree(source, destination)
 
-        os.rename(f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/Source.ino',
-                  f'C:/Users/{self.user}/Documents/SideKick/SK Projects/{name}/{name}.ino')
+        os.rename(f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}{self.bsfs}Source.ino',
+                  f'{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}{name}{self.bsfs}{name}.ino')
 
     def compile_and_upload_commands(self, port, project, board):
         """
@@ -112,19 +125,19 @@ class FileManager():
 
         Args:
             port (string): the com port the device is connected to e.g. "COM1"
-            board (string): the type of sidekick/teensy/arduino board
+            board (string): the type of sidekick{self.bsfs}teensy{self.bsfs}arduino board
             project (string): the name of the project to upload
         Returns:
             list: with [compile (string), upload (string)]
         """
 
-        project_path = f"C:/Users/{self.user}/Documents/SideKick/SK Projects/\
-{project}/{project}.ino"
+        project_path = f"{self.inc}{self.bsfs}Users{self.bsfs}{self.user}{self.bsfs}Documents{self.bsfs}SideKick{self.bsfs}SK Projects{self.bsfs}\
+{project}{self.bsfs}{project}.ino"
 
-        compile_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" compile --fqbn \
+        compile_msg = f"\"{self.cwd}{self.bsfs}Externals{self.bsfs}arduino-cli.exe\" compile --fqbn \
 {board} \"{project_path}\""
 
-        upload_msg = f"\"{self.cwd}/Externals/arduino-cli.exe\" \
+        upload_msg = f"\"{self.cwd}{self.bsfs}Externals{self.bsfs}arduino-cli.exe\" \
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]
