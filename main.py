@@ -53,12 +53,12 @@ class MainGUI(qtw.QMainWindow):
         self.menu_width = 0
         self.supported_boards = {}
 
-        self.top_graph = Graph()
+        self.top_graph = Graph(key="1")
         self.main_ui.top_graph = qtw.QVBoxLayout()
         self.main_ui.top_graph.addWidget(self.top_graph.graph)
         self.main_ui.top_widget.setLayout(self.main_ui.top_graph)
 
-        self.bottom_graph = Graph()
+        self.bottom_graph = Graph(key="2")
         self.main_ui.bottom_graph = qtw.QVBoxLayout()
         self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
         self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
@@ -212,6 +212,8 @@ class MainGUI(qtw.QMainWindow):
 
         self.update_ports()
         self.update_projects()
+        self.top_graph.update_graph()
+        self.bottom_graph.update_graph()
 
         if self.prev_debug_window != self.debug_window:
             if self.debug_window:
@@ -412,12 +414,11 @@ class MainGUI(qtw.QMainWindow):
             self.current_projects = self.file_manager.get_all_projects()
 
             # Raw data
-            self.message_handler.raw_data = self.device_manager.raw_data
+            raw_data = self.device_manager.raw_data
 
-            self.message_handler.terminal_output_html(
-                self.main_ui.terminal.height())
-
-            # self.message_handler.get_graph_data()
+            self.message_handler.get_terminal(raw_data, self.main_ui.terminal.height())
+            self.top_graph.set_graph_data(raw_data)
+            self.bottom_graph.set_graph_data(raw_data)
 
             if self.compile:
                 self.debug_window = False
