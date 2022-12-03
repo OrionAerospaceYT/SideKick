@@ -41,10 +41,7 @@ class MainGUI(qtw.QMainWindow):
 
         super(MainGUI, self).__init__()
 
-        ###########################################
-        # Attributes for the gui are defined here #
-        ###########################################
-
+        # Attributes for the gui are defined here
         self.device_manager = DeviceManager()
         self.file_manager = FileManager()
         self.message_handler = MessageHandler()
@@ -72,10 +69,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.bottom_update.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.add_supported_boards()
 
-        ##################################################
-        # Attributes for event handling are defined here #
-        ##################################################
-
+        # Attributes for event handling are defined here
         self.recording = False
         self.light_on = False
         self.file_manager_window = False
