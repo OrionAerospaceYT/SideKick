@@ -19,7 +19,6 @@ class FileManager():
 
     def __init__(self):
 
-        # Definitions constant for each OS
         self.user = os.getlogin()
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.operating_system = platform.system()
@@ -44,6 +43,7 @@ class FileManager():
         self.libraries_path = self.sidekick_path + f"{self.sep}Libraries"
         self.saves_path = self.sidekick_path + f"{self.sep}SavedData"
         self.boards_path = f"{self.path}{self.sep}Ui{self.sep}boards.csv"
+        self.settings_path = f"{self.path}{self.sep}settings.txt"
 
         # Checks for the SideKick libraries
         if len(os.listdir(self.libraries_path)) == 0:
@@ -51,7 +51,7 @@ class FileManager():
 
     def create_sidekick_file(self):
         """
-        Creates the SideKick directory in documents if it dos not exist
+        Creates sidekick directory in documents if it does not already exist
         """
 
         directories = os.listdir(self.documents_path)
@@ -75,7 +75,8 @@ class FileManager():
 
     def move_libraries(self):
         """
-        Copies the sidekick ConsciOS to the libraries folder
+        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS.
+        TODO fix returns
         """
 
         conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
@@ -90,8 +91,10 @@ class FileManager():
 
     def get_all_boards(self):
         """
-        Returns dictionary of valid devices
-        Based off of the boards.csv file
+        Gets all supported boards from the "./Ui/boards.csv".
+
+        Returns:
+            dictionary: the list of supported boards
         """
 
         board_dict = {}
@@ -105,7 +108,10 @@ class FileManager():
 
     def get_all_projects(self):
         """
-        Returns all project directories except for Libraries
+        Gets all projects in the "SK Projects" folder.
+
+        Returns:
+            list: a list of all the projects
         """
 
         return os.listdir(self.projects_path)
@@ -114,6 +120,8 @@ class FileManager():
         """
         Adds new projects when new project is clicked.
         Creates a new file, copies the source reference, then renames the .ino file
+
+        TODO support new projects on enter key
 
         Args:
             name (string): the name of the new project from the line edit
@@ -161,7 +169,7 @@ upload -p {port} --fqbn {board} \"{project_path}\""
             project (string): the current project selected
         """
 
-        with open("settings.txt", "r", encoding="UTF-8") as settings_file:
+        with open(self.settings_path, "r", encoding="UTF-8") as settings_file:
 
             settings = settings_file.readlines()
 
@@ -176,7 +184,7 @@ upload -p {port} --fqbn {board} \"{project_path}\""
         settings[board_index] = f"Board: {board}\n"
         settings[project_index] = f"Project: {project}\n"
 
-        with open("settings.txt", "w", encoding="UTF-8") as settings_file:
+        with open(self.settings_path, "w", encoding="UTF-8") as settings_file:
             settings_file.writelines(settings)
 
     def load_options(self):
@@ -193,7 +201,7 @@ upload -p {port} --fqbn {board} \"{project_path}\""
 
         in_drop_down_section = False
 
-        with open("settings.txt", "r", encoding="UTF-8") as settings:
+        with open(self.settings_path, "r", encoding="UTF-8") as settings:
 
             for line in settings:
 
