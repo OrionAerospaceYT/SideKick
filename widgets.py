@@ -4,6 +4,7 @@ display the data onto a graph.
 """
 
 import pyqtgraph as pg
+import numpy as np
 
 class Graph():
     """
@@ -11,17 +12,16 @@ class Graph():
     the screen
     """
 
-    def __init__(self):
+    def __init__(self, key="0"):
 
         self.legend = None
-        self.plots = None
+        self.plots = []
         self.graph = None
 
         self.graph = pg.PlotWidget()
         self.graph.setMenuEnabled(False)
 
         self.legend = self.graph.addLegend()
-        self.plots = []
 
         self.graph.setBackground('#2b2b35')
 
@@ -33,19 +33,67 @@ class Graph():
         self.graph.getAxis("left").setTextPen((255, 255, 255))
         self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
+        self.key = key
+        self.graph_data = []
+
+    def decode_graph_data(self, raw_input):
+        """
+        Picks out the graph data from the raw data
+
+        Args:
+            raw_input (string): raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
+        Returns:
+            graph_top_data (list): holds the values for the top graph
+            graph_bottom_data (list): holds the values for the bottom graph
+        """
+
+        graph_data = []
+        raw_list = raw_input.split("g(")
+
+        for data in raw_list:
+            data = data.split(")")
+            if "t(" not in data[0] and data[0] != "" and "\r" not in data[0]:
+                valid_graph_data = data[0].replace(" ", "").split(",")
+                if valid_graph_data[1] == self.key:
+                    graph_data.append(valid_graph_data[2])
+
+        return graph_data
+
+    def set_graph_data(self, raw_data):
+        """
+        Gets the graph data and puts it in the form to be plotted
+
+        Args:
+            raw_data (list): a list of all raw data
+        """
+        if not raw_data:
+            return
+        if raw_data[-1] != "":
+            for data in raw_data:
+                plot = self.decode_graph_data(data)
+                if plot:
+                    self.graph_data.append(plot)
+                if len(self.graph_data) > 1000:
+                    self.graph_data.pop(0)
+        else:
+            self.graph_data = []
+
+    def update_plots(self, num_of_plots):
+        for item in self.plots:
+            self.graph.removeItem(item)
+
+        for _ in range(num_of_plots):
+            self.plots.append(self.graph.plot([0],[0]))
+
     def update_graph(self):
-        """
-        TODO display new data on the graph
-        """
 
-        pass
+        plots = list(map(list, zip(*self.graph_data)))
 
-    def set_data(self):
-        """
-        TODO set the new data for the graph
-        """
+        if len(plots) != len(self.plots):
+            self.update_plots(len(plots))
 
-        pass
+        for index, plot in enumerate(self.plots):
+            plot.setData(np.array(plots[index], dtype=float))
 
 
 class Widgets():
