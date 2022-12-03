@@ -38,12 +38,12 @@ class FileManager():
 
         # Definitions for frequently used paths
         self.documents_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}Documents"
-        self.sidekick_path = self.documents_path + f"{self.sep}SideKick"
-        self.projects_path = self.sidekick_path + f"{self.sep}SK Projects"
-        self.libraries_path = self.sidekick_path + f"{self.sep}Libraries"
-        self.saves_path = self.sidekick_path + f"{self.sep}SavedData"
-        self.boards_path = f"{self.path}{self.sep}Ui{self.sep}boards.csv"
-        self.settings_path = f"{self.path}{self.sep}settings.txt"
+        self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
+        self.projects_path = f"{self.sidekick_path}{self.sep}SK Projects"
+        self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
+        self.saves_path = f"{self.sidekick_path}{self.sep}SavedData"
+        self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
+        self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
 
         # Checks for the SideKick libraries
         if len(os.listdir(self.libraries_path)) == 0:
