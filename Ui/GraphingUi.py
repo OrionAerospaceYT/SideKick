@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\GraphingUi.ui'
+# Form implementation generated from reading ui file 'GraphingUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -506,9 +506,6 @@ class Ui_MainWindow(object):
         self.select_project.setObjectName("select_project")
         self.select_project.addItem("")
         self.file_menu.addWidget(self.select_project)
-        self.new_project = QtWidgets.QPushButton(self.file_layout)
-        self.new_project.setObjectName("new_project")
-        self.file_menu.addWidget(self.new_project)
         self.delete_project = QtWidgets.QPushButton(self.file_layout)
         self.delete_project.setObjectName("delete_project")
         self.file_menu.addWidget(self.delete_project)
@@ -638,7 +635,6 @@ class Ui_MainWindow(object):
         self.record.setText(_translate("MainWindow", "Record"))
         self.help.setText(_translate("MainWindow", "Help"))
         self.select_project.setItemText(0, _translate("MainWindow", "Select Project"))
-        self.new_project.setText(_translate("MainWindow", "New Project"))
         self.delete_project.setText(_translate("MainWindow", "Delete Project"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
