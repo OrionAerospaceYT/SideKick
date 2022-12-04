@@ -67,7 +67,7 @@ class MessageHandler():
         terminal_html = self.terminal_header
 
         for data in reversed(decoded_data):
-            total_lines += len(data) // (size[1] / 12) + 1
+            total_lines += len(data) // (size[1] / 8) + 2
             if total_lines <= amount_of_lines:
                 terminal_html += self.beginning + data + self.ending
 
