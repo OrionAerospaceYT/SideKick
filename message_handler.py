@@ -3,14 +3,6 @@ This file handles displaying error messages and graphs
 This file imports device manager and gets the data
 """
 
-COLOUR_ORDER = ["#FF0C0C",
-                "#31f78e",
-                "#02acf5",
-                "#fc7703",
-                "#9d03fc",
-                "#fce803",
-                "#fc03b1"]
-
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
