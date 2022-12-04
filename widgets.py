@@ -77,18 +77,12 @@ class Graph():
         Args:
             raw_data (list): a list of all raw data
         """
+        self.graph_data = []
 
-        if not raw_data:
-            return
-        if raw_data[-1] != "":
-            for data in raw_data:
-                plot = self.decode_graph_data(data)
-                if plot:
-                    self.graph_data.append(plot)
-                if len(self.graph_data) > 1000:
-                    self.graph_data.pop(0)
-        else:
-            self.graph_data = []
+        for data in raw_data:
+            plot = self.decode_graph_data(data)
+            if plot:
+                self.graph_data.append(plot)
 
     def update_plots(self, num_of_plots):
         """
