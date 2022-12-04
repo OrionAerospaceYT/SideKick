@@ -3,8 +3,6 @@ This is the main python file responsible for having
 the debugging window open.
 This file also holds the
 
-TODO make more variables global e.g. self.supported_boards
-TODO finish graphs (display data on graphs)
 TODO fix teensy upload (auto upload mode)
 TODO make classes for device manager window and file manager winow
 TODO display COM by default in COM dropdown
