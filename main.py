@@ -6,6 +6,7 @@ This file also holds the
 TODO fix teensy upload (auto upload mode)
 TODO make classes for device manager window and file manager winow
 TODO display COM by default in COM dropdown
+TODO library manager
 """
 
 import sys
@@ -122,16 +123,14 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.record.clicked.connect(self.record_data)
         self.main_ui.file.clicked.connect(self.open_file_manager)
         self.main_ui.device.clicked.connect(self.open_device_manager)
-        self.main_ui.project_name.returnPressed.connect(self.new_project)
         self.main_ui.upload.clicked.connect(self.upload_project)
         self.main_ui.quit.clicked.connect(self.close_debug_window)
-        self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.compile.clicked.connect(self.compile_project)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.disconnect.clicked.connect(self.disconnect_device)
 
-        self.main_ui.select_project.activated[str].connect(
-            self.open_file_manager)
+        self.main_ui.message.returnPressed.connect(self.send)
+        self.main_ui.project_name.returnPressed.connect(self.new_project)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -208,18 +207,22 @@ class MainGUI(qtw.QMainWindow):
         calls all update functions
         """
 
+        # update functions
         self.update_ports()
         self.update_projects()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
 
+        # debugging window
         if self.prev_debug_window != self.debug_window:
             if self.debug_window:
                 self.main_ui.debugger.setVisible(True)
                 self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
             else:
                 self.main_ui.debugger.setVisible(False)
+        self.prev_debug_window = self.debug_window
 
+        # compile and upload
         if self.compile:
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Compiling"))
@@ -241,16 +244,11 @@ class MainGUI(qtw.QMainWindow):
 
         self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
-        if self.device_manager.port is not None:
+        if self.device_manager.device is not None:
             self.main_ui.bottom_update.setText("Connected")
+            self.main_ui.com_ports.setCurrentText(self.device_manager.port)
         else:
             self.main_ui.bottom_update.setText("Not Connected")
-
-        self.prev_debug_window = self.debug_window
-
-        if self.device_manager.port is not None:
-
-            self.main_ui.com_ports.setCurrentText(self.device_manager.port)
 
     def new_project(self):
         """
@@ -271,7 +269,7 @@ class MainGUI(qtw.QMainWindow):
 
     def connect_device(self, port):
         """
-        Connects new devices through device manager and updates com port in
+        Connects new devices through device manager and updates com por[t in
         self.message_handler
 
         Args:
@@ -279,7 +277,6 @@ class MainGUI(qtw.QMainWindow):
         """
 
         baud = self.main_ui.baud_rate.itemText(0)
-
         self.device_manager.connect_device(port, baud)
 
     def send(self):

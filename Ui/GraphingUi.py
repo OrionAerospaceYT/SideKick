@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'GraphingUi.ui'
+# Form implementation generated from reading ui file 'GraphingUi - Copy.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -34,21 +34,8 @@ class Ui_MainWindow(object):
 "  border: none;\n"
 "  border-radius: 10px;\n"
 "}\n"
-"QPushButton#upload {\n"
-"  image: url(Ui/U_Arrow.png);\n"
-"  image-position: left;\n"
-"  text-align: right;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
 "QPushButton#send {\n"
 "  image: url(Ui/U_Arrow.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
-"QPushButton#help {\n"
-"  image: url(Ui/Help.png);\n"
 "  image-position: left;\n"
 "  padding-left: 10px;\n"
 "  width: 10px;\n"
@@ -210,26 +197,6 @@ class Ui_MainWindow(object):
 "  border: none;\n"
 "  border-radius: 10px;\n"
 "}\n"
-"QPushButton#upload {\n"
-"      image: url(Ui/U_Arrow.png);\n"
-"      image-position: left;      \n"
-"    text-align: right;\n"
-"      padding-left: 10px;\n"
-"      width: 10px;\n"
-"}\n"
-"QPushButton#help {\n"
-"      image: url(Ui/Help.png);\n"
-"      image-position: left;\n"
-"      padding-left: 10px;    \n"
-"      width: 10px;\n"
-"}\n"
-"QPushButton#compile {\n"
-"    image: url(Ui/tick.png);\n"
-"    image-position: left;\n"
-"    padding-left: 10px;\n"
-"    text-align: right;\n"
-"    width: 20px;\n"
-"}\n"
 "QPushButton:pressed {\n"
 "  background-color: #000;\n"
 "}\n"
@@ -253,7 +220,7 @@ class Ui_MainWindow(object):
 "  width: 50px;\n"
 "  height: 20px;\n"
 "}\n"
-"QPushButton:hover:!pressed{\n"
+"QComboBox:hover:!pressed{\n"
 "  background-color: #151525;\n"
 "}\n"
 "\n"
@@ -297,23 +264,23 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalFrame)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.file = QtWidgets.QPushButton(self.horizontalFrame)
-        self.file.setMinimumSize(QtCore.QSize(50, 0))
+        self.file.setMinimumSize(QtCore.QSize(0, 0))
         self.file.setObjectName("file")
         self.horizontalLayout.addWidget(self.file)
         self.device = QtWidgets.QPushButton(self.horizontalFrame)
-        self.device.setMinimumSize(QtCore.QSize(75, 0))
+        self.device.setMinimumSize(QtCore.QSize(0, 0))
         self.device.setObjectName("device")
         self.horizontalLayout.addWidget(self.device)
         self.upload = QtWidgets.QPushButton(self.horizontalFrame)
-        self.upload.setMinimumSize(QtCore.QSize(100, 0))
+        self.upload.setMinimumSize(QtCore.QSize(0, 0))
         self.upload.setObjectName("upload")
         self.horizontalLayout.addWidget(self.upload)
         self.compile = QtWidgets.QPushButton(self.horizontalFrame)
-        self.compile.setMinimumSize(QtCore.QSize(100, 0))
+        self.compile.setMinimumSize(QtCore.QSize(0, 0))
         self.compile.setObjectName("compile")
         self.horizontalLayout.addWidget(self.compile)
         self.com_ports = QtWidgets.QComboBox(self.horizontalFrame)
-        self.com_ports.setMinimumSize(QtCore.QSize(125, 0))
+        self.com_ports.setMinimumSize(QtCore.QSize(0, 0))
         self.com_ports.setObjectName("com_ports")
         self.horizontalLayout.addWidget(self.com_ports)
         self.record = QtWidgets.QPushButton(self.horizontalFrame)
@@ -333,7 +300,7 @@ class Ui_MainWindow(object):
         self.top_update.setObjectName("top_update")
         self.horizontalLayout.addWidget(self.top_update)
         self.help = QtWidgets.QPushButton(self.horizontalFrame)
-        self.help.setMinimumSize(QtCore.QSize(100, 0))
+        self.help.setMinimumSize(QtCore.QSize(0, 0))
         self.help.setObjectName("help")
         self.horizontalLayout.addWidget(self.help)
         self.gridLayout.addWidget(self.horizontalFrame, 0, 0, 1, 9)
@@ -346,6 +313,8 @@ class Ui_MainWindow(object):
         self.gridLayout.addItem(spacerItem3, 1, 8, 1, 1)
         self.terminal = QtWidgets.QTextBrowser(self.centralwidget)
         self.terminal.setStyleSheet("")
+        self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.terminal.setObjectName("terminal")
         self.gridLayout.addWidget(self.terminal, 1, 4, 3, 2)
         self.file_layout = QtWidgets.QFrame(self.centralwidget)
@@ -608,12 +577,12 @@ class Ui_MainWindow(object):
         self.debugger.setObjectName("debugger")
         self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
         self.debugger_1.setObjectName("debugger_1")
-        self.debug_log = QtWidgets.QTextBrowser(self.debugger)
-        self.debug_log.setObjectName("debug_log")
-        self.debugger_1.addWidget(self.debug_log, 1, 0, 1, 1)
         self.quit = QtWidgets.QPushButton(self.debugger)
         self.quit.setObjectName("quit")
         self.debugger_1.addWidget(self.quit, 0, 1, 1, 1)
+        self.debug_log = QtWidgets.QTextBrowser(self.debugger)
+        self.debug_log.setObjectName("debug_log")
+        self.debugger_1.addWidget(self.debug_log, 0, 0, 2, 1)
         self.gridLayout.addWidget(self.debugger, 4, 4, 1, 4)
         self.gridLayout.setColumnStretch(4, 3)
         self.gridLayout.setColumnStretch(6, 5)

@@ -65,7 +65,6 @@ class DeviceManager():
         buffer = b""
 
         while self.device is not None:
-
             try:
                 raw_data = self.device.read_all()
             except serial.SerialException:
@@ -79,8 +78,6 @@ class DeviceManager():
                     buffer = b""
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
-        self.port = None
-        self.raw_data = []
 
     def terminate_device(self):
         """
@@ -108,8 +105,7 @@ class DeviceManager():
             baud (int): the baud rate of the connected board
         """
 
-        self.get_data = threading.Thread(
-            target=self.threaded_get_raw_data, args=(port, baud),)
+        self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud),)
         self.get_data.start()
 
     def scan_avaliable_ports(self, port):
