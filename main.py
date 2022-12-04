@@ -100,7 +100,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.select_project.setCurrentText(self.project)
 
         timer = qtc.QTimer(self)
-        timer.setInterval(15)
+        timer.setInterval(25)
         timer.timeout.connect(self.update)
         timer.start()
 
