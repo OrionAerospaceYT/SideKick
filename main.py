@@ -124,7 +124,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.record.clicked.connect(self.record_data)
         self.main_ui.file.clicked.connect(self.open_file_manager)
         self.main_ui.device.clicked.connect(self.open_device_manager)
-        self.main_ui.new_project.clicked.connect(self.new_project)
+        self.main_ui.project_name.returnPressed.connect(self.new_project)
         self.main_ui.upload.clicked.connect(self.upload_project)
         self.main_ui.quit.clicked.connect(self.close_debug_window)
         self.main_ui.message.returnPressed.connect(self.send)
@@ -407,8 +407,7 @@ class MainGUI(qtw.QMainWindow):
         while RUNNING:
             # Com ports
             port = self.device_manager.port
-            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(
-                port)
+            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(port)
 
             # Projects
             self.current_projects = self.file_manager.get_all_projects()
@@ -416,7 +415,9 @@ class MainGUI(qtw.QMainWindow):
             # Raw data
             raw_data = self.device_manager.raw_data
 
-            self.message_handler.get_terminal(raw_data, self.main_ui.terminal.height())
+            size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
+
+            self.message_handler.get_terminal(raw_data, size)
             self.top_graph.set_graph_data(raw_data)
             self.bottom_graph.set_graph_data(raw_data)
 
