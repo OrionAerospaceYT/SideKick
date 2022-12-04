@@ -77,7 +77,8 @@ class DeviceManager():
                 if buffer.count(b"\r\n") > 1:
                     self.raw_data.append(buffer.split(b"\r\n")[-2].decode("UTF-8"))
                     buffer = b""
-
+                    if len(self.raw_data) > 1500:
+                        self.raw_data.pop(0)
         self.port = None
         self.raw_data = []
 
