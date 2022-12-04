@@ -6,6 +6,14 @@ display the data onto a graph.
 import pyqtgraph as pg
 import numpy as np
 
+COLOUR_ORDER = ["#FF0C0C",
+                "#31f78e",
+                "#02acf5",
+                "#fc7703",
+                "#9d03fc",
+                "#fce803",
+                "#fc03b1"]
+
 class Graph():
     """
     Sets up the graphing object to show it on
@@ -16,6 +24,7 @@ class Graph():
 
         self.legend = None
         self.plots = []
+        self.labels = []
         self.graph = None
 
         self.graph = pg.PlotWidget()
@@ -56,6 +65,8 @@ class Graph():
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 if valid_graph_data[1] == self.key:
                     graph_data.append(valid_graph_data[2])
+                    if valid_graph_data[0] not in self.labels:
+                        self.labels.append(valid_graph_data[0])
 
         return graph_data
 
@@ -66,6 +77,7 @@ class Graph():
         Args:
             raw_data (list): a list of all raw data
         """
+
         if not raw_data:
             return
         if raw_data[-1] != "":
@@ -79,13 +91,23 @@ class Graph():
             self.graph_data = []
 
     def update_plots(self, num_of_plots):
+        """
+        Adds or removes old plots.
+
+        Args:
+            num_of_plots (int): the number of plots
+        """
+
         for item in self.plots:
             self.graph.removeItem(item)
 
-        for _ in range(num_of_plots):
-            self.plots.append(self.graph.plot([0],[0]))
+        for i in range(num_of_plots):
+            self.plots.append(self.graph.plot([0],[0], name=self.labels[i]))
 
     def update_graph(self):
+        """
+        To update the graphs displayed on the main GUI
+        """
 
         plots = list(map(list, zip(*self.graph_data)))
 
@@ -93,7 +115,8 @@ class Graph():
             self.update_plots(len(plots))
 
         for index, plot in enumerate(self.plots):
-            plot.setData(np.array(plots[index], dtype=float))
+            pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
+            plot.setData(np.array(plots[index], dtype=float), pen=pen)
 
 
 class Widgets():
