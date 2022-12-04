@@ -68,7 +68,6 @@ class DeviceManager():
 
             try:
                 raw_data = self.device.read_all()
-                print(raw_data)
             except serial.SerialException:
                 self.terminate_device()
                 break
@@ -187,7 +186,6 @@ class DeviceManager():
             upload_output = upload_process.communicate()
             upload_output = upload_output[0].decode("UTF-8")
 
-            print(upload_output)
             if "No" not in upload_output:
                 return None, True
 
