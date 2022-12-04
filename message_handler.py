@@ -46,29 +46,30 @@ class MessageHandler():
 
         return terminal_data
 
-    def get_terminal(self, raw_data, height):
+    def get_terminal(self, raw_data, size):
         """
-        Calculates the amount of lines the terminal can displaye at
-        once (TODO)
+        Calculates the amount of lines the terminal can display at
+        once.
 
         Args:
             raw_data (list): a list of all raw data
-            height (int): the height of the terminal
+            size (tuple): the x and y dimensions of the terminal
         """
         decoded_data = []
 
-        amount_of_data = int(height / 30)
+        amount_of_lines = int((size[0]-32) / 12)
+        total_lines = 0
 
-        for i in range(1, amount_of_data):
-            if i > len(raw_data):
-                break
-            decoded_string = self.decode_terminal_data(raw_data[-i])
+        for item in raw_data:
+            decoded_string = self.decode_terminal_data(item)
             decoded_data.append(decoded_string)
 
         terminal_html = self.terminal_header
 
-        for data in decoded_data:
-            terminal_html += self.beginning + data + self.ending
+        for data in reversed(decoded_data):
+            total_lines += len(data) // (size[1] / 20) + 1
+            if total_lines <= amount_of_lines:
+                terminal_html += self.beginning + data + self.ending
 
         self.terminal_html = terminal_html
 
