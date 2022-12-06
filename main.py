@@ -26,6 +26,7 @@ from widgets import Graph
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
+from library import LibraryManager
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -35,6 +36,9 @@ class MainGUI(qtw.QMainWindow):
     it holds the gui object which we need to modify.
 
     This class also usues the Graph class from graphs.py
+
+    Args:
+        qtw (QtWidgets): the main window functions
     """
 
     def __init__(self):
@@ -103,6 +107,13 @@ class MainGUI(qtw.QMainWindow):
         timer.timeout.connect(self.update)
         timer.start()
 
+    def open_library_manager(self):
+        """
+        Opens the library manager window
+        """
+        library = LibraryManager(self.file_manager, self)
+        library.show()
+
     def add_supported_boards(self):
         """main_ui_top_graph
         Adds the supported boards to the drop down so that
@@ -126,11 +137,13 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.upload.clicked.connect(self.upload_project)
         self.main_ui.quit.clicked.connect(self.close_debug_window)
         self.main_ui.compile.clicked.connect(self.compile_project)
-        self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.disconnect.clicked.connect(self.disconnect_device)
+        self.main_ui.library_manager.clicked.connect(self.open_library_manager)
 
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.project_name.returnPressed.connect(self.new_project)
+
+        self.main_ui.com_ports.activated[str].connect(self.connect_device)
 
     def connect_keyboard_shortcuts(self):
         """
