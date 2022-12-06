@@ -10,11 +10,7 @@ import platform
 
 class FileManager():
     """
-    Handles all files and operating system
-        Current working directory
-        Checking for all sidekick files
-        Saves data
-        Creates new projects
+    All processing to do with OS information such as file directorys, saves and more
     """
 
     def __init__(self):
