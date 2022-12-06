@@ -18,6 +18,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtCore import Qt
 
+from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
 #from widgets import DeviceManagerWindow
@@ -26,7 +27,6 @@ from widgets import Graph
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-from library import LibraryManager
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -43,7 +43,7 @@ class MainGUI(qtw.QMainWindow):
 
     def __init__(self):
 
-        super(MainGUI, self).__init__()
+        super().__init__()
 
         # Attributes for the gui are defined here
         self.device_manager = DeviceManager()
