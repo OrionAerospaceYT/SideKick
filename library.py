@@ -19,7 +19,7 @@ class LibraryManager(qtw.QMainWindow):
     """
 
     def __init__(self, file_manager, parent=None):
-        super(LibraryManager, self).__init__(parent=parent)
+        super().__init__(parent=parent)
 
         # Attributes for the library manager
         self.library_ui = library()
