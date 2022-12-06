@@ -43,9 +43,9 @@ class LibraryManager(qtw.QMainWindow):
         with open(self.file_manager.arduino_lib_path,"r",encoding="utf8") as libraries:
             for line in libraries:
                 if '"name":' in line:
-                    self.installable.append(f"""{regex.sub("", line).replace('name', '')}""")
+                    self.installable.append(f"{regex.sub('', line).replace('name', '')}")
                 elif '"sentence":' in line:
-                    self.installable[-1] += f"""\n{regex.sub("", line).replace('sentence', '')}"""
+                    self.installable[-1] += f"\n{regex.sub('', line).replace('sentence', '')}"
                 elif '"paragraph":' in line:
                     paragraph = regex.sub("", line).replace('paragraph', '').replace(". ", "\n")
                     self.installable[-1] += f"\n{paragraph}"
@@ -96,6 +96,7 @@ class LibraryManager(qtw.QMainWindow):
         check_boxes = []
         for item in edited_search_results:
             button = qtw.QCheckBox(self.library_ui.scroll)
+            button.setMaximumWidth(500)
             button.setText(item)
             check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(check_boxes[-1])
