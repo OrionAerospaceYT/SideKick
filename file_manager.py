@@ -40,6 +40,8 @@ class FileManager():
         self.saves_path = f"{self.sidekick_path}{self.sep}SavedData"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
+        self.arduino_lib_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}\
+AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         # Checks for the SideKick libraries
         if len(os.listdir(self.libraries_path)) == 0:
