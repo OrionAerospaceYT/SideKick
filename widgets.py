@@ -1,11 +1,16 @@
 """
 A file to handle receiving and parsing graphing data and to
 display the data onto a graph.
+
+TODO class DeviceManagerWindow
+TODO class FileManagerWindow
+TODO class RecordLight
 """
 
 import pyqtgraph as pg
 import numpy as np
 
+# Constant list of colour orders for the graphs
 COLOUR_ORDER = ["#FF0C0C",
                 "#31f78e",
                 "#02acf5",
@@ -14,7 +19,7 @@ COLOUR_ORDER = ["#FF0C0C",
                 "#fce803",
                 "#fc03b1"]
 
-class Graph():
+class Graph:
     """
     Sets up the graphing object to show it on the screen.
 
@@ -165,13 +170,54 @@ class Graph():
 
         self.in_use = False
 
-class Widgets():
+
+class Widgets:
     """
-    super class to DevieManagerWindow, FileManagerWindow, and RecordLight
+    Super class to DeviceManagerWindow, FileManagerWindow, and RecordLight
+
+    Attributes:
+        show (bool): whether or not to display the GUI
+        width (int): the width of the widget
+        height (int): the height of the widget
+
+    Methods:
+        get_show:
+            Returns:
+                bool: whether or not to show the GUI
+        get_height:
+            Returns:
+                int: the height of the widget
+        get_width:
+            Returns:
+                int: the width of the widget
     """
 
-    def __init__(self, state=False):
+    def __init__(self, state=False, width=0, height=0):
         self.show = state
+        self.width = width
+        self.height = height
+
+    def get_show(self):
+        """
+        Returns:
+            bool: whether or not to show the GUI
+        """
+        return self.show
+
+    def get_height(self):
+        """
+        Returns:
+            int: the height of the widget
+        """
+        return int(self.height)
+
+    def get_width(self):
+        """
+        Returns:
+            int: the width of the widget
+        """
+        return int(self.width)
+
 
 class DeviceManagerWindow(Widgets):
     """
