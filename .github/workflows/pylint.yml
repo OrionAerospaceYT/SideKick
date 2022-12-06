@@ -44,4 +44,4 @@ jobs:
     
     - name: Analysing library.py
       run: |
-        pylint library.py
+        pylint library.py --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
