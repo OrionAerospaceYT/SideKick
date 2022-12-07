@@ -10,7 +10,6 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
     steps:
     - uses: actions/checkout@v3
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -21,6 +20,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
+
 
     - name: Analysing main.py
       run: |
@@ -45,3 +45,11 @@ jobs:
     - name: Analysing library.py
       run: |
         pylint library.py --disable=I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+=======
+    - name: Analysing main.py
+      run: |
+        pylint main.py --disable=R1732,R1732,R0902 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+    - name: Analysing file_manager.py
+      run: |
+        pylint file_manager.py --disable=R0902
+
