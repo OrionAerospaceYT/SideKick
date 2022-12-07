@@ -93,12 +93,12 @@ class LibraryManager(qtw.QMainWindow):
                     split_string = temp_string.split(" ")
                     index_counter = 0
                     final_string = [""]
-                    for text in split_string:
-                        if len(text) + len(final_string[index_counter]) < NUM_OF_CHARACTERS:
-                            final_string[index_counter] += f"{text} "
+                    for string_item in split_string:
+                        if len(string_item) + len(final_string[index_counter]) < NUM_OF_CHARACTERS:
+                            final_string[index_counter] += f"{string_item} "
                         else:
                             index_counter += 1
-                            final_string.append(f"\n{text} ")
+                            final_string.append(f"\n{string_item} ")
                     for string in final_string:
                         output_text += string
                     output_text += "\n"
