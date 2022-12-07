@@ -1,155 +1,478 @@
-import webbrowser
-import threading
+"""
+This is the main python file responsible for having
+the debugging window open.
+This file also holds the
+
+TODO fix teensy upload (auto upload mode)
+TODO make classes for device manager window and file manager winow
+TODO display COM by default in COM dropdown
+TODO library manager
+"""
+
 import sys
+import threading
+import time
 
-from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
+from PyQt5 import QtWidgets as qtw
+from PyQt5.QtCore import Qt
 
-from Backend import DataHandler
-from FileManager import FileManager
-from Graphing import Graphing
-from Library import Library
+from library import LibraryManager
+from device_manager import DeviceManager
+from file_manager import FileManager
+#from widgets import DeviceManagerWindow
+#rom widgets import FileManagerWindow
+from widgets import Graph
+from message_handler import MessageHandler
+from Ui.GraphingUi import Ui_MainWindow as main_window
 
-# Colours are defined here
-COLOUR_ORDER = ["#FF0C0C", "#31f78e", "#02acf5","#fc7703","#9d03fc","#fce803","#fc03b1"]
-ACCENT_COLOUR = "#252530"
-TEXT_COLOUR = "#00f0c3"
 
-# Definition to be appended to
-supported_devices = {}
+class MainGUI(qtw.QMainWindow):
+    """
+    Launches the main window (debugging window)
 
-"""Deals with events from the frontend"""
-class EventHandler():
+    This class inherits QMainWindow from PyQt5.QtWidgets as
+    it holds the gui object which we need to modify.
+
+    This class also usues the Graph class from graphs.py
+
+    Args:
+        qtw (QtWidgets): the main window functions
+    """
 
     def __init__(self):
-        self.graphing = None
-        self.library = None
-        self.project_error = ""
 
-    # The Graphing window is ALWAYS the parent window
-    # Launches the main graphing window, CSS is also used here
-    def launch_graphing(self):
-        app = qtw.QApplication(sys.argv)
-        with open("Ui/Style.css", "r") as style_file:
-            app.setStyleSheet(style_file.read())
-        app_icon = qtg.QIcon("Ui/SideKick.ico")
-        app.setWindowIcon(app_icon)
-        self.graphing = Graphing()
-        self.graphing.show()
-        app.exec_()
+        super().__init__()
 
-    # Launches the library manager window
-    def launch_library(self):
-        self.library = Library(self.graphing)
-        self.library.show()
+        # Attributes for the gui are defined here
+        self.device_manager = DeviceManager()
+        self.file_manager = FileManager()
+        self.message_handler = MessageHandler()
 
-    def update_warning(self):
-        # Creates a warning pop-up
-        warning = qtw.QMessageBox()
-        # Creats a warning icon
-        warning.setIcon(qtw.QMessageBox.Warning)
-        # Sets the text of the window
-        warning.setText("Warning: ")
-        warning.setInformativeText("""Library syntax may change with update\n\
-                                    Current projects may not work with new code!""")
-        warning.setWindowTitle("Update Warning")
-        # Adds the OK button
-        warning.setStandardButtons(qtw.QMessageBox.Ok)
-        warning.buttonClicked.connect(self.test)
-        warning.exec_()
+        self.main_ui = main_window()
+        self.main_ui.setupUi(self)
 
-    # Sends the text from terminal to device
-    def send_serial_input_to_device(self):
-        if data.device is not None:
-            data.device.write(bytes(self.graphing.ui.lineEdit.text(), 'utf-8'))
-        self.graphing.ui.lineEdit.setText("")
+        self.menu_width = 0
+        self.supported_boards = {}
 
-    # Changes the COM port beign used
-    def update_com(self, value):
-        self.disconnect_device()
-        if value != "Select COM":
-            self.graphing.ui.COM.setText(value)
-            data.device = None
-            data.com_port = value
-            data.html_header = """<h1><b><font color="#00f0c3">Terminal</b></h1><body>"""
-            self.graphing.ui.com_ports.setCurrentText("Select COM")
-            self.graphing.debug = False
+        self.top_graph = Graph(key="1")
+        self.main_ui.top_graph = qtw.QVBoxLayout()
+        self.main_ui.top_graph.addWidget(self.top_graph.graph)
+        self.main_ui.top_widget.setLayout(self.main_ui.top_graph)
 
-    # Discconects the SideKick device
-    def disconnect_device(self):
-        self.graphing.ui.COM.setText("")
-        data.device = None
-        data.com_port = None
-        data.__init__()
+        self.bottom_graph = Graph(key="2")
+        self.main_ui.bottom_graph = qtw.QVBoxLayout()
+        self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
+        self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
 
-    # Creates a new project and handles the errors given
-    def new_project(self):
-        if self.graphing.ui.project_name.text() == "":
-            self.disconnect_device()
-            self.project_error = """<font color="#ff003c">Please enter a project name!"""
-            data.errors = 2
-        if file_manager.add_new_project(self.graphing.ui.project_name.text()) == 0:
-            self.disconnect_device()
-            self.project_error = """<font color="#ff003c">A project with that name already exists!"""
-            data.errors = 2
+        self.connect_buttons()
+        self.connect_keyboard_shortcuts()
+        self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
+        self.main_ui.message.setPlaceholderText("Enter message here.")
+        self.main_ui.bottom_update.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.add_supported_boards()
 
-    # Compiles and Uploads current project
-    def upload(self):
-        # Disconnects everything and gets the project path.
-        com = data.com_port
-        self.disconnect_device()
-        data.debug = True
+        # Attributes for event handling are defined here
+        self.recording = False
+        self.light_on = False
+        self.file_manager_window = False
+        self.device_manager_window = False
+        self.debug_window = False
+        self.prev_debug_window = True
+        self.upload = False
+        self.compile = False
 
-        project_path = f'"C:/Users/{file_manager.user}\
-                        /Documents/SideKick/SK Projects/\
-                        {self.graphing.ui.project_paths.currentText()}/\
-                        {self.graphing.ui.project_paths.currentText()}.ino"'
+        self.commands = []
 
-        # Creates upload on another thread and sets Html.
-        upload = threading.Thread(target=data.upload, args=(com, project_path,))
-        upload.start()
-        self.display_message("Uploading...")
+        self.avaliable_port_list = []
+        self.current_projects = []
+        self.supported_boards = []
 
-    # Stops and starts recordings.
-    def record(self):
-        data.save_data = not data.save_data
-        if data.save_data:
-            file_manager.start_new_save()
+        threaded_blinking_record = threading.Thread(
+            target=self.blinking_record, args=(),)
+        threaded_blinking_record.start()
 
-    def display_message(self, message=""):
+        threaded_backend_loop = threading.Thread(
+            target=self.threaded_backend, args=(),)
+        threaded_backend_loop.start()
 
-        if data.errors == 1:
-            message = f"""<h1><b><font color="#00f0c3">
-                      Upload Failed</b></h1><p>
-                      {data.compile_output}</p>"""
-        elif data.errors == 2:
-            message = f"""<h1><b><font color="#00f0c3">
-                      Terminal</b></h1><p>
-                      {self.project_error}</p>"""
+        self.board, self.project = self.file_manager.load_options()
+
+        self.main_ui.supported_boards.setCurrentText(self.board)
+        self.main_ui.select_project.setCurrentText(self.project)
+
+        timer = qtc.QTimer(self)
+        timer.setInterval(25)
+        timer.timeout.connect(self.update)
+        timer.start()
+
+    def open_library_manager(self):
+        """
+        Opens the library manager window
+        """
+        library = LibraryManager(self.file_manager, self)
+        library.show()
+
+    def add_supported_boards(self):
+        """main_ui_top_graph
+        Adds the supported boards to the drop down so that
+        they can be selected for uploads.
+        """
+
+        boards = list(self.file_manager.get_all_boards().keys())
+
+        for board in boards:
+
+            self.main_ui.supported_boards.addItem(board)
+
+    def connect_buttons(self):
+        """
+        Connects the buttons/drop-downs on the gui to python functions
+        """
+
+        self.main_ui.record.clicked.connect(self.record_data)
+        self.main_ui.file.clicked.connect(self.open_file_manager)
+        self.main_ui.device.clicked.connect(self.open_device_manager)
+        self.main_ui.upload.clicked.connect(self.upload_project)
+        self.main_ui.quit.clicked.connect(self.close_debug_window)
+        self.main_ui.compile.clicked.connect(self.compile_project)
+        self.main_ui.disconnect.clicked.connect(self.disconnect_device)
+        self.main_ui.library_manager.clicked.connect(self.open_library_manager)
+
+        self.main_ui.message.returnPressed.connect(self.send)
+        self.main_ui.project_name.returnPressed.connect(self.new_project)
+
+        self.main_ui.com_ports.activated[str].connect(self.connect_device)
+
+    def connect_keyboard_shortcuts(self):
+        """
+        Connects keyboard shortcuts to their respective functions:
+            ctrl + x (disconnect)
+            ctrl + s (verify/compile)
+            ctrl + u (upload)
+            ctrl + r (record)
+            ctrl + h (help)
+        """
+
+        disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
+        disconnect.activated.connect(self.disconnect_device)
+
+        compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
+        compile_code.activated.connect(self.compile_project)
+
+        upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
+        upload.activated.connect(self.upload_project)
+
+        record = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
+        record.activated.connect(self.record_data)
+
+        help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
+        help_website.activated.connect(self.demo_function)
+
+    def turn_on_rec_light(self, is_on):
+        """
+        Turns on or off the blinking record light
+
+        Args:
+            is_on (boolean): either shows or hides the record light
+        """
+
+        if is_on:
+            self.main_ui.record_light.setStyleSheet("""image: url(Ui/Record.png);
+                                                    image-position: center;
+                                                    """)
         else:
-            message = f"""<h1><b><font color="#00f0c3">{message}</b></h1>"""
+            self.main_ui.record_light.setStyleSheet("")
 
-        self.graphing.debug = True
+    def update_projects(self):
+        """
+        Updates the current projects window so it shows all projects in the project folder.
+        """
 
-        self.disconnect_device()
+        projects_on_gui = [self.main_ui.select_project.itemText(
+            i) for i in range(self.main_ui.select_project.count())]
+        for project in self.current_projects:
+            if project not in projects_on_gui:
+                self.main_ui.select_project.addItem(project)
+        for project in projects_on_gui:
+            if project not in self.current_projects:
+                target = self.main_ui.select_project.findText(project)
+                self.main_ui.select_project.removeItem(target)
 
-        self.graphing.ui.terminal.setHtml(message)
+    def update_ports(self):
+        """
+        Updates all avaliable ports, removes unavaliable one
+        """
 
-    # Loads up Orion Aerospace youtube channel
-    def help(self):
-        webbrowser.open("https://www.youtube.com/c/OrionAerospace", autoraise=True)
+        ports_on_gui = [self.main_ui.com_ports.itemText(
+            i) for i in range(self.main_ui.com_ports.count())]
+        for port in self.avaliable_port_list:
+            if port not in ports_on_gui:
+                self.main_ui.com_ports.addItem(port)
+        for port in ports_on_gui:
+            if port not in self.avaliable_port_list:
+                target = self.main_ui.com_ports.findText(port)
+                self.main_ui.com_ports.removeItem(target)
 
-    # A spare function to test connectiions to buttons
-    # NOT NECESSARY
-    def test(self, value=""):
-        print("This button works" + str(value))
+    def update(self):
+        """
+        calls all update functions
+        """
+
+        # update functions
+        self.update_ports()
+        self.update_projects()
+        self.top_graph.update_graph()
+        self.bottom_graph.update_graph()
+
+        # debugging window
+        if self.prev_debug_window != self.debug_window:
+            if self.debug_window:
+                self.main_ui.debugger.setVisible(True)
+                self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
+            else:
+                self.main_ui.debugger.setVisible(False)
+        self.prev_debug_window = self.debug_window
+
+        # compile and upload
+        if self.compile:
+            self.main_ui.top_update.setText(
+                self.message_handler.get_status("Compiling"))
+        elif self.upload:
+            self.main_ui.top_update.setText(
+                self.message_handler.get_status("Uploading"))
+        else:
+            self.main_ui.top_update.setText("")
+
+        if self.device_manager_window:
+            self.main_ui.device_layout.setVisible(True)
+            self.main_ui.file_layout.setVisible(False)
+        elif self.file_manager_window:
+            self.main_ui.file_layout.setVisible(True)
+            self.main_ui.device_layout.setVisible(False)
+        else:
+            self.main_ui.file_layout.setVisible(False)
+            self.main_ui.device_layout.setVisible(False)
+
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+
+        if self.device_manager.device is not None:
+            self.main_ui.bottom_update.setText("Connected")
+            self.main_ui.com_ports.setCurrentText(self.device_manager.port)
+        else:
+            self.main_ui.bottom_update.setText("Not Connected")
+
+    def new_project(self):
+        """
+        creates the new project in the SK Projects folder
+        sends a message to the screen if no name is entered or an invalid one
+        sets the text of the project_name entry to ""
+        """
+
+        project_name = self.main_ui.project_name.text()
+        if project_name == "":
+            return
+        if project_name in self.file_manager.get_all_projects():
+            return
+
+        self.file_manager.add_new_project(project_name)
+
+        project_name = self.main_ui.project_name.setText("")
+
+    def connect_device(self, port):
+        """
+        Connects new devices through device manager and updates com por[t in
+        self.message_handler
+
+        Args:
+            port (string): the com port selected in the gui
+        """
+
+        baud = self.main_ui.baud_rate.itemText(0)
+        self.device_manager.connect_device(port, baud)
+
+    def send(self):
+        """
+        Sends the message from the line edit to the connected device
+        """
+
+        self.device_manager.send(self.main_ui.message.text())
+
+        self.main_ui.message.setText("")
+
+    def disconnect_device(self):
+        """
+        Disconnects the sidekick/teensy/arduino device
+        """
+
+        self.device_manager.terminate_device()
+
+    def record_data(self):
+        """
+        Blinks the record light and saves the data
+        """
+
+        self.recording = not self.recording
+
+    def open_file_manager(self):
+        """
+        Opens/closes the file menu
+        Closes device manager if they are both open at the same time
+        """
+
+        self.file_manager_window = not self.file_manager_window
+
+        if self.device_manager_window and self.file_manager_window:
+            self.device_manager_window = False
+
+    def open_device_manager(self):
+        """
+        Opens/closes the device menu
+        Closes file manager if they are both open at the same time
+        """
+
+        self.device_manager_window = not self.device_manager_window
+
+        if self.device_manager_window and self.file_manager_window:
+            self.file_manager_window = False
+
+    def upload_project(self):
+        """
+        TODO:
+
+        Gets selected board to upload to
+        Checks if a device is connected to the gui
+        Disconnects the device to upload
+        Compiles the script and then uploads the script
+        Reconnects the device - or - Displays error on the screen
+        """
+
+        project = self.main_ui.select_project.currentText()
+        boards_dictionary = self.file_manager.get_all_boards()
+        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+        port = self.device_manager.port
+
+        self.commands = self.file_manager.compile_and_upload_commands(
+            port, project, board)
+
+        self.upload = True
+
+    def compile_project(self):
+        """
+        Compiles the script
+        """
+
+        project = self.main_ui.select_project.currentText()
+        boards_dictionary = self.file_manager.get_all_boards()
+        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+        port = self.device_manager.port
+
+        self.commands = self.file_manager.compile_and_upload_commands(
+            port, project, board)
+
+        self.compile = True
+
+    def close_debug_window(self):
+        """
+        Closes the bottom pop up layout
+        """
+
+        self.debug_window = False
+
+    def demo_function(self):
+        """
+        Prints "Hello world!"
+        Used to demo connected buttons
+        """
+        print("Hello world!")
+
+    def blinking_record(self):
+        """
+        Non-blocking function to perform functions over a time interval
+        """
+
+        while RUNNING:
+            if not self.recording:
+                self.turn_on_rec_light(True)
+
+            if self.recording:
+                self.turn_on_rec_light(self.light_on)
+                self.light_on = not self.light_on
+
+            if self.compile:
+                self.message_handler.update_ellipsis()
+            if self.upload:
+                self.message_handler.update_ellipsis()
+
+            time.sleep(0.5)
+
+    def threaded_backend(self):
+        """
+        All backend tasks that need to be performed continually
+        """
+
+        while RUNNING:
+            # Com ports
+            port = self.device_manager.port
+            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(port)
+
+            # Projects
+            self.current_projects = self.file_manager.get_all_projects()
+
+            # Raw data
+            raw_data = self.device_manager.raw_data
+
+            size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
+
+            self.message_handler.get_terminal(raw_data, size)
+            self.top_graph.set_graph_data(raw_data)
+            self.bottom_graph.set_graph_data(raw_data)
+
+            if self.compile:
+                self.debug_window = False
+
+                error = self.device_manager.compile_script(self.commands[0])
+                self.message_handler.decode_debug_message(error)
+
+                self.debug_window = True
+                self.compile = False
+
+            if self.upload:
+
+                self.debug_window = False
+
+                port = self.device_manager.port
+                self.device_manager.terminate_device()
+
+                error, success = self.device_manager.upload_script(
+                    self.commands[0], self.commands[1])
+
+                if not success:
+                    self.message_handler.decode_debug_message(error)
+                    self.debug_window = True
+
+                time.sleep(0.25)
+                self.connect_device(port)
+
+                self.upload = False
 
 if __name__ == "__main__":
 
-    data = DataHandler()
-    file_manager = FileManager()
-    event_handler = EventHandler()
+    RUNNING = True
 
-    supported_devices = file_manager.get_all_boards()
+    app = qtw.QApplication(sys.argv)
+    app_icon = qtg.QIcon("Ui/SideKick.ico")
+    app.setWindowIcon(app_icon)
+    main_gui = MainGUI()
 
-    event_handler.launch_graphing()
+    main_gui.show()
+    app.exec_()
+
+    main_gui.device_manager.terminate_device()
+    RUNNING = False
+
+    project_selected = main_gui.main_ui.select_project.currentText()
+    board_selected = main_gui.main_ui.supported_boards.currentText()
+
+    main_gui.file_manager.save_options(board_selected, project_selected)

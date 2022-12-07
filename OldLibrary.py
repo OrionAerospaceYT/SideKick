@@ -1,15 +1,16 @@
 from Ui.LibraryUi import Ui_MainWindow as library
+
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets as qtw
+
 import subprocess
 import os
 import re
-import __main__
 
 class Library(qtw.QMainWindow):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(Library, self).__init__(parent=parent)
 
         # Defines the library window
@@ -42,7 +43,8 @@ class Library(qtw.QMainWindow):
         # Checks which libraries are and aren't installed
         cwd = os.getcwd()
         get_installed_libraries = f'"{cwd}/Externals/arduino-cli.exe" lib list'
-        installed = subprocess.Popen(get_installed_libraries, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        installed = subprocess.Popen(
+            get_installed_libraries, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         installed_libraries, error = installed.communicate()
 
         # Removes all installed libraries from the options
@@ -66,7 +68,8 @@ class Library(qtw.QMainWindow):
                 while name[0] == " ":
                     name = name[1:]
                 # Installs the library
-                installing = subprocess.Popen(f""""{cwd}/Externals/arduino-cli.exe" lib install "{name}" """)
+                installing = subprocess.Popen(
+                    f""""{cwd}/Externals/arduino-cli.exe" lib install "{name}" """)
                 installed, error = installing.communicate()
 
     def add_new_label(self, name):
