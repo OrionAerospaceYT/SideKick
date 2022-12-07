@@ -10,6 +10,8 @@ from PyQt5 import QtWidgets as qtw
 
 from Ui.LibraryUi import Ui_MainWindow as library
 
+NUM_OF_CHARACTERS = 50
+
 class LibraryManager(qtw.QMainWindow):
     """
     updates and maintains the library manager window
@@ -76,15 +78,32 @@ class LibraryManager(qtw.QMainWindow):
         """
 
         text = text.replace('       ', ' ')
-        text = text.replace("\n", "-").strip()
+        text = text.replace("\n", "-")
+        text = text.replace("u00c3", "<")
+        text = text.replace("u003e", ">")
+        text = text.replace("u003cbr/>", "")
 
         output_text = ""
         for index, string in enumerate(text.split("-")):
-            if index < 2:
+            if index == 0:
                 output_text += f"{string}\n"
             else:
-                output_text += f"{string} "
-
+                temp_string =  f"{string} "
+                if len(temp_string) > NUM_OF_CHARACTERS:
+                    split_string = temp_string.split(" ")
+                    index_counter = 0
+                    final_string = [""]
+                    for text in split_string:
+                        if len(text) + len(final_string[index_counter]) < NUM_OF_CHARACTERS:
+                            final_string[index_counter] += f"{text} "
+                        else:
+                            index_counter += 1
+                            final_string.append(f"\n{text} ")
+                    for string in final_string:
+                        output_text += string
+                    output_text += "\n"
+                else:
+                    output_text += f"{string} "
         return output_text
 
     def add_new_label(self):

@@ -35,21 +35,8 @@ QPushButton {
   border: none;
   border-radius: 10px;
 }
-QPushButton#upload {
-  image: url(Ui/U_Arrow.png);
-  image-position: left;
-  text-align: right;
-  padding-left: 10px;
-  width: 10px;
-}
 QPushButton#send {
   image: url(Ui/U_Arrow.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton#help {
-  image: url(Ui/Help.png);
   image-position: left;
   padding-left: 10px;
   width: 10px;
@@ -248,25 +235,6 @@ QPushButton {
   border: none;
   border-radius: 10px;
 }
-QPushButton#upload {
-	image: url(Ui/U_Arrow.png);
-	image-position: left;
-	padding-left: 10px;
-	text-align: right;
-}
-QPushButton#help {
-  	image: url(Ui/Help.png);
- 	 image-position: left;
-  	padding-left: 10px;	
- 	 width: 10px;
-}
-QPushButton#compile {
-	image: url(Ui/tick.png);
-	image-position: left;
-	padding-left: 10px;
-	text-align: right;
-	width: 20px;
-}
 QPushButton:pressed {
   background-color: #000;
 }
@@ -290,7 +258,7 @@ QComboBox::down-arrow {
   width: 50px;
   height: 20px;
 }
-QPushButton:hover:!pressed{
+QComboBox:hover:!pressed{
   background-color: #151525;
 }
 
@@ -362,7 +330,7 @@ QScrollArea {
           <widget class="QPushButton" name="upload">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -375,7 +343,7 @@ QScrollArea {
           <widget class="QPushButton" name="compile">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -388,7 +356,7 @@ QScrollArea {
           <widget class="QComboBox" name="com_ports">
            <property name="minimumSize">
             <size>
-             <width>125</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -450,7 +418,7 @@ QScrollArea {
           <widget class="QPushButton" name="help">
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -495,6 +463,12 @@ QScrollArea {
        <widget class="QTextBrowser" name="terminal">
         <property name="styleSheet">
          <string notr="true"/>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
        </widget>
       </item>
@@ -855,15 +829,15 @@ QPushButton:hover:!pressed{
 }</string>
         </property>
         <layout class="QGridLayout" name="debugger_1">
-         <item row="1" column="0">
-          <widget class="QTextBrowser" name="debug_log"/>
-         </item>
          <item row="0" column="1">
           <widget class="QPushButton" name="quit">
            <property name="text">
             <string>x</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="0" rowspan="2">
+          <widget class="QTextBrowser" name="debug_log"/>
          </item>
         </layout>
        </widget>
