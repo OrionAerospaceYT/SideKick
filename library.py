@@ -66,6 +66,27 @@ class LibraryManager(qtw.QMainWindow):
         # Connecting buttons
         self.library_ui.enter.clicked.connect(self.add_new_label)
 
+    def format_text(self, text):
+        """
+        formats the text such that the width is limited to a number of characters
+        and all text is centered.
+
+        Args:
+            text (str): the text to process
+        """
+
+        text = text.replace('       ', ' ')
+        text = text.replace("\n", "-").strip()
+
+        output_text = ""
+        for index, string in enumerate(text.split("-")):
+            if index < 2:
+                output_text += f"{string}\n"
+            else:
+                output_text += f"{string} "
+
+        return output_text
+
     def add_new_label(self):
         """
         Adds more labels
@@ -98,8 +119,7 @@ class LibraryManager(qtw.QMainWindow):
         check_boxes = []
         for item in edited_search_results:
             button = qtw.QCheckBox(self.library_ui.scroll)
-            button.setMaximumWidth(500)
-            button.setText(item)
+            button.setText(self.format_text(item))
             check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(check_boxes[-1])
 
