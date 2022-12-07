@@ -3,8 +3,6 @@
 </img>
 </p>
 
-![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg?branch=dev)
-
 [![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml)
 
 Table of Contents 
