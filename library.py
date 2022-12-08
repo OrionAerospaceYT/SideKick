@@ -42,7 +42,7 @@ class LibraryManager(qtw.QMainWindow):
 
         # Gets ALL libraries from the files
         self.installable = []
-        with open(self.file_manager.arduino_lib_path,"r",encoding="utf8") as libraries:
+        with open(self.file_manager.arduino_lib_path,"r",encoding="UTF-8") as libraries:
             for line in libraries:
                 if '"name":' in line:
                     self.installable.append(f"{regex.sub('', line).replace('name', '')}")

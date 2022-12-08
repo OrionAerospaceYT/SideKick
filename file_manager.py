@@ -43,6 +43,10 @@ class FileManager():
         self.arduino_lib_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
+        # Creates directories if not already
+        self.create_sidekick_file()
+        self.create_sub_sidekick_files()
+
         # Checks for the SideKick libraries
         if len(os.listdir(self.libraries_path)) == 0:
             self.move_libraries()
