@@ -23,16 +23,16 @@ class LibraryManager(qtw.QMainWindow):
     def __init__(self, file_manager, parent=None):
         super().__init__(parent=parent)
 
-        # Attributes for the library manager
+        # Definition of attributes
+        self.file_manager = file_manager
+        self.check_boxes = []
         self.library_ui = library()
+
         self.library_ui.setupUi(self)
 
         # Adds the scroll wheels
         self.library_ui.scrollArea.setVerticalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOn)
         self.library_ui.scrollArea.setHorizontalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOff)
-
-        # Defines the file_manager
-        self.file_manager = file_manager
 
         # Adds place holder text
         self.library_ui.search.setPlaceholderText("Search for your library here.")
@@ -67,6 +67,7 @@ class LibraryManager(qtw.QMainWindow):
 
         # Connecting buttons
         self.library_ui.enter.clicked.connect(self.add_new_label)
+        self.library_ui.install.clicked.connect(self.install)
 
     def format_text(self, text):
         """
@@ -118,7 +119,7 @@ class LibraryManager(qtw.QMainWindow):
         for i in reversed(range(self.library_ui.scroll.layout().count())):
             self.library_ui.scroll.layout().itemAt(i).widget().setParent(None)
 
-        # Removes exact copies
+        # Removes exact copiesarg
         search_results = []
         for item in self.installable:
             if self.library_ui.search.text().lower() in item.lower():
@@ -135,12 +136,27 @@ class LibraryManager(qtw.QMainWindow):
                 previous.append(header)
 
         # Adds QtTextBrowsers to the QScrollArea
-        check_boxes = []
+        self.check_boxes = []
         for item in edited_search_results:
             button = qtw.QCheckBox(self.library_ui.scroll)
             button.setText(self.format_text(item))
-            check_boxes.append(button)
-            self.library_ui.scroll.layout().addWidget(check_boxes[-1])
+            self.check_boxes.append(button)
+            self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
 
         # Clears the search term
         self.library_ui.search.setText("")
+
+    def install(self):
+        """
+        Installs the libraries that the user has checked
+        """
+        # Iterates through every Check Box to check if it is checked
+        for item in self.check_boxes:
+            # Finds out if checked
+            if item.isChecked():
+                name = item.text().split("\n")[0]
+                # Removes the first character if it is " "
+                while name[0] == " ":
+                    name = name[1:]
+                # Installs the lib'rary
+                subprocess.Popen(f'"{self.file_manager.arduino_path}" lib install "{name}"')
