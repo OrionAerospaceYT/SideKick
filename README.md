@@ -11,7 +11,7 @@ Table of Contents
 * [What does it run on?](#Hardware)
 * [Getting Started?](#Getting-Started)
 * [What is SideKick GUI?](#SideKick-GUI)
-* [What is ConsciOS?](#ConsciOS)
+* [What is ConsciOS?](https://github.com/OrionAerospaceYT/ConsciOS)
 ---
 
 # What is SideKick?
@@ -117,16 +117,3 @@ The file structure is:
 |  |
 |  |---- SideKick.py    # The file to be run to use the code - not used for executable.
 ```
-
-## Dependencies
-
-The exe is an independent app and does not require any external apps.
-
-However for the python code you will need to:
-```
-pip install PyQt5
-pip install serial
-pip install pyqtgraph
-pip install threading
-```
-# ConsciOS
