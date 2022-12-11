@@ -159,4 +159,5 @@ class LibraryManager(qtw.QMainWindow):
                 while name[0] == " ":
                     name = name[1:]
                 # Installs the lib'rary
-                subprocess.Popen(f'"{self.file_manager.arduino_path}" lib install "{name}"')
+                with subprocess.Popen(f'"{self.file_manager.arduino_path}" lib install "{name}"'):
+                    pass
