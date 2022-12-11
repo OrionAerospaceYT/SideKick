@@ -10,6 +10,7 @@ SavedData/
 dist/
 *.ifp
 Installer/SideKickInstaller
+Settings
 
 # VI ignores
 *.swp
