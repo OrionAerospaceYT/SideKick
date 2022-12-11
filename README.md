@@ -5,14 +5,13 @@
 
 [![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml)
 
-Table of Contents 
-====================
+##Table of Contents 
+
 * [What is SideKick?](#What-is-SideKick)
 * [What does it run on?](#Hardware)
 * [Getting Started?](#Getting-Started)
 * [What is SideKick GUI?](#SideKick-GUI)
 * [What is ConsciOS?](https://github.com/OrionAerospaceYT/ConsciOS)
----
 
 ## What is SideKick?
 
