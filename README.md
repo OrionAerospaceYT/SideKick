@@ -14,20 +14,20 @@ Table of Contents
 * [What is ConsciOS?](https://github.com/OrionAerospaceYT/ConsciOS)
 ---
 
-# What is SideKick?
+## What is SideKick?
 
 An expansion/offshoot of the <a href = https://www.arduino.cc/>Arduino</a> ecosystem geared towards more advanced robotics projects. We got tired of using breadboards and rewriting similar code for various robotics projects, so we started working on SideKick -- An advanced framework and ecosystem designed to make the prototyping process for robotics faster.
 
 Currently this entire ecosystem is ina "pre-alpha"
 
-# Hardware
+## Hardware
 
 Custom SideKick Hardware will be availabile soon! Register Interest <a href = 'https://docs.google.com/forms/d/e/1FAIpQLSd36gO5EY-KUUJ7Ppadt0nrD7Khohj1LoGKAEagtOyS_skXQg/viewform?usp=sf_link'>HERE</a>
 
 Currently all <b>Arduino</b>, <b>Teensy</b> boards are supported and most SAMD boards by ConsciOS and the GUI.    
 
 
-# Getting Started
+## Getting Started
 
 Video Tutorials coming soon! 
 
@@ -35,13 +35,13 @@ It is recommended to have basic experience with Arduino, C++, or ROS before jump
 
 Go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and Download 
 
-# SideKick GUI
+## SideKick GUI
 
 This is the official SideKick app, designed to be used with SideKick hardware but may also be used with other hardware!<br/>
 The SideKick app is to be used for debugging, uploading and managing projects.<br/>
 The SideKick app is designed to be used the SideKick C++ framework.<br/>
 
-## Installation
+### Installation
 
 1) To install the App as an executable for normal use go to <a href = https://github.com/OrionAerospaceYT/SideKick/releases/>Releases</a> and download.<br/>
 2) Then unzip the downloaded file.
@@ -49,7 +49,7 @@ The SideKick app is designed to be used the SideKick C++ framework.<br/>
 4) Follow the instructions on the setup wizard.
 5) If you selected desktop shortcut then you may run the app from your desktop.
 
-## Instructions
+### Instructions
 
 If you are not using the executable installation you can run the code as a normal python file.
 To run this code, I recommend terminal if you are using the .py files and type:
@@ -75,7 +75,7 @@ To save Terminal data, click Record. The blinking light means data is being reco
 
 To save Graph data, right click on the plot you want to save, go to export and select your save location and format.<br/>
 
-## Features
+### Features
 
 Two graphs with labels and multiple plots for easy debugging.<br/>
 
@@ -93,9 +93,8 @@ Easy to use C++ macros for SideKick hardware.<br/>
 
 Dark mode for a clean looking app.<br/>
 
-## Directory Structure
+### Directory Structure
 
-The file structure is:
 ```
 |--SideKick             # SideKick GUI directory.
 |  |
