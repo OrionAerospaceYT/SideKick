@@ -11,6 +11,17 @@ from PyQt5 import QtWidgets as qtw
 from Ui.LibraryUi import Ui_MainWindow as library
 
 NUM_OF_CHARACTERS = 50
+EXCLUDED_CHARACTERS = [("\n", "-"),
+                       ("       ", " "),
+                       ("u003c", "<"),
+                       ("u003e", ">"),
+                       ("<", ""),
+                       (">", ""),
+                       ("h1", ""),
+                       ("h2", ""),
+                       ("br", ""),
+                       (" /", ""),
+                       (".", ". ")]
 
 class LibraryManager(qtw.QMainWindow):
     """
@@ -77,17 +88,23 @@ class LibraryManager(qtw.QMainWindow):
         Args:
             text (str): the text to process
         """
-
-        text = text.replace('       ', ' ')
-        text = text.replace("\n", "-")
-        text = text.replace("u00c3", "<")
-        text = text.replace("u003e", ">")
-        text = text.replace("u003cbr/>", "")
+        print(text)
+        for excluded_string in EXCLUDED_CHARACTERS:
+            text = text.replace(excluded_string[0], excluded_string[1])
 
         output_text = ""
-        for index, string in enumerate(text.split("-")):
-            if index == 0:
-                output_text += f"{string}\n"
+        header_displayed = False
+        display = False
+
+        for string in text.split("-"):
+            if not header_displayed:
+                for char in string:
+                    if char.isalnum():
+                        display = True
+                        break
+                if display:
+                    output_text += f"   {string}\n   "
+                    header_displayed = True
             else:
                 temp_string =  f"{string} "
                 if len(temp_string) > NUM_OF_CHARACTERS:
@@ -99,10 +116,10 @@ class LibraryManager(qtw.QMainWindow):
                             final_string[index_counter] += f"{string_item} "
                         else:
                             index_counter += 1
-                            final_string.append(f"\n{string_item} ")
+                            final_string.append(f"\n    {string_item} ")
                     for string in final_string:
                         output_text += string
-                    output_text += "\n"
+                    output_text += "\n    "
                 else:
                     output_text += f"{string} "
         return output_text
@@ -119,7 +136,7 @@ class LibraryManager(qtw.QMainWindow):
         for i in reversed(range(self.library_ui.scroll.layout().count())):
             self.library_ui.scroll.layout().itemAt(i).widget().setParent(None)
 
-        # Removes exact copiesarg
+        # Removes exact copies
         search_results = []
         for item in self.installable:
             if self.library_ui.search.text().lower() in item.lower():
