@@ -10,7 +10,7 @@ from PyQt5 import QtWidgets as qtw
 
 from Ui.LibraryUi import Ui_MainWindow as library
 
-NUM_OF_CHARACTERS = 50
+NUM_OF_CHARACTERS = 80
 EXCLUDED_CHARACTERS = [("\n", "-"),
                        ("       ", " "),
                        ("u003c", "<"),
@@ -37,7 +37,7 @@ class LibraryManager(qtw.QMainWindow):
         # Adds the scroll wheels
         self.library_ui.scrollArea.setVerticalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOn)
         self.library_ui.scrollArea.setHorizontalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOff)
-        # self.setFixedSize(400, 600)
+        self.setFixedSize(750, 500)
 
         # Adds place holder text
         self.library_ui.search.setPlaceholderText("Search for your library here.")
@@ -73,14 +73,75 @@ class LibraryManager(qtw.QMainWindow):
         # Connecting buttons
         self.library_ui.enter.clicked.connect(self.add_new_label)
         self.library_ui.install.clicked.connect(self.install)
+        self.library_ui.search.returnPressed.connect(self.add_new_label)
 
     def format_text(self, text):
         """
-        formats the text such that the width is limited to a number of characters
-        and all text is centered.
+        gets the text and splits it into the sections then re assembles it
+        so that it does not exceed theline length
+
+        Args:
+            text (str): the string to be formatted
+
+        Returns:
+            str: the formatted string
+        """
+
+        output_text = ""
+        header_displayed = False
+        display = False
+
+        # iterates through each "\n" which is represented by the "-"
+        for string in text.split("-"):
+
+            # the first line is slightly different
+            # the indent is key and checks must be made that it
+            # is a title not an empty line
+            if not header_displayed:
+                for char in string:
+                    if char.isalnum():
+                        display = True
+                        break
+                if display:
+                    output_text += f"   {string}\n   "
+                    header_displayed = True
+                continue
+
+            temp_string =  f"{string} "
+
+            # if the line it too long, split it up and parse it together over multiple lines
+            if len(temp_string) > NUM_OF_CHARACTERS:
+                split_string = temp_string.split(" ")
+                index_counter = 0
+                final_string = [""]
+
+                # goes through each item keeping track of how long the line is
+                for string_item in split_string:
+                    if len(string_item) + len(final_string[index_counter]) < NUM_OF_CHARACTERS:
+                        final_string[index_counter] += f"{string_item} "
+                    else:
+                        index_counter += 1
+                        final_string.append(f"\n    {string_item} ")
+
+                for string in final_string:
+                    output_text += string
+                output_text += "\n    "
+            else:
+                output_text += f"{string}\n    "
+
+        return output_text
+
+    def get_formatted_text(self, text):
+        """
+        removes all html and other tags with regex
+        then formats the text using self.format_text()
+        and finally adds the new characters
 
         Args:
             text (str): the text to process
+
+        Returns:
+            str: the formatted string
         """
 
         for excluded_string in EXCLUDED_CHARACTERS:
@@ -91,37 +152,8 @@ class LibraryManager(qtw.QMainWindow):
         text = re.sub(r'http[s]?://\S+', '', text)
         text = re.sub(r"http\S+", "", text)
 
-        output_text = ""
-        header_displayed = False
-        display = False
-
-        for string in text.split("-"):
-            if not header_displayed:
-                for char in string:
-                    if char.isalnum():
-                        display = True
-                        break
-                if display:
-                    output_text += f"   {string}\n   "
-                    header_displayed = True
-            else:
-                temp_string =  f"{string} "
-                if len(temp_string) > NUM_OF_CHARACTERS:
-                    split_string = temp_string.split(" ")
-                    index_counter = 0
-                    final_string = [""]
-                    for string_item in split_string:
-                        if len(string_item) + len(final_string[index_counter]) < NUM_OF_CHARACTERS:
-                            final_string[index_counter] += f"{string_item} "
-                        else:
-                            index_counter += 1
-                            final_string.append(f"\n    {string_item} ")
-
-                    for string in final_string:
-                        output_text += string
-                    output_text += "\n    "
-                else:
-                    output_text += f"{string}\n    "
+        # formats the text in terms of line length
+        output_text = self.format_text(text)
 
         # removes any unwanted spaces and adds new lines before and after
         output_text = output_text.replace("\n     ", "\n    ")
@@ -160,7 +192,7 @@ class LibraryManager(qtw.QMainWindow):
         self.check_boxes = []
         for item in edited_search_results:
             button = qtw.QCheckBox(self.library_ui.scroll)
-            button.setText(self.format_text(item))
+            button.setText(self.get_formatted_text(item))
             self.check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
 
@@ -171,6 +203,7 @@ class LibraryManager(qtw.QMainWindow):
         """
         Installs the libraries that the user has checked
         """
+
         # Iterates through every Check Box to check if it is checked
         for item in self.check_boxes:
             # Finds out if checked
