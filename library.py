@@ -14,14 +14,7 @@ NUM_OF_CHARACTERS = 50
 EXCLUDED_CHARACTERS = [("\n", "-"),
                        ("       ", " "),
                        ("u003c", "<"),
-                       ("u003e", ">"),
-                       ("<", ""),
-                       (">", ""),
-                       ("h1", ""),
-                       ("h2", ""),
-                       ("br", ""),
-                       (" /", ""),
-                       (".", ". ")]
+                       ("u003e", ">")]
 
 class LibraryManager(qtw.QMainWindow):
     """
@@ -44,6 +37,7 @@ class LibraryManager(qtw.QMainWindow):
         # Adds the scroll wheels
         self.library_ui.scrollArea.setVerticalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOn)
         self.library_ui.scrollArea.setHorizontalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOff)
+        # self.setFixedSize(400, 600)
 
         # Adds place holder text
         self.library_ui.search.setPlaceholderText("Search for your library here.")
@@ -88,9 +82,14 @@ class LibraryManager(qtw.QMainWindow):
         Args:
             text (str): the text to process
         """
-        print(text)
+
         for excluded_string in EXCLUDED_CHARACTERS:
             text = text.replace(excluded_string[0], excluded_string[1])
+
+        text = re.sub(r'\<[^>]*\>', "", text)
+        text = re.sub(r'http://\S+|https://\S+', '', text)
+        text = re.sub(r'http[s]?://\S+', '', text)
+        text = re.sub(r"http\S+", "", text)
 
         output_text = ""
         header_displayed = False
@@ -117,11 +116,16 @@ class LibraryManager(qtw.QMainWindow):
                         else:
                             index_counter += 1
                             final_string.append(f"\n    {string_item} ")
+
                     for string in final_string:
                         output_text += string
                     output_text += "\n    "
                 else:
-                    output_text += f"{string} "
+                    output_text += f"{string}\n    "
+
+        # removes any unwanted spaces and adds new lines before and after
+        output_text = output_text.replace("\n     ", "\n    ")
+        output_text = f"\n{output_text}\n"
         return output_text
 
     def add_new_label(self):
