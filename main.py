@@ -17,7 +17,6 @@ import time
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
-from PyQt5.QtCore import Qt
 
 from library import LibraryManager
 from device_manager import DeviceManager
@@ -71,7 +70,7 @@ class MainGUI(qtw.QMainWindow):
         self.connect_keyboard_shortcuts()
         self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
         self.main_ui.message.setPlaceholderText("Enter message here.")
-        self.main_ui.bottom_update.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
         self.add_supported_boards()
 
         # Attributes for event handling are defined here
