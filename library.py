@@ -104,7 +104,8 @@ class LibraryManager(qtw.QMainWindow):
                         display = True
                         break
                 if display:
-                    output_text += f"   <font color=red>{string}</font><br>   "
+                    output_text += f"   <h2><font color='#00f0c3'>{string}</font></h2><br>   "
+                    output_text += "<font color='#FFFFFF' size='+2'>"
                     header_displayed = True
                 continue
 
@@ -148,11 +149,6 @@ class LibraryManager(qtw.QMainWindow):
         for excluded_string in EXCLUDED_CHARACTERS:
             text = text.replace(excluded_string[0], excluded_string[1])
 
-        text = re.sub(r'\<[^>]*\>', "", text)
-        text = re.sub(r'http://\S+|https://\S+', '', text)
-        text = re.sub(r'http[s]?://\S+', '', text)
-        text = re.sub(r"http\S+", "", text)
-
         # formats the text in terms of line length
         output_text = self.format_text(text)
 
@@ -160,6 +156,29 @@ class LibraryManager(qtw.QMainWindow):
         output_text = output_text.replace("<br>     ", "<br>    ")
         output_text = f"<br>{output_text}<br>"
         return output_text
+
+    def text_to_qicon(self, text):
+        """
+        Converts the input text to a QIcon object.
+
+        Args:
+            text (string): the html that needs to be converted to a QIcon
+
+        Returns:
+            QIcon: the html
+        """
+
+        document = qtg.QTextDocument()
+        document.setDocumentMargin(0)
+        document.setHtml(self.get_formatted_text(text))
+
+        pixmap = qtg.QPixmap(document.size().toSize())
+        pixmap.fill(qtc.Qt.transparent)
+        painter = qtg.QPainter(pixmap)
+        document.drawContents(painter)
+        painter.end()
+
+        return qtg.QIcon(pixmap), pixmap.size()
 
     def add_new_label(self):
         """
@@ -192,30 +211,16 @@ class LibraryManager(qtw.QMainWindow):
         # Adds QtTextBrowsers to the QScrollArea
         self.check_boxes = []
         for item in edited_search_results:
+
             button = qtw.QCheckBox(self.library_ui.scroll)
 
-            ########################################################################
-            # Experimental colouring                                               #
-            # change colours                                                  #
-            # resize text                                                     #
-            ########################################################################
-            document = qtg.QTextDocument()
-            document.setDocumentMargin(0)
-            document.setHtml(self.get_formatted_text(item))
+            icon, size = self.text_to_qicon(item)
 
-            pixmap = qtg.QPixmap(document.size().toSize())
-            pixmap.fill(qtc.Qt.transparent)
-            painter = qtg.QPainter(pixmap)
-            document.drawContents(painter)
-            painter.end()
-
-            icon = qtg.QIcon(pixmap)
             button.setIcon(icon)
-            button.setIconSize(pixmap.size())
+            button.setIconSize(size)
 
             self.check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
-            ########################################################################
 
         # Clears the search term
         self.library_ui.search.setText("")
@@ -229,8 +234,9 @@ class LibraryManager(qtw.QMainWindow):
         for item in self.check_boxes:
             # Finds out if checked
             if item.isChecked():
-                name = item.text().split("\n")[0]
+                name = item.text().split("<br>")[0]
                 # Removes the first character if it is " "
+                print(name, item.text())
                 while name[0] == " ":
                     name = name[1:]
                 # Installs the lib'rary
