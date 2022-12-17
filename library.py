@@ -7,6 +7,7 @@ import subprocess
 
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtGui as qtg
 
 from Ui.LibraryUi import Ui_MainWindow as library
 
@@ -103,7 +104,7 @@ class LibraryManager(qtw.QMainWindow):
                         display = True
                         break
                 if display:
-                    output_text += f"   {string}\n   "
+                    output_text += f"   <font color=red>{string}</font><br>   "
                     header_displayed = True
                 continue
 
@@ -121,13 +122,13 @@ class LibraryManager(qtw.QMainWindow):
                         final_string[index_counter] += f"{string_item} "
                     else:
                         index_counter += 1
-                        final_string.append(f"\n    {string_item} ")
+                        final_string.append(f"<br>    {string_item} ")
 
                 for string in final_string:
                     output_text += string
-                output_text += "\n    "
+                output_text += "<br>    "
             else:
-                output_text += f"{string}\n    "
+                output_text += f"{string}<br>    "
 
         return output_text
 
@@ -156,8 +157,8 @@ class LibraryManager(qtw.QMainWindow):
         output_text = self.format_text(text)
 
         # removes any unwanted spaces and adds new lines before and after
-        output_text = output_text.replace("\n     ", "\n    ")
-        output_text = f"\n{output_text}\n"
+        output_text = output_text.replace("<br>     ", "<br>    ")
+        output_text = f"<br>{output_text}<br>"
         return output_text
 
     def add_new_label(self):
@@ -192,9 +193,29 @@ class LibraryManager(qtw.QMainWindow):
         self.check_boxes = []
         for item in edited_search_results:
             button = qtw.QCheckBox(self.library_ui.scroll)
-            button.setText(self.get_formatted_text(item))
+
+            ########################################################################
+            # Experimental colouring                                               #
+            # change colours                                                  #
+            # resize text                                                     #
+            ########################################################################
+            document = qtg.QTextDocument()
+            document.setDocumentMargin(0)
+            document.setHtml(self.get_formatted_text(item))
+
+            pixmap = qtg.QPixmap(document.size().toSize())
+            pixmap.fill(qtc.Qt.transparent)
+            painter = qtg.QPainter(pixmap)
+            document.drawContents(painter)
+            painter.end()
+
+            icon = qtg.QIcon(pixmap)
+            button.setIcon(icon)
+            button.setIconSize(pixmap.size())
+
             self.check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
+            ########################################################################
 
         # Clears the search term
         self.library_ui.search.setText("")
