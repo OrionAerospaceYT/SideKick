@@ -7,12 +7,52 @@ import os
 import shutil
 import platform
 
-#class SaveManager():
-#    """
-#    loads and saves data to the saves file
-#    """
-#
-#    def __init__(self):
+class SaveManager():
+    """
+    loads and saves data to the saves file
+    """
+
+    def __init__(self):
+        self.record_status = False
+        self.prev_record_status = False
+        self.save_folder_path = ""
+        self.sep = ""
+
+    def create_new_file(self):
+        """
+        creates a new save file
+        """
+        num_of_saves = len(os.listdir(self.save_folder_path))
+        file = open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.txt", "w",
+                    encoding="UTF-8")
+        file.close()
+
+    def save_data(self, raw_data):
+        """
+        saves the raw data to the latest save_file
+
+        Args:
+            raw_data (str): the raw data from com device
+        """
+        self.record_status = True
+        if self.record_status != self.prev_record_status:
+            self.create_new_file()
+
+        save_name = os.listdir(self.save_folder_path)[-1]
+        save_path = f"{self.save_folder_path}{self.sep}{save_name}"
+
+        with open(save_path, "a", encoding="UTF-8") as save:
+            save.write(raw_data[-1])
+            save.write("\n")
+        self.prev_record_status = True
+
+    def stop_save(self):
+        """
+        sets record_status to false
+        """
+        self.record_status = False
+        self.prev_record_status = False
+
 
 class FileManager():
     """
@@ -23,7 +63,7 @@ class FileManager():
         path (str): the path of the main file being run
         operating_system (str): the operating system the app is run on
         sep (str): the seperator for file directories
-
+        save_manager (SaveManager): the class responsible for saving
         paths (str): the different necessary paths
 
     Methods:
@@ -34,6 +74,7 @@ class FileManager():
         self.user = os.getlogin()
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.operating_system = platform.system()
+        self.save_manager = SaveManager()
 
         # Initialise for each OS
         if self.operating_system == "Windows":
@@ -53,12 +94,14 @@ class FileManager():
         self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
         self.projects_path = f"{self.sidekick_path}{self.sep}SK Projects"
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
-        self.saves_path = f"{self.sidekick_path}{self.sep}SavedData"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
         self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe"
         self.arduino_lib_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
+
+        self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}SavedData"
+        self.save_manager.sep = self.sep
 
         # Creates directories if not already
         self.create_sidekick_file()
@@ -88,7 +131,7 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
         if "SK Projects" not in directories:
             os.mkdir(self.projects_path)
         if "SavedData" not in directories:
-            os.mkdir(self.saves_path)
+            os.mkdir(self.save_manager.save_folder_path)
         if "Libraries" not in directories:
             os.mkdir(self.libraries_path)
 
