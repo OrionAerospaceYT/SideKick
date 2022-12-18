@@ -7,6 +7,12 @@ import os
 import shutil
 import platform
 
+#class SaveManager():
+#    """
+#    loads and saves data to the saves file
+#    """
+#
+#    def __init__(self):
 
 class FileManager():
     """
