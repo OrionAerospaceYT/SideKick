@@ -32,7 +32,6 @@ class LibraryManager(qtw.QMainWindow):
         self.file_manager = file_manager
         self.check_boxes = []
         self.library_ui = library()
-
         self.library_ui.setupUi(self)
 
         # Adds the scroll wheels
@@ -105,6 +104,7 @@ class LibraryManager(qtw.QMainWindow):
                         break
                 if display:
                     output_text += f"   <h2><font color='#00f0c3'>{string}</font></h2><br>   "
+                    name = string
                     output_text += "<font color='#FFFFFF' size='+2'>"
                     header_displayed = True
                 continue
@@ -131,7 +131,7 @@ class LibraryManager(qtw.QMainWindow):
             else:
                 output_text += f"{string}<br>    "
 
-        return output_text
+        return output_text, name
 
     def get_formatted_text(self, text):
         """
@@ -150,12 +150,13 @@ class LibraryManager(qtw.QMainWindow):
             text = text.replace(excluded_string[0], excluded_string[1])
 
         # formats the text in terms of line length
-        output_text = self.format_text(text)
+        output_text, name = self.format_text(text)
 
         # removes any unwanted spaces and adds new lines before and after
         output_text = output_text.replace("<br>     ", "<br>    ")
         output_text = f"<br>{output_text}<br>"
-        return output_text
+
+        return output_text, name
 
     def text_to_qicon(self, text):
         """
@@ -170,7 +171,9 @@ class LibraryManager(qtw.QMainWindow):
 
         document = qtg.QTextDocument()
         document.setDocumentMargin(0)
-        document.setHtml(self.get_formatted_text(text))
+
+        formatted_text, name = self.get_formatted_text(text)
+        document.setHtml(formatted_text)
 
         pixmap = qtg.QPixmap(document.size().toSize())
         pixmap.fill(qtc.Qt.transparent)
@@ -178,7 +181,7 @@ class LibraryManager(qtw.QMainWindow):
         document.drawContents(painter)
         painter.end()
 
-        return qtg.QIcon(pixmap), pixmap.size()
+        return qtg.QIcon(pixmap), name, pixmap.size()
 
     def add_new_label(self):
         """
@@ -214,11 +217,12 @@ class LibraryManager(qtw.QMainWindow):
 
             button = qtw.QCheckBox(self.library_ui.scroll)
 
-            icon, size = self.text_to_qicon(item)
+            icon, name, size = self.text_to_qicon(item)
 
             button.setIcon(icon)
             button.setIconSize(size)
-
+            button.setText(name)
+            button.setStyleSheet("""color:#32323C""")
             self.check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
 
@@ -234,9 +238,9 @@ class LibraryManager(qtw.QMainWindow):
         for item in self.check_boxes:
             # Finds out if checked
             if item.isChecked():
-                name = item.text().split("<br>")[0]
+                name = item.text()
                 # Removes the first character if it is " "
-                print(name, item.text())
+                print(name)
                 while name[0] == " ":
                     name = name[1:]
                 # Installs the lib'rary
