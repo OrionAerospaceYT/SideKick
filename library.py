@@ -4,6 +4,7 @@ Library manager
 
 import re
 import subprocess
+import threading
 
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
@@ -20,18 +21,25 @@ EXCLUDED_CHARACTERS = [("\n", "-"),
 class LibraryManager(qtw.QMainWindow):
     """
     updates and maintains the library manager window
+    inherits qtw.QMainWindow so it inherits the properties needed
+    for the gui
 
-    Args:
-        qtw (QtWidgets): the main window functions
+    Attributes:
+        file_manager (FileManager): the file manager from MainGUI
+        check_boxes (list): the checkboxes that are on display
+        library_ui (library): the library GUI
+        installable (list): the list of installable libraries
     """
 
     def __init__(self, file_manager, parent=None):
         super().__init__(parent=parent)
 
         # Definition of attributes
+        self.library_ui = library()
         self.file_manager = file_manager
         self.check_boxes = []
-        self.library_ui = library()
+        self.installable = []
+
         self.library_ui.setupUi(self)
 
         # Adds the scroll wheels
@@ -42,11 +50,20 @@ class LibraryManager(qtw.QMainWindow):
         # Adds place holder text
         self.library_ui.search.setPlaceholderText("Search for your library here.")
 
-        # Loads the avaliable libraries
+        threaded_init = threading.Thread(
+            target=self.threaded_init, args=(),)
+        threaded_init.start()
+
+        self.show()
+
+    def threaded_init(self):
+        """
+        loading all the files takes some time therefore it is
+        threaded so that the main gui doesnt suffer any speed
+        """
         regex = re.compile('[^a-zA-Z0-9 ./;_()#]')
 
         # Gets ALL libraries from the files
-        self.installable = []
         with open(self.file_manager.arduino_lib_path,"r",encoding="UTF-8") as libraries:
             for line in libraries:
                 if '"name":' in line:
