@@ -169,12 +169,15 @@ class LibraryManager(qtw.QMainWindow):
             QIcon: the html
         """
 
+        # creates a QTextDocument from the html
         document = qtg.QTextDocument()
         document.setDocumentMargin(0)
 
         formatted_text, name = self.get_formatted_text(text)
         document.setHtml(formatted_text)
 
+        # converts the QTextDocument to a QIcon so that it can then be
+        # set to the button icon
         pixmap = qtg.QPixmap(document.size().toSize())
         pixmap.fill(qtc.Qt.transparent)
         painter = qtg.QPainter(pixmap)
@@ -221,8 +224,13 @@ class LibraryManager(qtw.QMainWindow):
 
             button.setIcon(icon)
             button.setIconSize(size)
+
+            # for the installation the name is set to the button text
+            # but the colour is the same as the background so that the
+            # name cannot be seen
             button.setText(name)
             button.setStyleSheet("""color:#32323C""")
+
             self.check_boxes.append(button)
             self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
 
