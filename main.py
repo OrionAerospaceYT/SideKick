@@ -113,7 +113,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the library manager window
         """
-        library = LibraryManager(self.file_manager, self)
+        LibraryManager(self.file_manager, self)
 
     def add_supported_boards(self):
         """main_ui_top_graph
