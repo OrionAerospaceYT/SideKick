@@ -398,7 +398,9 @@ class MainGUI(qtw.QMainWindow):
             self.bottom_graph.set_graph_data(raw_data)
 
             if self.record_light.blinking:
-                pass
+                self.file_manager.save_manager.save_data(raw_data)
+            else:
+                self.file_manager.save_manager.stop_save()
 
             if self.compile:
                 self.debug_window = False
