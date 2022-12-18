@@ -6,6 +6,7 @@ TODO class DeviceManagerWindow
 TODO class FileManagerWindow
 TODO class RecordLight
 """
+import time
 
 import pyqtgraph as pg
 import numpy as np
@@ -197,6 +198,12 @@ class Widgets:
         self.width = width
         self.height = height
 
+    def update_show(self):
+        """
+        converts show to not show
+        """
+        self.show = not self.show
+
     def get_show(self):
         """
         Returns:
@@ -232,6 +239,7 @@ class DeviceManagerWindow(Widgets):
         self.device_list = []
         self.baud = 115200
 
+
 class FileManagerWindow(Widgets):
     """
     Responsible for data on the file manager widgets.
@@ -244,11 +252,53 @@ class FileManagerWindow(Widgets):
         self.project = ""
         self.project_list = []
 
+
 class RecordLight(Widgets):
     """
     Blinks the record light
-    TODO
+    This class inherits Widgets
+
+    Attributes:
+        blinking (bool): wether or not the record light is meant to blink
+        running (bool): while the the app is running
+
+    Methods:
+        threaded_blink:
+            blinks the light every 0.5 seconds
+
+        update_recording:
+            changes the recording status
+
+        terminate_record:
+            stops the threaded loop
     """
 
     def __init__(self):
         super().__init__(True)
+
+        self.blinking = False
+        self.running = True
+
+    def threaded_blink(self):
+        """
+        blinks the light every 0.5 seconds
+        """
+        while self.running:
+            if self.blinking:
+                self.update_show()
+            else:
+                self.show = True
+
+            time.sleep(0.75)
+
+    def update_recording(self):
+        """
+        changes the recording status
+        """
+        self.blinking = not self.blinking
+
+    def terminate_record(self):
+        """
+        stops the threaded loop
+        """
+        self.running = False
