@@ -397,6 +397,9 @@ class MainGUI(qtw.QMainWindow):
             self.top_graph.set_graph_data(raw_data)
             self.bottom_graph.set_graph_data(raw_data)
 
+            if self.record_light.blinking:
+                pass
+
             if self.compile:
                 self.debug_window = False
 
