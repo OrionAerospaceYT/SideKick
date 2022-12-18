@@ -21,9 +21,12 @@ from PyQt5 import QtWidgets as qtw
 from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
+
 #from widgets import DeviceManagerWindow
 #rom widgets import FileManagerWindow
 from widgets import Graph
+from widgets import RecordLight
+
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
@@ -49,6 +52,7 @@ class MainGUI(qtw.QMainWindow):
         self.device_manager = DeviceManager()
         self.file_manager = FileManager()
         self.message_handler = MessageHandler()
+        self.record_light = RecordLight()
 
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
@@ -74,8 +78,6 @@ class MainGUI(qtw.QMainWindow):
         self.add_supported_boards()
 
         # Attributes for event handling are defined here
-        self.recording = False
-        self.light_on = False
         self.file_manager_window = False
         self.device_manager_window = False
         self.debug_window = False
@@ -90,7 +92,7 @@ class MainGUI(qtw.QMainWindow):
         self.supported_boards = []
 
         threaded_blinking_record = threading.Thread(
-            target=self.blinking_record, args=(),)
+            target=self.record_light.threaded_blink, args=(),)
         threaded_blinking_record.start()
 
         threaded_backend_loop = threading.Thread(
@@ -131,13 +133,13 @@ class MainGUI(qtw.QMainWindow):
         Connects the buttons/drop-downs on the gui to python functions
         """
 
-        self.main_ui.record.clicked.connect(self.record_data)
+        self.main_ui.record.clicked.connect(self.record_light.update_recording)
         self.main_ui.file.clicked.connect(self.open_file_manager)
         self.main_ui.device.clicked.connect(self.open_device_manager)
         self.main_ui.upload.clicked.connect(self.upload_project)
         self.main_ui.quit.clicked.connect(self.close_debug_window)
         self.main_ui.compile.clicked.connect(self.compile_project)
-        self.main_ui.disconnect.clicked.connect(self.disconnect_device)
+        self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
 
         self.main_ui.message.returnPressed.connect(self.send)
@@ -156,7 +158,7 @@ class MainGUI(qtw.QMainWindow):
         """
 
         disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
-        disconnect.activated.connect(self.disconnect_device)
+        disconnect.activated.connect(self.device_manager.terminate_device)
 
         compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
         compile_code.activated.connect(self.compile_project)
@@ -165,7 +167,7 @@ class MainGUI(qtw.QMainWindow):
         upload.activated.connect(self.upload_project)
 
         record = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
-        record.activated.connect(self.record_data)
+        record.activated.connect(self.record_light.update_recording)
 
         help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
         help_website.activated.connect(self.demo_function)
@@ -235,6 +237,9 @@ class MainGUI(qtw.QMainWindow):
                 self.main_ui.debugger.setVisible(False)
         self.prev_debug_window = self.debug_window
 
+        # record light
+        self.turn_on_rec_light(self.record_light.show)
+
         # compile and upload
         if self.compile:
             self.main_ui.top_update.setText(
@@ -301,20 +306,6 @@ class MainGUI(qtw.QMainWindow):
 
         self.main_ui.message.setText("")
 
-    def disconnect_device(self):
-        """
-        Disconnects the sidekick/teensy/arduino device
-        """
-
-        self.device_manager.terminate_device()
-
-    def record_data(self):
-        """
-        Blinks the record light and saves the data
-        """
-
-        self.recording = not self.recording
-
     def open_file_manager(self):
         """
         Opens/closes the file menu
@@ -339,8 +330,6 @@ class MainGUI(qtw.QMainWindow):
 
     def upload_project(self):
         """
-        TODO:
-
         Gets selected board to upload to
         Checks if a device is connected to the gui
         Disconnects the device to upload
@@ -386,26 +375,6 @@ class MainGUI(qtw.QMainWindow):
         Used to demo connected buttons
         """
         print("Hello world!")
-
-    def blinking_record(self):
-        """
-        Non-blocking function to perform functions over a time interval
-        """
-
-        while RUNNING:
-            if not self.recording:
-                self.turn_on_rec_light(True)
-
-            if self.recording:
-                self.turn_on_rec_light(self.light_on)
-                self.light_on = not self.light_on
-
-            if self.compile:
-                self.message_handler.update_ellipsis()
-            if self.upload:
-                self.message_handler.update_ellipsis()
-
-            time.sleep(0.5)
 
     def threaded_backend(self):
         """
@@ -470,6 +439,7 @@ if __name__ == "__main__":
     app.exec_()
 
     main_gui.device_manager.terminate_device()
+    main_gui.record_light.terminate_record()
     RUNNING = False
 
     project_selected = main_gui.main_ui.select_project.currentText()
