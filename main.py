@@ -6,8 +6,7 @@ This file also holds the
 TODO fix teensy upload (auto upload mode)
 TODO make classes for device manager window and file manager winow
 TODO display COM by default in COM dropdown
-TODO library manager
-TODO Record button
+TODO loading saved data (GUI re design in file manager)
 """
 
 import sys
