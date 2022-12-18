@@ -23,9 +23,9 @@ class SaveManager():
         creates a new save file
         """
         num_of_saves = len(os.listdir(self.save_folder_path))
-        file = open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.txt", "w",
-                    encoding="UTF-8")
-        file.close()
+        with open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.txt", "w",
+                    encoding="UTF-8"):
+            pass
 
     def save_data(self, raw_data):
         """
