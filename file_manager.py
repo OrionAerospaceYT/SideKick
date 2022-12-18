@@ -11,6 +11,16 @@ import platform
 class FileManager():
     """
     All processing to do with OS information such as file directorys, saves and more
+
+    Attributes:
+        user (str): the logged in user to the system
+        path (str): the path of the main file being run
+        operating_system (str): the operating system the app is run on
+        sep (str): the seperator for file directories
+
+        paths (str): the different necessary paths
+
+    Methods:
     """
 
     def __init__(self):
