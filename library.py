@@ -183,7 +183,9 @@ class LibraryManager(qtw.QMainWindow):
             text (string): the html that needs to be converted to a QIcon
 
         Returns:
-            QIcon: the html
+            QIcon : the html
+            str : the name of the library
+            int : the size of the pixmap
         """
 
         # creates a QTextDocument from the html
@@ -255,6 +257,14 @@ class LibraryManager(qtw.QMainWindow):
         self.library_ui.search.setText("")
 
     def install(self):
+        """
+        calls the actuall install function on a thread
+        """
+
+        install = threading.Thread(target=self.threaded_install)
+        install.start()
+
+    def threaded_install(self):
         """
         Installs the libraries that the user has checked
         """
