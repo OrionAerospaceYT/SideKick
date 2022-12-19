@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addItem(spacerItem3, 1, 8, 1, 1)
         self.terminal = QtWidgets.QTextBrowser(self.centralwidget)
         self.terminal.setStyleSheet("")
-        self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.terminal.setObjectName("terminal")
         self.gridLayout.addWidget(self.terminal, 1, 4, 3, 2)
