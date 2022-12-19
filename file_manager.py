@@ -218,6 +218,15 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
         os.rename(f"{self.projects_path}{self.sep}{name}{self.sep}Source.ino",
                   f"{self.projects_path}{self.sep}{name}{self.sep}{name}.ino")
 
+    def remove_project(self, name):
+        """
+        Deletes project
+
+        Args:
+            name (str): the project name
+        """
+        shutil.rmtree(f"{self.projects_path}{self.sep}{name}")
+
     def compile_and_upload_commands(self, port, project, board):
         """
         Compiles and uploads the script
