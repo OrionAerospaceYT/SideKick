@@ -35,7 +35,6 @@ class MessageHandler():
         Returns:
             terminal_data (strig): a single line string to have html added to it later
         """
-
         raw_list = raw_input.split("t(")
         terminal_data = ""
 
@@ -81,7 +80,6 @@ class MessageHandler():
         Args:
             error (string): the error from the compile/upload from arduino-cli
         """
-
         error = error.replace("\n", "<br>")
 
         debug_output = ""
@@ -116,7 +114,6 @@ class MessageHandler():
         Either increases or decreases the number of dots at the end of the uploading
         or compiling message to show that the gui is working.
         """
-
         length = len(self.status_trail)
 
         if length <= 0 and not self.status_increasing:
@@ -138,7 +135,6 @@ class MessageHandler():
         Returns:
             status (string): the input with the elipsis on the end
         """
-
         for item in enumerate(self.status_trail):
             status += item[1]
 
