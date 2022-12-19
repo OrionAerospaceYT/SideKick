@@ -12,6 +12,7 @@ TODO loading saved data (GUI re design in file manager)
 import sys
 import threading
 import time
+import webbrowser
 
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
@@ -119,11 +120,8 @@ class MainGUI(qtw.QMainWindow):
         Adds the supported boards to the drop down so that
         they can be selected for uploads.
         """
-
         boards = list(self.file_manager.get_all_boards().keys())
-
         for board in boards:
-
             self.main_ui.supported_boards.addItem(board)
 
     def connect_buttons(self):
@@ -143,7 +141,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.delete_project.clicked.connect(self.delete_project)
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.project_name.returnPressed.connect(self.new_project)
-
+        self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
 
     def connect_keyboard_shortcuts(self):
@@ -452,6 +450,13 @@ class MainGUI(qtw.QMainWindow):
         Used to demo connected buttons
         """
         print("Hello world!")
+
+    def show_help(self):
+        """
+        Takes you to the help website
+        TODO - help website
+        """
+        webbrowser.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
     def threaded_backend(self):
         """
