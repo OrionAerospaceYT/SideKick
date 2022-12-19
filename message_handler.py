@@ -3,6 +3,8 @@ This file handles displaying error messages and graphs
 This file imports device manager and gets the data
 """
 
+import time
+
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
@@ -22,6 +24,7 @@ class MessageHandler():
 
         self.status_trail = [".", ".", "."]
         self.status_increasing = False
+        self.running = True
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>"
@@ -45,7 +48,7 @@ class MessageHandler():
 
         return terminal_data
 
-    def get_terminal(self, raw_data, size):
+    def get_terminal(self, raw_data, size=(0,0), live=True):
         """
         Calculates the amount of lines the terminal can display at
         once.
@@ -53,10 +56,9 @@ class MessageHandler():
         Args:
             raw_data (list): a list of all raw data
             size (tuple): the x and y dimensions of the terminal
+            live (bool): if the data is being live streamed
         """
         decoded_data = []
-
-        amount_of_lines = int((size[0]-32) / 18)
         total_lines = 0
 
         for item in raw_data:
@@ -65,9 +67,19 @@ class MessageHandler():
 
         terminal_html = self.terminal_header
 
-        for data in reversed(decoded_data):
-            total_lines += len(data) // (size[1] / 8) + 2
-            if total_lines <= amount_of_lines:
+        # if live data, it cannot be scrolled through so it must be limited
+        # to the screen
+        if live:
+            amount_of_lines = int((size[0]-32) / 18)
+
+            for data in reversed(decoded_data):
+                total_lines += len(data) // (size[1] / 8) + 2
+                if total_lines <= amount_of_lines:
+                    terminal_html += self.beginning + data + self.ending
+
+        # if not live data then all data is shown in one go
+        if not live:
+            for data in decoded_data:
                 terminal_html += self.beginning + data + self.ending
 
         self.terminal_html = terminal_html
@@ -114,17 +126,21 @@ class MessageHandler():
         Either increases or decreases the number of dots at the end of the uploading
         or compiling message to show that the gui is working.
         """
-        length = len(self.status_trail)
 
-        if length <= 0 and not self.status_increasing:
-            self.status_increasing = True
-        elif length >= 3 and self.status_increasing:
-            self.status_increasing = False
+        while self.running:
+            length = len(self.status_trail)
 
-        if self.status_increasing:
-            self.status_trail.append(".")
-        else:
-            self.status_trail.pop(0)
+            if length <= 0 and not self.status_increasing:
+                self.status_increasing = True
+            elif length >= 3 and self.status_increasing:
+                self.status_increasing = False
+
+            if self.status_increasing:
+                self.status_trail.append(".")
+            else:
+                self.status_trail.pop(0)
+
+            time.sleep(0.5)
 
     def get_status(self, status):
         """
@@ -139,3 +155,9 @@ class MessageHandler():
             status += item[1]
 
         return status
+
+    def terminate_ellipsis(self):
+        """
+        Ends the threaded loop
+        """
+        self.running = False
