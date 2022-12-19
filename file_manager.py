@@ -42,8 +42,10 @@ class SaveManager():
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
         with open(save_path, "a", encoding="UTF-8") as save:
-            save.write(raw_data[-1])
-            save.write("\n")
+            if raw_data:
+                save.write(raw_data[-1])
+                save.write("\n")
+
         self.prev_record_status = True
 
     def stop_save(self):
@@ -60,7 +62,6 @@ class SaveManager():
         Returns:
             list: the saved raw data
         """
-
         with open(f"{self.save_folder_path}{self.sep}{file_name}", "r", encoding="UTF-8") as save:
             data = save.readlines()
 
@@ -188,15 +189,21 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
         Returns:
             list: a list of all the projects
         """
-
         return os.listdir(self.projects_path)
+
+    def get_all_saves(self):
+        """
+        Gets all saves in the "SavedData" folder.
+
+        Returns:
+            list: a list of all saves
+        """
+        return os.listdir(self.save_manager.save_folder_path)
 
     def add_new_project(self, name):
         """
         Adds new projects when new project is clicked.
         Creates a new file, copies the source reference, then renames the .ino file
-
-        TODO support new projects on enter key
 
         Args:
             name (string): the name of the new project from the line edit
