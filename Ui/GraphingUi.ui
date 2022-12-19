@@ -656,6 +656,16 @@ QScrollArea {
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="saves"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="show_save">
+           <property name="text">
+            <string>Show Save</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="delete_project">
            <property name="text">
             <string>Delete Project</string>
