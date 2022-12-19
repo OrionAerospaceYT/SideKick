@@ -38,7 +38,7 @@ class SaveManager():
         if self.record_status != self.prev_record_status:
             self.create_new_file()
 
-        save_name = os.listdir(self.save_folder_path)[-1]
+        save_name = f"Save{len(os.listdir(self.save_folder_path))}.txt"
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
         with open(save_path, "a", encoding="UTF-8") as save:
@@ -65,7 +65,7 @@ class SaveManager():
         with open(f"{self.save_folder_path}{self.sep}{file_name}", "r", encoding="UTF-8") as save:
             data = save.readlines()
 
-        return data
+        return [item.strip() for item in data]
 
 
 class FileManager():
@@ -208,7 +208,6 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
         Args:
             name (string): the name of the new project from the line edit
         """
-
         if name in os.listdir(self.projects_path):
             return
 
