@@ -81,6 +81,7 @@ class MainGUI(qtw.QMainWindow):
         self.device_manager_window = False
         self.debug_window = False
         self.prev_debug_window = True
+        self.showing_data = False
         self.upload = False
         self.compile = False
 
@@ -89,6 +90,7 @@ class MainGUI(qtw.QMainWindow):
         self.avaliable_port_list = []
         self.current_projects = []
         self.supported_boards = []
+        self.current_saves = []
 
         threaded_blinking_record = threading.Thread(
             target=self.record_light.threaded_blink, args=(),)
@@ -139,6 +141,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.compile.clicked.connect(self.compile_project)
         self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
+        self.main_ui.show_save.clicked.connect(self.display_save)
 
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.project_name.returnPressed.connect(self.new_project)
@@ -180,8 +183,7 @@ class MainGUI(qtw.QMainWindow):
 
         if is_on:
             self.main_ui.record_light.setStyleSheet("""image: url(Ui/Record.png);
-                                                    image-position: center;
-                                                    """)
+                                                    image-position: center;""")
         else:
             self.main_ui.record_light.setStyleSheet("")
 
@@ -189,31 +191,69 @@ class MainGUI(qtw.QMainWindow):
         """
         Updates the current projects window so it shows all projects in the project folder.
         """
-
+        selected_project = self.main_ui.select_project.currentText()
         projects_on_gui = [self.main_ui.select_project.itemText(
             i) for i in range(self.main_ui.select_project.count())]
+
+        # add new items
         for project in self.current_projects:
             if project not in projects_on_gui:
                 self.main_ui.select_project.addItem(project)
+
+        # remove old items
         for project in projects_on_gui:
             if project not in self.current_projects:
                 target = self.main_ui.select_project.findText(project)
                 self.main_ui.select_project.removeItem(target)
 
+        # checks if the project is in the current projects are
+        # either selected or from the settings.txt
+        if selected_project in self.current_projects:
+            self.main_ui.select_project.setCurrentText(selected_project)
+        elif self.project in self.current_projects:
+            self.main_ui.select_project.setCurrentText(self.project)
+
     def update_ports(self):
         """
         Updates all avaliable ports, removes unavaliable one
         """
-
         ports_on_gui = [self.main_ui.com_ports.itemText(
             i) for i in range(self.main_ui.com_ports.count())]
+
+        # adds new items
         for port in self.avaliable_port_list:
             if port not in ports_on_gui:
                 self.main_ui.com_ports.addItem(port)
+
+        # removes old items
         for port in ports_on_gui:
             if port not in self.avaliable_port_list:
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
+
+    def update_saves(self):
+        """
+        Updates all avaliable ports, removes unavaliable one
+        """
+        saves_on_gui = [self.main_ui.saves.itemText(
+            i) for i in range(self.main_ui.saves.count())]
+
+        # adds new items
+        for save in self.current_saves:
+            if save not in saves_on_gui:
+                self.main_ui.saves.addItem(save)
+
+        # removes old items
+        for save in saves_on_gui:
+            if save not in self.current_saves:
+                target = self.main_ui.saves.findText(save)
+                self.main_ui.saves.removeItem(target)
+
+    def update_terminal(self):
+        """
+        updates the html of the terminal
+        """
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
     def update(self):
         """
@@ -223,6 +263,7 @@ class MainGUI(qtw.QMainWindow):
         # update functions
         self.update_ports()
         self.update_projects()
+        self.update_saves()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
 
@@ -258,7 +299,9 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.file_layout.setVisible(False)
             self.main_ui.device_layout.setVisible(False)
 
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+        if (self.device_manager.device is not None) or (not self.showing_data):
+            self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+
 
         if self.device_manager.device is not None:
             self.main_ui.bottom_update.setText("Connected")
@@ -360,11 +403,35 @@ class MainGUI(qtw.QMainWindow):
 
         self.compile = True
 
+    def display_save(self, already_called=False):
+        """
+        Loads the saved data onto the graphs on the GUI
+
+        Args:
+            save (str): the save file name
+            already_called (bool): for some reason this function needs to be called twice
+        """
+        self.showing_data = True
+
+        save = self.main_ui.saves.currentText()
+        raw_data = self.file_manager.save_manager.get_saved_data(save)
+
+        self.message_handler.get_terminal(raw_data, live=False)
+        self.top_graph.set_graph_data(raw_data)
+        self.bottom_graph.set_graph_data(raw_data)
+
+        self.update_terminal()
+        self.top_graph.update_graph()
+        self.bottom_graph.update_graph()
+
+        if not already_called:
+            time.sleep(0.1)
+            self.display_save(True)
+
     def close_debug_window(self):
         """
         Closes the bottom pop up layout
         """
-
         self.debug_window = False
 
     def demo_function(self):
@@ -379,6 +446,9 @@ class MainGUI(qtw.QMainWindow):
         All backend tasks that need to be performed continually
         """
 
+        ellipsis = threading.Thread(target=self.message_handler.update_ellipsis)
+        ellipsis.start()
+
         while RUNNING:
             # Com ports
             port = self.device_manager.port
@@ -387,14 +457,24 @@ class MainGUI(qtw.QMainWindow):
             # Projects
             self.current_projects = self.file_manager.get_all_projects()
 
-            # Raw data
-            raw_data = self.device_manager.raw_data
+            # Saves
+            self.current_saves = self.file_manager.get_all_saves()
 
-            size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
+            # If device manager has a connected device, show the data
+            # otherwise the graphs shouldnt be overwritten
+            if (self.device_manager.device is not None) or (not self.showing_data):
 
-            self.message_handler.get_terminal(raw_data, size)
-            self.top_graph.set_graph_data(raw_data)
-            self.bottom_graph.set_graph_data(raw_data)
+                if not self.showing_data:
+                    raw_data = []
+                if self.device_manager.device is not None:
+                    raw_data = self.device_manager.raw_data
+                    self.showing_data = False
+
+                size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
+
+                self.message_handler.get_terminal(raw_data, size)
+                self.top_graph.set_graph_data(raw_data)
+                self.bottom_graph.set_graph_data(raw_data)
 
             if self.record_light.blinking:
                 self.file_manager.save_manager.save_data(raw_data)
@@ -443,6 +523,7 @@ if __name__ == "__main__":
 
     main_gui.device_manager.terminate_device()
     main_gui.record_light.terminate_record()
+    main_gui.message_handler.terminate_ellipsis()
     RUNNING = False
 
     project_selected = main_gui.main_ui.select_project.currentText()
