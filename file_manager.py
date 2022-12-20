@@ -98,8 +98,8 @@ class FileManager():
             inc = "C:\\Users\\"
         elif self.operating_system == "Darwin":
             self.script_ending = "sh"
-            self.sep = "/Users/"
-            inc = ""
+            self.sep = "/"
+            inc = "/Users/"
         elif self.operating_system == "Linux":
             self.script_ending = "sh"
             self.sep = "/"
