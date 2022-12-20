@@ -75,6 +75,7 @@ class FileManager():
     Attributes:
         user (str): the logged in user to the system
         path (str): the path of the main file being run
+        script_ending (str): exe or sh depending on OS
         operating_system (str): the operating system the app is run on
         sep (str): the seperator for file directories
         save_manager (SaveManager): the class responsible for saving
@@ -92,26 +93,29 @@ class FileManager():
 
         # Initialise for each OS
         if self.operating_system == "Windows":
+            self.script_ending = "exe"
             self.sep = "\\"
-            inc = "C:"
+            inc = "C:\\Users\\"
         elif self.operating_system == "Darwin":
+            self.script_ending = "sh"
             self.sep = "/"
             inc = ""
         elif self.operating_system == "Linux":
+            self.script_ending = "sh"
             self.sep = "/"
-            inc = ""
+            inc = "/home/"
         else:
             raise Exception("Invalis OS. Shutting down.")
 
         # Definitions for frequently used paths
-        self.documents_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}Documents"
+        self.documents_path = f"{inc}{self.user}{self.sep}Documents"
         self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
         self.projects_path = f"{self.sidekick_path}{self.sep}SK Projects"
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
-        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe"
-        self.arduino_lib_path = f"{inc}{self.sep}Users{self.sep}{self.user}{self.sep}\
+        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}"
+        self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}SavedData"
@@ -241,10 +245,10 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
 
-        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe\" \
+        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}\" \
 compile --fqbn {board} \"{project_path}\""
 
-        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.exe\" \
+        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}\" \
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]
