@@ -93,15 +93,15 @@ class FileManager():
 
         # Initialise for each OS
         if self.operating_system == "Windows":
-            self.script_ending = "exe"
+            self.script_ending = ".exe"
             self.sep = "\\"
             inc = "C:\\Users\\"
         elif self.operating_system == "Darwin":
-            self.script_ending = "sh"
+            self.script_ending = ""
             self.sep = "/"
             inc = "/Users/"
         elif self.operating_system == "Linux":
-            self.script_ending = "sh"
+            self.script_ending = ".sh"
             self.sep = "/"
             inc = "/home/"
         else:
@@ -114,7 +114,8 @@ class FileManager():
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
-        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}"
+        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli\
+{self.script_ending}"
         self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
