@@ -246,10 +246,10 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
 
-        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}\" \
+        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli-mac\" \
 compile --fqbn {board} \"{project_path}\""
 
-        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli.{self.script_ending}\" \
+        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli-mac\" \
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]

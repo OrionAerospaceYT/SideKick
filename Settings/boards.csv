@@ -1,5 +1,5 @@
 Select Board, None
-SK Stem, None
+SK Stem, arduino:mbed_rp2040:pico
 SK Brain, None
 Teensy4.1, teensy:avr:teensy41
 Teensy4.0, teensy:avr:teensy40
