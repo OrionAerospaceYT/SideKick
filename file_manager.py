@@ -128,8 +128,6 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
         self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
-        self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
-AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}SavedData"
         self.save_manager.sep = self.sep
