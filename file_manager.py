@@ -101,6 +101,7 @@ class FileManager():
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         elif self.operating_system == "Darwin":
+            self.path = self.path.lower()
             self.arduino_cli = "arduino-cli-mac"
             self.sep = "/"
             inc = "/Users/"
@@ -121,7 +122,7 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
             raise Exception("Invalis OS. Shutting down.")
 
         # Definitions for frequently used paths
-        self.documents_path = f"{inc}{self.user}{self.sep}Documents"
+        self.documents_path = f"{inc}{self.user}{self.sep}documents"
         self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
         self.projects_path = f"{self.sidekick_path}{self.sep}SK Projects"
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
