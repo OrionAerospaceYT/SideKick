@@ -93,17 +93,30 @@ class FileManager():
 
         # Initialise for each OS
         if self.operating_system == "Windows":
-            self.script_ending = ".exe"
+            self.arduino_cli = "arduino-cli-windows.exe"
             self.sep = "\\"
             inc = "C:\\Users\\"
+
+            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
+AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
+
         elif self.operating_system == "Darwin":
-            self.script_ending = ""
+            self.arduino_cli = "arduino-cli-mac"
             self.sep = "/"
             inc = "/Users/"
+
+            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
+Libraries{self.sep}Arduino15{self.sep}library_index.json"
+
         elif self.operating_system == "Linux":
-            self.script_ending = ".sh"
+
+            self.arduino_cli = "arduino-cli-linux.sh"
             self.sep = "/"
             inc = "/home/"
+
+            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
+AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
+
         else:
             raise Exception("Invalis OS. Shutting down.")
 
@@ -114,8 +127,7 @@ class FileManager():
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
-        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}arduino-cli\
-{self.script_ending}"
+        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
         self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
@@ -246,10 +258,10 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
 
-        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli-mac\" \
+        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 compile --fqbn {board} \"{project_path}\""
 
-        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}arduino-cli-mac\" \
+        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 upload -p {port} --fqbn {board} \"{project_path}\""
 
         return [compile_msg, upload_msg]
