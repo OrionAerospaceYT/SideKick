@@ -106,7 +106,7 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
             inc = "/Users/"
 
             self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
-Libraries{self.sep}Arduino15{self.sep}library_index.json"
+Library{self.sep}Arduino15{self.sep}library_index.json"
 
         elif self.operating_system == "Linux":
 
