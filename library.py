@@ -75,8 +75,8 @@ class LibraryManager(qtw.QMainWindow):
                     self.installable[-1] += f"\n{paragraph}"
 
         # Checks which libraries are and aren't installed
-        # NOTE This needs to be moved to OS dependant
-        get_installed_libraries = f'"{self.file_manager.path}/Externals/arduino-cli.exe" lib list'
+        get_installed_libraries = f'"{self.file_manager.arduino_path}" lib list'
+
         with subprocess.Popen(
             get_installed_libraries, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, shell=True) as installed:
