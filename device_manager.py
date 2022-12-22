@@ -124,7 +124,7 @@ class DeviceManager():
         if sys.platform.startswith("win"):
             ports = [f"COM{i}" for i in range(256)]
         elif sys.platform.startswith("linux") or sys.platform.startswith("cygwin"):
-            ports = glob.glob("/dev/tty[A-Za-z]*")
+            ports = glob.glob("/dev/tty*")
         elif sys.platform.startswith("darwin"):
             ports = glob.glob("/dev/tty.*")
 
