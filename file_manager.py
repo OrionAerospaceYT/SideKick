@@ -96,15 +96,16 @@ class FileManager():
             self.arduino_cli = "arduino-cli-windows.exe"
             self.sep = "\\"
             inc = "C:\\Users\\"
+            documents = "Documents"
 
             self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
         elif self.operating_system == "Darwin":
-            self.path = self.path.lower()
             self.arduino_cli = "arduino-cli-mac"
             self.sep = "/"
             inc = "/Users/"
+            documents = "documents"
 
             self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
 Library{self.sep}Arduino15{self.sep}library_index.json"
@@ -114,23 +115,24 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             self.arduino_cli = "arduino-cli-linux.sh"
             self.sep = "/"
             inc = "/home/"
+            documents = "Documents"
 
-            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
-AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
+            self.arduino_lib_path = f"{inc}{self.user}{self.sep}.arduino15\
+{self.sep}library_index.json"
 
         else:
             raise Exception("Invalis OS. Shutting down.")
 
         # Definitions for frequently used paths
-        self.documents_path = f"{inc}{self.user}{self.sep}documents"
+        self.documents_path = f"{inc}{self.user}{self.sep}{documents}"
         self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
-        self.projects_path = f"{self.sidekick_path}{self.sep}SK Projects"
+        self.projects_path = f"{self.sidekick_path}{self.sep}Projects"
         self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
         self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
 
-        self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}SavedData"
+        self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}Saves"
         self.save_manager.sep = self.sep
 
         # Creates directories if not already
@@ -152,23 +154,22 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
 
     def create_sub_sidekick_files(self):
         """
-        Creates SideKick sub directories (SK Projects, SavedData, Libraries) if
+        Creates SideKick sub directories (Projects, SavedData, Libraries) if
         they do not already exist.
         """
 
         directories = os.listdir(self.sidekick_path)
 
-        if "SK Projects" not in directories:
+        if "Projects" not in directories:
             os.mkdir(self.projects_path)
-        if "SavedData" not in directories:
+        if "Saves" not in directories:
             os.mkdir(self.save_manager.save_folder_path)
         if "Libraries" not in directories:
             os.mkdir(self.libraries_path)
 
     def move_libraries(self):
         """
-        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS.
-        TODO fix returns
+        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
         """
 
         conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
