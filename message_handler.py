@@ -63,7 +63,8 @@ class MessageHandler():
 
         for item in raw_data:
             decoded_string = self.decode_terminal_data(item)
-            decoded_data.append(decoded_string)
+            if len(decoded_string) != 0:
+                decoded_data.append(decoded_string)
 
         terminal_html = self.terminal_header
 
