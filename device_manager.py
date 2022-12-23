@@ -78,7 +78,7 @@ class DeviceManager():
                 ############################################################################
                 # DEBUGGING CODE                                                           #
                 ############################################################################
-                #self.raw_cummulative_data += raw_data.replace(b"\r\n", b"").decode("UTF-8")
+                #self.raw_cummulative_data += raw_data.replace(b"\r\n", b"/n").decode("UTF-8")
                 #print("Raw data cummulative >>> " + self.raw_cummulative_data)
                 #string = ""
                 #for item in self.raw_data:
@@ -88,11 +88,20 @@ class DeviceManager():
 
                 if buffer.count(b"\r\n") > 1:
 
-                    self.raw_data.append(buffer.split(b"\r\n")[-2].replace(
-                        b"\r\n",b"").decode("UTF-8"))
+                    decoded_buffer = buffer.decode("UTF-8")
+
+                    index = None
+
+                    if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
+                        index = 0
+                    else:
+                        index = 1
+
+                    if index is not None:
+                        self.raw_data.append(decoded_buffer.split("\r\n")[index])
+                        buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
                     self.raw_data = list(filter(None, self.raw_data))
-                    buffer = buffer.replace(buffer.split(b"\r\n")[-2], b"")
 
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
