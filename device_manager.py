@@ -59,7 +59,7 @@ class DeviceManager():
         self.raw_cummulative_data = ""
 
         try:
-            self.device = serial.Serial(port, baud, timeout=0, rtscts=True)
+            self.device = serial.Serial(port, baud, rtscts=True)
         except serial.SerialException:
             self.device = None
 
