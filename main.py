@@ -514,12 +514,10 @@ class MainGUI(qtw.QMainWindow):
                 port = self.device_manager.port
                 self.device_manager.terminate_device()
 
-                error, success = self.device_manager.upload_script(
-                    self.commands[0], self.commands[1])
+                error = self.device_manager.upload_script(self.commands[0], self.commands[1])
 
-                if not success:
-                    self.message_handler.decode_debug_message(error)
-                    self.debug_window = True
+                self.message_handler.decode_debug_message(error)
+                self.debug_window = True
 
                 time.sleep(0.25)
                 self.connect_device(port)
