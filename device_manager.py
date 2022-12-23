@@ -27,7 +27,7 @@ class DeviceManager():
         self.get_data = None
         self.port = None
         self.raw_data = []
-
+        self.raw_cummulative_data = ""
         self.terminal_data = ""
         self.graph_top_data = []
         self.graph_bottom_data = []
@@ -56,6 +56,7 @@ class DeviceManager():
 
         self.port = port
         self.terminate_device()
+        self.raw_cummulative_data = ""
 
         try:
             self.device = serial.Serial(port, baud, timeout=0, rtscts=True)
@@ -73,9 +74,26 @@ class DeviceManager():
 
             if raw_data != b"":
                 buffer += raw_data
+
+                ############################################################################
+                # DEBUGGING CODE                                                           #
+                ############################################################################
+                #self.raw_cummulative_data += raw_data.replace(b"\r\n", b"").decode("UTF-8")
+                #print("Raw data cummulative >>> " + self.raw_cummulative_data)
+                #string = ""
+                #for item in self.raw_data:
+                #    string += item.replace("\r\n", "")
+                #print("Data on terminal >>> " + string)
+                ############################################################################
+
                 if buffer.count(b"\r\n") > 1:
-                    self.raw_data.append(buffer.split(b"\r\n")[-2].decode("UTF-8"))
-                    buffer = b""
+
+                    self.raw_data.append(buffer.split(b"\r\n")[-2].replace(
+                        b"\r\n",b"").decode("UTF-8"))
+
+                    self.raw_data = list(filter(None, self.raw_data))
+                    buffer = buffer.replace(buffer.split(b"\r\n")[-2], b"")
+
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
 
@@ -183,9 +201,6 @@ class DeviceManager():
             upload_output = upload_process.communicate()
             upload_output = upload_output[0].decode("UTF-8")
 
-            if "No" not in upload_output:
-                return None, True
-
         error_output = compile_output+upload_output
 
-        return error_output, False
+        return error_output
