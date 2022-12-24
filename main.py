@@ -28,8 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = False
-CONSCIOS_PATH = "PUT_YOUR_PATH_TO_REPO"
+DEV = True
+CONSCIOS_PATH = "C:\\Users\\Alexander_Armitage\\Documents\\GitHub\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
     """

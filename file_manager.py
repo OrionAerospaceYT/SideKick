@@ -147,6 +147,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if dev:
             print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
             self.move_libraries(consci_os_path)
+            self.move_source(consci_os_path)
 
     def create_sidekick_file(self):
         """
@@ -178,7 +179,6 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         shutil.rmtree(f"{self.path}{self.sep}ConsciOS")
-        os.mkdir(f"{self.path}{self.sep}ConsciOS")
 
         destination = f"{self.path}{self.sep}ConsciOS"
         shutil.copytree(source, destination)
@@ -193,6 +193,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
+        destination = f"{self.libraries_path}{self.sep}libraries"
 
         if not conscios_folder:
             print("ERROR: The ConsciOS is non-existent!")
@@ -201,9 +202,9 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if source is None:
             source = f"{self.path}{self.sep}ConsciOS"
         else:
-            source += "{self.sep}libraries"
+            source += f"{self.sep}libraries"
+            shutil.rmtree(destination)
 
-        destination = f"{self.libraries_path}{self.sep}libraries"
         shutil.copytree(source, destination)
 
     def get_all_boards(self):
