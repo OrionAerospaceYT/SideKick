@@ -175,7 +175,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
 
     def move_source(self, raw_source):
         """
-        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
+        If the GUI is in dev mode, replace the reference to the source code
+        for new projects
         """
 
         try:
