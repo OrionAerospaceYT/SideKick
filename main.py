@@ -28,6 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
+DEV = False
+CONSCIOS_PATH = "PUT_YOUR_PATH_TO_REPO"
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -48,7 +50,7 @@ class MainGUI(qtw.QMainWindow):
 
         # Attributes for the gui are defined here
         self.device_manager = DeviceManager()
-        self.file_manager = FileManager()
+        self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.message_handler = MessageHandler()
         self.record_light = RecordLight()
 

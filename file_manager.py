@@ -84,7 +84,7 @@ class FileManager():
     Methods:
     """
 
-    def __init__(self):
+    def __init__(self, dev, consci_os_path):
 
         self.user = os.getlogin()
         self.path = os.path.dirname(os.path.realpath(__file__))
@@ -143,6 +143,11 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if len(os.listdir(self.libraries_path)) == 0:
             self.move_libraries()
 
+        # Checks if the GUI is being used in dev mode
+        if dev:
+            print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
+            self.move_libraries(consci_os_path)
+
     def create_sidekick_file(self):
         """
         Creates sidekick directory in documents if it does not already exist
@@ -167,9 +172,24 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if "Libraries" not in directories:
             os.mkdir(self.libraries_path)
 
-    def move_libraries(self):
+    def move_source(self, source):
         """
         If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
+        """
+
+        shutil.rmtree(f"{self.path}{self.sep}ConsciOS")
+        os.mkdir(f"{self.path}{self.sep}ConsciOS")
+
+        destination = f"{self.path}{self.sep}ConsciOS"
+        shutil.copytree(source, destination)
+
+    def move_libraries(self, source=None):
+        """
+        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
+        Or if the app is being used in development mode
+
+        Args:
+            source (str): the source to the new libraries
         """
 
         conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
@@ -178,7 +198,11 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             print("ERROR: The ConsciOS is non-existent!")
             return
 
-        source = f"{self.path}{self.sep}ConsciOS"
+        if source is None:
+            source = f"{self.path}{self.sep}ConsciOS"
+        else:
+            source += "{self.sep}libraries"
+
         destination = f"{self.libraries_path}{self.sep}libraries"
         shutil.copytree(source, destination)
 
