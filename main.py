@@ -487,7 +487,6 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = self.device_manager.raw_data
                     self.showing_data = False
 
-                print(raw_data)
                 size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
 
                 self.message_handler.get_terminal(raw_data, size)
