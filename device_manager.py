@@ -26,11 +26,13 @@ class DeviceManager():
         self.device = None
         self.get_data = None
         self.port = None
-        self.raw_data = []
+
+        self.failed_recv = 0
+
         self.raw_cummulative_data = ""
         self.terminal_data = ""
-        self.graph_top_data = []
-        self.graph_bottom_data = []
+
+        self.raw_data = []
 
     def send(self, message):
         """
@@ -68,9 +70,12 @@ class DeviceManager():
         while self.device is not None:
             try:
                 raw_data = self.device.read_all()
+                self.failed_recv = 0
             except serial.SerialException:
-                self.terminate_device()
-                break
+                self.failed_recv += 1
+                if self.failed_recv == 10:
+                    self.terminate_device()
+                    break
 
             if raw_data != b"":
                 buffer += raw_data
@@ -118,8 +123,6 @@ class DeviceManager():
         self.raw_data = []
 
         self.terminal_data = ""
-        self.graph_top_data = []
-        self.graph_bottom_data = []
 
     def connect_device(self, port="COM1", baud=115200):
         """
