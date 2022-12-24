@@ -74,6 +74,9 @@ class DeviceManager():
 
             if raw_data != b"":
                 buffer += raw_data
+                buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
+                if buffer.startswith(b"\r\n"):
+                    buffer = buffer[2:]
 
                 ############################################################################
                 # DEBUGGING CODE                                                           #
@@ -85,13 +88,11 @@ class DeviceManager():
                 #    string += item.replace("\r\n", "")
                 #print("Data on terminal >>> " + string)
                 ############################################################################
-
-                if buffer.count(b"\r\n") > 1:
+                while buffer.count(b"\r\n") > 1 or buffer.endswith(b"\r\n"):
 
                     decoded_buffer = buffer.decode("UTF-8")
 
                     index = None
-
                     if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
                         index = 0
                     else:
