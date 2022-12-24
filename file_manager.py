@@ -173,14 +173,23 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if "Libraries" not in directories:
             os.mkdir(self.libraries_path)
 
-    def move_source(self, source):
+    def move_source(self, raw_source):
         """
         If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
         """
 
-        shutil.rmtree(f"{self.path}{self.sep}ConsciOS")
+        try:
+            shutil.rmtree(f"{self.path}{self.sep}ConsciOS{self.sep}libraries")
+            shutil.rmtree(f"{self.path}{self.sep}ConsciOS{self.sep}Source")
+        except FileNotFoundError:
+            pass
 
-        destination = f"{self.path}{self.sep}ConsciOS"
+        source = f"{raw_source}{self.sep}libraries"
+        destination = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
+        shutil.copytree(source, destination)
+
+        source = f"{raw_source}{self.sep}Source"
+        destination = f"{self.path}{self.sep}ConsciOS{self.sep}Source"
         shutil.copytree(source, destination)
 
     def move_libraries(self, source=None):
