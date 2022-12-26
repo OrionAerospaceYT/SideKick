@@ -215,9 +215,9 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             source = f"{self.path}{self.sep}ConsciOS"
         else:
             source += f"{self.sep}libraries"
-            shutil.rmtree(destination)
+            #shutil.rmtree(destination)
 
-        shutil.copytree(source, destination)
+        shutil.move(source, destination)
 
     def get_all_boards(self):
         """
@@ -294,9 +294,11 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
+
         if self.dev:
             project_path = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
             self.move_libraries(self.consci_os_path)
+
         compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 compile --fqbn {board} \"{project_path}\""
 
