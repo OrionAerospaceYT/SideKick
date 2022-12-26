@@ -29,7 +29,7 @@ from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
 DEV = True
-CONSCIOS_PATH = "C:\\Users\\Alexander_Armitage\\Documents\\GitHub\\ConsciOS"
+CONSCIOS_PATH = "/Users/pandora/documents/github/Conscios"
 
 class MainGUI(qtw.QMainWindow):
     """

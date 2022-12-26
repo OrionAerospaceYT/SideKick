@@ -90,6 +90,8 @@ class FileManager():
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.operating_system = platform.system()
         self.save_manager = SaveManager()
+        self.dev = dev
+        self.consci_os_path = consci_os_path
 
         # Initialise for each OS
         if self.operating_system == "Windows":
@@ -147,7 +149,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if dev:
             print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
             self.move_libraries(consci_os_path)
-            self.move_source(consci_os_path)
+            #self.move_source(consci_os_path)
 
     def create_sidekick_file(self):
         """
@@ -292,7 +294,9 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
-
+        if self.dev:
+            project_path = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
+            self.move_libraries(self.consci_os_path)
         compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 compile --fqbn {board} \"{project_path}\""
 
