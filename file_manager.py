@@ -204,6 +204,9 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             source (str): the source to the new libraries
         """
 
+        if "libraries" not in os.listdir(self.libraries_path):
+            os.mkdir(f"{self.libraries_path}{self.sep}libraries")
+
         conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
         destination = f"{self.libraries_path}{self.sep}libraries"
 
@@ -215,9 +218,14 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             source = f"{self.path}{self.sep}ConsciOS"
         else:
             source += f"{self.sep}libraries"
-            #shutil.rmtree(destination)
 
-        shutil.move(source, destination)
+        for library in os.listdir(source):
+            try:
+                if library in os.listdir(destination):
+                    shutil.rmtree(f"{destination}{self.sep}{library}")
+                shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
+            except NotADirectoryError:
+                pass
 
     def get_all_boards(self):
         """
