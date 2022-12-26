@@ -28,8 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = True
-CONSCIOS_PATH = "/Users/pandora/documents/github/Conscios"
+DEV = False
+CONSCIOS_PATH = ""
 
 class MainGUI(qtw.QMainWindow):
     """
