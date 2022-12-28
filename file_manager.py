@@ -215,7 +215,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             return
 
         if source is None:
-            source = f"{self.path}{self.sep}ConsciOS"
+            source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
         else:
             source += f"{self.sep}libraries"
 
