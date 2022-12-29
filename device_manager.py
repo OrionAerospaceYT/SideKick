@@ -56,6 +56,11 @@ class DeviceManager():
             baud (int): the baud rate of the connected device
         """
 
+        try:
+            serial.close()
+        except AttributeError:
+            pass
+
         self.port = port
         self.terminate_device()
         self.raw_cummulative_data = ""
@@ -69,6 +74,7 @@ class DeviceManager():
         buffer = b""
 
         while self.device is not None:
+            print("Device is threaded...")
             try:
                 raw_data = self.device.read_all()
                 self.failed_recv = 0
@@ -113,6 +119,7 @@ class DeviceManager():
 
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
+        print("Ended...")
 
     def terminate_device(self):
         """
