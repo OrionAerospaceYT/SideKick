@@ -62,7 +62,8 @@ class DeviceManager():
 
         try:
             self.device = serial.Serial(port, baud, rtscts=True)
-        except serial.SerialException:
+        except serial.SerialException as error:
+            print(error)
             self.device = None
 
         buffer = b""
@@ -71,7 +72,8 @@ class DeviceManager():
             try:
                 raw_data = self.device.read_all()
                 self.failed_recv = 0
-            except serial.SerialException:
+            except serial.SerialException as error:
+                print(error)
                 self.failed_recv += 1
                 if self.failed_recv == 10:
                     self.terminate_device()
