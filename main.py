@@ -93,13 +93,13 @@ class MainGUI(qtw.QMainWindow):
         self.supported_boards = []
         self.current_saves = []
 
-        threaded_blinking_record = threading.Thread(
-            target=self.record_light.threaded_blink, args=(),)
-        threaded_blinking_record.start()
+        #threaded_blinking_record = threading.Thread(
+            #target=self.record_light.threaded_blink, args=(),)
+        #threaded_blinking_record.start()
 
-        threaded_backend_loop = threading.Thread(
-            target=self.threaded_backend, args=(),)
-        threaded_backend_loop.start()
+        #threaded_backend_loop = threading.Thread(
+            #target=self.threaded_backend, args=(),)
+        #threaded_backend_loop.start()
 
         self.board, self.project = self.file_manager.load_options()
 
@@ -465,8 +465,8 @@ class MainGUI(qtw.QMainWindow):
         All backend tasks that need to be performed continually
         """
 
-        ellipsis = threading.Thread(target=self.message_handler.update_ellipsis)
-        ellipsis.start()
+        #ellipsis = threading.Thread(target=self.message_handler.update_ellipsis)
+        #ellipsis.start()
 
         while RUNNING:
             # Com ports
@@ -525,25 +525,38 @@ class MainGUI(qtw.QMainWindow):
                 self.connect_device(port)
 
                 self.upload = False
-
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+      
 if __name__ == "__main__":
+    device_manager = DeviceManager()
+    file_manager = FileManager(DEV, CONSCIOS_PATH)
+    print("SIDEKICK is in headless mode")
+    board = input('type the board type: ')
+    port = input('type the com port: ')
+    commands = file_manager.compile_and_upload_commands(port," ",board)
+    user_input = ''
+    while user_input != 'q':
+        user_input = input("q to quit, u to upload, s to compile: ")
+        if user_input == 'q':
+            print("Quitting...")
+            break
+        elif user_input == 'u':
+            print(f'uploading to {port}')
+            error = device_manager.upload_script(commands[0], commands[1])
+            print(f"{bcolors.WARNING}{error}{bcolors.ENDC}")
 
-    RUNNING = True
-
-    app = qtw.QApplication(sys.argv)
-    app_icon = qtg.QIcon("Ui/SideKick.ico")
-    app.setWindowIcon(app_icon)
-    main_gui = MainGUI()
-
-    main_gui.show()
-    app.exec_()
-
-    main_gui.device_manager.terminate_device()
-    main_gui.record_light.terminate_record()
-    main_gui.message_handler.terminate_ellipsis()
-    RUNNING = False
-
-    project_selected = main_gui.main_ui.select_project.currentText()
-    board_selected = main_gui.main_ui.supported_boards.currentText()
-
-    main_gui.file_manager.save_options(board_selected, project_selected)
+        elif user_input == 's':
+            print('compiling')
+            error = device_manager.compile_script(commands[0])
+            print(f"{bcolors.WARNING}{error}{bcolors.ENDC}")
+        else:
+            print("please enter a valid input")
