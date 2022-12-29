@@ -27,6 +27,7 @@ from widgets import RecordLight
 
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
+import csv
 
 DEV = True
 CONSCIOS_PATH = "/Users/pandora/documents/github/conscios"
@@ -541,15 +542,17 @@ if __name__ == "__main__":
     file_manager = FileManager(DEV, CONSCIOS_PATH)
     print("SIDEKICK is in headless mode")
     board = input('type the board type: ')
-    port = input('type the com port: ')
+    port = ''
     commands = file_manager.compile_and_upload_commands(port," ",board)
     user_input = ''
     while user_input != 'q':
-        user_input = input("q to quit, u to upload, s to compile: ")
+        user_input = input("q to quit, u to upload, s to compile, p to scan ports, b to change board (lb to list boards): ")
         if user_input == 'q':
             print("Quitting...")
             break
         elif user_input == 'u':
+            port = input('type the com port: ')
+            commands = file_manager.compile_and_upload_commands(port," ",board)
             print(f'uploading to {port}')
             error = device_manager.upload_script(commands[0], commands[1])
             print(f"{bcolors.WARNING}{error}{bcolors.ENDC}")
@@ -558,5 +561,16 @@ if __name__ == "__main__":
             print('compiling')
             error = device_manager.compile_script(commands[0])
             print(f"{bcolors.WARNING}{error}{bcolors.ENDC}")
+        elif user_input == 'p':
+            print("Scanning available COM ports")
+            print(device_manager.scan_avaliable_ports(None))
+        elif user_input == 'b':
+            board = input('type the board type: ')
+            commands = file_manager.compile_and_upload_commands(port," ",board)
+        elif user_input =='lb':
+            with open("./Settings/boards.csv", 'r') as file:
+                csvreader = csv.reader(file)
+                for row in csvreader:
+                    print(row)
         else:
             print("please enter a valid input")
