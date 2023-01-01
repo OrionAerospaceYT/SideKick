@@ -297,11 +297,11 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.file_layout.setVisible(False)
             self.main_ui.device_layout.setVisible(False)
 
-        if (self.device_manager.device is not None) or (not self.showing_data):
+        if (self.device_manager.connected) or (not self.showing_data):
             self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
 
-        if self.device_manager.device is not None:
+        if self.device_manager.connected:
             self.main_ui.bottom_update.setText("Connected")
             self.main_ui.com_ports.setCurrentText(self.device_manager.port)
         else:
@@ -481,11 +481,11 @@ class MainGUI(qtw.QMainWindow):
 
             # If device manager has a connected device, show the data
             # otherwise the graphs shouldnt be overwritten
-            if (self.device_manager.device is not None) or (not self.showing_data):
+            if (self.device_manager.connected) or (not self.showing_data):
 
                 if not self.showing_data:
                     raw_data = []
-                if self.device_manager.device is not None:
+                if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
                     self.showing_data = False
 
