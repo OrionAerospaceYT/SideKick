@@ -88,6 +88,8 @@ class DeviceManager():
             port (string): the port to connect to
             baud (int): the baud rate of the connected device
         """
+        print("Connecting...")
+
         self.port = port
         self.raw_cummulative_data = ""
 
@@ -100,7 +102,6 @@ class DeviceManager():
         buffer = b""
 
         while self.connected:
-            print("Device is threaded...")
             try:
                 raw_data = self.device.read_all()
                 self.failed_recv = 0
@@ -141,6 +142,8 @@ class DeviceManager():
             self.device.close()
 
         self()
+
+        print("Disconnected")
 
     def terminate_device(self):
         """
