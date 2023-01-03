@@ -35,15 +35,20 @@ class SaveManager():
             raw_data (str): the raw data from com device
         """
         self.record_status = True
-        if self.record_status != self.prev_record_status:
-            self.create_new_file()
-
         save_name = f"Save{len(os.listdir(self.save_folder_path))}.txt"
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
+        if self.record_status != self.prev_record_status:
+            self.create_new_file()
+
+        with open(save_path, "r", encoding="UTF-8") as save:
+            already_saved_data = save.read().splitlines()
+
+        unsaved_data = [item for item in raw_data if item not in already_saved_data]
+
         with open(save_path, "a", encoding="UTF-8") as save:
-            if raw_data:
-                save.write(raw_data[-1])
+            for data in unsaved_data:
+                save.write(data)
                 save.write("\n")
 
         self.prev_record_status = True
