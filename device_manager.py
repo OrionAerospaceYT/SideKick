@@ -99,11 +99,11 @@ class DeviceManager():
             self.connected = True
         except serial.SerialException as error:
             self.error = error
+            return
 
         buffer = b""
 
         while self.connected:
-            print(serial.tools.list_ports.comports())
             try:
                 raw_data = self.device.read_all()
                 self.failed_recv = 0
@@ -139,7 +139,6 @@ class DeviceManager():
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
 
-        print("Triggered")
         if self.device is not None:
             self.device.close()
 
