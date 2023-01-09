@@ -26,6 +26,7 @@ class DeviceManager():
         self.device = None
         self.get_data = None
         self.port = None
+        self.error = None
 
         self.failed_recv = 0
 
@@ -40,6 +41,7 @@ class DeviceManager():
         self.device = None
         self.get_data = None
         self.port = None
+        self.error = None
 
         self.failed_recv = 0
 
@@ -88,7 +90,6 @@ class DeviceManager():
             port (string): the port to connect to
             baud (int): the baud rate of the connected device
         """
-        print("Connecting...")
 
         self.port = port
         self.raw_cummulative_data = ""
@@ -97,16 +98,16 @@ class DeviceManager():
             self.device = serial.Serial(port, baud, rtscts=True)
             self.connected = True
         except serial.SerialException as error:
-            print(error)
+            self.error = error
 
         buffer = b""
 
         while self.connected:
+            print(serial.tools.list_ports.comports())
             try:
                 raw_data = self.device.read_all()
                 self.failed_recv = 0
-            except serial.SerialException as error:
-                print(error)
+            except serial.SerialException:
                 raw_data = ""
                 self.failed_recv += 1
                 if self.failed_recv == 10:
@@ -138,12 +139,11 @@ class DeviceManager():
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
 
+        print("Triggered")
         if self.device is not None:
             self.device.close()
 
         self()
-
-        print("Disconnected")
 
     def terminate_device(self):
         """
