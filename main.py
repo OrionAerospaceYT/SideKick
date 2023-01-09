@@ -213,7 +213,7 @@ class MainGUI(qtw.QMainWindow):
 
     def update_ports(self):
         """
-        Updates all avaliable ports, removes unavaliable one
+        Updates all avaliable ports, removes unavaliable ones
         """
         ports_on_gui = [self.main_ui.com_ports.itemText(
             i) for i in range(self.main_ui.com_ports.count())]
@@ -231,7 +231,7 @@ class MainGUI(qtw.QMainWindow):
 
     def update_saves(self):
         """
-        Updates all avaliable ports, removes unavaliable one
+        Updates all avaliable saves, removes unavaliable ones
         """
         saves_on_gui = [self.main_ui.saves.itemText(
             i) for i in range(self.main_ui.saves.count())]
@@ -278,6 +278,8 @@ class MainGUI(qtw.QMainWindow):
         self.turn_on_rec_light(self.record_light.show)
 
         # compile and upload
+        if self.device_manager.error is not None:
+            self.failed_connect()
         if self.compile:
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Compiling"))
@@ -425,6 +427,14 @@ class MainGUI(qtw.QMainWindow):
         if not already_called:
             time.sleep(0.1)
             self.display_save(True)
+
+    def failed_connect(self):
+        """
+        Loads an information gui to show that the GUI has failed to connect
+        """
+
+        message = f"Error, could not connect!\n{self.device_manager.error}"
+        qtw.QMessageBox.warning(self, 'Failed connect', message)
 
     def delete_project(self):
         """
