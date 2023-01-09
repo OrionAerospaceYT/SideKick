@@ -533,8 +533,10 @@ class MainGUI(qtw.QMainWindow):
                 self.message_handler.decode_debug_message(error)
                 self.debug_window = True
 
-                time.sleep(0.25)
-                self.connect_device(port)
+                time.sleep(1)
+
+                if port in self.avaliable_port_list:
+                    self.connect_device(port)
 
                 self.upload = False
 
