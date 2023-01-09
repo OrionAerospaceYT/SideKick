@@ -280,6 +280,8 @@ class MainGUI(qtw.QMainWindow):
         # compile and upload
         if self.device_manager.error is not None:
             self.failed_connect()
+            self.device_manager()
+
         if self.compile:
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Compiling"))
