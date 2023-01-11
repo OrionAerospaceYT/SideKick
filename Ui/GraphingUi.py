@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\GraphingUi.ui'
+# Form implementation generated from reading ui file 'GraphingUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -294,9 +294,10 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.top_update = QtWidgets.QLabel(self.horizontalFrame)
-        self.top_update.setMinimumSize(QtCore.QSize(150, 0))
-        self.top_update.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.top_update.setMinimumSize(QtCore.QSize(400, 0))
+        self.top_update.setMaximumSize(QtCore.QSize(400, 16777215))
         self.top_update.setText("")
+        self.top_update.setAlignment(QtCore.Qt.AlignCenter)
         self.top_update.setObjectName("top_update")
         self.horizontalLayout.addWidget(self.top_update)
         self.help = QtWidgets.QPushButton(self.horizontalFrame)
@@ -317,6 +318,106 @@ class Ui_MainWindow(object):
         self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.terminal.setObjectName("terminal")
         self.gridLayout.addWidget(self.terminal, 1, 4, 3, 2)
+        self.device_layout = QtWidgets.QFrame(self.centralwidget)
+        self.device_layout.setMinimumSize(QtCore.QSize(200, 0))
+        self.device_layout.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.device_layout.setStyleSheet("/*General Styling*/\n"
+"* {\n"
+"   font: 10pt \"Roboto \";\n"
+"  background-color: #2b2b35;\n"
+"  color: #FFFFFF;\n"
+"  border: none;\n"
+"  border-radius:10px;\n"
+"}\n"
+"\n"
+"/*Button Styling*/\n"
+"QPushButton {\n"
+"  padding: 10px 10px;\n"
+"  text-align: center;\n"
+"  outline: none;\n"
+"  background-color: #25252f;\n"
+"  border: none;\n"
+"  border-radius: 10px;\n"
+"}\n"
+"QPushButton#disconnect {\n"
+"  image: url(Ui/Plug.png);\n"
+"  image-position: left;\n"
+"  padding-left: 10px;\n"
+"  width: 10px;\n"
+"}\n"
+"QPushButton:pressed {\n"
+"  background-color: #000;\n"
+"}\n"
+"QPushButton:hover:!pressed{\n"
+"  background-color: #151525;\n"
+"}\n"
+"\n"
+"/*Combo Box Styling*/\n"
+"QComboBox {\n"
+"  padding: 10px 10px;\n"
+"  text-align: center;\n"
+"  outline: none;\n"
+"  background-color: #25252f;\n"
+"  border: none;\n"
+"  border-radius: 10px;\n"
+"  height: 20px;\n"
+"}\n"
+"QComboBox::down-arrow {\n"
+"  image: url(Ui/D_Arrow.png);\n"
+"  image-position: right;\n"
+"  padding-right: 50px;\n"
+"  width: 50px;\n"
+"  height: 20px;\n"
+"}\n"
+"\n"
+"/*Label Styling*/\n"
+"QLabel {\n"
+"  font-size: 20px;\n"
+"  font-weight: bold;\n"
+"  padding-left: 6px;\n"
+"}")
+        self.device_layout.setObjectName("device_layout")
+        self.dhsgd = QtWidgets.QVBoxLayout(self.device_layout)
+        self.dhsgd.setContentsMargins(20, -1, 20, -1)
+        self.dhsgd.setObjectName("dhsgd")
+        self.baud_rate = QtWidgets.QComboBox(self.device_layout)
+        self.baud_rate.setObjectName("baud_rate")
+        self.baud_rate.addItem("")
+        self.baud_rate.addItem("")
+        self.baud_rate.addItem("")
+        self.baud_rate.addItem("")
+        self.dhsgd.addWidget(self.baud_rate)
+        self.supported_boards = QtWidgets.QComboBox(self.device_layout)
+        self.supported_boards.setObjectName("supported_boards")
+        self.dhsgd.addWidget(self.supported_boards)
+        self.disconnect = QtWidgets.QPushButton(self.device_layout)
+        self.disconnect.setObjectName("disconnect")
+        self.dhsgd.addWidget(self.disconnect)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dhsgd.addItem(spacerItem4)
+        self.gridLayout.addWidget(self.device_layout, 1, 2, 5, 1)
+        self.debugger = QtWidgets.QFrame(self.centralwidget)
+        self.debugger.setStyleSheet("QFrame{\n"
+"   font: 10pt \"Roboto \";\n"
+"  font-size: 14px;\n"
+"  background-color: #2b2b35;\n"
+"  color: #FFFFFF;\n"
+"  border:none;\n"
+"  border-radius:10px;\n"
+"}\n"
+"QPushButton:hover:!pressed{\n"
+"  background-color: #ff0000;\n"
+"}")
+        self.debugger.setObjectName("debugger")
+        self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
+        self.debugger_1.setObjectName("debugger_1")
+        self.quit = QtWidgets.QPushButton(self.debugger)
+        self.quit.setObjectName("quit")
+        self.debugger_1.addWidget(self.quit, 0, 1, 1, 1)
+        self.debug_log = QtWidgets.QTextBrowser(self.debugger)
+        self.debug_log.setObjectName("debug_log")
+        self.debugger_1.addWidget(self.debug_log, 0, 0, 2, 1)
+        self.gridLayout.addWidget(self.debugger, 4, 4, 1, 4)
         self.file_layout = QtWidgets.QFrame(self.centralwidget)
         self.file_layout.setEnabled(True)
         self.file_layout.setMinimumSize(QtCore.QSize(200, 0))
@@ -488,109 +589,9 @@ class Ui_MainWindow(object):
         self.show_save = QtWidgets.QPushButton(self.file_layout)
         self.show_save.setObjectName("show_save")
         self.file_menu.addWidget(self.show_save)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.file_menu.addItem(spacerItem4)
-        self.gridLayout.addWidget(self.file_layout, 1, 1, 5, 1)
-        self.device_layout = QtWidgets.QFrame(self.centralwidget)
-        self.device_layout.setMinimumSize(QtCore.QSize(200, 0))
-        self.device_layout.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.device_layout.setStyleSheet("/*General Styling*/\n"
-"* {\n"
-"   font: 10pt \"Roboto \";\n"
-"  background-color: #2b2b35;\n"
-"  color: #FFFFFF;\n"
-"  border: none;\n"
-"  border-radius:10px;\n"
-"}\n"
-"\n"
-"/*Button Styling*/\n"
-"QPushButton {\n"
-"  padding: 10px 10px;\n"
-"  text-align: center;\n"
-"  outline: none;\n"
-"  background-color: #25252f;\n"
-"  border: none;\n"
-"  border-radius: 10px;\n"
-"}\n"
-"QPushButton#disconnect {\n"
-"  image: url(Ui/Plug.png);\n"
-"  image-position: left;\n"
-"  padding-left: 10px;\n"
-"  width: 10px;\n"
-"}\n"
-"QPushButton:pressed {\n"
-"  background-color: #000;\n"
-"}\n"
-"QPushButton:hover:!pressed{\n"
-"  background-color: #151525;\n"
-"}\n"
-"\n"
-"/*Combo Box Styling*/\n"
-"QComboBox {\n"
-"  padding: 10px 10px;\n"
-"  text-align: center;\n"
-"  outline: none;\n"
-"  background-color: #25252f;\n"
-"  border: none;\n"
-"  border-radius: 10px;\n"
-"  height: 20px;\n"
-"}\n"
-"QComboBox::down-arrow {\n"
-"  image: url(Ui/D_Arrow.png);\n"
-"  image-position: right;\n"
-"  padding-right: 50px;\n"
-"  width: 50px;\n"
-"  height: 20px;\n"
-"}\n"
-"\n"
-"/*Label Styling*/\n"
-"QLabel {\n"
-"  font-size: 20px;\n"
-"  font-weight: bold;\n"
-"  padding-left: 6px;\n"
-"}")
-        self.device_layout.setObjectName("device_layout")
-        self.dhsgd = QtWidgets.QVBoxLayout(self.device_layout)
-        self.dhsgd.setContentsMargins(20, -1, 20, -1)
-        self.dhsgd.setObjectName("dhsgd")
-        self.baud_rate = QtWidgets.QComboBox(self.device_layout)
-        self.baud_rate.setObjectName("baud_rate")
-        self.baud_rate.addItem("")
-        self.baud_rate.addItem("")
-        self.baud_rate.addItem("")
-        self.baud_rate.addItem("")
-        self.dhsgd.addWidget(self.baud_rate)
-        self.supported_boards = QtWidgets.QComboBox(self.device_layout)
-        self.supported_boards.setObjectName("supported_boards")
-        self.dhsgd.addWidget(self.supported_boards)
-        self.disconnect = QtWidgets.QPushButton(self.device_layout)
-        self.disconnect.setObjectName("disconnect")
-        self.dhsgd.addWidget(self.disconnect)
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dhsgd.addItem(spacerItem5)
-        self.gridLayout.addWidget(self.device_layout, 1, 2, 5, 1)
-        self.debugger = QtWidgets.QFrame(self.centralwidget)
-        self.debugger.setStyleSheet("QFrame{\n"
-"   font: 10pt \"Roboto \";\n"
-"  font-size: 14px;\n"
-"  background-color: #2b2b35;\n"
-"  color: #FFFFFF;\n"
-"  border:none;\n"
-"  border-radius:10px;\n"
-"}\n"
-"QPushButton:hover:!pressed{\n"
-"  background-color: #ff0000;\n"
-"}")
-        self.debugger.setObjectName("debugger")
-        self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
-        self.debugger_1.setObjectName("debugger_1")
-        self.quit = QtWidgets.QPushButton(self.debugger)
-        self.quit.setObjectName("quit")
-        self.debugger_1.addWidget(self.quit, 0, 1, 1, 1)
-        self.debug_log = QtWidgets.QTextBrowser(self.debugger)
-        self.debug_log.setObjectName("debug_log")
-        self.debugger_1.addWidget(self.debug_log, 0, 0, 2, 1)
-        self.gridLayout.addWidget(self.debugger, 4, 4, 1, 4)
+        self.file_menu.addItem(spacerItem5)
+        self.gridLayout.addWidget(self.file_layout, 1, 1, 5, 1)
         self.gridLayout.setColumnStretch(4, 3)
         self.gridLayout.setColumnStretch(6, 5)
         self.gridLayout.setRowStretch(1, 1)
@@ -610,17 +611,17 @@ class Ui_MainWindow(object):
         self.compile.setText(_translate("MainWindow", "Compile"))
         self.record.setText(_translate("MainWindow", "Record"))
         self.help.setText(_translate("MainWindow", "Help"))
-        self.select_project.setItemText(0, _translate("MainWindow", "Select Project"))
-        self.saves.setItemText(0, _translate("MainWindow", "Select Save"))
-        self.delete_project.setText(_translate("MainWindow", "Delete Project"))
-        self.library_manager.setText(_translate("MainWindow", "Library Manager"))
-        self.show_save.setText(_translate("MainWindow", "Show Save"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
         self.baud_rate.setItemText(2, _translate("MainWindow", "38400"))
         self.baud_rate.setItemText(3, _translate("MainWindow", "9200"))
         self.disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.quit.setText(_translate("MainWindow", "x"))
+        self.select_project.setItemText(0, _translate("MainWindow", "Select Project"))
+        self.saves.setItemText(0, _translate("MainWindow", "Select Save"))
+        self.delete_project.setText(_translate("MainWindow", "Delete Project"))
+        self.library_manager.setText(_translate("MainWindow", "Library Manager"))
+        self.show_save.setText(_translate("MainWindow", "Show Save"))
 
 
 if __name__ == "__main__":
