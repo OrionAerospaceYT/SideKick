@@ -399,18 +399,21 @@ QScrollArea {
           <widget class="QLabel" name="top_update">
            <property name="minimumSize">
             <size>
-             <width>150</width>
+             <width>400</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>400</width>
              <height>16777215</height>
             </size>
            </property>
            <property name="text">
             <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -470,6 +473,163 @@ QScrollArea {
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
+       </widget>
+      </item>
+      <item row="1" column="2" rowspan="5">
+       <widget class="QFrame" name="device_layout">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/*General Styling*/
+* {
+   font: 10pt &quot;Roboto &quot;;
+  background-color: #2b2b35;
+  color: #FFFFFF;
+  border: none;
+  border-radius:10px;
+}
+
+/*Button Styling*/
+QPushButton {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #25252f;
+  border: none;
+  border-radius: 10px;
+}
+QPushButton#disconnect {
+  image: url(Ui/Plug.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
+}
+QPushButton:pressed {
+  background-color: #000;
+}
+QPushButton:hover:!pressed{
+  background-color: #151525;
+}
+
+/*Combo Box Styling*/
+QComboBox {
+  padding: 10px 10px;
+  text-align: center;
+  outline: none;
+  background-color: #25252f;
+  border: none;
+  border-radius: 10px;
+  height: 20px;
+}
+QComboBox::down-arrow {
+  image: url(Ui/D_Arrow.png);
+  image-position: right;
+  padding-right: 50px;
+  width: 50px;
+  height: 20px;
+}
+
+/*Label Styling*/
+QLabel {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 6px;
+}</string>
+        </property>
+        <layout class="QVBoxLayout" name="dhsgd">
+         <property name="leftMargin">
+          <number>20</number>
+         </property>
+         <property name="rightMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QComboBox" name="baud_rate">
+           <item>
+            <property name="text">
+             <string>115200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>57600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>38400</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>9200</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="supported_boards"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="disconnect">
+           <property name="text">
+            <string>Disconnect</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="4" colspan="4">
+       <widget class="QFrame" name="debugger">
+        <property name="styleSheet">
+         <string notr="true">QFrame{
+   font: 10pt &quot;Roboto &quot;;
+  font-size: 14px;
+  background-color: #2b2b35;
+  color: #FFFFFF;
+  border:none;
+  border-radius:10px;
+}
+QPushButton:hover:!pressed{
+  background-color: #ff0000;
+}</string>
+        </property>
+        <layout class="QGridLayout" name="debugger_1">
+         <item row="0" column="1">
+          <widget class="QPushButton" name="quit">
+           <property name="text">
+            <string>x</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" rowspan="2">
+          <widget class="QTextBrowser" name="debug_log"/>
+         </item>
+        </layout>
        </widget>
       </item>
       <item row="1" column="1" rowspan="5">
@@ -697,163 +857,6 @@ QScrollArea {
             </size>
            </property>
           </spacer>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="2" rowspan="5">
-       <widget class="QFrame" name="device_layout">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">/*General Styling*/
-* {
-   font: 10pt &quot;Roboto &quot;;
-  background-color: #2b2b35;
-  color: #FFFFFF;
-  border: none;
-  border-radius:10px;
-}
-
-/*Button Styling*/
-QPushButton {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #25252f;
-  border: none;
-  border-radius: 10px;
-}
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
-QPushButton:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Combo Box Styling*/
-QComboBox {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #25252f;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
-}
-
-/*Label Styling*/
-QLabel {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 6px;
-}</string>
-        </property>
-        <layout class="QVBoxLayout" name="dhsgd">
-         <property name="leftMargin">
-          <number>20</number>
-         </property>
-         <property name="rightMargin">
-          <number>20</number>
-         </property>
-         <item>
-          <widget class="QComboBox" name="baud_rate">
-           <item>
-            <property name="text">
-             <string>115200</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>57600</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>38400</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>9200</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="supported_boards"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="disconnect">
-           <property name="text">
-            <string>Disconnect</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="4" column="4" colspan="4">
-       <widget class="QFrame" name="debugger">
-        <property name="styleSheet">
-         <string notr="true">QFrame{
-   font: 10pt &quot;Roboto &quot;;
-  font-size: 14px;
-  background-color: #2b2b35;
-  color: #FFFFFF;
-  border:none;
-  border-radius:10px;
-}
-QPushButton:hover:!pressed{
-  background-color: #ff0000;
-}</string>
-        </property>
-        <layout class="QGridLayout" name="debugger_1">
-         <item row="0" column="1">
-          <widget class="QPushButton" name="quit">
-           <property name="text">
-            <string>x</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" rowspan="2">
-          <widget class="QTextBrowser" name="debug_log"/>
          </item>
         </layout>
        </widget>
