@@ -90,7 +90,6 @@ class DeviceManager():
             port (string): the port to connect to
             baud (int): the baud rate of the connected device
         """
-
         self.port = port
         self.raw_cummulative_data = ""
 
@@ -98,7 +97,7 @@ class DeviceManager():
             self.device = serial.Serial(port, baud, rtscts=True)
             self.connected = True
         except serial.SerialException as error:
-            self.error = error
+            self.error = str(error).replace("(","\n").replace(")","\n")
             return
 
         buffer = b""
@@ -164,6 +163,7 @@ class DeviceManager():
             port (string): the com port the device is connected to e.g. "COM1"
             baud (int): the baud rate of the connected board
         """
+        self()
 
         self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud),)
         self.get_data.start()
