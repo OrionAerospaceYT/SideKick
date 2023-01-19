@@ -17,6 +17,7 @@ class SaveManager():
         self.prev_record_status = False
         self.save_folder_path = ""
         self.sep = ""
+        self.prev_save_data = []
 
     def create_new_file(self):
         """
@@ -56,6 +57,7 @@ class SaveManager():
                 save.write("\n")
 
         self.prev_record_status = True
+        self.prev_save_data = raw_data
 
     def stop_save(self):
         """
