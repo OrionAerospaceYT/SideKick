@@ -184,6 +184,26 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.main_ui.record_light.setStyleSheet("")
 
+    def update_compile_and_upload(self):
+        """
+        Updates the top label while uploading or compiling
+        """
+
+        if self.compile:
+            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
+            self.main_ui.top_update.setText(
+                self.message_handler.get_status("Compiling"))
+        elif self.upload:
+            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
+            self.main_ui.top_update.setText(
+                self.message_handler.get_status("Uploading"))
+        elif self.device_manager.error is not None:
+            self.main_ui.top_update.setStyleSheet("QLabel{font-size:10pt}")
+            self.main_ui.top_update.setText(
+                f"Error, could not connect!\n{self.device_manager.error}")
+        else:
+            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
+            self.main_ui.top_update.setText("")
 
     def update_ports(self):
         """
@@ -253,22 +273,7 @@ class MainGUI(qtw.QMainWindow):
         # record light
         self.turn_on_rec_light(self.record_light.show)
 
-        # compile and upload
-        if self.compile:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
-            self.main_ui.top_update.setText(
-                self.message_handler.get_status("Compiling"))
-        elif self.upload:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
-            self.main_ui.top_update.setText(
-                self.message_handler.get_status("Uploading"))
-        elif self.device_manager.error is not None:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:10pt}")
-            self.main_ui.top_update.setText(
-                f"Error, could not connect!\n{self.device_manager.error}")
-        else:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
-            self.main_ui.top_update.setText("")
+        self.update_compile_and_upload()
 
         if self.device_manager_window:
             self.main_ui.device_layout.setVisible(True)
