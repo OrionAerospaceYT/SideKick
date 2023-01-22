@@ -772,7 +772,7 @@ QLineEdit:hover:!pressed{
 
 /*Label Styling*/
 QLabel {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
   padding-left: 6px;
 }
@@ -804,16 +804,50 @@ QScrollArea {
           <number>20</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="project_name"/>
+          <widget class="QPushButton" name="select_project">
+           <property name="text">
+            <string>Select Project</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="select_project">
-           <item>
-            <property name="text">
-             <string>Select Project</string>
-            </property>
-           </item>
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Selected Project</string>
+           </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QComboBox" name="saves">
