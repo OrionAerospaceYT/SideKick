@@ -72,7 +72,6 @@ class MainGUI(qtw.QMainWindow):
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
-        self.main_ui.project_name.setPlaceholderText("Enter projct name here.")
         self.main_ui.message.setPlaceholderText("Enter message here.")
         self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
         self.add_supported_boards()
@@ -104,7 +103,6 @@ class MainGUI(qtw.QMainWindow):
         self.board, self.project = self.file_manager.load_options()
 
         self.main_ui.supported_boards.setCurrentText(self.board)
-        self.main_ui.select_project.setCurrentText(self.project)
 
         timer = qtc.QTimer(self)
         timer.setInterval(25)
@@ -142,7 +140,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.show_save.clicked.connect(self.display_save)
         self.main_ui.delete_project.clicked.connect(self.delete_project)
         self.main_ui.message.returnPressed.connect(self.send)
-        self.main_ui.project_name.returnPressed.connect(self.new_project)
+        self.main_ui.select_project.clicked.connect(self.open_file)
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
 
@@ -185,31 +183,6 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.main_ui.record_light.setStyleSheet("")
 
-    def update_projects(self):
-        """
-        Updates the current projects window so it shows all projects in the project folder.
-        """
-        selected_project = self.main_ui.select_project.currentText()
-        projects_on_gui = [self.main_ui.select_project.itemText(
-            i) for i in range(self.main_ui.select_project.count())]
-
-        # add new items
-        for project in self.current_projects:
-            if project not in projects_on_gui:
-                self.main_ui.select_project.addItem(project)
-
-        # remove old items
-        for project in projects_on_gui:
-            if project not in self.current_projects:
-                target = self.main_ui.select_project.findText(project)
-                self.main_ui.select_project.removeItem(target)
-
-        # checks if the project is in the current projects are
-        # either selected or from the settings.txt
-        if selected_project in self.current_projects:
-            self.main_ui.select_project.setCurrentText(selected_project)
-        elif self.project in self.current_projects:
-            self.main_ui.select_project.setCurrentText(self.project)
 
     def update_ports(self):
         """
@@ -260,7 +233,6 @@ class MainGUI(qtw.QMainWindow):
 
         # update functions
         self.update_ports()
-        self.update_projects()
         self.update_saves()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
@@ -467,6 +439,14 @@ class MainGUI(qtw.QMainWindow):
         """
         webbrowser.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
+    def open_file(self):
+        """
+        Opens a file explorer window
+        """
+        filename, _ =  qtw.QFileDialog.getOpenFileName(
+            self, "Open SideKick project", directory=self.file_manager.projects_path)
+        print(filename)
+
     def threaded_backend(self):
         """
         All backend tasks that need to be performed continually
@@ -554,7 +534,7 @@ if __name__ == "__main__":
     main_gui.message_handler.terminate_ellipsis()
     RUNNING = False
 
-    project_selected = main_gui.main_ui.select_project.currentText()
+    # project_selected = main_gui.main_ui.select_project.currentText()
     board_selected = main_gui.main_ui.supported_boards.currentText()
 
-    main_gui.file_manager.save_options(board_selected, project_selected)
+    # main_gui.file_manager.save_options(board_selected, project_selected)
