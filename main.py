@@ -100,9 +100,10 @@ class MainGUI(qtw.QMainWindow):
             target=self.threaded_backend, args=(),)
         threaded_backend_loop.start()
 
-        self.board, self.project = self.file_manager.load_options()
+        board, project = self.file_manager.load_options()
 
-        self.main_ui.supported_boards.setCurrentText(self.board)
+        self.main_ui.supported_boards.setCurrentText(board)
+        self.file_manager.current_project = project
 
         timer = qtc.QTimer(self)
         timer.setInterval(25)
@@ -231,6 +232,9 @@ class MainGUI(qtw.QMainWindow):
         calls all update functions
         """
 
+        # set labels
+        self.main_ui.selected_project.setText(self.file_manager.current_project)
+
         # update functions
         self.update_ports()
         self.update_saves()
@@ -355,7 +359,7 @@ class MainGUI(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
-        project = self.main_ui.select_project.currentText()
+        project = self.file_manager.current_project
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
@@ -370,7 +374,7 @@ class MainGUI(qtw.QMainWindow):
         Compiles the script
         """
 
-        project = self.main_ui.select_project.currentText()
+        project = self.file_manager.current_project
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
@@ -443,9 +447,9 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens a file explorer window
         """
-        filename, _ =  qtw.QFileDialog.getOpenFileName(
-            self, "Open SideKick project", directory=self.file_manager.projects_path)
-        print(filename)
+        file_path, _ =  qtw.QFileDialog.getOpenFileName(
+            self, "Open SideKick project", self.file_manager.projects_path, "Arduino Files (*.ino)")
+        self.file_manager.set_current_project(file_path)
 
     def threaded_backend(self):
         """
@@ -534,7 +538,7 @@ if __name__ == "__main__":
     main_gui.message_handler.terminate_ellipsis()
     RUNNING = False
 
-    # project_selected = main_gui.main_ui.select_project.currentText()
+    project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
 
-    # main_gui.file_manager.save_options(board_selected, project_selected)
+    main_gui.file_manager.save_options(board_selected, project_selected)
