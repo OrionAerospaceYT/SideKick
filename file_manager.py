@@ -103,6 +103,7 @@ class FileManager():
         self.save_manager = SaveManager()
         self.dev = dev
         self.consci_os_path = consci_os_path
+        self.current_project = ""
 
         # Initialise for each OS
         if self.operating_system == "Windows":
@@ -384,3 +385,19 @@ upload -p {port} --fqbn {board} \"{project_path}\""
                         project = project.strip()
 
         return board, project
+
+    def set_current_project(self, file_path):
+        """
+        Sets the current_project variable
+
+        Args:
+            file_path (str): the file path to the .ino file
+        """
+
+        try:
+            if self.sep != "\\":
+                self.current_project = file_path.split(self.sep)[-2]
+            else:
+                self.current_project = file_path.split("/")[-2]
+        except IndexError():
+            pass
