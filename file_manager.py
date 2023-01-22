@@ -314,7 +314,6 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         if self.dev:
-            self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
             self.move_libraries(self.consci_os_path)
 
         compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
