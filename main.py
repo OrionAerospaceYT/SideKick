@@ -253,7 +253,7 @@ class MainGUI(qtw.QMainWindow):
         """
 
         # set labels
-        self.main_ui.selected_project.setText(self.file_manager.current_project)
+        self.main_ui.selected_project.setText(self.file_manager.parsed_project_name())
 
         # update functions
         self.update_ports()
@@ -364,13 +364,11 @@ class MainGUI(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
-        project = self.file_manager.current_project
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(
-            port, project, board)
+        self.commands = self.file_manager.compile_and_upload_commands(port, board)
 
         self.upload = True
 
@@ -379,13 +377,11 @@ class MainGUI(qtw.QMainWindow):
         Compiles the script
         """
 
-        project = self.file_manager.current_project
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(
-            port, project, board)
+        self.commands = self.file_manager.compile_and_upload_commands(port, board)
 
         self.compile = True
 

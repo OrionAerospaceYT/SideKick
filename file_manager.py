@@ -301,7 +301,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
         shutil.rmtree(f"{self.projects_path}{self.sep}{name}")
 
-    def compile_and_upload_commands(self, port, project, board):
+    def compile_and_upload_commands(self, port, board):
         """
         Compiles and uploads the script
 
@@ -313,17 +313,15 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             list: with [compile (string), upload (string)]
         """
 
-        project_path = f"{self.projects_path}{self.sep}{project}{self.sep}{project}.ino"
-
         if self.dev:
-            project_path = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
+            self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
             self.move_libraries(self.consci_os_path)
 
         compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
-compile --fqbn {board} \"{project_path}\""
+compile --fqbn {board} \"{self.current_project}\""
 
         upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
-upload -p {port} --fqbn {board} \"{project_path}\""
+upload -p {port} --fqbn {board} \"{self.current_project}\""
 
         return [compile_msg, upload_msg]
 
@@ -399,5 +397,23 @@ upload -p {port} --fqbn {board} \"{project_path}\""
                 self.current_project = file_path.split(self.sep)[-2]
             else:
                 self.current_project = file_path.split("/")[-2]
-        except IndexError():
+
+            self.current_project = file_path
+        except IndexError:
             pass
+
+    def parsed_project_name(self):
+        """
+        Removes all of the file directory info from the name
+
+        Returns:
+            str: the name to be displayed on the GUI
+        """
+
+        try:
+            if self.sep != "\\":
+                return self.current_project.split(self.sep)[-2]
+            else:
+                return self.current_project.split("/")[-2]
+        except IndexError:
+            return ""
