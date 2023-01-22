@@ -295,22 +295,22 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.main_ui.bottom_update.setText("Not Connected")
 
-    def new_project(self):
-        """
-        creates the new project in the SK Projects folder
-        sends a message to the screen if no name is entered or an invalid one
-        sets the text of the project_name entry to ""
-        """
-
-        project_name = self.main_ui.project_name.text()
-        if project_name == "":
-            return
-        if project_name in self.file_manager.get_all_projects():
-            return
-
-        self.file_manager.add_new_project(project_name)
-
-        project_name = self.main_ui.project_name.setText("")
+    #def new_project(self):
+    #    """
+    #    creates the new project in the SK Projects folder
+    #    sends a message to the screen if no name is entered or an invalid one
+    #    sets the text of the project_name entry to ""
+    #    """
+    #
+    #    project_name = self.main_ui.project_name.text()
+    #    if project_name == "":
+    #        return
+    #    if project_name in self.file_manager.get_all_projects():
+    #        return
+    #
+    #    self.file_manager.add_new_project(project_name)
+    #
+    #    project_name = self.main_ui.project_name.setText("")
 
     def connect_device(self, port):
         """
