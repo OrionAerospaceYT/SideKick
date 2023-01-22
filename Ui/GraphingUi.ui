@@ -827,7 +827,7 @@ QScrollArea {
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="selected_project">
            <property name="text">
             <string>Selected Project</string>
            </property>
