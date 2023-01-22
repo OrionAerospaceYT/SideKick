@@ -412,8 +412,10 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
 
         try:
             if self.sep != "\\":
-                return self.current_project.split(self.sep)[-2]
+                name = self.current_project.split(self.sep)[-2]
             else:
-                return self.current_project.split("/")[-2]
+                name = self.current_project.split("/")[-2]
         except IndexError:
-            return ""
+            name = ""
+
+        return name
