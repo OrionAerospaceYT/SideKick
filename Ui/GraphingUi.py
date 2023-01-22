@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'GraphingUi.ui'
+# Form implementation generated from reading ui file '.\GraphingUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -544,7 +544,7 @@ class Ui_MainWindow(object):
 "\n"
 "/*Label Styling*/\n"
 "QLabel {\n"
-"  font-size: 20px;\n"
+"  font-size: 15px;\n"
 "  font-weight: bold;\n"
 "  padding-left: 6px;\n"
 "}\n"
@@ -569,13 +569,16 @@ class Ui_MainWindow(object):
         self.file_menu.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         self.file_menu.setContentsMargins(20, -1, 20, -1)
         self.file_menu.setObjectName("file_menu")
-        self.project_name = QtWidgets.QLineEdit(self.file_layout)
-        self.project_name.setObjectName("project_name")
-        self.file_menu.addWidget(self.project_name)
-        self.select_project = QtWidgets.QComboBox(self.file_layout)
+        self.select_project = QtWidgets.QPushButton(self.file_layout)
         self.select_project.setObjectName("select_project")
-        self.select_project.addItem("")
         self.file_menu.addWidget(self.select_project)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.file_menu.addItem(spacerItem5)
+        self.label = QtWidgets.QLabel(self.file_layout)
+        self.label.setObjectName("label")
+        self.file_menu.addWidget(self.label)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.file_menu.addItem(spacerItem6)
         self.saves = QtWidgets.QComboBox(self.file_layout)
         self.saves.setObjectName("saves")
         self.saves.addItem("")
@@ -589,8 +592,8 @@ class Ui_MainWindow(object):
         self.show_save = QtWidgets.QPushButton(self.file_layout)
         self.show_save.setObjectName("show_save")
         self.file_menu.addWidget(self.show_save)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.file_menu.addItem(spacerItem5)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.file_menu.addItem(spacerItem7)
         self.gridLayout.addWidget(self.file_layout, 1, 1, 5, 1)
         self.gridLayout.setColumnStretch(4, 3)
         self.gridLayout.setColumnStretch(6, 5)
@@ -617,7 +620,8 @@ class Ui_MainWindow(object):
         self.baud_rate.setItemText(3, _translate("MainWindow", "9200"))
         self.disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.quit.setText(_translate("MainWindow", "x"))
-        self.select_project.setItemText(0, _translate("MainWindow", "Select Project"))
+        self.select_project.setText(_translate("MainWindow", "Select Project"))
+        self.label.setText(_translate("MainWindow", "Selected Project"))
         self.saves.setItemText(0, _translate("MainWindow", "Select Save"))
         self.delete_project.setText(_translate("MainWindow", "Delete Project"))
         self.library_manager.setText(_translate("MainWindow", "Library Manager"))
