@@ -165,3 +165,4 @@ dmypy.json
 cython_debug/
 Installer/Setup.ipf
 Settings/settings.txt
+*.txt
