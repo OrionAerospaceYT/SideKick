@@ -687,12 +687,6 @@ QPushButton#help {
   padding-left: 10px;
   width: 10px;
 }
-QPushButton#new_project {
-  image: url(Ui/Folder.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
 QPushButton#disconnect {
   image: url(Ui/Plug.png);
   image-position: left;
@@ -807,6 +801,13 @@ QScrollArea {
           <widget class="QPushButton" name="select_project">
            <property name="text">
             <string>Select Project</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="new_project">
+           <property name="text">
+            <string>New Project</string>
            </property>
           </widget>
          </item>
