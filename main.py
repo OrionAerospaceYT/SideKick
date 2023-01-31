@@ -142,6 +142,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.delete_project.clicked.connect(self.delete_project)
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.select_project.clicked.connect(self.open_file)
+        self.main_ui.new_project.clicked.connect(self.new_project)
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
 
@@ -295,22 +296,15 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.main_ui.bottom_update.setText("Not Connected")
 
-    #def new_project(self):
-    #    """
-    #    creates the new project in the SK Projects folder
-    #    sends a message to the screen if no name is entered or an invalid one
-    #    sets the text of the project_name entry to ""
-    #    """
-    #
-    #    project_name = self.main_ui.project_name.text()
-    #    if project_name == "":
-    #        return
-    #    if project_name in self.file_manager.get_all_projects():
-    #        return
-    #
-    #    self.file_manager.add_new_project(project_name)
-    #
-    #    project_name = self.main_ui.project_name.setText("")
+    def new_project(self):
+        """
+        Gets the directory URL from getExistingDirectoryUrl with a
+        QFileDialog and then creates a sidekick project in that directory.
+        TODO
+        """
+        file_path =  qtw.QFileDialog.getExistingDirectoryUrl(
+            self, "Create SideKick project")
+        file_path = file_path.toString().split("///")[1]
 
     def connect_device(self, port):
         """
