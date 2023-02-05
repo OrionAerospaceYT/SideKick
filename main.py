@@ -302,9 +302,9 @@ class MainGUI(qtw.QMainWindow):
         QFileDialog and then creates a sidekick project in that directory.
         TODO
         """
-        file_path =  qtw.QFileDialog.getExistingDirectoryUrl(
-            self, "Create SideKick project")
-        file_path = file_path.toString().split("///")[1]
+        folder_path = qtw.QFileDialog.getSaveFileName(self, 'Create Folder', '', 'Folders (*)')[0]
+
+        print(f"Folder Path: {folder_path}")
 
     def connect_device(self, port):
         """
