@@ -544,7 +544,14 @@ QLabel {
   font-size: 20px;
   font-weight: bold;
   padding-left: 6px;
-}</string>
+}
+QLabel#logo_2{
+  background-color: #2b2b35;
+  image: url(Ui/SideKick_Logo.png);
+  width:100px;
+  height:40px;
+}
+</string>
         </property>
         <layout class="QVBoxLayout" name="dhsgd">
          <property name="leftMargin">
@@ -553,6 +560,41 @@ QLabel {
          <property name="rightMargin">
           <number>20</number>
          </property>
+         <item>
+          <widget class="QLabel" name="logo_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QComboBox" name="baud_rate">
            <item>

@@ -375,11 +375,26 @@ class Ui_MainWindow(object):
 "  font-size: 20px;\n"
 "  font-weight: bold;\n"
 "  padding-left: 6px;\n"
-"}")
+"}\n"
+"QLabel#logo_2{\n"
+"  background-color: #2b2b35;\n"
+"  image: url(Ui/SideKick_Logo.png);\n"
+"  width:100px;\n"
+"  height:40px;\n"
+"}\n"
+"")
         self.device_layout.setObjectName("device_layout")
         self.dhsgd = QtWidgets.QVBoxLayout(self.device_layout)
         self.dhsgd.setContentsMargins(20, -1, 20, -1)
         self.dhsgd.setObjectName("dhsgd")
+        self.logo_2 = QtWidgets.QLabel(self.device_layout)
+        self.logo_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.logo_2.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.logo_2.setText("")
+        self.logo_2.setObjectName("logo_2")
+        self.dhsgd.addWidget(self.logo_2)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem4)
         self.baud_rate = QtWidgets.QComboBox(self.device_layout)
         self.baud_rate.setObjectName("baud_rate")
         self.baud_rate.addItem("")
@@ -393,8 +408,8 @@ class Ui_MainWindow(object):
         self.disconnect = QtWidgets.QPushButton(self.device_layout)
         self.disconnect.setObjectName("disconnect")
         self.dhsgd.addWidget(self.disconnect)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dhsgd.addItem(spacerItem4)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dhsgd.addItem(spacerItem5)
         self.gridLayout.addWidget(self.device_layout, 1, 2, 5, 1)
         self.debugger = QtWidgets.QFrame(self.centralwidget)
         self.debugger.setStyleSheet("QFrame{\n"
@@ -575,13 +590,13 @@ class Ui_MainWindow(object):
         self.logo.setText("")
         self.logo.setObjectName("logo")
         self.file_menu.addWidget(self.logo)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.file_menu.addItem(spacerItem5)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.file_menu.addItem(spacerItem6)
         self.selected_project = QtWidgets.QLabel(self.file_layout)
         self.selected_project.setObjectName("selected_project")
         self.file_menu.addWidget(self.selected_project)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.file_menu.addItem(spacerItem6)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.file_menu.addItem(spacerItem7)
         self.select_project = QtWidgets.QPushButton(self.file_layout)
         self.select_project.setObjectName("select_project")
         self.file_menu.addWidget(self.select_project)
@@ -594,8 +609,8 @@ class Ui_MainWindow(object):
         self.library_manager = QtWidgets.QPushButton(self.file_layout)
         self.library_manager.setObjectName("library_manager")
         self.file_menu.addWidget(self.library_manager)
-        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.file_menu.addItem(spacerItem7)
+        spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.file_menu.addItem(spacerItem8)
         self.gridLayout.addWidget(self.file_layout, 1, 1, 5, 1)
         self.gridLayout.setColumnStretch(4, 3)
         self.gridLayout.setColumnStretch(6, 5)
