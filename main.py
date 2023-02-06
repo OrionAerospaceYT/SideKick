@@ -139,7 +139,6 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
         self.main_ui.show_save.clicked.connect(self.display_save)
-        self.main_ui.delete_project.clicked.connect(self.delete_project)
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.select_project.clicked.connect(self.open_file)
         self.main_ui.new_project.clicked.connect(self.new_project)
@@ -304,7 +303,8 @@ class MainGUI(qtw.QMainWindow):
         """
         folder_path = qtw.QFileDialog.getSaveFileName(self, 'Create Folder', '', 'Folders (*)')[0]
 
-        print(f"Folder Path: {folder_path}")
+        if folder_path:
+            print(f"Folder Path: {folder_path}")
 
     def connect_device(self, port):
         """
@@ -403,20 +403,6 @@ class MainGUI(qtw.QMainWindow):
         if not already_called:
             time.sleep(0.1)
             self.display_save(True)
-
-    def delete_project(self):
-        """
-        Calls the delete project function in file manager after
-        checking that the user wants to with a warning pop up
-        """
-        project_name = self.main_ui.select_project.currentText()
-
-        message = f"Are you sure you want to delete:\n{project_name}"
-        ret = qtw.QMessageBox.warning(self, 'Delete warning', message,
-            qtw.QMessageBox.Yes | qtw.QMessageBox.No)
-
-        if ret == qtw.QMessageBox.Yes:
-            self.file_manager.remove_project(project_name)
 
     def close_debug_window(self):
         """
