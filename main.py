@@ -373,7 +373,7 @@ class MainGUI(qtw.QMainWindow):
 
         save, _ =  qtw.QFileDialog.getOpenFileName(
             self, "Open SideKick project", self.file_manager.projects_path, "Save Files (*.txt)")
-        
+
         if not save:
             return
 
