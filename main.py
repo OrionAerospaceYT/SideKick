@@ -223,24 +223,6 @@ class MainGUI(qtw.QMainWindow):
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
 
-    def update_saves(self):
-        """
-        Updates all avaliable saves, removes unavaliable ones
-        """
-        saves_on_gui = [self.main_ui.saves.itemText(
-            i) for i in range(self.main_ui.saves.count())]
-
-        # adds new items
-        for save in self.current_saves:
-            if save not in saves_on_gui:
-                self.main_ui.saves.addItem(save)
-
-        # removes old items
-        for save in saves_on_gui:
-            if save not in self.current_saves:
-                target = self.main_ui.saves.findText(save)
-                self.main_ui.saves.removeItem(target)
-
     def update_terminal(self):
         """
         updates the html of the terminal
@@ -257,7 +239,6 @@ class MainGUI(qtw.QMainWindow):
 
         # update functions
         self.update_ports()
-        self.update_saves()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
 
@@ -301,7 +282,8 @@ class MainGUI(qtw.QMainWindow):
         QFileDialog and then creates a sidekick project in that directory.
         TODO
         """
-        folder_path = qtw.QFileDialog.getSaveFileName(self, 'Create Folder', '', 'Folders (*)')[0]
+        folder_path = qtw.QFileDialog.getSaveFileName(self,
+                            'Create Folder', self.file_manager.projects_path, 'Folders (*)')[0]
 
         if folder_path:
             print(f"Folder Path: {folder_path}")
