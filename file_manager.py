@@ -66,14 +66,14 @@ class SaveManager():
         self.record_status = False
         self.prev_record_status = False
 
-    def get_saved_data(self, file_name):
+    def get_saved_data(self, file_dir):
         """
         loads the file and gets all data from it
 
         Returns:
             list: the saved raw data
         """
-        with open(f"{self.save_folder_path}{self.sep}{file_name}", "r", encoding="UTF-8") as save:
+        with open(file_dir, "r", encoding="UTF-8") as save:
             data = save.readlines()
 
         return [item.strip() for item in data]
