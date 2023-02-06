@@ -371,7 +371,12 @@ class MainGUI(qtw.QMainWindow):
         """
         self.showing_data = True
 
-        save = self.main_ui.saves.currentText()
+        save, _ =  qtw.QFileDialog.getOpenFileName(
+            self, "Open SideKick project", self.file_manager.projects_path, "Save Files (*.txt)")
+        
+        if not save:
+            return
+
         raw_data = self.file_manager.save_manager.get_saved_data(save)
 
         self.message_handler.get_terminal(raw_data, live=False)
