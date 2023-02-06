@@ -282,11 +282,10 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         Args:
             name (string): the name of the new project from the line edit
         """
-        if name in os.listdir(self.projects_path):
-            return
+        os.mkdir(name)
 
         source = f"{self.path}{self.sep}ConsciOS{self.sep}Source"
-        destination = f"{self.projects_path}{self.sep}{name}"
+        destination = f"\"{name}\""
         shutil.copytree(source, destination)
 
         os.rename(f"{self.projects_path}{self.sep}{name}{self.sep}Source.ino",
