@@ -361,7 +361,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.compile = True
 
-    def display_save(self, already_called=False):
+    def display_save(self, already_called=False, save=None):
         """
         Loads the saved data onto the graphs on the GUI
 
@@ -371,11 +371,13 @@ class MainGUI(qtw.QMainWindow):
         """
         self.showing_data = True
 
-        save, _ =  qtw.QFileDialog.getOpenFileName(
-            self, "Open SideKick project", self.file_manager.projects_path, "Save Files (*.txt)")
+        if not already_called:
+            save, _ =  qtw.QFileDialog.getOpenFileName(
+                self, "Open SideKick project", self.file_manager.save_manager.save_folder_path,
+                "Save Files (*.txt)")
 
         if not save:
-            return
+            print(f"No save in the location, {save}")
 
         raw_data = self.file_manager.save_manager.get_saved_data(save)
 
@@ -389,7 +391,7 @@ class MainGUI(qtw.QMainWindow):
 
         if not already_called:
             time.sleep(0.1)
-            self.display_save(True)
+            self.display_save(True, save)
 
     def close_debug_window(self):
         """
