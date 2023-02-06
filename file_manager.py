@@ -135,7 +135,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
 {self.sep}library_index.json"
 
         else:
-            raise Exception("Invalis OS. Shutting down.")
+            raise OSError("Invalis OS. Shutting down.")
 
         # Definitions for frequently used paths
         self.documents_path = f"{inc}{self.user}{self.sep}{documents}"
