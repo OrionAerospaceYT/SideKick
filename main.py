@@ -376,10 +376,10 @@ class MainGUI(qtw.QMainWindow):
                 self, "Open SideKick project", self.file_manager.save_manager.save_folder_path,
                 "Save Files (*.txt)")
 
-        if not save:
+        if save:
+            raw_data = self.file_manager.save_manager.get_saved_data(save)
+        else:
             print(f"No save in the location, {save}")
-
-        raw_data = self.file_manager.save_manager.get_saved_data(save)
 
         self.message_handler.get_terminal(raw_data, live=False)
         self.top_graph.set_graph_data(raw_data)
@@ -419,7 +419,9 @@ class MainGUI(qtw.QMainWindow):
         """
         file_path, _ =  qtw.QFileDialog.getOpenFileName(
             self, "Open SideKick project", self.file_manager.projects_path, "Arduino Files (*.ino)")
-        self.file_manager.set_current_project(file_path)
+
+        if file_path:
+            self.file_manager.set_current_project(file_path)
 
     def threaded_backend(self):
         """
@@ -457,7 +459,9 @@ class MainGUI(qtw.QMainWindow):
                 self.bottom_graph.set_graph_data(raw_data)
 
             if self.record_light.blinking:
-                self.file_manager.save_manager.save_data(raw_data)
+                change = self.device_manager.change_in_data_len
+                self.file_manager.save_manager.save_data(raw_data, change)
+                self.device_manager.reset_difference()
             else:
                 self.file_manager.save_manager.stop_save()
 

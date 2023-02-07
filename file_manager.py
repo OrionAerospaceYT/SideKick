@@ -28,7 +28,7 @@ class SaveManager():
                     encoding="UTF-8"):
             pass
 
-    def save_data(self, raw_data):
+    def save_data(self, raw_data, change_in_len):
         """
         saves the raw data to the latest save_file
 
@@ -37,19 +37,14 @@ class SaveManager():
         """
         self.record_status = True
 
-        save_name = f"Save{len(os.listdir(self.save_folder_path))}.txt"
+        save_name = f"Save{len(os.listdir(self.save_folder_path))-1}.txt"
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
-
+        print(save_name)
         if self.record_status != self.prev_record_status:
             self.create_new_file()
 
-        try:
-            with open(save_path, "r", encoding="UTF-8") as save:
-                already_saved_data = save.read().splitlines()
-        except FileNotFoundError:
-            return
-
-        unsaved_data = [item for item in raw_data if item not in already_saved_data]
+        # get the elements which have changed
+        unsaved_data = raw_data[-change_in_len:]
 
         with open(save_path, "a", encoding="UTF-8") as save:
             for data in unsaved_data:
@@ -57,7 +52,6 @@ class SaveManager():
                 save.write("\n")
 
         self.prev_record_status = True
-        self.prev_save_data = raw_data
 
     def stop_save(self):
         """

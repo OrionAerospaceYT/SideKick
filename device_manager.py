@@ -37,6 +37,8 @@ class DeviceManager():
 
         self.raw_data = []
 
+        self.__change_in_data_len = 0
+
     def __call__(self):
         self.device = None
         self.get_data = None
@@ -137,6 +139,8 @@ class DeviceManager():
 
                     if len(self.raw_data) > 1500:
                         self.raw_data.pop(0)
+
+                    self.__change_in_data_len += 1
 
         if self.device is not None:
             self.device.close()
@@ -246,3 +250,22 @@ class DeviceManager():
         error_output = compile_output+upload_output
 
         return error_output
+
+    def reset_difference(self):
+        """
+        Sets self.__change_in_data_len to 0 after the value
+        has been used.
+        """
+
+        self.__change_in_data_len = 0
+
+    @property
+    def change_in_data_len(self):
+        """
+        a getter for the private change_in_data_len attribute
+
+        Returns:
+            int: change_in_data_len
+        """
+
+        return self.__change_in_data_len
