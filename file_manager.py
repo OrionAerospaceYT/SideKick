@@ -268,7 +268,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
         return os.listdir(self.save_manager.save_folder_path)
 
-    def add_new_project(self, name):
+    def add_new_project(self, project_dir):
         """
         Adds new projects when new project is clicked.
         Creates a new file, copies the source reference, then renames the .ino file
@@ -276,14 +276,15 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         Args:
             name (string): the name of the new project from the line edit
         """
-        os.mkdir(name)
+        project_dir = project_dir.replace("/", self.sep)
 
         source = f"{self.path}{self.sep}ConsciOS{self.sep}Source"
-        destination = f"\"{name}\""
+        destination = f"{project_dir}"
+        print(destination)
         shutil.copytree(source, destination)
 
-        os.rename(f"{self.projects_path}{self.sep}{name}{self.sep}Source.ino",
-                  f"{self.projects_path}{self.sep}{name}{self.sep}{name}.ino")
+        os.rename(f"{project_dir}{self.sep}Source.ino",
+                  f"{project_dir}{self.sep}{project_dir.split(self.sep)[-1]}.ino")
 
     def remove_project(self, name):
         """
