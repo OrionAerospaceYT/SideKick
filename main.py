@@ -286,7 +286,7 @@ class MainGUI(qtw.QMainWindow):
                             'Create Folder', self.file_manager.projects_path, 'Folders (*)')[0]
 
         if folder_path:
-            print(f"Folder Path: {folder_path}")
+            self.file_manager.add_new_project(folder_path)
 
     def connect_device(self, port):
         """
