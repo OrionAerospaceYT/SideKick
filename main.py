@@ -379,7 +379,7 @@ class MainGUI(qtw.QMainWindow):
         if save:
             raw_data = self.file_manager.save_manager.get_saved_data(save)
         else:
-            print(f"No save in the location, {save}")
+            return
 
         self.message_handler.get_terminal(raw_data, live=False)
         self.top_graph.set_graph_data(raw_data)
