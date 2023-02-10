@@ -477,6 +477,12 @@ QScrollArea {
       </item>
       <item row="1" column="2" rowspan="5">
        <widget class="QFrame" name="device_layout">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>200</width>
@@ -561,6 +567,22 @@ QLabel#logo_2{
           <number>20</number>
          </property>
          <item>
+          <spacer name="verticalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="logo_2">
            <property name="minimumSize">
             <size>
@@ -590,7 +612,7 @@ QLabel#logo_2{
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>20</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -624,6 +646,12 @@ QLabel#logo_2{
          </item>
          <item>
           <widget class="QPushButton" name="disconnect">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Disconnect</string>
            </property>
@@ -678,6 +706,12 @@ QPushButton:hover:!pressed{
        <widget class="QFrame" name="file_layout">
         <property name="enabled">
          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
@@ -846,6 +880,22 @@ QScrollArea {
           <number>20</number>
          </property>
          <item>
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="logo">
            <property name="minimumSize">
             <size>
@@ -875,15 +925,21 @@ QScrollArea {
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>20</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
          </item>
          <item>
           <widget class="QLabel" name="selected_project">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="text">
             <string>Selected Project</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -919,6 +975,18 @@ QScrollArea {
          </item>
          <item>
           <widget class="QPushButton" name="show_save">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Show Save</string>
            </property>
@@ -940,6 +1008,19 @@ QScrollArea {
             <size>
              <width>20</width>
              <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>200</width>
+             <height>20</height>
             </size>
            </property>
           </spacer>
