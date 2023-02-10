@@ -37,11 +37,11 @@ class SaveManager():
         """
         self.record_status = True
 
-        save_name = f"Save{len(os.listdir(self.save_folder_path))-1}.txt"
-        save_path = f"{self.save_folder_path}{self.sep}{save_name}"
-        print(save_name)
         if self.record_status != self.prev_record_status:
             self.create_new_file()
+
+        save_name = f"Save{len(os.listdir(self.save_folder_path))}.txt"
+        save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
         # get the elements which have changed
         unsaved_data = raw_data[-change_in_len:]
