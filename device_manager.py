@@ -115,7 +115,8 @@ class DeviceManager():
                     self.terminate_device()
                     break
 
-            if raw_data != b"":
+            if raw_data != b"" and isinstance(raw_data, bytes):
+
                 buffer += raw_data
                 buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
                 if buffer.startswith(b"\r\n"):
