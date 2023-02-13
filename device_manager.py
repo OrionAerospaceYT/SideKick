@@ -6,10 +6,17 @@ It uses pySerial and has a loop running on a thread.
 
 import glob
 import sys
+import random
 import threading
+import time
 import subprocess
 import serial
 
+MESSAGES = {
+"terminal": [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"],
+"top_graph": [b"g(x, 1, 5)", b"g(x, 1, 4)", b"g(x, 1, 3)", b"g(x, 1, 5)"],
+"bottom_graph": [b"g(x, 2, 5)", b"g(x, 2, 4)", b"g(x, 2, 3)", b"g(x, 2, 5)"]
+}
 
 class DeviceManager():
     """
@@ -20,6 +27,7 @@ class DeviceManager():
         Writes
         Connect
         Disconnect
+    TODO: full class docstring
     """
 
     def __init__(self):
@@ -37,7 +45,10 @@ class DeviceManager():
 
         self.raw_data = []
 
+        # private definitions
         self.__change_in_data_len = 0
+        self.__emulated_input = b""
+        self.__emulating = False
 
     def __call__(self):
         self.device = None
@@ -53,6 +64,11 @@ class DeviceManager():
         self.terminal_data = ""
 
         self.raw_data = []
+
+        # private definitions
+        self.__change_in_data_len = 0
+        self.__emulated_input = b""
+        self.__emulating = False
 
     def send(self, message):
         """
@@ -82,7 +98,7 @@ class DeviceManager():
 
         print("Data on terminal >>> " + string)
 
-    def threaded_get_raw_data(self, port, baud):
+    def threaded_get_raw_data(self, port, baud, dev=False):
         """
         Raw input data from the serial device
         Connects device and then while loops with no time.sleep
@@ -95,18 +111,23 @@ class DeviceManager():
         self.port = port
         self.raw_cummulative_data = ""
 
-        try:
-            self.device = serial.Serial(port, baud, rtscts=True)
-            self.connected = True
-        except serial.SerialException as error:
-            self.error = str(error).replace("(","\n").replace(")","\n")
-            return
+        if not dev:
+            try:
+                self.device = serial.Serial(port, baud, rtscts=True)
+            except serial.SerialException as error:
+                self.error = str(error).replace("(","\n").replace(")","\n")
+                return
 
+        self.connected = True
         buffer = b""
 
         while self.connected:
             try:
-                raw_data = self.device.read_all()
+                if not self.__emulating:
+                    raw_data = self.device.read_all()
+                else:
+                    raw_data = self.__emulated_input
+                    self.__emulated_input == b""
                 self.failed_recv = 0
             except serial.SerialException:
                 raw_data = ""
@@ -157,7 +178,7 @@ class DeviceManager():
 
         self.connected = False
 
-    def connect_device(self, port="COM1", baud=115200):
+    def connect_device(self, port="COM1", baud=115200, dev=False):
         """
         connects the device in order to read the data coming
         from the SideKick/Teensy/Arduino
@@ -170,10 +191,17 @@ class DeviceManager():
         """
         self()
 
-        self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud),)
+        if dev:
+            self.__emulating = True
+            print("<<< Emulating device >>>")
+
+            emulator = threading.Thread(target=self.device_emulator)
+            emulator.start()
+
+        self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud, dev),)
         self.get_data.start()
 
-    def scan_avaliable_ports(self, port):
+    def scan_avaliable_ports(self, port, dev=False):
         """
         iterates through each com port and checks if it can be opened or not
 
@@ -193,7 +221,8 @@ class DeviceManager():
         elif sys.platform.startswith("darwin"):
             ports = glob.glob("/dev/tty.*")
 
-        result = []
+        result = ["emulate"] if dev else []
+
         if port is not None:
             result.append(port)
 
@@ -270,3 +299,21 @@ class DeviceManager():
         """
 
         return self.__change_in_data_len
+
+    def device_emulator(self):
+        """
+        Gives dummy inputs to dev the GUI without physical
+        hardware!
+
+        Designed to be run on a thread to emulate the device
+        being disconnected from the whole system.
+        """
+
+        while self.__emulating:
+
+            self.__emulated_input += random.choice(MESSAGES["terminal"])
+            self.__emulated_input += random.choice(MESSAGES["top_graph"])
+            self.__emulated_input += random.choice(MESSAGES["bottom_graph"])
+            self.__emulated_input += b"\r\n"
+
+            time.sleep(0.1)
