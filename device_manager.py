@@ -127,7 +127,7 @@ class DeviceManager():
                     raw_data = self.device.read_all()
                 else:
                     raw_data = self.__emulated_input
-                    self.__emulated_input == b""
+                    self.__emulated_input = b""
                 self.failed_recv = 0
             except serial.SerialException:
                 raw_data = ""
