@@ -28,8 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = False
-CONSCIOS_PATH = ""
+DEV = True
+CONSCIOS_PATH = "/home/alexander/Documents/GitHub/SideKick/ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -298,7 +298,10 @@ class MainGUI(qtw.QMainWindow):
         """
 
         baud = self.main_ui.baud_rate.itemText(0)
-        self.device_manager.connect_device(port, baud)
+        if DEV and port == "emulate":
+            self.device_manager.connect_device(port, baud, dev=True)
+        else:
+            self.device_manager.connect_device(port, baud)
 
     def send(self):
         """
@@ -434,7 +437,7 @@ class MainGUI(qtw.QMainWindow):
         while RUNNING:
             # Com ports
             port = self.device_manager.port
-            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(port)
+            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(port, DEV)
 
             # Projects
             self.current_projects = self.file_manager.get_all_projects()
