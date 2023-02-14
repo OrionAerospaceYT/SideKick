@@ -11,12 +11,9 @@ import threading
 import time
 import subprocess
 import serial
+import numpy as np
 
-MESSAGES = {
-"terminal": [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"],
-"top_graph": [b"g(x, 1, 5)", b"g(x, 1, 4)", b"g(x, 1, 3)", b"g(x, 1, 5)"],
-"bottom_graph": [b"g(x, 2, 5)", b"g(x, 2, 4)", b"g(x, 2, 3)", b"g(x, 2, 5)"]
-}
+MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
 
 class DeviceManager():
     """
@@ -48,6 +45,7 @@ class DeviceManager():
         # private definitions
         self.__change_in_data_len = 0
         self.__emulated_input = b""
+        self.__emulating_counter = 0
         self.__emulating = False
 
     def __call__(self):
@@ -68,6 +66,7 @@ class DeviceManager():
         # private definitions
         self.__change_in_data_len = 0
         self.__emulated_input = b""
+        self.__emulating_counter = 0
         self.__emulating = False
 
     def send(self, message):
@@ -80,6 +79,28 @@ class DeviceManager():
         """
 
         self.device.write(message.encode("UTF-8"))
+
+    def device_data(self):
+        """
+        Gets the raw data from either the emulated device or the actual
+        arduino device that's connected.
+
+        Returns:
+            bytes: raw data from device
+        """
+
+        try:
+            if not self.__emulating:
+                raw_data = self.device.read_all()
+            else:
+                raw_data = self.__emulated_input
+                self.__emulated_input = b""
+            self.failed_recv = 0
+        except serial.SerialException:
+            raw_data = ""
+            self.failed_recv += 1
+
+        return raw_data
 
     def debug_device(self, raw_data):
         """
@@ -122,19 +143,11 @@ class DeviceManager():
         buffer = b""
 
         while self.connected:
-            try:
-                if not self.__emulating:
-                    raw_data = self.device.read_all()
-                else:
-                    raw_data = self.__emulated_input
-                    self.__emulated_input = b""
-                self.failed_recv = 0
-            except serial.SerialException:
-                raw_data = ""
-                self.failed_recv += 1
-                if self.failed_recv == 10:
-                    self.terminate_device()
-                    break
+
+            raw_data = self.device_data()
+
+            if self.failed_recv > 10:
+                break
 
             if raw_data != b"" and isinstance(raw_data, bytes):
 
@@ -147,15 +160,13 @@ class DeviceManager():
 
                     decoded_buffer = buffer.decode("UTF-8")
 
-                    index = None
                     if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
                         index = 0
                     else:
                         index = 1
 
-                    if index is not None:
-                        self.raw_data.append(decoded_buffer.split("\r\n")[index])
-                        buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
+                    self.raw_data.append(decoded_buffer.split("\r\n")[index])
+                    buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
                     self.raw_data = list(filter(None, self.raw_data))
 
@@ -193,7 +204,7 @@ class DeviceManager():
 
         if dev:
             self.__emulating = True
-            print("<<< Emulating device >>>")
+            print("<<< WARNING >>> EMULATING DEVICE")
 
             emulator = threading.Thread(target=self.device_emulator)
             emulator.start()
@@ -311,9 +322,14 @@ class DeviceManager():
 
         while self.__emulating:
 
-            self.__emulated_input += random.choice(MESSAGES["terminal"])
-            self.__emulated_input += random.choice(MESSAGES["top_graph"])
-            self.__emulated_input += random.choice(MESSAGES["bottom_graph"])
+            self.__emulated_input += random.choice(MESSAGES)
+            self.__emulated_input += bytes(
+                f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
+            if not ((self.__emulating_counter - 90) % 180 == 0):
+                self.__emulated_input +=  bytes(
+                f"g(tan, 2, {np.tan(self.__emulating_counter * np.pi / 180)})", "UTF-8")
             self.__emulated_input += b"\r\n"
 
-            time.sleep(0.1)
+            self.__emulating_counter += 1
+
+            time.sleep(0.01)
