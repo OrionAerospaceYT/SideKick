@@ -325,7 +325,7 @@ class DeviceManager():
             self.__emulated_input += random.choice(MESSAGES)
             self.__emulated_input += bytes(
                 f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
-            if not ((self.__emulating_counter - 90) % 180 == 0):
+            if not (self.__emulating_counter - 90) % 180 == 0:
                 self.__emulated_input +=  bytes(
                 f"g(tan, 2, {np.tan(self.__emulating_counter * np.pi / 180)})", "UTF-8")
             self.__emulated_input += b"\r\n"
