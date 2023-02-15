@@ -33,8 +33,6 @@ class DeviceManager():
         self.port = None
         self.error = None
 
-        self.failed_recv = 0
-
         self.connected = False
 
         self.raw_cummulative_data = ""
@@ -43,7 +41,8 @@ class DeviceManager():
         self.raw_data = []
 
         # private definitions
-        self.__change_in_data_len = 0
+        self.__failed_recv = 0
+        self.__change_in_data = []
         self.__emulated_input = b""
         self.__emulating_counter = 0
         self.__emulating = False
@@ -54,8 +53,6 @@ class DeviceManager():
         self.port = None
         self.error = None
 
-        self.failed_recv = 0
-
         self.connected = False
 
         self.raw_cummulative_data = ""
@@ -64,7 +61,8 @@ class DeviceManager():
         self.raw_data = []
 
         # private definitions
-        self.__change_in_data_len = 0
+        self.__failed_recv = 0
+        self.__change_in_data = []
         self.__emulated_input = b""
         self.__emulating_counter = 0
         self.__emulating = False
@@ -79,6 +77,32 @@ class DeviceManager():
         """
 
         self.device.write(message.encode("UTF-8"))
+
+    def device_parse_data(self, buffer):
+        """
+        Parses the data buffer into self.raw_data.
+
+        Args:
+            buffer (string): the collective data
+        """
+
+        decoded_buffer = buffer.decode("UTF-8")
+
+        if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
+            index = 0
+        else:
+            index = 1
+
+        self.raw_data.append(decoded_buffer.split("\r\n")[index])
+        self.__change_in_data.append(decoded_buffer.split("\r\n")[index])
+        buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
+
+        self.raw_data = list(filter(None, self.raw_data))
+
+        if len(self.raw_data) > 1500:
+            self.raw_data.pop(0)
+
+        return buffer
 
     def device_data(self):
         """
@@ -95,10 +119,10 @@ class DeviceManager():
             else:
                 raw_data = self.__emulated_input
                 self.__emulated_input = b""
-            self.failed_recv = 0
+            self.__failed_recv = 0
         except serial.SerialException:
             raw_data = ""
-            self.failed_recv += 1
+            self.__failed_recv += 1
 
         return raw_data
 
@@ -146,34 +170,20 @@ class DeviceManager():
 
             raw_data = self.device_data()
 
-            if self.failed_recv > 10:
+            if self.__failed_recv > 10:
                 break
 
-            if raw_data != b"" and isinstance(raw_data, bytes):
+            if not (raw_data != b"" and isinstance(raw_data, bytes)):
+                continue
 
-                buffer += raw_data
-                buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
-                if buffer.startswith(b"\r\n"):
-                    buffer = buffer[2:]
+            buffer += raw_data
+            buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
+            if buffer.startswith(b"\r\n"):
+                buffer = buffer[2:]
 
-                while buffer.count(b"\r\n") > 1 or buffer.endswith(b"\r\n"):
+            while buffer.count(b"\r\n") > 1 or buffer.endswith(b"\r\n"):
 
-                    decoded_buffer = buffer.decode("UTF-8")
-
-                    if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
-                        index = 0
-                    else:
-                        index = 1
-
-                    self.raw_data.append(decoded_buffer.split("\r\n")[index])
-                    buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
-
-                    self.raw_data = list(filter(None, self.raw_data))
-
-                    if len(self.raw_data) > 1500:
-                        self.raw_data.pop(0)
-
-                    self.__change_in_data_len += 1
+                buffer = self.device_parse_data(buffer)
 
         if self.device is not None:
             self.device.close()
@@ -294,14 +304,14 @@ class DeviceManager():
 
     def reset_difference(self):
         """
-        Sets self.__change_in_data_len to 0 after the value
+        Sets self.__change_in_data to 0 after the value
         has been used.
         """
 
-        self.__change_in_data_len = 0
+        self.__change_in_data = []
 
     @property
-    def change_in_data_len(self):
+    def change_in_data(self):
         """
         a getter for the private change_in_data_len attribute
 
@@ -309,7 +319,7 @@ class DeviceManager():
             int: change_in_data_len
         """
 
-        return self.__change_in_data_len
+        return self.__change_in_data
 
     def device_emulator(self):
         """
