@@ -462,8 +462,7 @@ class MainGUI(qtw.QMainWindow):
                 self.bottom_graph.set_graph_data(raw_data)
 
             if self.record_light.blinking:
-                change = self.device_manager.change_in_data_len
-                self.file_manager.save_manager.save_data(raw_data, change)
+                self.file_manager.save_manager.save_data(self.device_manager.change_in_data)
                 self.device_manager.reset_difference()
             else:
                 self.file_manager.save_manager.stop_save()
