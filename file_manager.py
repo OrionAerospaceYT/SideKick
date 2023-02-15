@@ -28,7 +28,7 @@ class SaveManager():
                     encoding="UTF-8"):
             pass
 
-    def save_data(self, raw_data, change_in_len):
+    def save_data(self, data):
         """
         saves the raw data to the latest save_file
 
@@ -44,7 +44,7 @@ class SaveManager():
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
         # get the elements which have changed
-        unsaved_data = raw_data[-change_in_len:]
+        unsaved_data = data
 
         with open(save_path, "a", encoding="UTF-8") as save:
             for data in unsaved_data:
