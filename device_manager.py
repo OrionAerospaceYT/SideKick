@@ -302,13 +302,16 @@ class DeviceManager():
 
         return error_output
 
-    def reset_difference(self):
+    def reset_difference(self, data):
         """
         Sets self.__change_in_data to 0 after the value
         has been used.
+
+        Args:
+            data (list): the data that is saved
         """
 
-        self.__change_in_data = []
+        self.__change_in_data = self.__change_in_data[len(data):]
 
     @property
     def change_in_data(self):
