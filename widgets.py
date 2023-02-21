@@ -302,3 +302,36 @@ class RecordLight(Widgets):
         stops the threaded loop
         """
         self.running = False
+
+class Menus:
+    """
+    A class to control showing and hiding menus.
+    """
+
+    def __init__(self, widgets_file, widgets_device):
+
+        self.widgets_file = widgets_file
+        self.widgets_device = widgets_device
+
+        self.showing_file = False
+        self.showing_device = False
+
+    def show_file(self):
+
+        for item in self.widgets_device:
+            item.setVisible(False)
+
+        for item in self.widgets_file:
+            item.setVisible(True)
+
+    def show_device(self):
+
+        for item in self.widgets_device:
+            item.setVisible(False)
+
+        for item in self.widgets_file:
+            item.setVisible(True)
+
+    def hide_menu(self):
+
+        #TODO
