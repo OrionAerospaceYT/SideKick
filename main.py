@@ -28,8 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = False
-CONSCIOS_PATH = ""
+DEV = True
+CONSCIOS_PATH = "C:\\Users\\a-armitage17\\Documents\\GitHub\\SideKick\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -77,8 +77,6 @@ class MainGUI(qtw.QMainWindow):
         self.add_supported_boards()
 
         # Attributes for event handling are defined here
-        self.file_manager_window = False
-        self.device_manager_window = False
         self.debug_window = False
         self.prev_debug_window = True
         self.showing_data = False
@@ -259,16 +257,6 @@ class MainGUI(qtw.QMainWindow):
         self.turn_on_rec_light(self.record_light.show)
 
         self.update_compile_and_upload()
-
-        if self.device_manager_window:
-            self.main_ui.device_layout.setVisible(True)
-            self.main_ui.file_layout.setVisible(False)
-        elif self.file_manager_window:
-            self.main_ui.file_layout.setVisible(True)
-            self.main_ui.device_layout.setVisible(False)
-        else:
-            self.main_ui.file_layout.setVisible(False)
-            self.main_ui.device_layout.setVisible(False)
 
         if (self.device_manager.connected) or (not self.showing_data):
             self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
