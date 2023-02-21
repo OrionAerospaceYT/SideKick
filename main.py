@@ -28,8 +28,8 @@ from widgets import RecordLight
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = True
-CONSCIOS_PATH = "/home/alexander/Documents/GitHub/SideKick/ConsciOS"
+DEV = False
+CONSCIOS_PATH = ""
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -235,7 +235,11 @@ class MainGUI(qtw.QMainWindow):
         """
 
         # set labels
-        self.main_ui.selected_project.setText(self.file_manager.parsed_project_name())
+        name = self.file_manager.parsed_project_name()
+        if name:
+            self.main_ui.selected_project.setText(self.file_manager.parsed_project_name())
+        else:
+            self.main_ui.selected_project.setText("Select A Project!")
 
         # update functions
         self.update_ports()
