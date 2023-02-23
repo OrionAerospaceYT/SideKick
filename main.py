@@ -337,7 +337,7 @@ class MainGUI(qtw.QMainWindow):
         Closes device manager if they are both open at the same time
         """
 
-        self.side_menu.show_file()
+        self.side_menu.show_side_menu(file=True)
 
     def open_device_manager(self):
         """
@@ -345,7 +345,7 @@ class MainGUI(qtw.QMainWindow):
         Closes file manager if they are both open at the same time
         """
 
-        self.side_menu.show_device()
+        self.side_menu.show_side_menu(device=True)
 
     def upload_project(self):
         """
