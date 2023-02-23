@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1026</width>
-    <height>638</height>
+    <width>1028</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -553,7 +553,7 @@ QComboBox::down-arrow {
 
 /*Label Styling*/
 QLabel {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
   padding-left: 6px;
 }
@@ -677,6 +677,22 @@ QLabel#logo_2{
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QPushButton" name="select_project">
            <property name="text">
             <string>Select Project</string>
@@ -742,7 +758,7 @@ QLabel#logo_2{
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>10</width>
+          <width>30</width>
           <height>20</height>
          </size>
         </property>
@@ -774,7 +790,7 @@ QLabel#logo_2{
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>5</width>
+          <width>10</width>
           <height>20</height>
          </size>
         </property>

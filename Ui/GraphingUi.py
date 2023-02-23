@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1026, 638)
+        MainWindow.resize(1028, 641)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -395,7 +395,7 @@ class Ui_MainWindow(object):
 "\n"
 "/*Label Styling*/\n"
 "QLabel {\n"
-"  font-size: 20px;\n"
+"  font-size: 15px;\n"
 "  font-weight: bold;\n"
 "  padding-left: 6px;\n"
 "}\n"
@@ -444,6 +444,8 @@ class Ui_MainWindow(object):
         self.selected_project.setAlignment(QtCore.Qt.AlignCenter)
         self.selected_project.setObjectName("selected_project")
         self.dhsgd.addWidget(self.selected_project)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem4)
         self.select_project = QtWidgets.QPushButton(self.side_menu)
         self.select_project.setObjectName("select_project")
         self.dhsgd.addWidget(self.select_project)
@@ -462,15 +464,15 @@ class Ui_MainWindow(object):
         self.library_manager = QtWidgets.QPushButton(self.side_menu)
         self.library_manager.setObjectName("library_manager")
         self.dhsgd.addWidget(self.library_manager)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dhsgd.addItem(spacerItem4)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dhsgd.addItem(spacerItem5)
         self.gridLayout.addWidget(self.side_menu, 1, 1, 5, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem5, 1, 7, 2, 1)
-        spacerItem6 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem6, 6, 2, 1, 1)
-        spacerItem7 = QtWidgets.QSpacerItem(5, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem7, 6, 0, 1, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem6, 1, 7, 2, 1)
+        spacerItem7 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem7, 6, 2, 1, 1)
+        spacerItem8 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem8, 6, 0, 1, 1)
         self.gridLayout.setColumnStretch(3, 1)
         self.gridLayout.setColumnStretch(4, 1)
         self.gridLayout.setColumnStretch(5, 3)
