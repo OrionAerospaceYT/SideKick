@@ -303,21 +303,23 @@ class RecordLight(Widgets):
         """
         self.running = False
 
-class Menus:
+class SideMenu:
     """
     A class to control showing and hiding menus.
     """
 
-    def __init__(self, widgets_file, widgets_device):
+    def __init__(self, widgets_file, widgets_device, layout):
 
         self.widgets_file = widgets_file
         self.widgets_device = widgets_device
+        self.layout = layout
 
         self.showing_file = False
         self.showing_device = False
 
     def show_file(self):
 
+        self.layout.setVisible(True)
         for item in self.widgets_device:
             item.setVisible(False)
 
@@ -326,12 +328,13 @@ class Menus:
 
     def show_device(self):
 
+        self.layout.setVisible(True)
         for item in self.widgets_device:
-            item.setVisible(False)
+            item.setVisible(True)
 
         for item in self.widgets_file:
-            item.setVisible(True)
+            item.setVisible(False)
 
     def hide_menu(self):
 
-        #TODO
+        self.layout.setVisible(False)
