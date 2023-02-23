@@ -262,7 +262,7 @@ class MainGUI(qtw.QMainWindow):
         # set labels
         name = self.file_manager.parsed_project_name()
         if name:
-            self.main_ui.selected_project.setText(self.file_manager.parsed_project_name())
+            self.main_ui.selected_project.setText(name)
         else:
             self.main_ui.selected_project.setText("Select A Project!")
 
