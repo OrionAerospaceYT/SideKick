@@ -24,11 +24,12 @@ from file_manager import FileManager
 
 from widgets import Graph
 from widgets import RecordLight
+from widgets import SideMenu
 
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = True
+DEV = False
 CONSCIOS_PATH = "C:\\Users\\a-armitage17\\Documents\\GitHub\\SideKick\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
@@ -48,24 +49,28 @@ class MainGUI(qtw.QMainWindow):
 
         super().__init__()
 
-        # Attributes for the gui are defined here
-        self.device_manager = DeviceManager()
-        self.file_manager = FileManager(DEV, CONSCIOS_PATH)
-        self.message_handler = MessageHandler()
-        self.record_light = RecordLight()
-
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
 
-        self.menu_width = 0
-        self.supported_boards = {}
-
+        # Associative classes are initialised here
+        self.device_manager = DeviceManager()
+        self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
+        self.bottom_graph = Graph(key="2")
+        self.message_handler = MessageHandler()
+        self.record_light = RecordLight()
+        self.side_menu = SideMenu(
+            self.file_and_device_widgets()[0],
+            self.file_and_device_widgets()[1],
+            self.main_ui.side_menu)
+
+        # Attributes and initial config here
+        self.side_menu.hide_menu()
+
         self.main_ui.top_graph = qtw.QVBoxLayout()
         self.main_ui.top_graph.addWidget(self.top_graph.graph)
         self.main_ui.top_widget.setLayout(self.main_ui.top_graph)
 
-        self.bottom_graph = Graph(key="2")
         self.main_ui.bottom_graph = qtw.QVBoxLayout()
         self.main_ui.bottom_graph.addWidget(self.bottom_graph.graph)
         self.main_ui.bottom_widget.setLayout(self.main_ui.bottom_graph)
@@ -84,11 +89,12 @@ class MainGUI(qtw.QMainWindow):
         self.compile = False
 
         self.commands = []
-
         self.avaliable_port_list = []
         self.current_projects = []
         self.supported_boards = []
         self.current_saves = []
+
+        self.supported_boards = {}
 
         threaded_blinking_record = threading.Thread(
             target=self.record_light.threaded_blink, args=(),)
@@ -107,6 +113,27 @@ class MainGUI(qtw.QMainWindow):
         timer.setInterval(25)
         timer.timeout.connect(self.update)
         timer.start()
+
+    def file_and_device_widgets(self):
+        """
+        Connects all of the buttons and other widgets
+        to the side menu class
+
+        Returns:
+            list: the list of file manager widgets
+            list: the list of device manager widgets
+        """
+        file_manager = [self.main_ui.selected_project,
+                        self.main_ui.select_project,
+                        self.main_ui.new_project,
+                        self.main_ui.show_save,
+                        self.main_ui.library_manager]
+
+        device_manager = [self.main_ui.baud_rate,
+                          self.main_ui.disconnect,
+                          self.main_ui.supported_boards]
+
+        return file_manager, device_manager
 
     def open_library_manager(self):
         """
@@ -310,10 +337,7 @@ class MainGUI(qtw.QMainWindow):
         Closes device manager if they are both open at the same time
         """
 
-        self.file_manager_window = not self.file_manager_window
-
-        if self.device_manager_window and self.file_manager_window:
-            self.device_manager_window = False
+        self.side_menu.show_file()
 
     def open_device_manager(self):
         """
@@ -321,10 +345,7 @@ class MainGUI(qtw.QMainWindow):
         Closes file manager if they are both open at the same time
         """
 
-        self.device_manager_window = not self.device_manager_window
-
-        if self.device_manager_window and self.file_manager_window:
-            self.file_manager_window = False
+        self.side_menu.show_device()
 
     def upload_project(self):
         """
