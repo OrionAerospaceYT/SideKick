@@ -317,23 +317,23 @@ class SideMenu:
         self.showing_file = False
         self.showing_device = False
 
-    def show_file(self):
+    def show_side_menu(self, file=False, device=False):
 
-        self.layout.setVisible(True)
+        if file:
+            self.showing_file = not self.showing_file
+            self.showing_device = False
+        elif device:
+            self.showing_device = not self.showing_device
+            self.showing_file = False
+
+        self.layout.setVisible(
+            self.showing_file or self.showing_device)
+
         for item in self.widgets_device:
-            item.setVisible(False)
+            item.setVisible(self.showing_device)
 
         for item in self.widgets_file:
-            item.setVisible(True)
-
-    def show_device(self):
-
-        self.layout.setVisible(True)
-        for item in self.widgets_device:
-            item.setVisible(True)
-
-        for item in self.widgets_file:
-            item.setVisible(False)
+            item.setVisible(self.showing_file)
 
     def hide_menu(self):
 
