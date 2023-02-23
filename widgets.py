@@ -306,6 +306,13 @@ class RecordLight(Widgets):
 class SideMenu:
     """
     A class to control showing and hiding menus.
+
+    Attributes:
+        widgets_file (list): a list of widgets for the file side menu
+        widgets_device (list): a list of widgets for the device side menu
+        layout (pyqt layout): the layout that holds both side menus
+        showing_file (bool): whether the file widgets are being shown
+        showing_device (bool): whether the device widgets are being shown
     """
 
     def __init__(self, widgets_file, widgets_device, layout):
@@ -318,7 +325,13 @@ class SideMenu:
         self.showing_device = False
 
     def show_side_menu(self, file=False, device=False):
+        """
+        Updates the side menu to show the correct one.
 
+        Args:
+            file (bool) whether to update file being displayed
+            device (bool) whether to update device being displayed
+        """
         if file:
             self.showing_file = not self.showing_file
             self.showing_device = False
@@ -336,5 +349,7 @@ class SideMenu:
             item.setVisible(self.showing_file)
 
     def hide_menu(self):
-
+        """
+        Hides the entire display (used on startup).
+        """
         self.layout.setVisible(False)
