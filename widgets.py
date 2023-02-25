@@ -225,34 +225,6 @@ class Widgets:
         """
         return int(self.width)
 
-
-class DeviceManagerWindow(Widgets):
-    """
-    Responsible for data on the device manager widgets.
-    TODO
-    """
-
-    def __init__(self):
-        super().__init__()
-
-        self.device = ""
-        self.device_list = []
-        self.baud = 115200
-
-
-class FileManagerWindow(Widgets):
-    """
-    Responsible for data on the file manager widgets.
-    TODO
-    """
-
-    def __init__(self):
-        super().__init__()
-
-        self.project = ""
-        self.project_list = []
-
-
 class RecordLight(Widgets):
     """
     Blinks the record light
