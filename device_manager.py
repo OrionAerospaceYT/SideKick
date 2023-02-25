@@ -185,7 +185,7 @@ class DeviceManager():
 
                 buffer = self.device_parse_data(buffer)
 
-        if self.device is not None:
+        if self.device:
             self.device.close()
 
         self()
