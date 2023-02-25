@@ -313,6 +313,17 @@ class SideMenu:
         layout (pyqt layout): the layout that holds both side menus
         showing_file (bool): whether the file widgets are being shown
         showing_device (bool): whether the device widgets are being shown
+    
+    Methods:
+        show_side_menu:
+            Updates the side menu to show the correct one.
+
+            Args:
+                file (bool) whether to update file being displayed
+                device (bool) whether to update device being displayed
+        
+        hide_menu:
+            Hides the entire display (used on startup).
     """
 
     def __init__(self, widgets_file, widgets_device, layout):
