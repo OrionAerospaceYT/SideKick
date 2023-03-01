@@ -136,7 +136,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
         self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
-
+        self.actuators_test = \
+            f"{self.path}{self.sep}Internals{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"
         self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}Saves"
         self.save_manager.sep = self.sep
 
@@ -374,13 +375,17 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
 
         return board, project
 
-    def set_current_project(self, file_path):
+    def set_current_project(self, file_path, manual=False):
         """
         Sets the current_project variable
 
         Args:
             file_path (str): the file path to the .ino file
         """
+
+        if manual:
+            self.current_project = self.actuators_test
+            return
 
         try:
             if self.sep != "\\":
