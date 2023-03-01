@@ -18,6 +18,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
 
+from actuator import ActuatorGUI
 from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
@@ -129,7 +130,8 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.show_save,
                         self.main_ui.library_manager]
 
-        device_manager = [self.main_ui.baud_rate,
+        device_manager = [self.main_ui.tune_actuators,
+                          self.main_ui.baud_rate,
                           self.main_ui.disconnect,
                           self.main_ui.supported_boards]
 
@@ -141,11 +143,21 @@ class MainGUI(qtw.QMainWindow):
         """
         LibraryManager(self.file_manager, self)
 
+    def open_actuator_gui(self):
+        """
+        Opens the actuator tuning suite
+        """
+
+        self.upload_project(actuator=True)
+        ActuatorGUI(self.device_manager, self)
+
     def add_supported_boards(self):
-        """main_ui_top_graph
+        """
+        main_ui_top_graph
         Adds the supported boards to the drop down so that
         they can be selected for uploads.
         """
+
         boards = list(self.file_manager.get_all_boards().keys())
         for board in boards:
             self.main_ui.supported_boards.addItem(board)
@@ -169,6 +181,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.new_project.clicked.connect(self.new_project)
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
+        self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -194,6 +207,9 @@ class MainGUI(qtw.QMainWindow):
 
         help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
         help_website.activated.connect(self.demo_function)
+
+        tune_actuators = qtw.QShortcut(qtg.QKeySequence("ctrl+a"), self)
+        tune_actuators.activated.connect(self.open_actuator_gui)
 
     def turn_on_rec_light(self, is_on):
         """
@@ -347,7 +363,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.side_menu.show_side_menu(device=True)
 
-    def upload_project(self):
+    def upload_project(self, actuator=False):
         """
         Gets selected board to upload to
         Checks if a device is connected to the gui
@@ -360,6 +376,7 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
+        self.file_manager.set_current_project("", manual=True)
         self.commands = self.file_manager.compile_and_upload_commands(port, board)
 
         self.upload = True
