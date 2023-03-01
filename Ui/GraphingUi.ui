@@ -624,6 +624,13 @@ QLabel#logo_2{
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="tune_actuators">
+           <property name="text">
+            <string>Tune Actuators</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QComboBox" name="baud_rate">
            <item>
             <property name="text">
