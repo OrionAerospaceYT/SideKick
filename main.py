@@ -148,7 +148,7 @@ class MainGUI(qtw.QMainWindow):
         Opens the actuator tuning suite
         """
 
-        self.upload_project(actuator=True)
+        self.upload_project()
         ActuatorGUI(self.device_manager, self)
 
     def add_supported_boards(self):
