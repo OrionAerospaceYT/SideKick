@@ -363,7 +363,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.side_menu.show_side_menu(device=True)
 
-    def upload_project(self, actuator=False):
+    def upload_project(self):
         """
         Gets selected board to upload to
         Checks if a device is connected to the gui
