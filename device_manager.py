@@ -76,7 +76,8 @@ class DeviceManager():
             message (binary string): the message to send to the device
         """
 
-        self.device.write(message.encode("UTF-8"))
+        if self.device:
+            self.device.write(f"{message}\n".encode("UTF-8"))
 
     def device_parse_data(self, buffer):
         """
