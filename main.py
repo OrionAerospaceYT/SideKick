@@ -467,7 +467,7 @@ class MainGUI(qtw.QMainWindow):
         while RUNNING:
             # Com ports
             port = self.device_manager.port
-            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(port, DEV)
+            self.avaliable_port_list = self.device_manager.scan_avaliable_ports(DEV)
 
             # Projects
             self.current_projects = self.file_manager.get_all_projects()
