@@ -23,11 +23,13 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.device_manager = device_manager
 
-        self.actuators = {"select": None}
+        self.actuators = {"All Actuators": 0}
+
+        self.sliders = []
 
         self.pos = 0
         self.min = 0
-        self.max = 90
+        self.max = 180
 
         self.connect()
 
@@ -75,6 +77,22 @@ class ActuatorGUI(qtw.QMainWindow):
             if servo not in self.actuators.keys():
                 target = self.actuators_ui.select_actuator.findText(servo)
                 self.actuators_ui.select_actuator.removeItem(target)
+
+    def update_slider(self):
+        """
+        Adds sliders to the QScrollAreas
+        TODO
+        """
+        #for i in reversed(range(self.actuators_ui.scroll.layout().count())):
+        #    self.actuators_ui.scroll.layout().itemAt(i).widget().setParent(None)
+
+        self.sliders = []
+        sliders = list(self.actuators.keys())
+
+        for _ in sliders:
+            actuator = qtw.QSlider(self.actuators_ui.scroll)
+            self.sliders.append(actuator)
+            self.actuators_ui.scroll.layout().addWidget(self.sliders[-1])
 
     def update(self):
         """
@@ -126,3 +144,5 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.actuators_ui.name.setText("")
         self.actuators_ui.pin_input.setText("")
+
+        self.update_slider()
