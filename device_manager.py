@@ -222,12 +222,11 @@ class DeviceManager():
         self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud, dev),)
         self.get_data.start()
 
-    def scan_avaliable_ports(self, port, dev=False):
+    def scan_avaliable_ports(self, dev=False):
         """
         Gets all avaliable com ports.
 
         Args:
-            port (string): the current com port connected to the gui
             dev (bool): whether or not to show the dev option of emulate
 
         Returns:
