@@ -4,13 +4,12 @@ and serial devices.
 It uses pySerial and has a loop running on a thread.
 """
 
-import glob
-import sys
 import random
 import threading
 import time
 import subprocess
 import serial
+import serial.tools.list_ports
 import numpy as np
 
 MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
@@ -225,38 +224,22 @@ class DeviceManager():
 
     def scan_avaliable_ports(self, port, dev=False):
         """
-        iterates through each com port and checks if it can be opened or not
-
-        https://stackoverflow.com/questions/12090503/listing-available-com-ports-with-python
+        Gets all avaliable com ports.
 
         Args:
             port (string): the current com port connected to the gui
+            dev (bool): whether or not to show the dev option of emulate
 
         Returns:
-            result (list): avaliable com ports for pyserial
+            list : avaliable com ports for pyserial
         """
 
-        if sys.platform.startswith("win"):
-            ports = [f"COM{i}" for i in range(256)]
-        elif sys.platform.startswith("linux") or sys.platform.startswith("cygwin"):
-            ports = glob.glob("/dev/tty*")
-        elif sys.platform.startswith("darwin"):
-            ports = glob.glob("/dev/tty.*")
+        available_ports = ["emulate"] if dev else []
 
-        result = ["emulate"] if dev else []
+        for port in serial.tools.list_ports.comports():
+            available_ports.append(port.device)
 
-        if port is not None:
-            result.append(port)
-
-        for sys_port in ports:
-            try:
-                serial_port = serial.Serial(sys_port)
-                serial_port.close()
-                result.append(sys_port)
-            except (OSError, serial.SerialException):
-                pass
-
-        return result
+        return available_ports
 
     def compile_script(self, compile_cmd):
         """
@@ -265,7 +248,7 @@ class DeviceManager():
         Args:
             compile_cmd (string): the command t ocompile the script with arduino-cli
         Returns:
-            compile_output[0] (string): the error string to be parsed
+            string : the error string to be parsed
         """
 
         compile_process = subprocess.Popen(
