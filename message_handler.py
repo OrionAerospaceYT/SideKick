@@ -8,6 +8,12 @@ import time
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
+TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
+>Terminal</p></h1><br>"
+
+SUCCESS_MSG = "<p style=\"font-weight: bold;color:#00f0c3;font-size:24px\">SUCCESS</p><br>"
+
+FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919;;font-size:24px\">ERROR</p><br>"
 
 class MessageHandler():
     """
@@ -16,8 +22,6 @@ class MessageHandler():
 
     def __init__(self):
 
-        self.terminal_header = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
->Terminal</p></h1><br>"
         self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
@@ -66,7 +70,7 @@ class MessageHandler():
             if len(decoded_string) != 0:
                 decoded_data.append(decoded_string)
 
-        terminal_html = self.terminal_header
+        terminal_html = TERMINAL_HEADER
 
         # if live data, it cannot be scrolled through so it must be limited
         # to the screen
@@ -119,8 +123,13 @@ class MessageHandler():
             "\x1B[90m", "<font color=\"#D6790F\">")
         debug_output = debug_output.replace(
             "\x1B[92m", "<font color=\"#00f0c3\">")
-        self.debug_html = debug_output.replace(
+        debug_output = debug_output.replace(
             "\x1B[93m", "<font color=\"#00f0c3\">")
+
+        if "exit status" in debug_output:
+            self.debug_html = FAILURE_MSG + debug_output
+        else:
+            self.debug_html = SUCCESS_MSG + debug_output
 
     def update_ellipsis(self):
         """
