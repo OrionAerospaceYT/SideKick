@@ -11,9 +11,9 @@ TEXT_COLOUR = "#00f0c3"
 TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
 >Terminal</p></h1><br>"
 
-SUCCESS_MSG = "<p style=\"font-weight: bold;color:#00f0c3;font-size:24px\">SUCCESS</p><br>"
+SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">Success</p><br>"
 
-FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919;;font-size:24px\">ERROR</p><br>"
+FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919;;font-size:24px\">Error</p><br>"
 
 class MessageHandler():
     """
