@@ -314,6 +314,7 @@ compile --fqbn {board} \"{self.current_project}\""
         upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 upload -p {port} --fqbn {board} \"{self.current_project}\""
 
+        print(self.current_project)
         return [compile_msg, upload_msg]
 
     def save_options(self, board, project):
