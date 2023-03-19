@@ -306,7 +306,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
 
         if self.dev:
-            self.move_libraries(self.consci_os_path)
+            self.move_libraries(f"{self.consci_os_path}")
+            self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
 
         compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 compile --fqbn {board} \"{self.current_project}\""
@@ -314,7 +315,6 @@ compile --fqbn {board} \"{self.current_project}\""
         upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
 upload -p {port} --fqbn {board} \"{self.current_project}\""
 
-        print(self.current_project)
         return [compile_msg, upload_msg]
 
     def save_options(self, board, project):
