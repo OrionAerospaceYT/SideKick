@@ -90,8 +90,8 @@ class ActuatorGUI(qtw.QMainWindow):
         sliders = list(self.actuators.keys())
 
         for _ in sliders:
-            actuator = qtw.QSlider(self.actuators_ui.scroll)
-            self.sliders.append(actuator)
+            device_actuator = qtw.QSlider(self.actuators_ui.scroll)
+            self.sliders.append(device_actuator)
             self.actuators_ui.scroll.layout().addWidget(self.sliders[-1])
 
     def update(self):
