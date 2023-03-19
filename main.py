@@ -30,7 +30,7 @@ from widgets import SideMenu
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = True
+DEV = False
 CONSCIOS_PATH = "C:\\Users\\Alexander_Armitage\\Documents\\GitHub\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
