@@ -148,7 +148,7 @@ class MainGUI(qtw.QMainWindow):
         Opens the actuator tuning suite
         """
 
-        self.upload_project()
+        self.upload_actuator()
         ActuatorGUI(self.device_manager, self)
 
     def add_supported_boards(self):
@@ -362,6 +362,21 @@ class MainGUI(qtw.QMainWindow):
         """
 
         self.side_menu.show_side_menu(device=True)
+
+    def upload_actuator(self):
+        """
+        Uploads the actuator test script.
+        """
+
+        boards_dictionary = self.file_manager.get_all_boards()
+        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+        port = self.device_manager.port
+
+        self.file_manager.set_current_project(self.file_manager.actuators_test, True)
+        self.commands = self.file_manager.compile_and_upload_commands(port, board)
+
+        self.upload = True
+
 
     def upload_project(self):
         """
