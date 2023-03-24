@@ -278,11 +278,15 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
 
         source = f"{self.path}{self.sep}ConsciOS{self.sep}Source"
         destination = f"{project_dir}"
-        print(destination)
+
         shutil.copytree(source, destination)
 
         os.rename(f"{project_dir}{self.sep}Source.ino",
                   f"{project_dir}{self.sep}{project_dir.split(self.sep)[-1]}.ino")
+
+        self.set_current_project(
+            f"{project_dir}{self.sep}{project_dir.split(self.sep)[-1]}.ino",
+            True )
 
     def remove_project(self, name):
         """
@@ -385,7 +389,7 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
         """
 
         if manual:
-            self.current_project = self.actuators_test
+            self.current_project = file_path.replace("\\", "/")
             return
 
         try:
@@ -405,7 +409,7 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
         Returns:
             str: the name to be displayed on the GUI
         """
-
+        print(self.current_project)
         try:
             if self.sep != "\\":
                 name = self.current_project.split(self.sep)[-2]
