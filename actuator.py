@@ -74,7 +74,7 @@ class ActuatorGUI(qtw.QMainWindow):
 
         # removes old items
         for servo in servos_on_gui:
-            if servo not in self.actuators.keys():
+            if servo not in self.actuators:
                 target = self.actuators_ui.select_actuator.findText(servo)
                 self.actuators_ui.select_actuator.removeItem(target)
 
