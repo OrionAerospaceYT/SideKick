@@ -409,7 +409,7 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
         Returns:
             str: the name to be displayed on the GUI
         """
-        print(self.current_project)
+
         try:
             if self.sep != "\\":
                 name = self.current_project.split(self.sep)[-2]
