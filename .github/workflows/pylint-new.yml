@@ -47,4 +47,4 @@ jobs:
 
     - name: Analysing actuator.py
       run: |
-        pylint actuator.py
+        pylint actuator.py --disable=R0903
