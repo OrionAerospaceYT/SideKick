@@ -391,7 +391,6 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        self.file_manager.set_current_project("")
         self.commands = self.file_manager.compile_and_upload_commands(port, board)
 
         self.upload = True
