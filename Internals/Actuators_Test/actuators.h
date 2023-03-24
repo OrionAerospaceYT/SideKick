@@ -18,6 +18,7 @@ namespace actuators{
   // Globals can be defined here
   const int MAX_NUM_OF_SERVOS = 128;
   Servo servos[MAX_NUM_OF_SERVOS];
+  int positions[MAX_NUM_OF_SERVOS];
   int servoCount = 0;
 
   void init()
@@ -46,5 +47,6 @@ namespace actuators{
     } else {
       PRINT("Invalid servo index!");
     }
+    positions[servoIndex] = pos;
   }
 }  // namespace actuators
