@@ -381,7 +381,9 @@ upload -p {port} --fqbn {board} \"{self.current_project}\""
         if not os.path.exists(project):
             if len(os.listdir(self.projects_path)) > 0:
                 project_name = os.listdir(self.projects_path)[0]
-                project = f"{self.projects_path}{self.sep}{project_name}{self.sep}{project_name}.ino".replace("\\", "/")
+                project = f"{self.projects_path}{self.sep}{project_name}"
+                project += f"{self.sep}{project_name}.ino"
+                project = project.replace("\\", "/")
             else:
                 project = ""
 
