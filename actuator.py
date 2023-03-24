@@ -68,7 +68,7 @@ class ActuatorGUI(qtw.QMainWindow):
             i) for i in range(self.actuators_ui.select_actuator.count())]
 
         # adds new items
-        for servo in self.actuators.keys():
+        for servo in self.actuators:
             if servo not in servos_on_gui:
                 self.actuators_ui.select_actuator.addItem(servo)
 
