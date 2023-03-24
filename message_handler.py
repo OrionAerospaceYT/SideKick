@@ -15,6 +15,8 @@ SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">Succ
 
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919;;font-size:24px\">Error</p><br>"
 
+ERROR_TERMS = ["Error opening sketch", "Error during build", "exit status"]
+
 class MessageHandler():
     """
     Gets all text/graph data to be displayed on the front end
@@ -126,10 +128,12 @@ class MessageHandler():
         debug_output = debug_output.replace(
             "\x1B[93m", "<font color=\"#00f0c3\">")
 
-        if "exit status" in debug_output:
-            self.debug_html = FAILURE_MSG + debug_output
-        else:
-            self.debug_html = SUCCESS_MSG + debug_output
+        for item in debug_output:
+            if item in debug_output:
+                self.debug_html = FAILURE_MSG + debug_output
+                return
+
+        self.debug_html = SUCCESS_MSG + debug_output
 
     def update_ellipsis(self):
         """
