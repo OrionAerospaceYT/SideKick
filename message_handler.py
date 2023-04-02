@@ -129,9 +129,7 @@ class MessageHandler():
             "\x1B[93m", "<font color=\"#00f0c3\">")
 
         for item in ERROR_TERMS:
-            print(item)
             if item in debug_output:
-                print("ERROR")
                 self.debug_html = FAILURE_MSG + debug_output
                 return
 
