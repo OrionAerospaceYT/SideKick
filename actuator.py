@@ -7,7 +7,7 @@ SideKick GUI.
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
 
-from Ui.ActuatorUi import Ui_MainWindow as actuator
+from Ui.NewActuatorUi import Ui_MainWindow as actuator
 
 class ActuatorGUI(qtw.QMainWindow):
     """
@@ -31,118 +31,101 @@ class ActuatorGUI(qtw.QMainWindow):
         self.min = 0
         self.max = 180
 
-        self.connect()
+        self.actuators_ui.name.setPlaceholderText("Name")
+        self.actuators_ui.pin.setPlaceholderText("Pin")
+        self.actuators_ui.min.setPlaceholderText("Minimum")
+        self.actuators_ui.max.setPlaceholderText("Maximum")
 
-        timer = qtc.QTimer(self)
-        timer.setInterval(25)
-        timer.timeout.connect(self.update)
-        timer.start()
+        self.actuators_ui.progressBar.setMinimum(0)
+        self.actuators_ui.progressBar.setMaximum(0)
+
+        self.actuators_ui.scrollArea.setVisible(False)
+        #self.actuators_ui.options_frame.setVisible(False)
+
+        self.actuators_ui.add.clicked.connect(self.add_new_actuator)
+        #self.connect()
+
+        #timer = qtc.QTimer(self)
+        #timer.setInterval(25)
+        #timer.timeout.connect(self.update)
+        #timer.start()
 
         self.show()
 
-    def connect(self):
+    def set_done_upload(self):
         """
-        Connects all widgets
+        Stops loading and shows scroll bars
         """
+        self.actuators_ui.loading.setVisible(False)
+        self.actuators_ui.scrollArea.setVisible(True)
+        #self.actuators_ui.options_frame.setVisible(True)
 
-        self.actuators_ui.slider.setMinimum(self.min)
-        self.actuators_ui.slider.setMaximum(self.max)
-        self.actuators_ui.slider.setValue((self.min + self.max) // 2)
-        self.actuators_ui.slider.setTickPosition(qtw.QSlider.TicksBelow)
-        self.actuators_ui.slider.setTickInterval(self.max - self.min)
-        self.actuators_ui.slider.valueChanged.connect(self.update_pos)
-
-        self.actuators_ui.lower_lim.returnPressed.connect(self.set_lower_lim)
-        self.actuators_ui.upper_lim.returnPressed.connect(self.set_upper_lim)
-
-        self.actuators_ui.lower_lim.setText(str(self.min))
-        self.actuators_ui.upper_lim.setText(str(self.max))
-
-        self.actuators_ui.add_actuator.clicked.connect(self.add_new_actuator)
-
-    def update_servos(self):
+    def set_progress(self, value):
         """
-        Updates all avaliable servos, removes unavaliable ones
+        Sets the progress value on the progress bar
+
+        Args:
+            value (int): the percentage of the way through
         """
-        servos_on_gui = [self.actuators_ui.select_actuator.itemText(
-            i) for i in range(self.actuators_ui.select_actuator.count())]
+        self.actuators_ui.progressBar.setValue(value)
 
-        # adds new items
-        for servo in self.actuators:
-            if servo not in servos_on_gui:
-                self.actuators_ui.select_actuator.addItem(servo)
-
-        # removes old items
-        for servo in servos_on_gui:
-            if servo not in self.actuators:
-                target = self.actuators_ui.select_actuator.findText(servo)
-                self.actuators_ui.select_actuator.removeItem(target)
-
-    def update_slider(self):
-        """
-        Adds sliders to the QScrollAreas
-        TODO
-        """
-        #for i in reversed(range(self.actuators_ui.scroll.layout().count())):
-        #    self.actuators_ui.scroll.layout().itemAt(i).widget().setParent(None)
-
-        self.sliders = []
-        sliders = list(self.actuators.keys())
-
-        for _ in sliders:
-            device_actuator = qtw.QSlider(qtc.Qt.Horizontal)
-            self.sliders.append(device_actuator)
-            self.actuators_ui.slider_area.addWidget(self.sliders[-1])
-
-    def update(self):
-        """
-        Keeps all information relevant
-        """
-
-        self.actuators_ui.slider.setMinimum(self.min)
-        self.actuators_ui.slider.setMaximum(self.max)
-
-        try:
-            self.actuators_ui.pos.setText(f"Position: {self.actuators_ui.slider.value()}")
-            self.actuators_ui.actuator.setText(
-                f"Actuator: {self.actuators_ui.select_actuator.currentText()}")
-            self.actuators_ui.pin.setText(
-                f"Pin: {self.actuators[self.actuators_ui.select_actuator.currentText()]}")
-        except KeyError:
-            pass
-
-        self.update_servos()
-
-    def update_pos(self):
+    def update_pos(self, value, indx):
         """
         Sends the message to the device.
         """
-        indx = list(self.actuators.keys()).index(self.actuators_ui.select_actuator.currentText())
-        self.device_manager.send(f"servo{indx-1}-{self.actuators_ui.slider.value()}")
+        self.device_manager.send(f"servo{indx}-{value}")
 
-    def set_upper_lim(self):
+    def create_new_slider(self, name, minimum, maximum):
         """
-        Sets the value of the upper limit
+        Creates the layout for a new slider.
         """
+        horizontal_layout = qtw.QHBoxLayout()
 
-        self.max = int(self.actuators_ui.upper_lim.text())
+        name_label = qtw.QLabel(name)
 
-    def set_lower_lim(self):
-        """
-        Sets the value of the upper limit
-        """
+        slider = qtw.QSlider(self.actuators_ui.scrollAreaWidgetContents)
+        slider.setOrientation(qtc.Qt.Horizontal)
+        slider.setMinimum(minimum)
+        slider.setMaximum(maximum)
+        slider.setValue((minimum + maximum) // 2)
+        slider.valueChanged.connect(lambda: self.update_pos(slider.value(),
+                                                            self.sliders.index(horizontal_layout)))
 
-        self.min = int(self.actuators_ui.lower_lim.text())
+        pos_label = qtw.QLabel()
+
+        spacer = qtw.QSpacerItem(20,
+                                40,
+                                qtw.QSizePolicy.Minimum,
+                                qtw.QSizePolicy.Maximum)
+
+        horizontal_layout.addWidget(name_label)
+        horizontal_layout.addWidget(slider)
+        horizontal_layout.addWidget(pos_label)
+        horizontal_layout.addItem(spacer)
+
+        return horizontal_layout
 
     def add_new_actuator(self):
         """
         Defines a new actuator.
         """
+        name = self.actuators_ui.name.text()
 
-        self.actuators[self.actuators_ui.name.text()] = int(self.actuators_ui.pin_input.text())
-        self.device_manager.send(f"addservo-{int(self.actuators_ui.pin_input.text())}")
+        try:
+            pin = int(self.actuators_ui.pin.text())
+            minimum = int(self.actuators_ui.min.text())
+            maximum = int(self.actuators_ui.max.text())
+        except ValueError:
+            print("<<< WARNING >>> PIN, MIN, MAX NEED TO BE INTEGERS")
+            return
+
+        self.actuators[name] = [pin, minimum, maximum]
+        self.device_manager.send(f"addservo-{pin}")
+
+        self.sliders.append(self.create_new_slider(name, minimum, maximum))
+        self.actuators_ui.verticalLayout_2.addLayout(self.sliders[-1])
 
         self.actuators_ui.name.setText("")
-        self.actuators_ui.pin_input.setText("")
-
-        self.update_slider()
+        self.actuators_ui.pin.setText("")
+        self.actuators_ui.min.setText("")
+        self.actuators_ui.max.setText("")
