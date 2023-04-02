@@ -14,25 +14,52 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(447, 201)
+        MainWindow.resize(570, 376)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.loading = QtWidgets.QFrame(self.centralwidget)
+        self.loading.setObjectName("loading")
+        self.loading_screen = QtWidgets.QVBoxLayout(self.loading)
+        self.loading_screen.setObjectName("loading_screen")
+        self.textBrowser = QtWidgets.QTextBrowser(self.loading)
+        self.textBrowser.setStyleSheet("/*General Styling*/\n"
+"* {\n"
+"  \n"
+"  font: 10pt \"Roboto \";\n"
+"  font-size: 14px;\n"
+"  background-color: #32323C;\n"
+"  color: #FFFFFF;\n"
+"}\n"
+"\n"
+"/*Text Box Styling*/\n"
+"QTextBrowser {\n"
+"  border: none; \n"
+"  padding-left:10px; \n"
+"  padding-top:10px;\n"
+"  border-radius: 10px;\n"
+"}")
+        self.textBrowser.setObjectName("textBrowser")
+        self.loading_screen.addWidget(self.textBrowser)
+        self.progressBar = QtWidgets.QProgressBar(self.loading)
+        self.progressBar.setProperty("value", 24)
+        self.progressBar.setObjectName("progressBar")
+        self.loading_screen.addWidget(self.progressBar)
+        spacerItem = QtWidgets.QSpacerItem(20, 100, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.loading_screen.addItem(spacerItem)
+        self.verticalLayout.addWidget(self.loading)
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 427, 161))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 533, 73))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.min = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.min.setObjectName("min")
-        self.horizontalLayout.addWidget(self.min)
         self.add = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
         self.add.setObjectName("add")
         self.horizontalLayout.addWidget(self.add)
@@ -42,6 +69,9 @@ class Ui_MainWindow(object):
         self.pin = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.pin.setObjectName("pin")
         self.horizontalLayout.addWidget(self.pin)
+        self.min = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
+        self.min.setObjectName("min")
+        self.horizontalLayout.addWidget(self.min)
         self.max = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.max.setObjectName("max")
         self.horizontalLayout.addWidget(self.max)
@@ -65,6 +95,18 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
+        self.logo = QtWidgets.QLabel(self.centralwidget)
+        self.logo.setMinimumSize(QtCore.QSize(0, 50))
+        self.logo.setStyleSheet("QLabel#logo{\n"
+"  background-color: #32323C;\n"
+"  image: url(Ui/SideKick_Logo.png);\n"
+"  width:100px;\n"
+"  height:50px;\n"
+"}\n"
+"")
+        self.logo.setText("")
+        self.logo.setObjectName("logo")
+        self.verticalLayout.addWidget(self.logo)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -76,6 +118,14 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Actuator Test"))
+        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Uploading sketch please wait...</span></p></body></html>"))
         self.add.setText(_translate("MainWindow", "Add Actuator"))
         self.name_1.setText(_translate("MainWindow", "   All   "))
 
