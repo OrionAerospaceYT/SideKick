@@ -30,8 +30,8 @@ from widgets import SideMenu
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = False
-CONSCIOS_PATH = ""
+DEV = True
+CONSCIOS_PATH = "D:\\.downloads\\ConsciOS\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -373,7 +373,9 @@ class MainGUI(qtw.QMainWindow):
         port = self.device_manager.port
 
         self.file_manager.set_current_project(self.file_manager.actuators_test, True)
+        self.file_manager.dev = False
         self.commands = self.file_manager.compile_and_upload_commands(port, board)
+        self.file_manager.dev = True
 
         self.upload = True
 
