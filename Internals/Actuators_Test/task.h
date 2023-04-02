@@ -63,10 +63,10 @@ namespace task
         }
       }
 
-      for (int i=0; i<actuators::servoCount; i++)
+      /*for (int i=0; i<actuators::servoCount; i++)
       {
         GRAPH(i, actuators::positions[i], TOP);
-      }
+      }*/
     }
 
 } // namespace task
