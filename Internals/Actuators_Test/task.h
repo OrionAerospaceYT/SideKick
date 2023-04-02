@@ -22,32 +22,27 @@ namespace task
 
     // Can be used for code that only runs once
     // This can also be run multiple times by changing the code flow in main.h
-    void Setup()
-    {
+    void Setup(){
         subtask::exampleLongFunc(); // you can delete this purely for demonstration
     }
 
     // Can be used to automatically test actuators
     // Very useful for quick plug and play testing
-    void ActuatorTest()
-    {
+    void ActuatorTest(){
     }
 
     // Can be used to print sensor values and any other required calibration
-    void Calibration()
-    {
+    void Calibration(){
     }
 
     // Code that loops
     void Loop()
     {
       while (Serial.available()) {
-
         String command = Serial.readStringUntil('\n');
         int dividerIndex = command.indexOf('-');
 
         if (dividerIndex != -1) {
-
           String servoName = command.substring(0, dividerIndex);
           String servoNumberString = command.substring(dividerIndex + 1);
           int servoNumber = servoNumberString.toInt();
@@ -55,7 +50,7 @@ namespace task
           if (servoName.startsWith("addservo")) {
             actuators::addServo(servoNumber);
           }
-          else if (servoName.startsWith("servo")) {
+          if (servoName.startsWith("servo")) {
             String indexString = servoName.substring(5);
             int servoIndex = indexString.toInt();
             actuators::moveServo(servoIndex, servoNumber);
