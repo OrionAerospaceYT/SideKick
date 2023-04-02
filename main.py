@@ -54,6 +54,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.setupUi(self)
 
         # Associative classes are initialised here
+        self.actuator_gui = None
         self.device_manager = DeviceManager()
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
@@ -149,7 +150,7 @@ class MainGUI(qtw.QMainWindow):
         """
 
         self.upload_actuator()
-        ActuatorGUI(self.device_manager, self)
+        self.actuator_gui = ActuatorGUI(self.device_manager, self)
 
     def add_supported_boards(self):
         """
@@ -541,6 +542,11 @@ class MainGUI(qtw.QMainWindow):
                     self.connect_device(port)
 
                 self.upload = False
+
+                try:
+                    self.actuator_gui.set_done_upload()
+                except AttributeError():
+                    pass
 
 if __name__ == "__main__":
 
