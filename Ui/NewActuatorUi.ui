@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>570</width>
-    <height>376</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,7 +90,7 @@ QProgressBar::chunk
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="options_frame">
+     <widget class="QWidget" name="options_widget" native="true">
       <layout class="QHBoxLayout" name="options">
        <property name="sizeConstraint">
         <enum>QLayout::SetFixedSize</enum>
