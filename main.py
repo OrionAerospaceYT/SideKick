@@ -30,7 +30,7 @@ from widgets import SideMenu
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-DEV = True
+DEV = False
 CONSCIOS_PATH = "D:\\.downloads\\ConsciOS\\ConsciOS"
 
 class MainGUI(qtw.QMainWindow):
@@ -545,7 +545,7 @@ class MainGUI(qtw.QMainWindow):
 
                 try:
                     self.actuator_gui.set_done_upload()
-                except AttributeError():
+                except TypeError():
                     pass
 
 if __name__ == "__main__":
