@@ -27,6 +27,8 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.sliders = []
 
+        self.done = False
+
         self.pos = 0
         self.min = 0
         self.max = 180
@@ -40,25 +42,32 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.progressBar.setMaximum(0)
 
         self.actuators_ui.scrollArea.setVisible(False)
-        #self.actuators_ui.options_frame.setVisible(False)
+        self.actuators_ui.options_widget.setVisible(False)
 
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
-        #self.connect()
-
-        #timer = qtc.QTimer(self)
-        #timer.setInterval(25)
-        #timer.timeout.connect(self.update)
-        #timer.start()
 
         self.show()
 
+        self.timer = qtc.QTimer(self)
+        self.timer.setInterval(25)
+        self.timer.timeout.connect(self.display_all)
+        self.timer.start()
+
     def set_done_upload(self):
+        """
+        Sends the command to stop loading and show scroll bars
+        """
+        self.done = True
+
+    def display_all(self):
         """
         Stops loading and shows scroll bars
         """
-        self.actuators_ui.loading.setVisible(False)
-        self.actuators_ui.scrollArea.setVisible(True)
-        #self.actuators_ui.options_frame.setVisible(True)
+        if self.done:
+            self.actuators_ui.loading.setVisible(False)
+            self.actuators_ui.scrollArea.setVisible(True)
+            self.actuators_ui.options_widget.setVisible(True)
+            self.timer.stop()
 
     def set_progress(self, value):
         """
