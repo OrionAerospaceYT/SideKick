@@ -63,6 +63,8 @@ class ActuatorGUI(qtw.QMainWindow):
         self.min = 0
         self.max = 180
 
+        self.set_place_holder_text()
+
         self.actuators_ui.progressBar.setMinimum(0)
         self.actuators_ui.progressBar.setMaximum(0)
 
@@ -116,11 +118,11 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.progressBar.setValue(value)
 
     def update_pos(self, value, indx):
-        """
+        """``
         Sends the message to the device.
         """
         self.device_manager.send(f"servo{indx}-{value}")
-        self.sliders[indx].pos_label.setText(str(value))
+        #self.sliders[indx].pos_label.setText(str(value))
 
     def create_new_slider(self, name, minimum, maximum):
         """
