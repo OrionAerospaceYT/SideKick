@@ -545,7 +545,7 @@ class MainGUI(qtw.QMainWindow):
 
                 try:
                     self.actuator_gui.set_done_upload()
-                except TypeError():
+                except:
                     pass
 
 if __name__ == "__main__":
