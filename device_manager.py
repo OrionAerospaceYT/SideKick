@@ -237,7 +237,7 @@ class DeviceManager():
 
         for port in serial.tools.list_ports.comports():
             available_ports.append(port.device)
-            print(port.description)
+            #print(port.description)
         return available_ports
 
     def compile_script(self, compile_cmd):
