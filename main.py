@@ -240,9 +240,7 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Uploading"))
         elif self.device_manager.error is not None:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:10pt}")
-            self.main_ui.top_update.setText(
-                f"Error, could not connect!\n{self.device_manager.error}")
+            self.main_ui.top_update.setText("Error, could not connect!")
         else:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText("")
@@ -482,7 +480,6 @@ class MainGUI(qtw.QMainWindow):
 
         while RUNNING:
             # Com ports
-            port = self.device_manager.port
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(DEV)
 
             # Projects
@@ -527,7 +524,6 @@ class MainGUI(qtw.QMainWindow):
 
                 self.debug_window = False
 
-                port = self.device_manager.port
                 self.device_manager.terminate_device()
 
                 error = self.device_manager.upload_script(self.commands[0], self.commands[1])
@@ -539,7 +535,7 @@ class MainGUI(qtw.QMainWindow):
 
                 try:
                     self.actuator_gui.set_done_upload()
-                except:
+                except AttributeError():
                     pass
 
 if __name__ == "__main__":
