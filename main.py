@@ -535,7 +535,7 @@ class MainGUI(qtw.QMainWindow):
 
                 try:
                     self.actuator_gui.set_done_upload()
-                except AttributeError():
+                except AttributeError:
                     pass
 
 if __name__ == "__main__":
@@ -552,10 +552,15 @@ if __name__ == "__main__":
     main_gui.show()
     app.exec_()
 
+    RUNNING = False
+
+    # waits for whole backend call to finish before ending all of the other threads
+    # prevents errors
+    time.sleep(1)
+
     main_gui.device_manager.terminate_device()
     main_gui.record_light.terminate_record()
     main_gui.message_handler.terminate_ellipsis()
-    RUNNING = False
 
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
