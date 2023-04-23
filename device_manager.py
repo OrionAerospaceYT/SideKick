@@ -237,7 +237,10 @@ class DeviceManager():
 
         for port in serial.tools.list_ports.comports():
             available_ports.append(port.device)
-            #print(port.description)
+            print(port.description)
+            if not self.connected and ("USB" in port.description):
+                self.connect_device(str(port.device))
+                time.sleep(1)
         return available_ports
 
     def compile_script(self, compile_cmd):
