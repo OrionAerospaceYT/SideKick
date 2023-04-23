@@ -59,10 +59,6 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.done = False
 
-        self.pos = 0
-        self.min = 0
-        self.max = 180
-
         self.set_place_holder_text()
 
         self.actuators_ui.progressBar.setMinimum(0)
