@@ -380,7 +380,6 @@ class MainGUI(qtw.QMainWindow):
 
         self.upload = True
 
-
     def upload_project(self):
         """
         Gets selected board to upload to
@@ -535,11 +534,6 @@ class MainGUI(qtw.QMainWindow):
 
                 self.message_handler.decode_debug_message(error)
                 self.debug_window = True
-
-                time.sleep(1)
-
-                if port in self.avaliable_port_list:
-                    self.connect_device(port)
 
                 self.upload = False
 
