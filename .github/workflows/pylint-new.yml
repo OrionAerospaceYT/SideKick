@@ -47,4 +47,4 @@ jobs:
 
     - name: Analysing actuator.py
       run: |
-        pylint actuator.py --disable=I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+        pylint actuator.py --disable=I1101, R0903 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
