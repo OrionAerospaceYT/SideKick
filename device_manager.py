@@ -161,6 +161,7 @@ class DeviceManager():
                 self.device = serial.Serial(port, baud, rtscts=True)
             except serial.SerialException as error:
                 self.error = str(error).replace("(","\n").replace(")","\n")
+                print(self.error)
                 return
 
         self.connected = True
@@ -237,7 +238,7 @@ class DeviceManager():
 
         for port in serial.tools.list_ports.comports():
             available_ports.append(port.device)
-            print(port.description)
+            #print(port.description)
             if not self.connected and ("USB" in port.description):
                 self.connect_device(str(port.device))
                 time.sleep(1)
