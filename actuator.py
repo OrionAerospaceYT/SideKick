@@ -46,7 +46,9 @@ class ActuatorGUI(qtw.QMainWindow):
 
     def __init__(self, device_manager, parent=None):
 
-        super().__init__(parent=parent)
+        self.parent = parent
+
+        super().__init__(parent=self.parent)
 
         self.actuators_ui = actuator()
         self.actuators_ui.setupUi(self)
@@ -57,24 +59,19 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.sliders = []
 
-        self.done = False
-
         self.set_place_holder_text()
 
         self.actuators_ui.progressBar.setMinimum(0)
         self.actuators_ui.progressBar.setMaximum(0)
 
-        self.actuators_ui.scrollArea.setVisible(False)
-        self.actuators_ui.options_widget.setVisible(False)
+        #self.actuators_ui.scrollArea.setVisible(False)
+        #self.actuators_ui.options_widget.setVisible(False)
+        self.actuators_ui.loading.setVisible(False)
 
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
+        self.actuators_ui.upload.clicked.connect(self.upload)
 
         self.show()
-
-        self.timer = qtc.QTimer(self)
-        self.timer.setInterval(25)
-        self.timer.timeout.connect(self.display_all)
-        self.timer.start()
 
     def set_place_holder_text(self):
         """
@@ -86,24 +83,6 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.min.setPlaceholderText("Minimum")
         self.actuators_ui.max.setPlaceholderText("Maximum")
 
-    def set_done_upload(self):
-        """
-        Sends the command to stop loading and show scroll bars
-        """
-        self.done = True
-
-    def display_all(self):
-        """
-        Stops loading and shows scroll bars
-        """
-        if not self.done:
-            return
-
-        self.actuators_ui.loading.setVisible(False)
-        self.actuators_ui.scrollArea.setVisible(True)
-        self.actuators_ui.options_widget.setVisible(True)
-        self.timer.stop()
-
     def set_progress(self, value):
         """
         Sets the progress value on the progress bar
@@ -113,8 +92,14 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         self.actuators_ui.progressBar.setValue(value)
 
+    def upload(self):
+        """
+        Uploads the actuator test demo.
+        """
+        self.parent.upload_project(actuator=True)
+
     def update_pos(self, value, indx):
-        """``
+        """
         Sends the message to the device.
         """
         self.device_manager.send(f"servo{indx}-{value}")
