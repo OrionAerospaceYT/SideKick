@@ -54,7 +54,6 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.setupUi(self)
 
         # Associative classes are initialised here
-        self.actuator_gui = None
         self.device_manager = DeviceManager()
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
@@ -148,9 +147,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the actuator tuning suite
         """
-
-        self.upload_actuator()
-        self.actuator_gui = ActuatorGUI(self.device_manager, self)
+        ActuatorGUI(self.device_manager, self)
 
     def add_supported_boards(self):
         """
@@ -362,23 +359,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.side_menu.show_side_menu(device=True)
 
-    def upload_actuator(self):
-        """
-        Uploads the actuator test script.
-        """
-
-        boards_dictionary = self.file_manager.get_all_boards()
-        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
-        port = self.device_manager.port
-
-        self.file_manager.set_current_project(self.file_manager.actuators_test, True)
-        self.file_manager.dev = False
-        self.commands = self.file_manager.compile_and_upload_commands(port, board)
-        self.file_manager.dev = True
-
-        self.upload = True
-
-    def upload_project(self):
+    def upload_project(self, actuator=False):
         """
         Gets selected board to upload to
         Checks if a device is connected to the gui
@@ -387,11 +368,18 @@ class MainGUI(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
+        if actuator:
+            temp = self.file_manager.current_project
+            self.file_manager.current_project = self.file_manager.actuators_test
+
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
         self.commands = self.file_manager.compile_and_upload_commands(port, board)
+
+        if actuator:
+            self.file_manager.current_project = temp
 
         self.upload = True
 
@@ -532,11 +520,6 @@ class MainGUI(qtw.QMainWindow):
                 self.debug_window = True
 
                 self.upload = False
-
-                try:
-                    self.actuator_gui.set_done_upload()
-                except AttributeError:
-                    pass
 
 if __name__ == "__main__":
 
