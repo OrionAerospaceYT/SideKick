@@ -80,6 +80,9 @@ class Ui_MainWindow(object):
         self.max = QtWidgets.QLineEdit(self.options_widget)
         self.max.setObjectName("max")
         self.options.addWidget(self.max)
+        self.upload = QtWidgets.QPushButton(self.options_widget)
+        self.upload.setObjectName("upload")
+        self.options.addWidget(self.upload)
         spacerItem1 = QtWidgets.QSpacerItem(40, 50, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
         self.options.addItem(spacerItem1)
         self.verticalLayout.addWidget(self.options_widget)
@@ -144,6 +147,7 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Uploading sketch please wait</span></p></body></html>"))
         self.add.setText(_translate("MainWindow", "Add Actuator"))
+        self.upload.setText(_translate("MainWindow", "Upload Demo"))
         self.name_1.setText(_translate("MainWindow", "   All   "))
 
 

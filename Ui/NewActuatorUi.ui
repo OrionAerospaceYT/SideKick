@@ -115,6 +115,13 @@ QProgressBar::chunk
         <widget class="QLineEdit" name="max"/>
        </item>
        <item>
+        <widget class="QPushButton" name="upload">
+         <property name="text">
+          <string>Upload Demo</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
