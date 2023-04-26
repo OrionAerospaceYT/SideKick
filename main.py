@@ -54,6 +54,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.setupUi(self)
 
         # Associative classes are initialised here
+        self.actuator = None
         self.device_manager = DeviceManager()
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
@@ -147,7 +148,18 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the actuator tuning suite
         """
-        ActuatorGUI(self.device_manager, self)
+        if self.actuator != None:
+            return
+        self.actuator = ActuatorGUI(self.device_manager, self)
+        self.actuator.setAttribute(qtc.Qt.WA_DeleteOnClose)
+        self.actuator.show()
+        self.actuator.destroyed.connect(self.close_actuator_gui)
+
+    def close_actuator_gui(self):
+        """
+        Sets actuator_gui to false
+        """
+        self.actuator = None
 
     def add_supported_boards(self):
         """
@@ -368,6 +380,9 @@ class MainGUI(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
+        if self.upload:
+            return
+
         if actuator:
             temp = self.file_manager.current_project
             self.file_manager.current_project = self.file_manager.actuators_test
@@ -387,6 +402,8 @@ class MainGUI(qtw.QMainWindow):
         """
         Compiles the script
         """
+        if self.compile:
+            return
 
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
@@ -520,6 +537,10 @@ class MainGUI(qtw.QMainWindow):
                 self.debug_window = True
 
                 self.upload = False
+
+                if self.actuator is not None:
+                    self.actuator.done_upload()
+
 
 if __name__ == "__main__":
 
