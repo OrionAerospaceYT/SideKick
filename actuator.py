@@ -56,20 +56,41 @@ class ActuatorGUI(qtw.QMainWindow):
         self.device_manager = device_manager
 
         self.actuators = {"All Actuators": 0}
-
         self.sliders = []
+        self.restart = True
+
+        self()
+
+        timer = qtc.QTimer(self)
+        timer.setInterval(1000)
+        timer.timeout.connect(self)
+        timer.start()
+
+    def __call__(self):
+
+        if not self.restart:
+            return
+
+        for i in range(1, self.actuators_ui.verticalLayout_2.layout().count()):
+            widget = self.actuators_ui.verticalLayout_2.itemAt(i)
+            print(type(widget))
+            self.actuators_ui.verticalLayout_2.removeItem(widget)
+
+        self.actuators = {"All Actuators": 0}
+        self.sliders = []
+        self.restart = False
 
         self.set_place_holder_text()
 
         self.actuators_ui.progressBar.setMinimum(0)
         self.actuators_ui.progressBar.setMaximum(0)
 
-        #self.actuators_ui.scrollArea.setVisible(False)
-        #self.actuators_ui.options_widget.setVisible(False)
         self.actuators_ui.loading.setVisible(False)
 
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
         self.actuators_ui.upload.clicked.connect(self.upload)
+
+        self.restart = False
 
     def set_place_holder_text(self):
         """
@@ -103,10 +124,12 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         Removes inputs while uploading so the user does not miss
         assigning any actuators.
+        This functions puts them back on once the upload is complete.
         """
         self.actuators_ui.scrollArea.setVisible(True)
         self.actuators_ui.options_widget.setVisible(True)
         self.actuators_ui.loading.setVisible(False)
+        self.restart = True
 
     def update_pos(self, value, indx):
         """
