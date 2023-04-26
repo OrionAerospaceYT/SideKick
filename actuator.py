@@ -71,8 +71,6 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
         self.actuators_ui.upload.clicked.connect(self.upload)
 
-        self.show()
-
     def set_place_holder_text(self):
         """
         Sets all of the place holder text for the line edits on
@@ -97,6 +95,18 @@ class ActuatorGUI(qtw.QMainWindow):
         Uploads the actuator test demo.
         """
         self.parent.upload_project(actuator=True)
+        self.actuators_ui.scrollArea.setVisible(False)
+        self.actuators_ui.options_widget.setVisible(False)
+        self.actuators_ui.loading.setVisible(True)
+
+    def done_upload(self):
+        """
+        Removes inputs while uploading so the user does not miss
+        assigning any actuators.
+        """
+        self.actuators_ui.scrollArea.setVisible(True)
+        self.actuators_ui.options_widget.setVisible(True)
+        self.actuators_ui.loading.setVisible(False)
 
     def update_pos(self, value, indx):
         """
