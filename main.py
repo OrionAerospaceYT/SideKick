@@ -1,12 +1,6 @@
 """
 This is the main python file responsible for having
 the debugging window open.
-This file also holds the
-
-TODO fix teensy upload (auto upload mode)
-TODO make classes for device manager window and file manager winow
-TODO display COM by default in COM dropdown
-TODO loading saved data (GUI re design in file manager)
 """
 
 import sys
