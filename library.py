@@ -43,8 +43,6 @@ class LibraryManager(qtw.QMainWindow):
         self.library_ui.setupUi(self)
 
         # Adds the scroll wheels
-        self.library_ui.scrollArea.setVerticalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOn)
-        self.library_ui.scrollArea.setHorizontalScrollBarPolicy(qtc.Qt.ScrollBarAlwaysOff)
         self.setFixedSize(750, 500)
 
         # Adds place holder text
@@ -215,8 +213,8 @@ class LibraryManager(qtw.QMainWindow):
         """
 
         # Clears all current text boxes
-        for i in reversed(range(self.library_ui.scroll.layout().count())):
-            self.library_ui.scroll.layout().itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.library_ui.libraries.layout().count())):
+            self.library_ui.libraries.layout().itemAt(i).widget().setParent(None)
 
         # Removes exact copies
         search_results = []
@@ -238,7 +236,7 @@ class LibraryManager(qtw.QMainWindow):
         self.check_boxes = []
         for item in edited_search_results:
 
-            button = qtw.QCheckBox(self.library_ui.scroll)
+            button = qtw.QCheckBox()
 
             icon, name, size = self.text_to_qicon(item)
 
@@ -252,7 +250,7 @@ class LibraryManager(qtw.QMainWindow):
             button.setStyleSheet("""color:#32323C""")
 
             self.check_boxes.append(button)
-            self.library_ui.scroll.layout().addWidget(self.check_boxes[-1])
+            self.library_ui.libraries.addWidget(self.check_boxes[-1])
 
         # Clears the search term
         self.library_ui.search.setText("")
