@@ -317,7 +317,6 @@ class MainGUI(qtw.QMainWindow):
         """
         Gets the directory URL from getExistingDirectoryUrl with a
         QFileDialog and then creates a sidekick project in that directory.
-        TODO
         """
         folder_path = qtw.QFileDialog.getSaveFileName(self,
                             'Create Folder', self.file_manager.projects_path, 'Folders (*)')[0]
