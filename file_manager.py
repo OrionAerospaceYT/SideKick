@@ -6,6 +6,7 @@ deletion of files.
 import os
 import shutil
 import platform
+import json
 
 class SaveManager():
     """
@@ -69,8 +70,41 @@ class SaveManager():
 
         return [item.strip() for item in data]
 
+class JsonManager():
+    """
+    Json loader class that gets all information for the arduino
+    library manager.
+    """
 
-class FileManager():
+    def __init__(self, path):
+
+        self.path = path
+        self.libraries = {}
+        self.load()
+        self.get_info(list(self.libraries.keys())[0])
+
+    def load(self):
+        with open(self.path, encoding="utf-8") as file:
+            data = json.load(file)
+
+        libraries = data.get("libraries")
+        for library in libraries:
+            if library["name"] in self.libraries:
+                self.libraries[library["name"]]["version"].append(library["version"])
+            else:
+                self.libraries[library["name"]] = library
+                self.libraries[library["name"]]["version"] = [
+                    self.libraries[library["name"]]["version"]]
+
+    def get_info(self, name):
+        """
+        Formats the library text for the display on library manager wubdiw
+        """
+        for item in list(self.libraries[name].keys()):
+            print(str(item) + " : " + str(self.libraries[name][item]))
+
+
+class FileManager(JsonManager):
     """
     All processing to do with OS information such as file directorys, saves and more
 
@@ -154,6 +188,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
             self.move_libraries(consci_os_path)
             #self.move_source(consci_os_path)
+
+        super().__init__(self.arduino_lib_path)
 
     def create_sidekick_file(self):
         """
