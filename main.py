@@ -306,7 +306,6 @@ class MainGUI(qtw.QMainWindow):
         if (self.device_manager.connected) or (not self.showing_data):
             self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
-
         if self.device_manager.connected:
             self.main_ui.bottom_update.setText("Connected")
             self.main_ui.com_ports.setCurrentText(self.device_manager.port)
