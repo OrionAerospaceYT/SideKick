@@ -13,14 +13,14 @@ class Slider:
     """
     Creates sliders for the actuator test window.
     """
-    def __init__(self, name, minimum, maximum, parent=None):
+    def __init__(self, name, minimum, maximum):
         mid_point = (minimum + maximum) // 2
 
         self.horizontal_layout = qtw.QHBoxLayout()
 
         self.name_label = qtw.QLabel(name)
 
-        self.slider = qtw.QSlider(parent)
+        self.slider = qtw.QSlider()
         self.slider.setOrientation(qtc.Qt.Horizontal)
         self.slider.setMinimum(minimum)
         self.slider.setMaximum(maximum)
@@ -143,7 +143,7 @@ class ActuatorGUI(qtw.QMainWindow):
         Creates the layout for a new slider.
         """
 
-        slider = Slider(name, minimum, maximum, self.actuators_ui.scrollAreaWidgetContents)
+        slider = Slider(name, minimum, maximum)
         slider.slider.valueChanged.connect(lambda: self.update_pos(slider.slider.value(),
                                             self.sliders.index(slider.horizontal_layout)))
         return slider
