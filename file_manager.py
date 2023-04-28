@@ -81,7 +81,7 @@ class JsonManager():
         self.path = path
         self.libraries = {}
         self.load()
-        self.get_info(list(self.libraries.keys())[0])
+        #self.get_info(list(self.libraries.keys())[0])
 
     def load(self):
         with open(self.path, encoding="utf-8") as file:
@@ -96,12 +96,72 @@ class JsonManager():
                 self.libraries[library["name"]]["version"] = [
                     self.libraries[library["name"]]["version"]]
 
-    def get_info(self, name):
+    def get_title(self, name):
         """
-        Formats the library text for the display on library manager wubdiw
+        Returns the formatting for a title on the QTextBrowser of libraries
+        that can be installed.
+
+        Args:
+            name (string): the text for the title (name)
         """
+
+        return f"<h1><p style=\"color:#00f0c3; font-size:20px\">{name}</p></h1><br>"
+
+    def get_link(self, name, link):
+        """
+        Returns the html link for categories which are links.
+
+        Args:
+            name (string): the link
+        """
+
+        return f"<a style=\"color:#8ab4f8\" href={link}>{name}</a>"
+
+    def get_paragraph(self, name, text):
+        """
+        Makes a paragraph for each sub category
+
+        Args:
+            name (string): the name of the category
+            text (string): the description
+        """
+        return f"<p>{name}: {text}</p>"
+
+    def get_html(self, name):
+        """
+        Formats the library text for the display on library manager options
+        """
+        html = ""
+
         for item in list(self.libraries[name].keys()):
-            print(str(item) + " : " + str(self.libraries[name][item]))
+            if item == "name":
+                html = self.get_title(str(self.libraries[name][item]))
+            elif item == "checksum":
+                pass
+            elif item == "repository" or item == "url" or item == "website":
+                html += self.get_link(item, str(self.libraries[name][item]))
+            elif isinstance(item, str):
+                html += self.get_paragraph(item, str(self.libraries[name][item]))
+
+        return html
+
+    def get_all_libraries(self, name):
+        """
+        Returns all keys with the name in them.
+
+        Args:
+            name (string): the keyword to look for in the name
+        """
+
+        keys = list(self.libraries.keys())
+
+        libraries = []
+
+        for key in keys:
+            if name.lower() in key.lower():
+                libraries.append(key)
+
+        return libraries
 
 
 class FileManager(JsonManager):
