@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(462, 404)
+        MainWindow.resize(515, 428)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget.setObjectName("centralwidget")
@@ -25,23 +25,20 @@ class Ui_MainWindow(object):
         self.search = QtWidgets.QLineEdit(self.centralwidget)
         self.search.setObjectName("search")
         self.gridLayout.addWidget(self.search, 1, 0, 1, 1)
-        self.enter = QtWidgets.QPushButton(self.centralwidget)
-        self.enter.setObjectName("enter")
-        self.gridLayout.addWidget(self.enter, 1, 1, 1, 1)
         self.logo = QtWidgets.QLabel(self.centralwidget)
         self.logo.setText("")
         self.logo.setObjectName("logo")
         self.gridLayout.addWidget(self.logo, 0, 0, 1, 2)
-        self.install = QtWidgets.QPushButton(self.centralwidget)
-        self.install.setObjectName("install")
-        self.gridLayout.addWidget(self.install, 3, 0, 1, 2)
+        self.enter = QtWidgets.QPushButton(self.centralwidget)
+        self.enter.setObjectName("enter")
+        self.gridLayout.addWidget(self.enter, 1, 1, 1, 1)
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidget = QtWidgets.QWidget()
-        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 423, 285))
+        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 476, 338))
         self.scrollAreaWidget.setObjectName("scrollAreaWidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -63,7 +60,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "SideKick Library Manager"))
         self.enter.setText(_translate("MainWindow", "Enter"))
-        self.install.setText(_translate("MainWindow", "Install"))
 
 
 if __name__ == "__main__":
