@@ -115,7 +115,7 @@ class JsonManager():
             name (string): the link
         """
 
-        return f"<a style=\"color:#8ab4f8\" href={link}>{name}</a>"
+        return f"<a style=\"color:#8ab4f8\" href={link}>{name}</a><br>"
 
     def get_paragraph(self, name, text):
         """
@@ -136,7 +136,7 @@ class JsonManager():
         for item in list(self.libraries[name].keys()):
             if item == "name":
                 html = self.get_title(str(self.libraries[name][item]))
-            elif item == "checksum":
+            elif item == "checksum" or item == "version":
                 pass
             elif item == "repository" or item == "url" or item == "website":
                 html += self.get_link(item, str(self.libraries[name][item]))
@@ -144,6 +144,13 @@ class JsonManager():
                 html += self.get_paragraph(item, str(self.libraries[name][item]))
 
         return html
+
+    def get_versions(self, name):
+        """
+        Returns all of the versions that are avaliable.
+        """
+
+        return list(self.libraries[name]["version"])
 
     def get_all_libraries(self, name):
         """
