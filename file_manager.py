@@ -84,6 +84,9 @@ class JsonManager():
         #self.get_info(list(self.libraries.keys())[0])
 
     def load(self):
+        """
+        Loads all libraries from the library.json file in arduino15.
+        """
         with open(self.lib_path, encoding="utf-8") as file:
             data = json.load(file)
 
@@ -136,9 +139,9 @@ class JsonManager():
         for item in list(self.libraries[name].keys()):
             if item == "name":
                 html = self.get_title(str(self.libraries[name][item]))
-            elif item == "checksum" or item == "version":
+            elif item in ("checksum", "version"):
                 pass
-            elif item == "repository" or item == "url" or item == "website":
+            elif item in ("repository", "url", "website"):
                 html += self.get_link(item, str(self.libraries[name][item]))
             elif isinstance(item, str):
                 html += self.get_paragraph(item, str(self.libraries[name][item]))
