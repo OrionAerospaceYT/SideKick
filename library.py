@@ -129,6 +129,10 @@ class LibraryManager(qtw.QMainWindow):
     def install(self, version, name):
         """
         calls the actuall install function on a thread
+
+        Args:
+            version (string): the selected version to install
+            name (string): the name of the library to install   
         """
 
         print(name, version)
@@ -139,9 +143,13 @@ class LibraryManager(qtw.QMainWindow):
     def threaded_install(self, version, name):
         """
         Installs the libraries that the user has checked
+
+        Args:
+            version (string): the selected version to install
+            name (string): the name of the library to install        
         """
 
         cli_path = self.file_manager.get_cli_path()
         install_cmd = f"{cli_path} lib install \"{name}@{version}\""
-        print(install_cmd)
+
         subprocess.Popen(install_cmd)
