@@ -3,6 +3,7 @@ This is the main python file responsible for having
 the debugging window open.
 """
 
+import os
 import sys
 import threading
 import time
@@ -25,7 +26,16 @@ from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
 DEV = False
-CONSCIOS_PATH = "D:\\.downloads\\ConsciOS\\ConsciOS"
+CONSCIOS_PATH = ""
+
+if "-d" in sys.argv:
+    DEV = True
+
+    if os.path.exists(sys.argv[2]):
+        CONSCIOS_PATH = sys.argv[2]
+    else:
+        print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
+        sys.exit()
 
 class MainGUI(qtw.QMainWindow):
     """
