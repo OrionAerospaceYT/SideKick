@@ -25,17 +25,9 @@ from widgets import SideMenu
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
+RUNNING = True
 DEV = False
 CONSCIOS_PATH = ""
-
-if "-d" in sys.argv:
-    DEV = True
-
-    if os.path.exists(sys.argv[2]):
-        CONSCIOS_PATH = sys.argv[2]
-    else:
-        print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
-        sys.exit()
 
 class MainGUI(qtw.QMainWindow):
     """
@@ -546,7 +538,14 @@ class MainGUI(qtw.QMainWindow):
 
 if __name__ == "__main__":
 
-    RUNNING = True
+    if "-d" in sys.argv:
+        DEV = True
+
+    if os.path.exists(sys.argv[2]):
+        CONSCIOS_PATH = sys.argv[2]
+    else:
+        print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
+        sys.exit()
 
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
