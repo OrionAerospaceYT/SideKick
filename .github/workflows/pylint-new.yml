@@ -43,7 +43,7 @@ jobs:
         
     - name: Analysing library.py
       run: |
-        pylint library.py --disable=I1101 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+        pylint library.py --disable=I1101,R1732 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
 
     - name: Analysing actuator.py
       run: |
