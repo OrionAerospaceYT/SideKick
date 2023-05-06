@@ -3,6 +3,7 @@ Library manager
 """
 
 import threading
+import subprocess
 import math
 
 from PyQt5 import QtWidgets as qtw
@@ -16,7 +17,10 @@ class CheckBox:
     good looking way of displaying all relevant information of a
     library:
     """
-    def __init__(self, html, versions):
+
+    def __init__(self, name, html, versions, parent=None):
+
+        self.name = name
 
         self.vertical_layout = qtw.QVBoxLayout()
 
@@ -26,6 +30,9 @@ class CheckBox:
 
         self.install = qtw.QPushButton("Install")
 
+        if parent:
+            self.install.clicked.connect(lambda: parent.install(self.get_version(),
+                                                                self.name))
         self.vertical_layout.addWidget(self.install)
         self.vertical_layout.addWidget(self.versions)
 
@@ -67,6 +74,11 @@ class CheckBox:
             i += 1
         return num_blocks * 40
 
+    def get_version(self):
+        """
+        returns the version that is currently selected
+        """
+        return str(self.versions.currentText())
 
 class LibraryManager(qtw.QMainWindow):
     """
@@ -108,22 +120,28 @@ class LibraryManager(qtw.QMainWindow):
         Args:
             name (_type_): _description_
         """
-        for item in self.file_manager.get_all_libraries(self.library_ui.search.text()):
-            versions = self.file_manager.get_versions(item)
-            check_box = CheckBox(self.file_manager.get_html(item), versions)
+        for name in self.file_manager.get_all_libraries(self.library_ui.search.text()):
+            versions = self.file_manager.get_versions(name)
+            check_box = CheckBox(name, self.file_manager.get_html(name), versions, parent=self)
             self.check_boxes.append(check_box.horizontal_layout)
             self.library_ui.libraries.addLayout(self.check_boxes[-1])
 
-    def install(self):
+    def install(self, version, name):
         """
         calls the actuall install function on a thread
         """
 
-        install = threading.Thread(target=self.threaded_install)
+        print(name, version)
+
+        install = threading.Thread(target=lambda: self.threaded_install(version, name))
         install.start()
 
-    def threaded_install(self):
+    def threaded_install(self, version, name):
         """
         Installs the libraries that the user has checked
         """
-        pass
+
+        cli_path = self.file_manager.get_cli_path()
+        install_cmd = f"{cli_path} lib install \"{name}@{version}\""
+        print(install_cmd)
+        subprocess.Popen(install_cmd)
