@@ -26,7 +26,8 @@ class DeviceManager():
     TODO: full class docstring
     """
 
-    def __init__(self):
+    def __init__(self, parent=None):
+        self.parent = parent
         self.device = None
         self.get_data = None
         self.port = None
@@ -239,7 +240,8 @@ class DeviceManager():
         for port in serial.tools.list_ports.comports():
             available_ports.append(port.device)
             #print(port.description)
-            if not self.connected and ("USB" in port.description):
+            if not self.connected and ("USB" in port.description)\
+and not self.parent.showing_data:
                 self.connect_device(str(port.device))
                 time.sleep(1)
         return available_ports

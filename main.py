@@ -51,7 +51,7 @@ class MainGUI(qtw.QMainWindow):
 
         # Associative classes are initialised here
         self.actuator = None
-        self.device_manager = DeviceManager()
+        self.device_manager = DeviceManager(self)
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
@@ -416,6 +416,7 @@ class MainGUI(qtw.QMainWindow):
             already_called (bool): for some reason this function needs to be called twice
         """
         self.showing_data = True
+        self.device_manager.terminate_device()
 
         if not already_called:
             save, _ =  qtw.QFileDialog.getOpenFileName(
@@ -541,11 +542,11 @@ if __name__ == "__main__":
     if "-d" in sys.argv:
         DEV = True
 
-    if os.path.exists(sys.argv[2]):
-        CONSCIOS_PATH = sys.argv[2]
-    else:
-        print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
-        sys.exit()
+        if os.path.exists(sys.argv[2]):
+            CONSCIOS_PATH = sys.argv[2]
+        else:
+            print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
+            sys.exit()
 
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
