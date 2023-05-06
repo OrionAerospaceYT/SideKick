@@ -78,13 +78,13 @@ class JsonManager():
 
     def __init__(self, path):
 
-        self.path = path
+        self.lib_path = path
         self.libraries = {}
         self.load()
         #self.get_info(list(self.libraries.keys())[0])
 
     def load(self):
-        with open(self.path, encoding="utf-8") as file:
+        with open(self.lib_path, encoding="utf-8") as file:
             data = json.load(file)
 
         libraries = data.get("libraries")
@@ -399,6 +399,13 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             name (str): the project name
         """
         shutil.rmtree(f"{self.projects_path}{self.sep}{name}")
+
+    def get_cli_path(self):
+        """
+        Returns:
+            string: the path to arduino cli
+        """
+        return f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\""
 
     def compile_and_upload_commands(self, port, board):
         """
