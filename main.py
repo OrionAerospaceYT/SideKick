@@ -142,7 +142,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the actuator tuning suite
         """
-        if self.actuator != None:
+        if self.actuator is not None:
             return
         self.actuator = ActuatorGUI(self.device_manager, self)
         self.actuator.setAttribute(qtc.Qt.WA_DeleteOnClose)
