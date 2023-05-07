@@ -43,6 +43,7 @@ namespace task
 
         if (command.startsWith("reset")) {
           actuators::reset();
+          PRINT("Reset all actuators.")
         }
 
         int dividerIndex = command.indexOf('-');
