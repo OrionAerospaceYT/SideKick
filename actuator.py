@@ -71,11 +71,7 @@ class ActuatorGUI(qtw.QMainWindow):
         if not self.restart:
             return
 
-        for i in range(1, self.actuators_ui.verticalLayout_2.layout().count()):
-            widget = self.actuators_ui.verticalLayout_2.itemAt(i)
-            print(type(widget))
-            self.actuators_ui.verticalLayout_2.removeItem(widget)
-
+        self.clear_layout(self.actuators_ui.verticalLayout_2)
         self.actuators = {"All Actuators": 0}
         self.sliders = []
         self.restart = False
@@ -91,6 +87,28 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.upload.clicked.connect(self.upload)
 
         self.restart = False
+
+    def clear_layout(self, layout):
+        """
+        Removes all layouts and widgets from the screen except for first item.
+        """
+        while layout.count() > 1:
+            child = layout.takeAt(1)
+            if child.widget():
+                child.widget().deleteLater()
+            elif child.layout():
+                self.clear_sub_layout(child.layout())
+
+    def clear_sub_layout(self, layout):
+        """
+        Removes all layouts and widgets from the screen.
+        """
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+            elif child.layout():
+                self.clear_layout(child.layout())
 
     def set_place_holder_text(self):
         """
