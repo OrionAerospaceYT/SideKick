@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\ActuatorUi.ui'
+# Form implementation generated from reading ui file '.\NewActuatorUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,91 +14,145 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(513, 376)
+        MainWindow.resize(750, 481)
+        MainWindow.setMinimumSize(QtCore.QSize(750, 464))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.gridLayout = QtWidgets.QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.actuator = QtWidgets.QLabel(self.centralwidget)
-        self.actuator.setObjectName("actuator")
-        self.verticalLayout.addWidget(self.actuator)
-        self.pin = QtWidgets.QLabel(self.centralwidget)
-        self.pin.setObjectName("pin")
-        self.verticalLayout.addWidget(self.pin)
-        self.pos = QtWidgets.QLabel(self.centralwidget)
-        self.pos.setObjectName("pos")
-        self.verticalLayout.addWidget(self.pos)
-        self.gridLayout.addLayout(self.verticalLayout, 6, 0, 1, 2)
-        self.new_actuator = QtWidgets.QVBoxLayout()
-        self.new_actuator.setObjectName("new_actuator")
-        self.name = QtWidgets.QLineEdit(self.centralwidget)
+        self.loading = QtWidgets.QFrame(self.centralwidget)
+        self.loading.setObjectName("loading")
+        self.loading_screen = QtWidgets.QVBoxLayout(self.loading)
+        self.loading_screen.setObjectName("loading_screen")
+        self.textBrowser = QtWidgets.QTextBrowser(self.loading)
+        self.textBrowser.setStyleSheet("/*General Styling*/\n"
+"* {\n"
+"  \n"
+"  font: 10pt \"Roboto \";\n"
+"  font-size: 14px;\n"
+"  background-color: #32323C;\n"
+"  color: #FFFFFF;\n"
+"}\n"
+"\n"
+"/*Text Box Styling*/\n"
+"QTextBrowser {\n"
+"  border: none; \n"
+"  padding-left:10px; \n"
+"  padding-top:10px;\n"
+"  border-radius: 10px;\n"
+"}")
+        self.textBrowser.setObjectName("textBrowser")
+        self.loading_screen.addWidget(self.textBrowser)
+        self.progressBar = QtWidgets.QProgressBar(self.loading)
+        self.progressBar.setStyleSheet("QProgressBar\n"
+"{\n"
+"    border: solid grey;\n"
+"    border-radius: 15px;\n"
+"    color: black;\n"
+"}\n"
+"QProgressBar::chunk\n"
+"{\n"
+"    background-color: #00f0c3;\n"
+"    border-radius:15px;\n"
+"}")
+        self.progressBar.setProperty("value", 24)
+        self.progressBar.setObjectName("progressBar")
+        self.loading_screen.addWidget(self.progressBar)
+        spacerItem = QtWidgets.QSpacerItem(20, 100, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.loading_screen.addItem(spacerItem)
+        self.verticalLayout.addWidget(self.loading)
+        self.options_widget = QtWidgets.QWidget(self.centralwidget)
+        self.options_widget.setObjectName("options_widget")
+        self.options = QtWidgets.QHBoxLayout(self.options_widget)
+        self.options.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.options.setObjectName("options")
+        self.name = QtWidgets.QLineEdit(self.options_widget)
         self.name.setObjectName("name")
-        self.new_actuator.addWidget(self.name)
-        self.pin_input = QtWidgets.QLineEdit(self.centralwidget)
-        self.pin_input.setObjectName("pin_input")
-        self.new_actuator.addWidget(self.pin_input)
-        self.select_actuator = QtWidgets.QComboBox(self.centralwidget)
-        self.select_actuator.setObjectName("select_actuator")
-        self.new_actuator.addWidget(self.select_actuator)
-        self.add_actuator = QtWidgets.QPushButton(self.centralwidget)
-        self.add_actuator.setObjectName("add_actuator")
-        self.new_actuator.addWidget(self.add_actuator)
-        self.gridLayout.addLayout(self.new_actuator, 6, 2, 1, 1)
-        self.upper_lim = QtWidgets.QLineEdit(self.centralwidget)
-        self.upper_lim.setObjectName("upper_lim")
-        self.gridLayout.addWidget(self.upper_lim, 4, 2, 1, 1)
-        self.slider = QtWidgets.QSlider(self.centralwidget)
-        self.slider.setOrientation(QtCore.Qt.Horizontal)
-        self.slider.setObjectName("slider")
-        self.gridLayout.addWidget(self.slider, 2, 0, 1, 3)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 4, 1, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem1, 5, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem2, 0, 0, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem3, 3, 1, 1, 1)
-        self.lower_lim = QtWidgets.QLineEdit(self.centralwidget)
-        self.lower_lim.setObjectName("lower_lim")
-        self.gridLayout.addWidget(self.lower_lim, 4, 0, 1, 1)
+        self.options.addWidget(self.name)
+        self.pin = QtWidgets.QLineEdit(self.options_widget)
+        self.pin.setObjectName("pin")
+        self.options.addWidget(self.pin)
+        self.min = QtWidgets.QLineEdit(self.options_widget)
+        self.min.setObjectName("min")
+        self.options.addWidget(self.min)
+        self.max = QtWidgets.QLineEdit(self.options_widget)
+        self.max.setObjectName("max")
+        self.options.addWidget(self.max)
+        self.add = QtWidgets.QPushButton(self.options_widget)
+        self.add.setObjectName("add")
+        self.options.addWidget(self.add)
+        self.verticalLayout.addWidget(self.options_widget)
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
-        self.scroll = QtWidgets.QWidget()
-        self.scroll.setGeometry(QtCore.QRect(0, 0, 474, 113))
-        self.scroll.setObjectName("scroll")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.scroll)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(160, 20, 160, 80))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.slider_area = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.slider_area.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
-        self.slider_area.setContentsMargins(0, 0, 0, 0)
-        self.slider_area.setObjectName("slider_area")
-        self.horizontalSlider = QtWidgets.QSlider(self.verticalLayoutWidget)
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
-        self.slider_area.addWidget(self.horizontalSlider)
-        self.scrollArea.setWidget(self.scroll)
-        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 3)
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 713, 70))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.name_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.name_1.setMinimumSize(QtCore.QSize(100, 50))
+        self.name_1.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.name_1.setObjectName("name_1")
+        self.horizontalLayout_2.addWidget(self.name_1)
+        self.value = QtWidgets.QSlider(self.scrollAreaWidgetContents)
+        self.value.setOrientation(QtCore.Qt.Horizontal)
+        self.value.setObjectName("value")
+        self.horizontalLayout_2.addWidget(self.value)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout.addWidget(self.scrollArea)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.upload = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.upload.sizePolicy().hasHeightForWidth())
+        self.upload.setSizePolicy(sizePolicy)
+        self.upload.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.upload.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.upload.setObjectName("upload")
+        self.horizontalLayout_6.addWidget(self.upload)
+        self.logo = QtWidgets.QLabel(self.centralwidget)
+        self.logo.setMinimumSize(QtCore.QSize(0, 50))
+        self.logo.setStyleSheet("QLabel#logo{\n"
+"  background-color: #32323C;\n"
+"  image: url(Ui/SideKick_Logo.png);\n"
+"  width:100px;\n"
+"  height:50px;\n"
+"}\n"
+"")
+        self.logo.setText("")
+        self.logo.setObjectName("logo")
+        self.horizontalLayout_6.addWidget(self.logo)
+        spacerItem1 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem1)
+        self.verticalLayout.addLayout(self.horizontalLayout_6)
         MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Actuator Tuning"))
-        self.actuator.setText(_translate("MainWindow", "Actuator: "))
-        self.pin.setText(_translate("MainWindow", "Pin: "))
-        self.pos.setText(_translate("MainWindow", "Position"))
-        self.add_actuator.setText(_translate("MainWindow", "Add Actuator"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Actuator Test"))
+        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Uploading sketch please wait</span></p></body></html>"))
+        self.add.setText(_translate("MainWindow", "Add Actuator"))
+        self.name_1.setText(_translate("MainWindow", "   All   "))
+        self.upload.setText(_translate("MainWindow", "Upload Tester"))
 
 
 if __name__ == "__main__":
