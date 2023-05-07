@@ -26,9 +26,12 @@ namespace actuators{
   }
 
   void reset() {
-    Servo servos[MAX_NUM_OF_SERVOS];
-    int positions[MAX_NUM_OF_SERVOS];
-    int servoCount = 0;
+    for (int i=0; i<MAX_NUM_OF_SERVOS; i++){
+      servos[i].detach();
+    }
+    servos[MAX_NUM_OF_SERVOS];
+    positions[MAX_NUM_OF_SERVOS];
+    servoCount = 0;
   }
 
   void addServo(int pin) {
