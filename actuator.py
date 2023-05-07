@@ -6,6 +6,7 @@ SideKick GUI.
 
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtGui as qtg
 
 from Ui.NewActuatorUi import Ui_MainWindow as actuator
 
@@ -19,6 +20,8 @@ class Slider:
         self.horizontal_layout = qtw.QHBoxLayout()
 
         self.name_label = qtw.QLabel(name)
+        self.name_label.setMinimumWidth(100)
+        self.name_label.setMinimumHeight(50)
 
         self.slider = qtw.QSlider()
         self.slider.setOrientation(qtc.Qt.Horizontal)
@@ -88,7 +91,11 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
         self.actuators_ui.upload.clicked.connect(self.upload)
 
+        upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
+        upload.activated.connect(self.upload)
+
         self.actuators_ui.value.setMinimum(0)
+        self.actuators_ui.value.setValue(50)
         self.actuators_ui.value.setMaximum(100)
 
         self.actuators_ui.value.valueChanged.connect(lambda: self.update_pos_all(
