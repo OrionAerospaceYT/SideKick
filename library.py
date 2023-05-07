@@ -107,19 +107,29 @@ class LibraryManager(qtw.QMainWindow):
         self.library_ui.search.setPlaceholderText("Search for your library here.")
 
         # Connecting buttons
-        self.library_ui.enter.clicked.connect(self.add_new_label)
-        self.library_ui.search.returnPressed.connect(self.add_new_label)
-        self.library_ui.search.returnPressed.connect(self.add_new_label)
+        self.library_ui.enter.clicked.connect(self.update_labels)
+        self.library_ui.search.returnPressed.connect(self.update_labels)
+        self.library_ui.search.returnPressed.connect(self.update_labels)
 
         self.show()
 
-    def add_new_label(self):
+    def clear_layout(self, layout):
         """
-        Adds more labels
+        Removes all layouts and widgets from the screen.
+        """
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+            elif child.layout():
+                self.clear_layout(child.layout())
 
-        Args:
-            name (_type_): _description_
+    def update_labels(self):
         """
+        Updates the libraries that are on display.
+        """
+        self.clear_layout(self.library_ui.libraries)
+
         for name in self.file_manager.get_all_libraries(self.library_ui.search.text()):
             versions = self.file_manager.get_versions(name)
             check_box = CheckBox(name, self.file_manager.get_html(name), versions, parent=self)
