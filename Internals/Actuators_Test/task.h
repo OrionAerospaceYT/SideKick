@@ -40,6 +40,11 @@ namespace task
     {
       while (Serial.available()) {
         String command = Serial.readStringUntil('\n');
+
+        if (command.startsWith("reset")) {
+          actuators::reset();
+        }
+
         int dividerIndex = command.indexOf('-');
 
         if (dividerIndex != -1) {

@@ -23,7 +23,12 @@ namespace actuators{
 
   void init()
   {
+  }
 
+  void reset() {
+    Servo servos[MAX_NUM_OF_SERVOS];
+    int positions[MAX_NUM_OF_SERVOS];
+    int servoCount = 0;
   }
 
   void addServo(int pin) {
