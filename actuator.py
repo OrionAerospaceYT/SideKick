@@ -8,7 +8,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 
-from Ui.NewActuatorUi import Ui_MainWindow as actuator
+from Ui.ActuatorUi import Ui_MainWindow as actuator
 
 class Slider:
     """
