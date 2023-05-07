@@ -55,7 +55,7 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.device_manager = device_manager
 
-        self.actuators = {"All Actuators": 0}
+        self.actuators = {}
         self.sliders = []
         self.restart = True
 
@@ -71,8 +71,10 @@ class ActuatorGUI(qtw.QMainWindow):
         if not self.restart:
             return
 
+        self.device_manager.send("reset")
+
         self.clear_layout(self.actuators_ui.verticalLayout_2)
-        self.actuators = {"All Actuators": 0}
+        self.actuators = {}
         self.sliders = []
         self.restart = False
 
@@ -85,6 +87,12 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
         self.actuators_ui.upload.clicked.connect(self.upload)
+
+        self.actuators_ui.value.setMinimum(0)
+        self.actuators_ui.value.setMaximum(100)
+
+        self.actuators_ui.value.valueChanged.connect(lambda: self.update_pos_all(
+                self.actuators_ui.value.value()))
 
         self.restart = False
 
@@ -152,9 +160,25 @@ class ActuatorGUI(qtw.QMainWindow):
     def update_pos(self, value, indx):
         """
         Sends the message to the device.
+        
+        Args:
+            value (int): the position to move the actuator
+            indx (int): the number of the actuator to move
         """
         self.device_manager.send(f"servo{indx}-{value}")
-        #self.sliders[indx].pos_label.setText(str(value))
+
+    def update_pos_all(self, value):
+        """ 
+        Sends string to device for every actuator in the actuator list.
+
+        Args:
+            value (int): the percentage to move the actuator
+        """
+        value /= 100
+
+        for i, key in enumerate(self.actuators.items()):
+            position = int(key[1][1] + (key[1][2] - key[1][1]) * value)
+            self.device_manager.send(f"servo{i}-{position}")
 
     def create_new_slider(self, name, minimum, maximum):
         """
