@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
-    <height>385</height>
+    <width>750</width>
+    <height>481</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>750</width>
+    <height>464</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Actuator Test</string>
@@ -96,13 +102,6 @@ QProgressBar::chunk
         <enum>QLayout::SetFixedSize</enum>
        </property>
        <item>
-        <widget class="QPushButton" name="add">
-         <property name="text">
-          <string>Add Actuator</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLineEdit" name="name"/>
        </item>
        <item>
@@ -115,27 +114,11 @@ QProgressBar::chunk
         <widget class="QLineEdit" name="max"/>
        </item>
        <item>
-        <widget class="QPushButton" name="upload">
+        <widget class="QPushButton" name="add">
          <property name="text">
-          <string>Upload Demo</string>
+          <string>Add Actuator</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Maximum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>50</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -150,8 +133,8 @@ QProgressBar::chunk
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>550</width>
-         <height>69</height>
+         <width>713</width>
+         <height>70</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -161,8 +144,8 @@ QProgressBar::chunk
            <widget class="QLabel" name="name_1">
             <property name="minimumSize">
              <size>
-              <width>30</width>
-              <height>0</height>
+              <width>100</width>
+              <height>50</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -183,35 +166,6 @@ QProgressBar::chunk
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="pos_1">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </item>
        </layout>
@@ -219,26 +173,68 @@ QProgressBar::chunk
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="logo">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel#logo{
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QPushButton" name="upload">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text">
+         <string>Upload Tester</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="logo">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel#logo{
   background-color: #32323C;
   image: url(Ui/SideKick_Logo.png);
   width:100px;
   height:50px;
 }
 </string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>150</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
