@@ -204,9 +204,9 @@ class ActuatorGUI(qtw.QMainWindow):
         name = self.actuators_ui.name.text()
 
         try:
-            pin = int(self.actuators_ui.pin.text())
-            minimum = int(self.actuators_ui.min.text())
-            maximum = int(self.actuators_ui.max.text())
+            pin = int(self.actuators_ui.pin.text().strip())
+            minimum = int(self.actuators_ui.min.text().strip())
+            maximum = int(self.actuators_ui.max.text().strip())
         except ValueError:
             print("<<< WARNING >>> PIN, MIN, MAX NEED TO BE INTEGERS")
             return
