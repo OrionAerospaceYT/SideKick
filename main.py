@@ -89,10 +89,7 @@ class MainGUI(qtw.QMainWindow):
         self.commands = []
         self.avaliable_port_list = []
         self.current_projects = []
-        self.supported_boards = []
         self.current_saves = []
-
-        self.supported_boards = {}
 
         threaded_blinking_record = threading.Thread(
             target=self.record_light.threaded_blink, args=(),)
