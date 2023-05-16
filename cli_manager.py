@@ -1,10 +1,14 @@
+"""
+The cli manager file.
+"""
 import subprocess
 import threading
 
-class cli_manager:
+class CliManager:
     """
     Controls the flow of commands to the CLI
     """
+
     def __init__(self, path):
         self.path = path
         self.process = None
@@ -12,6 +16,12 @@ class cli_manager:
         self.running = False
 
     def threaded_call(self, cmd):
+        """
+        Puts the command on the thread to be non blocking
+
+        Args:
+            cmd (string): the command to run in terminal
+        """
         self.running = True
 
         self.process = subprocess.Popen(
@@ -24,4 +34,10 @@ class cli_manager:
         self.running = False
 
     def communicate(self, cmd):
+        """
+        Calls the thread to run the command
+
+        Args:
+            cmd (string): the command to run in terminal
+        """
         threading.Thread(target=self.threaded_call, args=(cmd),)
