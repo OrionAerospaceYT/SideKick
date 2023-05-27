@@ -11,11 +11,12 @@ class CliManager:
 
     def __init__(self, path):
         self.path = path
+        self.cmd = None
         self.process = None
         self.output = None
         self.running = False
 
-    def threaded_call(self, cmd):
+    def threaded_call(self):
         """
         Puts the command on the thread to be non blocking
 
@@ -25,12 +26,13 @@ class CliManager:
         self.running = True
 
         self.process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE,
+                self.cmd, stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 shell=True)
 
         self.output = self.process.communicate()
-
+        print(self.output[0])
+        self.cmd = None
         self.running = False
 
     def communicate(self, cmd):
@@ -40,4 +42,26 @@ class CliManager:
         Args:
             cmd (string): the command to run in terminal
         """
-        threading.Thread(target=self.threaded_call, args=(cmd),)
+        if self.cmd is not None:
+            self.process.kill()
+            print(f"<<< WARNING >>> KILLED PROCESS: {self.cmd}")
+
+        self.cmd = cmd
+        call = threading.Thread(target=self.threaded_call, args=(),)
+        call.start()
+
+if __name__ == "__main__":
+
+    PATH = "\"./Externals/arduino-cli-windows.exe\""
+
+    cli = CliManager(PATH)
+
+    while True:
+
+        command = input(">>> ")
+
+        if command.lower() == "exit":
+            break
+
+        else:
+            cli.communicate(PATH + " " + command)
