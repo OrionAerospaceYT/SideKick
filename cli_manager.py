@@ -11,28 +11,29 @@ class CliManager:
 
     def __init__(self, path):
         self.path = path
-        self.cmd = None
-        self.process = None
+        self.thread = None
         self.output = None
         self.running = False
+        self.process = None
 
-    def threaded_call(self):
+    def threaded_call(self, cmd):
         """
         Puts the command on the thread to be non blocking
 
         Args:
             cmd (string): the command to run in terminal
         """
-        self.running = True
 
         self.process = subprocess.Popen(
-                self.cmd, stdout=subprocess.PIPE,
+                cmd, stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 shell=True)
-
         self.output = self.process.communicate()
-        print(self.output[0])
-        self.cmd = None
+
+        if self.running:
+
+            print("DONE\n>>> ",end="")
+
         self.running = False
 
     def communicate(self, cmd):
@@ -42,13 +43,14 @@ class CliManager:
         Args:
             cmd (string): the command to run in terminal
         """
-        if self.cmd is not None:
-            self.process.kill()
-            print(f"<<< WARNING >>> KILLED PROCESS: {self.cmd}")
+        if self.running:
+            print("<<< WARNING >>> KILLING PROCESS")
+            self.running = False
+            self.thread.join()
 
-        self.cmd = cmd
-        call = threading.Thread(target=self.threaded_call, args=(),)
-        call.start()
+        self.running = True
+        self.thread = threading.Thread(target=self.threaded_call, args=(cmd,),)
+        self.thread.start()
 
 if __name__ == "__main__":
 
