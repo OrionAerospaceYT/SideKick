@@ -51,6 +51,7 @@ class MainGUI(qtw.QMainWindow):
 
         # Associative classes are initialised here
         self.actuator = None
+        self.state_machine = StateMachine()
         self.device_manager = DeviceManager(self)
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.top_graph = Graph(key="1")
@@ -289,13 +290,11 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph.update_graph()
 
         # debugging window
-        if self.prev_debug_window != self.debug_window:
-            if self.debug_window:
-                self.main_ui.debugger.setVisible(True)
-                self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
-            else:
-                self.main_ui.debugger.setVisible(False)
-        self.prev_debug_window = self.debug_window
+        if self.state_machine.debug_window:
+            self.main_ui.debugger.setVisible(True)
+            self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
+        else:
+            self.main_ui.debugger.setVisible(False)
 
         # record light
         self.turn_on_rec_light(self.record_light.show)
