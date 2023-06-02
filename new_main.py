@@ -375,6 +375,7 @@ class MainGUI(qtw.QMainWindow):
         cmd = self.cli_manager.get_command_str(
             f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"")
 
+        self.device_manager.terminate_device()
         self.cli_manager.communicate(cmd)
 
         if actuator:
