@@ -17,6 +17,7 @@ from actuator import ActuatorGUI
 from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
+from cli_manager import CliManager
 
 from widgets import Graph
 from widgets import RecordLight
@@ -51,9 +52,9 @@ class MainGUI(qtw.QMainWindow):
 
         # Associative classes are initialised here
         self.actuator = None
-        self.state_machine = StateMachine()
         self.device_manager = DeviceManager(self)
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
+        self.cli_manager = CliManager(self.file_manager.arduino_path)
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
         self.message_handler = MessageHandler()
@@ -84,10 +85,7 @@ class MainGUI(qtw.QMainWindow):
         self.debug_window = False
         self.prev_debug_window = True
         self.showing_data = False
-        self.upload = False
-        self.compile = False
 
-        self.commands = []
         self.avaliable_port_list = []
         self.current_projects = []
         self.current_saves = []
@@ -234,14 +232,10 @@ class MainGUI(qtw.QMainWindow):
         Updates the top label while uploading or compiling
         """
 
-        if self.compile:
+        if self.cli_manager.running:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText(
-                self.message_handler.get_status("Compiling"))
-        elif self.upload:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
-            self.main_ui.top_update.setText(
-                self.message_handler.get_status("Uploading"))
+                self.message_handler.get_status("Running"))
         elif self.device_manager.error is not None:
             self.main_ui.top_update.setText("Error, could not connect!")
         else:
@@ -290,7 +284,7 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph.update_graph()
 
         # debugging window
-        if self.state_machine.debug_window:
+        if self.debug_window:
             self.main_ui.debugger.setVisible(True)
             self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
         else:
@@ -370,9 +364,6 @@ class MainGUI(qtw.QMainWindow):
         Reconnects the device - or - Displays error on the screen
         """
 
-        if self.upload:
-            return
-
         if actuator:
             temp = self.file_manager.current_project
             self.file_manager.current_project = self.file_manager.actuators_test
@@ -381,27 +372,25 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(port, board)
+        cmd = self.cli_manager.get_command_str(
+            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"")
+
+        self.cli_manager.communicate(cmd)
 
         if actuator:
             self.file_manager.current_project = temp
-
-        self.upload = True
 
     def compile_project(self):
         """
         Compiles the script
         """
-        if self.compile:
-            return
-
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
-        port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(port, board)
+        cmd = self.cli_manager.get_command_str(
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"")
 
-        self.compile = True
+        self.cli_manager.communicate(cmd)
 
     def display_save(self, already_called=False, save=None):
         """
@@ -514,31 +503,6 @@ class MainGUI(qtw.QMainWindow):
                 self.device_manager.reset_difference(data)
             else:
                 self.file_manager.save_manager.stop_save()
-
-            if self.compile:
-                self.debug_window = False
-
-                error = self.device_manager.compile_script(self.commands[0])
-                self.message_handler.decode_debug_message(error)
-
-                self.debug_window = True
-                self.compile = False
-
-            if self.upload:
-
-                self.debug_window = False
-
-                self.device_manager.terminate_device()
-
-                error = self.device_manager.upload_script(self.commands[0], self.commands[1])
-
-                self.message_handler.decode_debug_message(error)
-                self.debug_window = True
-
-                self.upload = False
-
-                if self.actuator is not None:
-                    self.actuator.done_upload()
 
 
 if __name__ == "__main__":
