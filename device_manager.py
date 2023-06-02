@@ -34,6 +34,7 @@ class DeviceManager():
         self.error = None
 
         self.connected = False
+        self.auto_connect = False
 
         self.raw_cummulative_data = ""
         self.terminal_data = ""
@@ -54,6 +55,7 @@ class DeviceManager():
         self.error = None
 
         self.connected = False
+        self.auto_connect = False
 
         self.raw_cummulative_data = ""
         self.terminal_data = ""
@@ -240,8 +242,7 @@ class DeviceManager():
         for port in serial.tools.list_ports.comports():
             available_ports.append(port.device)
             #print(port.description)
-            if not self.connected and ("USB" in port.description)\
-and not self.parent.showing_data:
+            if not self.connected and ("USB" in port.description) and self.auto_connect:
                 self.connect_device(str(port.device))
                 time.sleep(1)
         return available_ports
