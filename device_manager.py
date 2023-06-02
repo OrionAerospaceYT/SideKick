@@ -247,22 +247,6 @@ class DeviceManager():
                 time.sleep(1)
         return available_ports
 
-    def compile_script(self, compile_cmd):
-        """
-        Compiles the selected script
-
-        Args:
-            compile_cmd (string): the command t ocompile the script with arduino-cli
-        Returns:
-            string : the error string to be parsed
-        """
-
-        compile_process = subprocess.Popen(
-            compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        compile_output = compile_process.communicate()
-
-        return compile_output[0].decode("UTF-8")
-
     def upload_script(self, compile_cmd, upload_cmd):
         """
         Compiles and uploads the script

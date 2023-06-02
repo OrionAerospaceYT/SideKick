@@ -11,7 +11,7 @@ class CliManager:
 
     def __init__(self, path):
         self.path = path
-        self.thread = None
+        self.thread = []
         self.output = None
         self.running = False
         self.process = None
@@ -34,8 +34,6 @@ class CliManager:
             output = self.output[0].decode("UTF-8")
             print(f"{output}\n>>> ",end="")
 
-        self.running = False
-
     def communicate(self, cmd):
         """
         Calls the thread to run the command
@@ -49,8 +47,8 @@ class CliManager:
             self.thread.join()
 
         self.running = True
-        self.thread = threading.Thread(target=self.threaded_call, args=(cmd,),)
-        self.thread.start()
+        self.thread.append(threading.Thread(target=self.threaded_call, args=(cmd,),))
+        self.thread[-1].start()
 
     def get_command_str(self, cmd):
         """
