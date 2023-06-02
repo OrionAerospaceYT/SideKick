@@ -31,8 +31,8 @@ class CliManager:
         self.output = self.process.communicate()
 
         if self.running:
-
-            print("DONE\n>>> ",end="")
+            output = self.output[0].decode("UTF-8")
+            print(f"{output}\n>>> ",end="")
 
         self.running = False
 
@@ -51,6 +51,15 @@ class CliManager:
         self.running = True
         self.thread = threading.Thread(target=self.threaded_call, args=(cmd,),)
         self.thread.start()
+
+    def get_command_str(self, cmd):
+        """
+        Gets the full command string for the arduino cli.
+
+        Args:
+            cmd (str): the command for the cli
+        """
+        return f"\"{self.path}\" {cmd}"
 
 if __name__ == "__main__":
 
