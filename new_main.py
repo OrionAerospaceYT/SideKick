@@ -468,6 +468,9 @@ class MainGUI(qtw.QMainWindow):
         ellipsis = threading.Thread(target=self.message_handler.update_ellipsis)
         ellipsis.start()
 
+        cli = threading.Thread(target=self.cli_manager.threaded_call, args=(),)
+        cli.start()
+
         while RUNNING:
             # Com ports
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(DEV)
