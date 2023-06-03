@@ -3,6 +3,7 @@ The cli manager file.
 """
 import subprocess
 import threading
+import time
 
 class CliManager:
     """
@@ -11,28 +12,31 @@ class CliManager:
 
     def __init__(self, path):
         self.path = path
-        self.thread = []
-        self.output = None
+        self.commands = []
+        self.outputs = []
         self.running = False
-        self.process = None
+        self.enabled = True
 
-    def threaded_call(self, cmd):
+    def threaded_call(self):
         """
         Puts the command on the thread to be non blocking
-
-        Args:
-            cmd (string): the command to run in terminal
         """
 
-        self.process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                shell=True)
-        self.output = self.process.communicate()
+        while self.enabled:
+            if not self.commands:
+                time.sleep(1)
+                continue
 
-        if self.running:
-            output = self.output[0].decode("UTF-8")
-            print(f"{output}\n>>> ",end="")
+            self.running = True
+            process = subprocess.Popen(
+                    self.commands.pop(0), stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    shell=True)
+            output = process.communicate()
+
+            self.outputs.append(output[0].decode("UTF-8"))
+            print(f"{self.outputs[-1]}\n>>> ",end="")
+            self.running = False
 
     def communicate(self, cmd):
         """
@@ -41,14 +45,7 @@ class CliManager:
         Args:
             cmd (string): the command to run in terminal
         """
-        if self.running:
-            print("<<< WARNING >>> KILLING PROCESS")
-            self.running = False
-            self.thread.join()
-
-        self.running = True
-        self.thread.append(threading.Thread(target=self.threaded_call, args=(cmd,),))
-        self.thread[-1].start()
+        self.commands.append(cmd)
 
     def get_command_str(self, cmd):
         """
@@ -59,11 +56,21 @@ class CliManager:
         """
         return f"\"{self.path}\" {cmd}"
 
+    def terminate(self):
+        """
+        Ends the threaded function if it is running.
+        """
+        self.enabled = False
+
+
 if __name__ == "__main__":
 
-    PATH = "\"./Externals/arduino-cli-windows.exe\""
+    PATH = "./Externals/arduino-cli-windows.exe"
 
     cli = CliManager(PATH)
+
+    command_runner = threading.Thread(target=cli.threaded_call, args=(),)
+    command_runner.start()
 
     while True:
 
@@ -73,4 +80,8 @@ if __name__ == "__main__":
             break
 
         else:
-            cli.communicate(PATH + " " + command)
+            string = cli.get_command_str(command)
+            print(f"The command: {string}")
+            cli.communicate(string)
+
+    cli.terminate()
