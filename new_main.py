@@ -284,11 +284,7 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph.update_graph()
 
         # debugging window
-        if self.debug_window:
-            self.main_ui.debugger.setVisible(True)
-            self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
-        else:
-            self.main_ui.debugger.setVisible(False)
+        self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
 
         # record light
         self.turn_on_rec_light(self.record_light.show)
