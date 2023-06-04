@@ -7,7 +7,6 @@ It uses pySerial and has a loop running on a thread.
 import random
 import threading
 import time
-import subprocess
 import serial
 import serial.tools.list_ports
 import numpy as np
@@ -32,9 +31,10 @@ class DeviceManager():
         self.get_data = None
         self.port = None
         self.error = None
+        self.target = None
 
         self.connected = False
-        self.auto_connect = False
+        self.auto_connect = True
 
         self.raw_cummulative_data = ""
         self.terminal_data = ""
@@ -53,9 +53,10 @@ class DeviceManager():
         self.get_data = None
         self.port = None
         self.error = None
+        self.target = None
 
         self.connected = False
-        self.auto_connect = False
+        self.auto_connect = True
 
         self.raw_cummulative_data = ""
         self.terminal_data = ""
@@ -193,6 +194,7 @@ class DeviceManager():
             self.device.close()
 
         self()
+        self.auto_connect = False
 
     def terminate_device(self):
         """
@@ -222,13 +224,17 @@ class DeviceManager():
 
             emulator = threading.Thread(target=self.device_emulator)
             emulator.start()
+        else:
+            self.auto_connect = True
+            self.target = port
 
-        self.get_data = threading.Thread(target=self.threaded_get_raw_data, args=(port, baud, dev),)
+        self.get_data = threading.Thread(
+            target=self.threaded_get_raw_data, args=(port, baud, dev),)
         self.get_data.start()
 
     def scan_avaliable_ports(self, dev=False):
         """
-        Gets all avaliable com ports.
+        Gets all avaliable com ports and auto connects to devices.
 
         Args:
             dev (bool): whether or not to show the dev option of emulate
@@ -240,41 +246,24 @@ class DeviceManager():
         available_ports = ["emulate"] if dev else []
 
         for port in serial.tools.list_ports.comports():
+
             available_ports.append(port.device)
-            #print(port.description)
-            if not self.connected and ("USB" in port.description) and self.auto_connect:
-                self.connect_device(str(port.device))
+
+            ###################
+            # Auto connection #
+            ###################
+
+        if not self.connected and self.auto_connect:
+
+            if self.target is not None and (self.target in available_ports):
+                self.connect_device(self.target)
                 time.sleep(1)
+            else:
+                for port in serial.tools.list_ports.comports():
+                    if "USB" in port.description:
+                        self.connect_device(str(port.device))
+
         return available_ports
-
-    def upload_script(self, compile_cmd, upload_cmd):
-        """
-        Compiles and uploads the script
-
-        Args:
-            compile_cmd (string): the command to compile the script with arduino-cli
-            upload_cmd (string): the command to upload the script with arduino-cli
-        Returns:
-            error_output (string): the report to display on debug
-            boolean: status of wether upload was success or not
-        """
-        upload_output = ""
-
-        compile_process = subprocess.Popen(
-            compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        compile_output = compile_process.communicate()
-
-        compile_output = compile_output[0].decode("UTF-8")
-
-        if "error:" not in compile_output:
-            upload_process = subprocess.Popen(
-                upload_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-            upload_output = upload_process.communicate()
-            upload_output = upload_output[0].decode("UTF-8")
-
-        error_output = compile_output+upload_output
-
-        return error_output
 
     def reset_difference(self, data):
         """
