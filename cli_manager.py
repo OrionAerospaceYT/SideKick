@@ -45,16 +45,7 @@ class CliManager:
         Args:
             cmd (string): the command to run in terminal
         """
-        self.commands.append(cmd)
-
-    def get_command_str(self, cmd):
-        """
-        Gets the full command string for the arduino cli.
-
-        Args:
-            cmd (str): the command for the cli
-        """
-        return f"\"{self.path}\" {cmd}"
+        self.commands.append(f"\"{self.path}\" {cmd}")
 
     def terminate(self):
         """
@@ -80,8 +71,6 @@ if __name__ == "__main__":
             break
 
         else:
-            string = cli.get_command_str(command)
-            print(f"The command: {string}")
-            cli.communicate(string)
+            cli.communicate(command)
 
     cli.terminate()
