@@ -357,7 +357,6 @@ class MainGUI(qtw.QMainWindow):
         Checks if a device is connected to the gui
         Disconnects the device to upload
         Compiles the script and then uploads the script
-        Reconnects the device - or - Displays error on the screen
         """
 
         if actuator:
@@ -368,11 +367,12 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        cmd = self.cli_manager.get_command_str(
-            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"")
+        self.cli_manager.communicate(
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"")
 
         self.device_manager.terminate_device()
-        self.cli_manager.communicate(cmd)
+        self.cli_manager.communicate(
+            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"")
 
         if actuator:
             self.file_manager.current_project = temp
@@ -384,10 +384,8 @@ class MainGUI(qtw.QMainWindow):
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
 
-        cmd = self.cli_manager.get_command_str(
+        self.cli_manager.communicate(
             f"compile --fqbn {board} \"{self.file_manager.current_project}\"")
-
-        self.cli_manager.communicate(cmd)
 
     def display_save(self, already_called=False, save=None):
         """
@@ -535,6 +533,7 @@ if __name__ == "__main__":
     main_gui.device_manager.terminate_device()
     main_gui.record_light.terminate_record()
     main_gui.message_handler.terminate_ellipsis()
+    main_gui.cli_manager.terminate()
 
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
