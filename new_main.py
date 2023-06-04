@@ -50,6 +50,12 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
 
+        # TEMPORARY
+        self.main_ui.debugger.setVisible(False)
+        #self.main_ui.terminal.setVisible(False)
+        #self.main_ui.top_widget.setVisible(False)
+        #self.main_ui.bottom_widget.setVisible(False)
+
         # Associative classes are initialised here
         self.actuator = None
         self.device_manager = DeviceManager(self)
