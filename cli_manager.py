@@ -8,6 +8,17 @@ import time
 class CliManager:
     """
     Controls the flow of commands to the CLI
+
+    TODO:
+    keep as is, add fullscreen that removes graphs + terminal
+
+    Output should be continuous with previous outputs seperated with clear headers -
+    Succes,
+    Fail,
+    Command
+
+    Change file -> menu
+    add cli manager button (full screen)
     """
 
     def __init__(self, path):
