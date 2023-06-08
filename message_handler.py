@@ -24,6 +24,8 @@ class MessageHandler():
 
     def __init__(self):
 
+        self.debug_window = False
+
         self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
@@ -130,10 +132,18 @@ class MessageHandler():
 
         for item in ERROR_TERMS:
             if item in debug_output:
-                self.debug_html = FAILURE_MSG + debug_output
+                self.debug_window = True
+                self.debug_html += FAILURE_MSG + debug_output
                 return
 
-        self.debug_html = SUCCESS_MSG + debug_output
+        self.debug_window = True
+        self.debug_html += SUCCESS_MSG + debug_output
+
+    def close_debug_window(self):
+        """
+        Sets the state of the debug window to false
+        """
+        self.debug_window = False
 
     def update_ellipsis(self):
         """
