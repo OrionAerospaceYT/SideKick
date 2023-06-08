@@ -436,19 +436,6 @@ QScrollArea {
         </layout>
        </widget>
       </item>
-      <item row="1" column="3" rowspan="3" colspan="2">
-       <widget class="QTextBrowser" name="terminal">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="5" colspan="2">
        <widget class="QWidget" name="bottom_widget" native="true"/>
       </item>
@@ -768,22 +755,6 @@ QLabel#logo_2{
         </layout>
        </widget>
       </item>
-      <item row="1" column="7" rowspan="2">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Minimum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>30</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="6" column="2">
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
@@ -815,6 +786,35 @@ QLabel#logo_2{
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="6" column="7">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>30</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="3" rowspan="3" colspan="2">
+       <widget class="QTextBrowser" name="terminal">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
