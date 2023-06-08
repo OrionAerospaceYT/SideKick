@@ -55,7 +55,7 @@ class CliManager:
             output = process.communicate()
 
             self.outputs.append(output[0].decode("UTF-8"))
-            print(f"{self.outputs[-1]}\n>>> ",end="")
+
             self.running = False
 
     def communicate(self, cmd):
