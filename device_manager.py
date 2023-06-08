@@ -249,9 +249,9 @@ class DeviceManager():
 
             available_ports.append(port.device)
 
-            ###################
-            # Auto connection #
-            ###################
+        ###################
+        # Auto connection #
+        ###################`
 
         if not self.connected and self.auto_connect:
 
