@@ -48,11 +48,11 @@ class CliManager:
                 continue
 
             self.running = True
-            process = subprocess.Popen(
+            with subprocess.Popen(
                     self.commands.pop(0), stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
-                    shell=True)
-            output = process.communicate()
+                    shell=True) as process:
+                output = process.communicate()
 
             self.outputs.append(output[0].decode("UTF-8"))
 
@@ -90,7 +90,6 @@ if __name__ == "__main__":
         if command.lower() == "exit":
             break
 
-        else:
-            cli.communicate(command)
+        cli.communicate(command)
 
     cli.terminate()
