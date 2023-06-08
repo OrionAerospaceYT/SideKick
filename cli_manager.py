@@ -28,7 +28,14 @@ class CliManager:
         self.running = False
         self.enabled = True
 
-        self.debug_window = False
+    def get_output(self):
+        """
+        Removes first output from the queue
+        """
+        try:
+            return self.outputs.pop(0)
+        except IndexError:
+            return None
 
     def threaded_call(self):
         """
@@ -37,7 +44,7 @@ class CliManager:
 
         while self.enabled:
             if not self.commands:
-                time.sleep(1)
+                time.sleep(0.25)
                 continue
 
             self.running = True
