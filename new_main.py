@@ -1,6 +1,10 @@
 """
 This is the main python file responsible for having
 the debugging window open.
+
+TODO:
+make the debug html not be displayed every loop so the user can scroll through it
+perhaps pass in the widget to message handler
 """
 
 import os
@@ -177,7 +181,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.file.clicked.connect(self.open_file_manager)
         self.main_ui.device.clicked.connect(self.open_device_manager)
         self.main_ui.upload.clicked.connect(self.upload_project)
-        self.main_ui.quit.clicked.connect(self.close_debug_window)
+        self.main_ui.quit.clicked.connect(self.message_handler.close_debug_window)
         self.main_ui.compile.clicked.connect(self.compile_project)
         self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
@@ -274,6 +278,16 @@ class MainGUI(qtw.QMainWindow):
         """
         calls all update functions
         """
+
+        # debug
+        output = self.cli_manager.get_output()
+        if output is not None:
+            self.message_handler.decode_debug_message(output)
+        if self.message_handler.debug_window:
+            self.main_ui.debugger.setVisible(True)
+            self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
+        else:
+            self.main_ui.debugger.setVisible(False)
 
         # set labels
         name = self.file_manager.parsed_project_name()
@@ -423,13 +437,6 @@ class MainGUI(qtw.QMainWindow):
         if not already_called:
             time.sleep(0.1)
             self.display_save(True, save)
-
-    def close_debug_window(self):
-        """
-        Closes the bottom pop up layout
-        TODO
-        """
-        print("closed")
 
     def demo_function(self):
         """
