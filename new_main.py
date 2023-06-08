@@ -244,7 +244,7 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Running"))
-        elif self.device_manager.error is not None:
+        elif self.device_manager.error is not None and self.device_manager.device is not None:
             self.main_ui.top_update.setText("Error, could not connect!")
         else:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
