@@ -51,4 +51,4 @@ jobs:
 
     - name: Analysing cli_manager.py
       run: |
-        pylint actuator.py --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
+        pylint cli_manager.py --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
