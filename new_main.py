@@ -52,9 +52,9 @@ class MainGUI(qtw.QMainWindow):
 
         # TEMPORARY
         self.main_ui.debugger.setVisible(False)
-        #self.main_ui.terminal.setVisible(False)
-        #self.main_ui.top_widget.setVisible(False)
-        #self.main_ui.bottom_widget.setVisible(False)
+        self.main_ui.terminal.setVisible(True)
+        self.main_ui.top_widget.setVisible(True)
+        self.main_ui.bottom_widget.setVisible(True)
 
         # Associative classes are initialised here
         self.actuator = None
@@ -88,8 +88,6 @@ class MainGUI(qtw.QMainWindow):
         self.add_supported_boards()
 
         # Attributes for event handling are defined here
-        self.debug_window = False
-        self.prev_debug_window = True
         self.showing_data = False
 
         self.avaliable_port_list = []
@@ -429,8 +427,9 @@ class MainGUI(qtw.QMainWindow):
     def close_debug_window(self):
         """
         Closes the bottom pop up layout
+        TODO
         """
-        self.debug_window = False
+        print("closed")
 
     def demo_function(self):
         """
@@ -442,7 +441,6 @@ class MainGUI(qtw.QMainWindow):
     def show_help(self):
         """
         Takes you to the help website
-        TODO - help website
         """
         webbrowser.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
