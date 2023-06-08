@@ -28,6 +28,8 @@ class CliManager:
         self.running = False
         self.enabled = True
 
+        self.debug_window = False
+
     def threaded_call(self):
         """
         Puts the command on the thread to be non blocking
