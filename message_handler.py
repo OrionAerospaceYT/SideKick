@@ -4,6 +4,7 @@ This file imports device manager and gets the data
 """
 
 import time
+from PyQt5 import QtGui as qtg
 
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
@@ -22,9 +23,12 @@ class MessageHandler():
     Gets all text/graph data to be displayed on the front end
     """
 
-    def __init__(self):
+    def __init__(self, layout, widget):
 
         self.debug_window = False
+        self.widget = widget
+        self.layout = layout
+        self.latest = None
 
         self.terminal_html = ""
         self.error_string = ""
@@ -132,18 +136,32 @@ class MessageHandler():
 
         for item in ERROR_TERMS:
             if item in debug_output:
-                self.debug_window = True
                 self.debug_html += FAILURE_MSG + debug_output
+                self.latest = FAILURE_MSG
+                self.set_debug_html()
                 return
 
-        self.debug_window = True
+        self.latest = SUCCESS_MSG
         self.debug_html += SUCCESS_MSG + debug_output
+        self.set_debug_html()
+
+    def set_debug_html(self):
+        """
+        Displays the html on the debug window text browser.
+        """
+        print(self.debug_html)
+        self.layout.setVisible(True)
+        self.widget.setHtml(self.debug_html)
+        line_num = self.calculate_line_height()
+        print(line_num)
+        scroll_value = self.widget.fontMetrics().lineSpacing() * line_num
+        self.widget.verticalScrollBar().setValue(scroll_value)
 
     def close_debug_window(self):
         """
         Sets the state of the debug window to false
         """
-        self.debug_window = False
+        self.layout.setVisible(False)
 
     def update_ellipsis(self):
         """
@@ -185,3 +203,36 @@ class MessageHandler():
         Ends the threaded loop
         """
         self.running = False
+
+    def calculate_line_height(self):
+        """
+
+        Args:
+            text (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        sections = self.debug_html.split(self.latest)
+        sections = [item for item in sections if item != '']
+        sections.pop(0)
+
+        html = ""
+        for item in sections:
+            html += item
+
+        total_width = 0
+        line_count = 0
+
+        for char in html:
+            char_width = qtg.QFontMetrics(self.widget.font()).width(char)
+
+            if total_width + char_width > self.widget.width():
+                line_count += 1
+                total_width = char_width
+            else:
+                total_width += char_width
+
+        pass
+        return html.count("<br>")
