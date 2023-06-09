@@ -56,9 +56,9 @@ class MainGUI(qtw.QMainWindow):
 
         # TEMPORARY
         self.main_ui.debugger.setVisible(False)
-        self.main_ui.terminal.setVisible(True)
-        self.main_ui.top_widget.setVisible(True)
-        self.main_ui.bottom_widget.setVisible(True)
+        #self.main_ui.terminal.setVisible(True)
+        #self.main_ui.top_widget.setVisible(True)
+        #self.main_ui.bottom_widget.setVisible(True)
 
         # Associative classes are initialised here
         self.actuator = None
@@ -67,7 +67,8 @@ class MainGUI(qtw.QMainWindow):
         self.cli_manager = CliManager(self.file_manager.arduino_path)
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
-        self.message_handler = MessageHandler()
+        self.message_handler = MessageHandler(self.main_ui.debugger,
+                                              self.main_ui.debug_log)
         self.record_light = RecordLight()
         self.side_menu = SideMenu(
             self.file_and_device_widgets()[0],
@@ -244,7 +245,7 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText(
                 self.message_handler.get_status("Running"))
-        elif self.device_manager.error is not None and self.device_manager.device is not None:
+        elif self.device_manager.error is not None and self.device_manager.device is None:
             self.main_ui.top_update.setText("Error, could not connect!")
         else:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
@@ -283,11 +284,6 @@ class MainGUI(qtw.QMainWindow):
         output = self.cli_manager.get_output()
         if output is not None:
             self.message_handler.decode_debug_message(output)
-        if self.message_handler.debug_window:
-            self.main_ui.debugger.setVisible(True)
-            self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
-        else:
-            self.main_ui.debugger.setVisible(False)
 
         # set labels
         name = self.file_manager.parsed_project_name()
@@ -300,9 +296,6 @@ class MainGUI(qtw.QMainWindow):
         self.update_ports()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
-
-        # debugging window
-        self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
 
         # record light
         self.turn_on_rec_light(self.record_light.show)
