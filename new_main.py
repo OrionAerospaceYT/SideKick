@@ -226,6 +226,9 @@ class MainGUI(qtw.QMainWindow):
         tune_actuators = qtw.QShortcut(qtg.QKeySequence("ctrl+a"), self)
         tune_actuators.activated.connect(self.open_actuator_gui)
 
+        full_screen = qtw.QShortcut(qtg.QKeySequence("ctrl+q"), self)
+        full_screen.activated.connect(self.message_handler.expand_debug)
+
     def turn_on_rec_light(self, is_on):
         """
         Turns on or off the blinking record light
