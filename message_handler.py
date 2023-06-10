@@ -17,6 +17,9 @@ Success</p><div style=\"margin-top:150px;\"></div>"
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
 Error</p><div style=\"margin-top:150px;\"></div>"
 
+USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
+User command</p><div style=\"margin-top:150px;\"></div>"
+
 ERROR_TERMS = ["Error opening sketch", "Error during build", "exit status"]
 
 class MessageHandler():
@@ -100,51 +103,56 @@ class MessageHandler():
 
         self.terminal_html = terminal_html
 
-    def decode_debug_message(self, error):
+    def format_compile_and_upload(self, error):
         """
-        Converts the dull default compile/upload output to nice coloured html
-        for easy debugging in the debug window
+        Formats the html for the command
 
         Args:
             error (string): the error from the compile/upload from arduino-cli
         """
-        error = error.replace("\n", "<br>")
 
         debug_output = ""
 
         for line in error.split("<br>"):
             line = line.replace("error:", "<font color=#E21919>error:")
-
-            line = line.replace(
-                "warning:", "<font color=#D6790F>warning:")
-
+            line = line.replace("warning:", "<font color=#D6790F>warning:")
             line = line.replace("note:", "<font color=#00f0c3>note:")
-
-            line = line.replace(
-                "In file", "<font color=#FFFFFF>In file")
-            line = line.replace(
-                r"C:\Users", r"<font color=#FFFFFF>C:\Users")
+            line = line.replace("In file", "<font color=#FFFFFF>In file")
+            line = line.replace(r"C:\Users", r"<font color=#FFFFFF>C:\Users")
             line = line.replace("^", "^<font color=#FFFFFF>")
 
             debug_output += line + "<br>"
 
-        debug_output = debug_output.replace(
-            "\x1B[0m", "<font color=\"#ffffff\">")
-        debug_output = debug_output.replace(
-            "\x1B[90m", "<font color=\"#D6790F\">")
-        debug_output = debug_output.replace(
-            "\x1B[92m", "<font color=\"#00f0c3\">")
-        debug_output = debug_output.replace(
-            "\x1B[93m", "<font color=\"#00f0c3\">")
+        debug_output = debug_output.replace("\x1B[0m", "<font color=\"#ffffff\">")
+        debug_output = debug_output.replace("\x1B[90m", "<font color=\"#D6790F\">")
+        debug_output = debug_output.replace("\x1B[92m", "<font color=\"#00f0c3\">")
+        debug_output = debug_output.replace("\x1B[93m", "<font color=\"#00f0c3\">")
         debug_output = debug_output.replace("<br><br><br>", "<br>")
 
         for item in ERROR_TERMS:
             if item in debug_output:
-                self.debug_html += debug_output + FAILURE_MSG
-                self.set_debug_html()
-                return
+                return debug_output + FAILURE_MSG
 
-        self.debug_html += debug_output + SUCCESS_MSG
+        return debug_output + SUCCESS_MSG
+
+
+    def decode_debug_message(self, error, cmd_type):
+        """
+        Converts the dull default compile/upload output to nice coloured html
+        for easy debugging in the debug window
+
+        Args:
+            error (string): the error from the compile/upload/user from arduino-cli
+            cmd_type (string): the type of command e.g. usr
+        """
+        error = error.replace("\n", "<br>")
+
+        if cmd_type == "compile" or cmd_type == "upload":
+            html = self.format_compile_and_upload(error)
+        else:
+            html = error + USER_MESSAGE
+        self.debug_html += html
+
         self.set_debug_html()
 
     def set_debug_html(self):
