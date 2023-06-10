@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1028, 641)
+        MainWindow.resize(1012, 650)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -178,9 +178,6 @@ class Ui_MainWindow(object):
         self.message = QtWidgets.QLineEdit(self.centralwidget)
         self.message.setObjectName("message")
         self.gridLayout.addWidget(self.message, 5, 3, 1, 2)
-        self.top_widget = QtWidgets.QWidget(self.centralwidget)
-        self.top_widget.setObjectName("top_widget")
-        self.gridLayout.addWidget(self.top_widget, 1, 5, 2, 2)
         self.horizontalFrame = QtWidgets.QFrame(self.centralwidget)
         self.horizontalFrame.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -306,9 +303,20 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.help)
         self.gridLayout.addWidget(self.horizontalFrame, 0, 0, 1, 8)
         self.bottom_widget = QtWidgets.QWidget(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.bottom_widget.sizePolicy().hasHeightForWidth())
+        self.bottom_widget.setSizePolicy(sizePolicy)
+        self.bottom_widget.setMinimumSize(QtCore.QSize(0, 100))
         self.bottom_widget.setObjectName("bottom_widget")
         self.gridLayout.addWidget(self.bottom_widget, 3, 5, 1, 2)
         self.debugger = QtWidgets.QFrame(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.debugger.sizePolicy().hasHeightForWidth())
+        self.debugger.setSizePolicy(sizePolicy)
         self.debugger.setStyleSheet("QFrame{\n"
 "   font: 10pt \"Roboto \";\n"
 "  font-size: 14px;\n"
@@ -316,20 +324,57 @@ class Ui_MainWindow(object):
 "  color: #FFFFFF;\n"
 "  border:none;\n"
 "  border-radius:10px;\n"
-"}\n"
-"QPushButton:hover:!pressed{\n"
-"  background-color: #ff0000;\n"
 "}")
         self.debugger.setObjectName("debugger")
         self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
         self.debugger_1.setObjectName("debugger_1")
         self.quit = QtWidgets.QPushButton(self.debugger)
+        self.quit.setStyleSheet("QPushButton:hover:!pressed{\n"
+"  background-color: #ff0000;\n"
+"}")
         self.quit.setObjectName("quit")
-        self.debugger_1.addWidget(self.quit, 0, 1, 1, 1)
+        self.debugger_1.addWidget(self.quit, 0, 2, 1, 1)
+        self.full_screen = QtWidgets.QPushButton(self.debugger)
+        self.full_screen.setStyleSheet("QPushButton{\n"
+"   font: 10pt \"Roboto \";\n"
+"  font-size: 14px;\n"
+"  background-color: #2b2b35;\n"
+"  color: #FFFFFF;\n"
+"  border:none;\n"
+"  border-radius:10px;\n"
+"}\n"
+"QPushButton:pressed {\n"
+"  background-color: #000;\n"
+"}\n"
+"QPushButton:hover:!pressed{\n"
+"  background-color: #151525;\n"
+"}")
+        self.full_screen.setObjectName("full_screen")
+        self.debugger_1.addWidget(self.full_screen, 0, 1, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.debugger_1.addItem(spacerItem2, 0, 0, 1, 1)
         self.debug_log = QtWidgets.QTextBrowser(self.debugger)
+        self.debug_log.setMinimumSize(QtCore.QSize(0, 150))
         self.debug_log.setObjectName("debug_log")
-        self.debugger_1.addWidget(self.debug_log, 0, 0, 2, 1)
+        self.debugger_1.addWidget(self.debug_log, 1, 0, 1, 3)
         self.gridLayout.addWidget(self.debugger, 4, 3, 1, 4)
+        spacerItem3 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem3, 6, 2, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem4, 6, 0, 1, 1)
+        spacerItem5 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem5, 6, 7, 1, 1)
+        self.terminal = QtWidgets.QTextBrowser(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.terminal.sizePolicy().hasHeightForWidth())
+        self.terminal.setSizePolicy(sizePolicy)
+        self.terminal.setStyleSheet("")
+        self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.terminal.setObjectName("terminal")
+        self.gridLayout.addWidget(self.terminal, 1, 3, 3, 2)
         self.side_menu = QtWidgets.QFrame(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -404,16 +449,16 @@ class Ui_MainWindow(object):
         self.dhsgd = QtWidgets.QVBoxLayout(self.side_menu)
         self.dhsgd.setContentsMargins(20, -1, 20, -1)
         self.dhsgd.setObjectName("dhsgd")
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.dhsgd.addItem(spacerItem2)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem6)
         self.logo_2 = QtWidgets.QLabel(self.side_menu)
         self.logo_2.setMinimumSize(QtCore.QSize(0, 50))
         self.logo_2.setMaximumSize(QtCore.QSize(16777215, 50))
         self.logo_2.setText("")
         self.logo_2.setObjectName("logo_2")
         self.dhsgd.addWidget(self.logo_2)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.dhsgd.addItem(spacerItem3)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem7)
         self.tune_actuators = QtWidgets.QPushButton(self.side_menu)
         self.tune_actuators.setObjectName("tune_actuators")
         self.dhsgd.addWidget(self.tune_actuators)
@@ -441,8 +486,8 @@ class Ui_MainWindow(object):
         self.selected_project.setAlignment(QtCore.Qt.AlignCenter)
         self.selected_project.setObjectName("selected_project")
         self.dhsgd.addWidget(self.selected_project)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.dhsgd.addItem(spacerItem4)
+        spacerItem8 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem8)
         self.select_project = QtWidgets.QPushButton(self.side_menu)
         self.select_project.setObjectName("select_project")
         self.dhsgd.addWidget(self.select_project)
@@ -461,28 +506,23 @@ class Ui_MainWindow(object):
         self.library_manager = QtWidgets.QPushButton(self.side_menu)
         self.library_manager.setObjectName("library_manager")
         self.dhsgd.addWidget(self.library_manager)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dhsgd.addItem(spacerItem5)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.dhsgd.addItem(spacerItem6)
+        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dhsgd.addItem(spacerItem9)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem10)
         self.gridLayout.addWidget(self.side_menu, 1, 1, 5, 1)
-        spacerItem7 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem7, 6, 2, 1, 1)
-        spacerItem8 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem8, 6, 0, 1, 1)
-        spacerItem9 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem9, 6, 7, 1, 1)
-        self.terminal = QtWidgets.QTextBrowser(self.centralwidget)
-        self.terminal.setStyleSheet("")
-        self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.terminal.setObjectName("terminal")
-        self.gridLayout.addWidget(self.terminal, 1, 3, 3, 2)
+        self.top_widget = QtWidgets.QWidget(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.top_widget.sizePolicy().hasHeightForWidth())
+        self.top_widget.setSizePolicy(sizePolicy)
+        self.top_widget.setMinimumSize(QtCore.QSize(0, 100))
+        self.top_widget.setObjectName("top_widget")
+        self.gridLayout.addWidget(self.top_widget, 1, 5, 1, 2)
         self.gridLayout.setColumnStretch(3, 1)
         self.gridLayout.setColumnStretch(4, 1)
         self.gridLayout.setColumnStretch(5, 3)
-        self.gridLayout.setRowStretch(1, 1)
-        self.gridLayout.setRowStretch(3, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -499,6 +539,7 @@ class Ui_MainWindow(object):
         self.record.setText(_translate("MainWindow", "Record"))
         self.help.setText(_translate("MainWindow", "Help"))
         self.quit.setText(_translate("MainWindow", "x"))
+        self.full_screen.setText(_translate("MainWindow", "Expand"))
         self.tune_actuators.setText(_translate("MainWindow", "Tune Actuators"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
