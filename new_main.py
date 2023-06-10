@@ -54,11 +54,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
 
-        # TEMPORARY
         self.main_ui.debugger.setVisible(False)
-        #self.main_ui.terminal.setVisible(True)
-        #self.main_ui.top_widget.setVisible(True)
-        #self.main_ui.bottom_widget.setVisible(True)
 
         # Associative classes are initialised here
         self.actuator = None
@@ -68,7 +64,10 @@ class MainGUI(qtw.QMainWindow):
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
         self.message_handler = MessageHandler(self.main_ui.debugger,
-                                              self.main_ui.debug_log)
+                                              self.main_ui.debug_log,
+                                              [self.main_ui.terminal,
+                                               self.main_ui.top_widget,
+                                               self.main_ui.bottom_widget])
         self.record_light = RecordLight()
         self.side_menu = SideMenu(
             self.file_and_device_widgets()[0],
@@ -193,6 +192,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
+        self.main_ui.full_screen.clicked.connect(self.message_handler.expand_debug)
 
     def connect_keyboard_shortcuts(self):
         """
