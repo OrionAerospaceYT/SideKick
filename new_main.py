@@ -94,6 +94,7 @@ class MainGUI(qtw.QMainWindow):
 
         # Attributes for event handling are defined here
         self.showing_data = False
+        self.upload = False
 
         self.avaliable_port_list = []
         self.current_projects = []
@@ -284,9 +285,12 @@ class MainGUI(qtw.QMainWindow):
         """
 
         # debug
-        output = self.cli_manager.get_output()
+        output, cmd_type = self.cli_manager.get_output()
         if output is not None:
-            self.message_handler.decode_debug_message(output)
+            self.message_handler.decode_debug_message(output, cmd_type)
+            if self.upload and not self.cli_manager.get_status():
+                self.connect_device(self.device_manager.last_port)
+                self.upload = False
 
         # set labels
         name = self.file_manager.parsed_project_name()
@@ -372,12 +376,16 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
+        self.upload = True
+
         self.cli_manager.communicate(
-            f"compile --fqbn {board} \"{self.file_manager.current_project}\"")
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
+            "upload")
 
         self.device_manager.terminate_device()
         self.cli_manager.communicate(
-            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"")
+            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"",
+            "upload")
 
         if actuator:
             self.file_manager.current_project = temp
@@ -390,7 +398,8 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
 
         self.cli_manager.communicate(
-            f"compile --fqbn {board} \"{self.file_manager.current_project}\"")
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
+            "compile")
 
     def display_save(self, already_called=False, save=None):
         """
@@ -456,7 +465,7 @@ class MainGUI(qtw.QMainWindow):
         if self.message_handler.minimized:
             self.device_manager.send(self.main_ui.message.text())
         else:
-            self.cli_manager.communicate(self.main_ui.message.text())
+            self.cli_manager.communicate(self.main_ui.message.text(), "usr")
         self.main_ui.message.setText("")
 
     def display_cli(self):
