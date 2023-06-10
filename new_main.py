@@ -67,7 +67,8 @@ class MainGUI(qtw.QMainWindow):
                                               self.main_ui.debug_log,
                                               [self.main_ui.terminal,
                                                self.main_ui.top_widget,
-                                               self.main_ui.bottom_widget])
+                                               self.main_ui.bottom_widget],
+                                              self.main_ui.message)
         self.record_light = RecordLight()
         self.side_menu = SideMenu(
             self.file_and_device_widgets()[0],
@@ -87,7 +88,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
-        self.main_ui.message.setPlaceholderText("Enter message here.")
+        self.main_ui.message.setPlaceholderText("Enter device message here.")
         self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
         self.add_supported_boards()
 
@@ -129,7 +130,8 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.select_project,
                         self.main_ui.new_project,
                         self.main_ui.show_save,
-                        self.main_ui.library_manager]
+                        self.main_ui.library_manager,
+                        self.main_ui.arduino_cli]
 
         device_manager = [self.main_ui.tune_actuators,
                           self.main_ui.baud_rate,
@@ -193,6 +195,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
         self.main_ui.full_screen.clicked.connect(self.message_handler.expand_debug)
+        self.main_ui.arduino_cli.clicked.connect(self.display_cli)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -337,15 +340,6 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.device_manager.connect_device(port, baud)
 
-    def send(self):
-        """
-        Sends the message from the line edit to the connected device
-        """
-
-        self.device_manager.send(self.main_ui.message.text())
-
-        self.main_ui.message.setText("")
-
     def open_file_manager(self):
         """
         Opens/closes the file menu
@@ -453,6 +447,24 @@ class MainGUI(qtw.QMainWindow):
 
         if file_path:
             self.file_manager.set_current_project(file_path)
+
+    def send(self):
+        """
+        A function to check wether or not the message entered is for the CLI or for the
+        device manager.
+        """
+        if self.message_handler.minimized:
+            self.device_manager.send(self.main_ui.message.text())
+        else:
+            self.cli_manager.communicate(self.main_ui.message.text())
+        self.main_ui.message.setText("")
+
+    def display_cli(self):
+        """
+        Shows the debug log in full screen so that the user can enter cli commands.
+        """
+        self.message_handler.set_debug_html()
+        self.message_handler.expand_debug()
 
     def threaded_backend(self):
         """
