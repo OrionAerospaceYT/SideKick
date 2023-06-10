@@ -22,13 +22,14 @@ class MessageHandler():
     Gets all text/graph data to be displayed on the front end
     """
 
-    def __init__(self, layout, widget, expansion_widgets=None):
+    def __init__(self, layout, widget, expansion_widgets=None, line_edit=None):
 
         self.debug_window = False
         self.minimized = True
         self.widget = widget
         self.layout = layout
         self.expansion_widgets = expansion_widgets
+        self.line_edit = line_edit
 
         self.terminal_html = ""
         self.error_string = ""
@@ -207,9 +208,11 @@ class MessageHandler():
         shows all graphing and terminal if minimize.
         """
         if self.minimized:
+            self.line_edit.setPlaceholderText("Enter arduino-cli message here.")
             for item in self.expansion_widgets:
                 item.setVisible(False)
         else:
+            self.line_edit.setPlaceholderText("Enter device message here.")
             for item in self.expansion_widgets:
                 item.setVisible(True)
         self.minimized = not self.minimized
