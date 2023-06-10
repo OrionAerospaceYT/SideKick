@@ -147,7 +147,7 @@ class MessageHandler():
         """
         error = error.replace("\n", "<br>")
 
-        if cmd_type == "compile" or cmd_type == "upload":
+        if ("compile", "upload") in cmd_type:
             html = self.format_compile_and_upload(error)
         else:
             html = error + USER_MESSAGE
