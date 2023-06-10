@@ -9,11 +9,13 @@ ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
 TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
->Terminal</p></h1><br>"
+>Terminal</p></h1><div style=\"margin-top:75px;\"></div>"
 
-SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">Success</p><br>"
+SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
+Success</p><div style=\"margin-top:150px;\"></div>"
 
-FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">Error</p><br>"
+FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
+Error</p><div style=\"margin-top:150px;\"></div>"
 
 ERROR_TERMS = ["Error opening sketch", "Error during build", "exit status"]
 
@@ -134,6 +136,7 @@ class MessageHandler():
             "\x1B[92m", "<font color=\"#00f0c3\">")
         debug_output = debug_output.replace(
             "\x1B[93m", "<font color=\"#00f0c3\">")
+        debug_output = debug_output.replace("<br><br><br>", "<br>")
 
         for item in ERROR_TERMS:
             if item in debug_output:
