@@ -23,8 +23,8 @@ class CliManager:
 
     def __init__(self, path):
         self.path = path
-        self.commands = []
-        self.outputs = []
+        self.commands = {}
+        self.outputs = {}
         self.running = False
         self.enabled = True
 
@@ -32,10 +32,23 @@ class CliManager:
         """
         Removes first output from the queue
         """
+
         try:
-            return self.outputs.pop(0)
+            key = list(self.outputs.keys())[0]
+            return key, self.outputs.pop(key)
         except IndexError:
-            return None
+            return None, None
+
+    def get_status(self, key="upload"):
+        """
+        Gets the current status of what tasks are still to be done.
+        """
+        print(self.commands)
+        for cmd in self.commands.items():
+            print(cmd)
+            if cmd[1] == key:
+                return True
+        return False
 
     def threaded_call(self):
         """
@@ -43,29 +56,34 @@ class CliManager:
         """
 
         while self.enabled:
-            if not self.commands:
+            if not self.commands.keys():
                 time.sleep(0.25)
                 continue
 
+            cmd =  list(self.commands.keys()).pop(0)
+            cmd_type = self.commands[cmd]
+
             self.running = True
             with subprocess.Popen(
-                    self.commands.pop(0), stdout=subprocess.PIPE,
+                    cmd, stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     shell=True) as process:
                 output = process.communicate()
 
-            self.outputs.append(output[0].decode("UTF-8"))
-
+            self.outputs[output[0].decode("UTF-8")] = cmd_type
+            self.commands.pop(cmd)
             self.running = False
 
-    def communicate(self, cmd):
+    def communicate(self, cmd, cmd_type="usr"):
         """
         Calls the thread to run the command
 
         Args:
             cmd (string): the command to run in terminal
+            cmd_type (string): what type of command
+            ('usr' = user input, 'compile' = compile, 'upload' = upload)
         """
-        self.commands.append(f"\"{self.path}\" {cmd}")
+        self.commands[f"\"{self.path}\" {cmd}"] = cmd_type
 
     def terminate(self):
         """
