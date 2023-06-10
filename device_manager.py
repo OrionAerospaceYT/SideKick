@@ -30,6 +30,7 @@ class DeviceManager():
         self.device = None
         self.get_data = None
         self.port = None
+        self.last_port = None
         self.error = None
         self.target = None
 
@@ -204,6 +205,7 @@ class DeviceManager():
         """
 
         self.connected = False
+        self.last_port = self.port
 
     def connect_device(self, port="COM1", baud=115200, dev=False):
         """
