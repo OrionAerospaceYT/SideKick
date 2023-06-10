@@ -241,7 +241,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
         self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
         self.actuators_test = \
-            f"{self.path}{self.sep}Internals{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"
+            f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"
         self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}Saves"
         self.save_manager.sep = self.sep
 
