@@ -506,6 +506,9 @@ class Ui_MainWindow(object):
         self.library_manager = QtWidgets.QPushButton(self.side_menu)
         self.library_manager.setObjectName("library_manager")
         self.dhsgd.addWidget(self.library_manager)
+        self.arduino_cli = QtWidgets.QPushButton(self.side_menu)
+        self.arduino_cli.setObjectName("arduino_cli")
+        self.dhsgd.addWidget(self.arduino_cli)
         spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.dhsgd.addItem(spacerItem9)
         spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -532,7 +535,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "SideKick"))
-        self.file.setText(_translate("MainWindow", "File"))
+        self.file.setText(_translate("MainWindow", "Menu"))
         self.device.setText(_translate("MainWindow", "Device"))
         self.upload.setText(_translate("MainWindow", "Upload"))
         self.compile.setText(_translate("MainWindow", "Compile"))
@@ -550,6 +553,7 @@ class Ui_MainWindow(object):
         self.new_project.setText(_translate("MainWindow", "New Project"))
         self.show_save.setText(_translate("MainWindow", "Show Save"))
         self.library_manager.setText(_translate("MainWindow", "Library Manager"))
+        self.arduino_cli.setText(_translate("MainWindow", "Arduino CLI"))
 
 
 if __name__ == "__main__":
