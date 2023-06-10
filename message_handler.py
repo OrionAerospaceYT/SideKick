@@ -160,7 +160,8 @@ class MessageHandler():
         Displays the html on the debug window text browser.
         """
         self.widget.setHtml(self.debug_html)
-        self.layout.setVisible(True)
+        self.debug_window = True
+        self.layout.setVisible(self.debug_window)
         time.sleep(0.1)
         self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-50)
 
@@ -168,9 +169,10 @@ class MessageHandler():
         """
         Sets the state of the debug window to false
         """
-        self.layout.setVisible(False)
+        self.debug_window = False
+        self.layout.setVisible(self.debug_window)
         if not self.minimized:
-            self.expand_debug()
+            self.expand_debug(exception=True)
 
     def update_ellipsis(self):
         """
@@ -213,11 +215,15 @@ class MessageHandler():
         """
         self.running = False
 
-    def expand_debug(self):
+    def expand_debug(self, exception=False):
         """
         Either hides all graphing and terminal if expand or
         shows all graphing and terminal if minimize.
         """
+
+        if not self.debug_window and not exception:
+            return
+
         if self.minimized:
             self.line_edit.setPlaceholderText("Enter arduino-cli message here.")
             for item in self.expansion_widgets:
