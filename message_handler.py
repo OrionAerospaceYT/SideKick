@@ -163,7 +163,7 @@ class MessageHandler():
         self.debug_window = True
         self.layout.setVisible(self.debug_window)
         time.sleep(0.1)
-        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-50)
+        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-150)
 
     def close_debug_window(self):
         """
@@ -215,7 +215,7 @@ class MessageHandler():
         """
         self.running = False
 
-    def expand_debug(self, exception=False):
+    def expand_debug(self, button=None, exception=False):
         """
         Either hides all graphing and terminal if expand or
         shows all graphing and terminal if minimize.
@@ -225,10 +225,14 @@ class MessageHandler():
             return
 
         if self.minimized:
+            if button is not None:
+                button.setText("Minimize")
             self.line_edit.setPlaceholderText("Enter arduino-cli message here.")
             for item in self.expansion_widgets:
                 item.setVisible(False)
         else:
+            if button is not None:
+                button.setText("Expand")
             self.line_edit.setPlaceholderText("Enter device message here.")
             for item in self.expansion_widgets:
                 item.setVisible(True)
