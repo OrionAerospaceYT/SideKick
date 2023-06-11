@@ -3,6 +3,7 @@ This file handles displaying error messages and graphs
 This file imports device manager and gets the data
 """
 
+import re
 import time
 
 ACCENT_COLOUR = "#252530"
@@ -15,7 +16,7 @@ SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
 Success</p><div style=\"margin-top:150px;\"></div>"
 
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
-Error</p><div style=\"margin-top:150px;\"></div>"
+Error line "
 
 USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
 User command</p><div style=\"margin-top:150px;\"></div>"
@@ -103,6 +104,23 @@ class MessageHandler():
 
         self.terminal_html = terminal_html
 
+    def get_line_number(self, string):
+        """
+        Gets the line number of the error in the compile
+
+        Returns:
+            int: the line number the error is on
+        """
+
+        pattern = r".*\\([^:]+):(\d+):\d+: <font color=#E21919>error:"
+        match = re.search(pattern, string)
+        if match:
+            filename = match.group(1)
+            first_number = int(match.group(2))
+            print(first_number)
+            return filename, first_number
+        return -1, -1
+
     def format_compile_and_upload(self, error):
         """
         Formats the html for the command
@@ -122,6 +140,7 @@ class MessageHandler():
             line = line.replace("^", "^<font color=#FFFFFF>")
 
             debug_output += line + "<br>"
+        file_name, line_num = self.get_line_number(debug_output)
 
         debug_output = debug_output.replace("\x1B[0m", "<font color=\"#ffffff\">")
         debug_output = debug_output.replace("\x1B[90m", "<font color=\"#D6790F\">")
@@ -131,8 +150,9 @@ class MessageHandler():
 
         for item in ERROR_TERMS:
             if item in debug_output:
-                return debug_output + FAILURE_MSG
-
+                debug_output += FAILURE_MSG + str(line_num) + " in " + str(file_name)
+                debug_output += "</p><div style=\"margin-top:150px;\"></div>"
+                return debug_output
         return debug_output + SUCCESS_MSG
 
 
@@ -151,6 +171,7 @@ class MessageHandler():
             html = self.format_compile_and_upload(error)
         else:
             html = "<font color=\"#ffffff\">" + error + USER_MESSAGE
+
         self.debug_html += html
 
         self.set_debug_html()
@@ -162,8 +183,7 @@ class MessageHandler():
         self.widget.setHtml(self.debug_html)
         self.debug_window = True
         self.layout.setVisible(self.debug_window)
-        time.sleep(0.1)
-        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-150)
+        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-100)
 
     def close_debug_window(self):
         """
