@@ -2,8 +2,6 @@
 Library manager
 """
 
-import threading
-import subprocess
 import math
 
 from PyQt5 import QtWidgets as qtw
@@ -97,6 +95,7 @@ class LibraryManager(qtw.QMainWindow):
         super().__init__(parent=parent)
 
         # Definition of attributes
+        self.parent = parent
         self.library_ui = library()
         self.file_manager = file_manager
         self.check_boxes = []
@@ -145,21 +144,4 @@ class LibraryManager(qtw.QMainWindow):
             name (string): the name of the library to install   
         """
 
-        print(name, version)
-
-        install = threading.Thread(target=lambda: self.threaded_install(version, name))
-        install.start()
-
-    def threaded_install(self, version, name):
-        """
-        Installs the libraries that the user has checked
-
-        Args:
-            version (string): the selected version to install
-            name (string): the name of the library to install        
-        """
-
-        cli_path = self.file_manager.get_cli_path()
-        install_cmd = f"{cli_path} lib install \"{name}@{version}\""
-
-        subprocess.Popen(install_cmd)
+        self.parent.cli_manager.communicate(f"lib install \"{name}@{version}\"")
