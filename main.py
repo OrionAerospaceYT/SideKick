@@ -1,6 +1,10 @@
 """
 This is the main python file responsible for having
 the debugging window open.
+
+TODO:
+make the debug html not be displayed every loop so the user can scroll through it
+perhaps pass in the widget to message handler
 """
 
 import os
@@ -17,6 +21,7 @@ from actuator import ActuatorGUI
 from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
+from cli_manager import CliManager
 
 from widgets import Graph
 from widgets import RecordLight
@@ -49,13 +54,21 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui = main_window()
         self.main_ui.setupUi(self)
 
+        self.main_ui.debugger.setVisible(False)
+
         # Associative classes are initialised here
         self.actuator = None
         self.device_manager = DeviceManager(self)
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
+        self.cli_manager = CliManager(self.file_manager.arduino_path)
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
-        self.message_handler = MessageHandler()
+        self.message_handler = MessageHandler(self.main_ui.debugger,
+                                              self.main_ui.debug_log,
+                                              [self.main_ui.terminal,
+                                               self.main_ui.top_widget,
+                                               self.main_ui.bottom_widget],
+                                              self.main_ui.message)
         self.record_light = RecordLight()
         self.side_menu = SideMenu(
             self.file_and_device_widgets()[0],
@@ -75,18 +88,14 @@ class MainGUI(qtw.QMainWindow):
 
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
-        self.main_ui.message.setPlaceholderText("Enter message here.")
+        self.main_ui.message.setPlaceholderText("Enter device message here.")
         self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
         self.add_supported_boards()
 
         # Attributes for event handling are defined here
-        self.debug_window = False
-        self.prev_debug_window = True
         self.showing_data = False
         self.upload = False
-        self.compile = False
 
-        self.commands = []
         self.avaliable_port_list = []
         self.current_projects = []
         self.current_saves = []
@@ -122,7 +131,8 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.select_project,
                         self.main_ui.new_project,
                         self.main_ui.show_save,
-                        self.main_ui.library_manager]
+                        self.main_ui.library_manager,
+                        self.main_ui.arduino_cli]
 
         device_manager = [self.main_ui.tune_actuators,
                           self.main_ui.baud_rate,
@@ -174,7 +184,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.file.clicked.connect(self.open_file_manager)
         self.main_ui.device.clicked.connect(self.open_device_manager)
         self.main_ui.upload.clicked.connect(self.upload_project)
-        self.main_ui.quit.clicked.connect(self.close_debug_window)
+        self.main_ui.quit.clicked.connect(self.message_handler.close_debug_window)
         self.main_ui.compile.clicked.connect(self.compile_project)
         self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
@@ -185,6 +195,9 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
+        self.main_ui.arduino_cli.clicked.connect(self.display_cli)
+        self.main_ui.full_screen.clicked.connect(
+            lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
 
     def connect_keyboard_shortcuts(self):
         """
@@ -214,6 +227,10 @@ class MainGUI(qtw.QMainWindow):
         tune_actuators = qtw.QShortcut(qtg.QKeySequence("ctrl+a"), self)
         tune_actuators.activated.connect(self.open_actuator_gui)
 
+        full_screen = qtw.QShortcut(qtg.QKeySequence("ctrl+q"), self)
+        full_screen.activated.connect(
+            lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
+
     def turn_on_rec_light(self, is_on):
         """
         Turns on or off the blinking record light
@@ -233,15 +250,11 @@ class MainGUI(qtw.QMainWindow):
         Updates the top label while uploading or compiling
         """
 
-        if self.compile:
+        if self.cli_manager.running:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText(
-                self.message_handler.get_status("Compiling"))
-        elif self.upload:
-            self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
-            self.main_ui.top_update.setText(
-                self.message_handler.get_status("Uploading"))
-        elif self.device_manager.error is not None:
+                self.message_handler.get_status("Running"))
+        elif self.device_manager.error is not None and self.device_manager.device is None:
             self.main_ui.top_update.setText("Error, could not connect!")
         else:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
@@ -276,6 +289,16 @@ class MainGUI(qtw.QMainWindow):
         calls all update functions
         """
 
+        # debug
+        output, cmd_type = self.cli_manager.get_output()
+        if output is not None:
+            self.message_handler.decode_debug_message(output, cmd_type)
+            if self.upload and not self.cli_manager.get_status():
+                if self.actuator is not None:
+                    self.actuator.done_upload()
+                self.connect_device(self.device_manager.last_port)
+                self.upload = False
+
         # set labels
         name = self.file_manager.parsed_project_name()
         if name:
@@ -287,15 +310,6 @@ class MainGUI(qtw.QMainWindow):
         self.update_ports()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
-
-        # debugging window
-        if self.prev_debug_window != self.debug_window:
-            if self.debug_window:
-                self.main_ui.debugger.setVisible(True)
-                self.main_ui.debug_log.setHtml(self.message_handler.debug_html)
-            else:
-                self.main_ui.debugger.setVisible(False)
-        self.prev_debug_window = self.debug_window
 
         # record light
         self.turn_on_rec_light(self.record_light.show)
@@ -337,15 +351,6 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.device_manager.connect_device(port, baud)
 
-    def send(self):
-        """
-        Sends the message from the line edit to the connected device
-        """
-
-        self.device_manager.send(self.main_ui.message.text())
-
-        self.main_ui.message.setText("")
-
     def open_file_manager(self):
         """
         Opens/closes the file menu
@@ -368,11 +373,7 @@ class MainGUI(qtw.QMainWindow):
         Checks if a device is connected to the gui
         Disconnects the device to upload
         Compiles the script and then uploads the script
-        Reconnects the device - or - Displays error on the screen
         """
-
-        if self.upload:
-            return
 
         if actuator:
             temp = self.file_manager.current_project
@@ -382,27 +383,30 @@ class MainGUI(qtw.QMainWindow):
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
         port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(port, board)
+        self.upload = True
+
+        self.cli_manager.communicate(
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
+            "upload")
+
+        self.device_manager.terminate_device()
+        self.cli_manager.communicate(
+            f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"",
+            "upload")
 
         if actuator:
             self.file_manager.current_project = temp
-
-        self.upload = True
 
     def compile_project(self):
         """
         Compiles the script
         """
-        if self.compile:
-            return
-
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
-        port = self.device_manager.port
 
-        self.commands = self.file_manager.compile_and_upload_commands(port, board)
-
-        self.compile = True
+        self.cli_manager.communicate(
+            f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
+            "compile")
 
     def display_save(self, already_called=False, save=None):
         """
@@ -437,12 +441,6 @@ class MainGUI(qtw.QMainWindow):
             time.sleep(0.1)
             self.display_save(True, save)
 
-    def close_debug_window(self):
-        """
-        Closes the bottom pop up layout
-        """
-        self.debug_window = False
-
     def demo_function(self):
         """
         Prints "Hello world!"
@@ -453,7 +451,6 @@ class MainGUI(qtw.QMainWindow):
     def show_help(self):
         """
         Takes you to the help website
-        TODO - help website
         """
         webbrowser.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
@@ -467,13 +464,42 @@ class MainGUI(qtw.QMainWindow):
         if file_path:
             self.file_manager.set_current_project(file_path)
 
+    def send(self):
+        """
+        A function to check wether or not the message entered is for the CLI or for the
+        device manager.
+        """
+        if self.message_handler.minimized:
+            self.device_manager.send(self.main_ui.message.text())
+        else:
+            self.cli_manager.communicate(self.main_ui.message.text(), "usr")
+        self.main_ui.message.setText("")
+
+    def display_cli(self):
+        """
+        Shows the debug log in full screen so that the user can enter cli commands.
+        """
+        self.message_handler.set_debug_html()
+        self.message_handler.expand_debug(self.main_ui.full_screen)
+
     def threaded_backend(self):
         """
         All backend tasks that need to be performed continually
+        
+        
+        PLAN:
+        
+        CLI States : running user command, compile, upload
+        Record States : on, off
+        Displaying save states : on, off
+        Auto Connect states : on, off
         """
 
         ellipsis = threading.Thread(target=self.message_handler.update_ellipsis)
         ellipsis.start()
+
+        cli = threading.Thread(target=self.cli_manager.threaded_call, args=(),)
+        cli.start()
 
         while RUNNING:
             # Com ports
@@ -508,31 +534,6 @@ class MainGUI(qtw.QMainWindow):
             else:
                 self.file_manager.save_manager.stop_save()
 
-            if self.compile:
-                self.debug_window = False
-
-                error = self.device_manager.compile_script(self.commands[0])
-                self.message_handler.decode_debug_message(error)
-
-                self.debug_window = True
-                self.compile = False
-
-            if self.upload:
-
-                self.debug_window = False
-
-                self.device_manager.terminate_device()
-
-                error = self.device_manager.upload_script(self.commands[0], self.commands[1])
-
-                self.message_handler.decode_debug_message(error)
-                self.debug_window = True
-
-                self.upload = False
-
-                if self.actuator is not None:
-                    self.actuator.done_upload()
-
 
 if __name__ == "__main__":
 
@@ -564,6 +565,7 @@ if __name__ == "__main__":
     main_gui.device_manager.terminate_device()
     main_gui.record_light.terminate_record()
     main_gui.message_handler.terminate_ellipsis()
+    main_gui.cli_manager.terminate()
 
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
