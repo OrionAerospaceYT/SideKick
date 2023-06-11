@@ -195,8 +195,9 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.help.clicked.connect(self.show_help)
         self.main_ui.com_ports.activated[str].connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
-        self.main_ui.full_screen.clicked.connect(self.message_handler.expand_debug)
         self.main_ui.arduino_cli.clicked.connect(self.display_cli)
+        self.main_ui.full_screen.clicked.connect(
+            lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
 
     def connect_keyboard_shortcuts(self):
         """
@@ -227,7 +228,8 @@ class MainGUI(qtw.QMainWindow):
         tune_actuators.activated.connect(self.open_actuator_gui)
 
         full_screen = qtw.QShortcut(qtg.QKeySequence("ctrl+q"), self)
-        full_screen.activated.connect(self.message_handler.expand_debug)
+        full_screen.activated.connect(
+            lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
 
     def turn_on_rec_light(self, is_on):
         """
@@ -478,7 +480,7 @@ class MainGUI(qtw.QMainWindow):
         Shows the debug log in full screen so that the user can enter cli commands.
         """
         self.message_handler.set_debug_html()
-        self.message_handler.expand_debug()
+        self.message_handler.expand_debug(self.main_ui.full_screen)
 
     def threaded_backend(self):
         """
