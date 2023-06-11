@@ -147,10 +147,10 @@ class MessageHandler():
         """
         error = error.replace("\n", "<br>")
 
-        if ("compile", "upload") in cmd_type:
+        if cmd_type in ("compile", "upload"):
             html = self.format_compile_and_upload(error)
         else:
-            html = error + USER_MESSAGE
+            html = "<font color=\"#ffffff\">" + error + USER_MESSAGE
         self.debug_html += html
 
         self.set_debug_html()
