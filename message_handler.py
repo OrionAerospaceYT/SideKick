@@ -16,7 +16,7 @@ SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
 Success</p><div style=\"margin-top:150px;\"></div>"
 
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
-Error line "
+Error "
 
 USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
 User command</p><div style=\"margin-top:150px;\"></div>"
@@ -150,8 +150,11 @@ class MessageHandler():
 
         for item in ERROR_TERMS:
             if item in debug_output:
-                debug_output += FAILURE_MSG + str(line_num) + " in " + str(file_name)
-                debug_output += "</p><div style=\"margin-top:150px;\"></div>"
+                if line_num > 0:
+                    debug_output += FAILURE_MSG + "line " + str(line_num) + " in " + str(file_name)
+                    debug_output += "</p><div style=\"margin-top:150px;\"></div>"
+                else:
+                    debug_output += FAILURE_MSG + "</p><div style=\"margin-top:150px;\"></div>"
                 return debug_output
         return debug_output + SUCCESS_MSG
 
