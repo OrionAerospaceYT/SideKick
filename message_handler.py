@@ -183,7 +183,8 @@ class MessageHandler():
         self.widget.setHtml(self.debug_html)
         self.debug_window = True
         self.layout.setVisible(self.debug_window)
-        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-100)
+        time.sleep(0.1)
+        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-125)
 
     def close_debug_window(self):
         """
