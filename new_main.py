@@ -292,6 +292,8 @@ class MainGUI(qtw.QMainWindow):
         if output is not None:
             self.message_handler.decode_debug_message(output, cmd_type)
             if self.upload and not self.cli_manager.get_status():
+                if self.actuator is not None:
+                    self.actuator.done_upload()
                 self.connect_device(self.device_manager.last_port)
                 self.upload = False
 
