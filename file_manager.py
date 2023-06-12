@@ -419,7 +419,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if self.dev:
             self.move_libraries(f"{self.consci_os_path}")
             self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
- 
+            print(self.current_project)
+
     def save_options(self, board, project):
         """
         Saves selected options in drop downs to the settings.txt file so
