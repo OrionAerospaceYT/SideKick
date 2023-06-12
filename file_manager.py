@@ -70,7 +70,7 @@ class SaveManager():
 
         return [item.strip() for item in data]
 
-class JsonManager():
+class JsonLibraryManager():
     """
     Json loader class that gets all information for the arduino
     library manager.
@@ -80,10 +80,10 @@ class JsonManager():
 
         self.lib_path = path
         self.libraries = {}
-        self.load()
+        self.load_libs()
         #self.get_info(list(self.libraries.keys())[0])
 
-    def load(self):
+    def load_libs(self):
         """
         Loads all libraries from the library.json file in arduino15.
         """
@@ -173,8 +173,39 @@ class JsonManager():
 
         return libraries
 
+class JsonBoardsManager:
+    """
+    Processes and parses the boards json file.
+    """
+    def __init__(self, path):
 
-class FileManager(JsonManager):
+        self.board_path = path
+        self.boards = {}
+        self.load_boards()
+
+    def load_boards(self):
+        """
+        Loads all libraries from the library.json file in arduino15.
+        """
+
+        with open(self.board_path, encoding="utf-8") as file:
+            data = json.load(file)
+
+        packages = data.get("packages")
+
+        for package in packages:
+            print(package["name"])
+            for board in package["platforms"]:
+                print(board["name"])
+                if board["name"] in self.boards:
+                    self.boards[board["name"]]["version"].append(board["version"])
+                else:
+                    self.boards[board["name"]] = board
+                    self.boards[board["name"]]["version"] = [
+                        self.boards[board["name"]]["version"]]
+
+
+class FileManager(JsonLibraryManager, JsonBoardsManager):
     """
     All processing to do with OS information such as file directorys, saves and more
 
@@ -207,8 +238,11 @@ class FileManager(JsonManager):
             inc = "C:\\Users\\"
             documents = "Documents"
 
-            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
+            arduino_lib_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
+
+            arduino_board_path = f"{inc}{self.user}{self.sep}\
+AppData{self.sep}Local{self.sep}Arduino15{self.sep}package_index.json"
 
         elif self.operating_system == "Darwin":
             self.arduino_cli = "arduino-cli-mac"
@@ -216,8 +250,11 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
             inc = "/Users/"
             documents = "documents"
 
-            self.arduino_lib_path = f"{inc}{self.user}{self.sep}\
+            arduino_lib_path = f"{inc}{self.user}{self.sep}\
 Library{self.sep}Arduino15{self.sep}library_index.json"
+
+            arduino_board_path = f"{inc}{self.user}{self.sep}\
+Library{self.sep}Arduino15{self.sep}package_index.json"
 
         elif self.operating_system == "Linux":
 
@@ -226,8 +263,11 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             inc = "/home/"
             documents = "Documents"
 
-            self.arduino_lib_path = f"{inc}{self.user}{self.sep}.arduino15\
+            arduino_lib_path = f"{inc}{self.user}{self.sep}.arduino15\
 {self.sep}library_index.json"
+
+            arduino_board_path = f"{inc}{self.user}{self.sep}.arduino15\
+{self.sep}package_index.json"
 
         else:
             raise OSError("Invalis OS. Shutting down.")
@@ -256,7 +296,8 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         elif len(os.listdir(self.libraries_path)) == 0:
             self.move_libraries()
 
-        super().__init__(self.arduino_lib_path)
+        super(FileManager, self).__init__(arduino_lib_path)
+        super(JsonLibraryManager, self).__init__(arduino_board_path)
 
     def create_sidekick_file(self):
         """
@@ -328,7 +369,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
 
                 shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
             except NotADirectoryError:
-                print(library)
+                pass
 
     def get_all_boards(self):
         """
