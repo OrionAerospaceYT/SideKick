@@ -249,15 +249,12 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         self.create_sidekick_file()
         self.create_sub_sidekick_files()
 
-        # Checks for the SideKick libraries
-        if len(os.listdir(self.libraries_path)) == 0:
-            self.move_libraries()
-
         # Checks if the GUI is being used in dev mode
         if dev:
             print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
             self.move_libraries(consci_os_path)
-            #self.move_source(consci_os_path)
+        elif len(os.listdir(self.libraries_path)) == 0:
+            self.move_libraries()
 
         super().__init__(self.arduino_lib_path)
 
@@ -323,7 +320,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
         else:
             source += f"{self.sep}libraries"
-
+            print(source)
         for library in os.listdir(source):
             try:
                 if library in os.listdir(destination):
