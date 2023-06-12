@@ -317,11 +317,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if "libraries" not in os.listdir(self.libraries_path):
             os.mkdir(f"{self.libraries_path}{self.sep}libraries")
 
-        conscios_folder = len(os.listdir(f"{self.path}{self.sep}ConsciOS"))
         destination = f"{self.libraries_path}{self.sep}libraries"
-
-        if not conscios_folder:
-            print("ERROR: The ConsciOS is non-existent!")
 
         if source is None:
             source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
