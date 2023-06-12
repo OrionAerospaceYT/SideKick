@@ -322,7 +322,6 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
 
         if not conscios_folder:
             print("ERROR: The ConsciOS is non-existent!")
-            return
 
         if source is None:
             source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
