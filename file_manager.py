@@ -182,6 +182,22 @@ class JsonBoardsManager:
         self.board_path = path
         self.boards = {}
         self.load_boards()
+        print(self.boards)
+
+    def format_dict(self, input_dict):
+        """
+        Formats the dictionary into a better form to be displayed
+        on the screen.
+
+        Args:
+            dict (dictionary) : The dictionary to be formatted
+        """
+        formatted_dict = {"architecture": input_dict["architecture"],
+        "version": [input_dict["version"]],
+        "url": input_dict["url"],
+        "boards": [board["name"] for board in input_dict["boards"]]}
+
+        return formatted_dict
 
     def load_boards(self):
         """
@@ -196,13 +212,12 @@ class JsonBoardsManager:
         for package in packages:
             print(package["name"])
             for board in package["platforms"]:
-                print(board["name"])
+                if board["name"].startswith("[DEPRECATED"):
+                    continue
                 if board["name"] in self.boards:
                     self.boards[board["name"]]["version"].append(board["version"])
                 else:
-                    self.boards[board["name"]] = board
-                    self.boards[board["name"]]["version"] = [
-                        self.boards[board["name"]]["version"]]
+                    self.boards[board["name"]] = self.format_dict(board)
 
 
 class FileManager(JsonLibraryManager, JsonBoardsManager):
