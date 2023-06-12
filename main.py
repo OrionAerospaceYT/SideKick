@@ -374,10 +374,12 @@ class MainGUI(qtw.QMainWindow):
         Disconnects the device to upload
         Compiles the script and then uploads the script
         """
+        temp = self.file_manager.current_project
 
         if actuator:
-            temp = self.file_manager.current_project
             self.file_manager.current_project = self.file_manager.actuators_test
+        elif DEV:
+            self.file_manager.set_dev_file()
 
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
@@ -394,19 +396,23 @@ class MainGUI(qtw.QMainWindow):
             f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"",
             "upload")
 
-        if actuator:
-            self.file_manager.current_project = temp
+        self.file_manager.current_project = temp
 
     def compile_project(self):
         """
         Compiles the script
         """
+        temp = self.file_manager.current_project
+        if DEV:
+            self.file_manager.set_dev_file()
         boards_dictionary = self.file_manager.get_all_boards()
         board = boards_dictionary[self.main_ui.supported_boards.currentText()]
 
         self.cli_manager.communicate(
             f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
             "compile")
+
+        self.file_manager.current_project = temp
 
     def display_save(self, already_called=False, save=None):
         """

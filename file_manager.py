@@ -410,30 +410,16 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         """
         return f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\""
 
-    def compile_and_upload_commands(self, port, board):
+    def set_dev_file(self):
         """
         Compiles and uploads the script
-
-        Args:
-            port (string): the com port the device is connected to e.g. "COM1"
-            board (string): the type of sidekick{self.bsfs}teensy{self.bsfs}arduino board
-            project (string): the name of the project to upload
-        Returns:
-            list: with [compile (string), upload (string)]
+        sets the current_project to the dev project
         """
 
         if self.dev:
             self.move_libraries(f"{self.consci_os_path}")
             self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
-
-        compile_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
-compile --fqbn {board} \"{self.current_project}\""
-
-        upload_msg = f"\"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}\" \
-upload -p {port} --fqbn {board} \"{self.current_project}\""
-
-        return [compile_msg, upload_msg]
-
+ 
     def save_options(self, board, project):
         """
         Saves selected options in drop downs to the settings.txt file so
