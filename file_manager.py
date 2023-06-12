@@ -320,14 +320,15 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
         else:
             source += f"{self.sep}libraries"
-            print(source)
+
         for library in os.listdir(source):
             try:
                 if library in os.listdir(destination):
                     shutil.rmtree(f"{destination}{self.sep}{library}")
+
                 shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
             except NotADirectoryError:
-                pass
+                print(library)
 
     def get_all_boards(self):
         """
@@ -411,7 +412,6 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
         if self.dev:
             self.move_libraries(f"{self.consci_os_path}")
             self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
-            print(self.current_project)
 
     def save_options(self, board, project):
         """
