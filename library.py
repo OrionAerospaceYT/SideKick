@@ -78,6 +78,7 @@ class CheckBox:
         """
         return str(self.versions.currentText())
 
+
 class LibraryManager(qtw.QMainWindow):
     """
     updates and maintains the library manager window
