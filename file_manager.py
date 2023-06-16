@@ -70,34 +70,12 @@ class SaveManager():
 
         return [item.strip() for item in data]
 
-class JsonLibraryManager():
+
+class HtmlGenerator():
     """
-    Json loader class that gets all information for the arduino
-    library manager.
+    Holds the functions which generate html for JsonLibraryManager and
+    JsonBoardsManager.
     """
-
-    def __init__(self, path):
-
-        self.lib_path = path
-        self.libraries = {}
-        self.load_libs()
-        #self.get_info(list(self.libraries.keys())[0])
-
-    def load_libs(self):
-        """
-        Loads all libraries from the library.json file in arduino15.
-        """
-        with open(self.lib_path, encoding="utf-8") as file:
-            data = json.load(file)
-
-        libraries = data.get("libraries")
-        for library in libraries:
-            if library["name"] in self.libraries:
-                self.libraries[library["name"]]["version"].append(library["version"])
-            else:
-                self.libraries[library["name"]] = library
-                self.libraries[library["name"]]["version"] = [
-                    self.libraries[library["name"]]["version"]]
 
     def get_title(self, name):
         """
@@ -130,23 +108,57 @@ class JsonLibraryManager():
         """
         return f"<p>{name}: {text}</p>"
 
-    def get_html(self, name):
+    def get_html(self, name, my_dict):
         """
         Formats the library text for the display on library manager options
+        
+        Args:
+            name (str): the name of the dictionary item
+            my_dict (dictionary): the dictionary to parse into html
         """
         html = ""
 
-        for item in list(self.libraries[name].keys()):
+        for item in list(my_dict[name].keys()):
             if item == "name":
-                html = self.get_title(str(self.libraries[name][item]))
+                html = self.get_title(str(my_dict[name][item]))
             elif item in ("checksum", "version"):
                 pass
             elif item in ("repository", "url", "website"):
-                html += self.get_link(item, str(self.libraries[name][item]))
+                html += self.get_link(item, str(my_dict[name][item]))
             elif isinstance(item, str):
-                html += self.get_paragraph(item, str(self.libraries[name][item]))
+                html += self.get_paragraph(item, str(my_dict[name][item]))
 
         return html
+
+
+class JsonLibraryManager(HtmlGenerator):
+    """
+    Json loader class that gets all information for the arduino
+    library manager.
+    """
+
+    def __init__(self, path):
+
+        self.lib_path = path
+        self.libraries = {}
+        self.load_libs()
+        #self.get_info(list(self.libraries.keys())[0])
+
+    def load_libs(self):
+        """
+        Loads all libraries from the library.json file in arduino15.
+        """
+        with open(self.lib_path, encoding="utf-8") as file:
+            data = json.load(file)
+
+        libraries = data.get("libraries")
+        for library in libraries:
+            if library["name"] in self.libraries:
+                self.libraries[library["name"]]["version"].append(library["version"])
+            else:
+                self.libraries[library["name"]] = library
+                self.libraries[library["name"]]["version"] = [
+                    self.libraries[library["name"]]["version"]]
 
     def get_versions(self, name):
         """
@@ -173,7 +185,7 @@ class JsonLibraryManager():
 
         return libraries
 
-class JsonBoardsManager:
+class JsonBoardsManager(HtmlGenerator):
     """
     Processes and parses the boards json file.
     """
@@ -182,7 +194,6 @@ class JsonBoardsManager:
         self.board_path = path
         self.boards = {}
         self.load_boards()
-        print(self.boards)
 
     def format_dict(self, input_dict):
         """
@@ -210,7 +221,6 @@ class JsonBoardsManager:
         packages = data.get("packages")
 
         for package in packages:
-            print(package["name"])
             for board in package["platforms"]:
                 if board["name"].startswith("[DEPRECATED"):
                     continue
