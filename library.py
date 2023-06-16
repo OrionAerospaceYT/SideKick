@@ -132,7 +132,8 @@ class LibraryManager(qtw.QMainWindow):
 
         for name in self.file_manager.get_all_libraries(self.library_ui.search.text()):
             versions = self.file_manager.get_versions(name)
-            check_box = CheckBox(name, self.file_manager.get_html(name), versions, parent=self)
+            check_box = CheckBox(name, self.file_manager.get_html(
+                name, self.file_manager.libraries), versions, parent=self)
             self.check_boxes.append(check_box.horizontal_layout)
             self.library_ui.libraries.addLayout(self.check_boxes[-1])
 
