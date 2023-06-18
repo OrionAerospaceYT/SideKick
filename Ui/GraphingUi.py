@@ -160,6 +160,21 @@ class Ui_MainWindow(object):
 "  border: none;\n"
 "  border-radius: 10px;\n"
 "  background-color: #2b2b35;\n"
+"}\n"
+"\n"
+"/*ScrollBar*/\n"
+"QScrollBar\n"
+"{\n"
+"    background: #2b2b35;\n"
+"}\n"
+"QScrollBar::handle\n"
+"{\n"
+"background :  #32323C;\n"
+"border-radius: 10px;\n"
+"}\n"
+"QScrollBar::handle::pressed\n"
+"{\n"
+"background : #2b2b35;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")

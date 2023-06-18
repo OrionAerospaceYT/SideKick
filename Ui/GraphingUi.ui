@@ -161,6 +161,21 @@ QWidget #bottom_widget{
   border: none;
   border-radius: 10px;
   background-color: #2b2b35;
+}
+
+/*ScrollBar*/
+QScrollBar
+{
+	background: #2b2b35;
+}
+QScrollBar::handle
+{
+background :  #32323C;
+border-radius: 10px;
+}
+QScrollBar::handle::pressed
+{
+background : #2b2b35;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
