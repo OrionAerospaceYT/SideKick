@@ -77,6 +77,13 @@ class HtmlGenerator():
     JsonBoardsManager.
     """
 
+    def get_versions(self, name, my_dict):
+        """
+        Returns all of the versions that are avaliable.
+        """
+
+        return list(my_dict[name]["version"])
+
     def get_title(self, name):
         """
         Returns the formatting for a title on the QTextBrowser of libraries
@@ -108,6 +115,19 @@ class HtmlGenerator():
         """
         return f"<p>{name}: {text}</p>"
 
+    def get_list_paragraph(self, name, my_list):
+        """
+        Makes a paragraph for each sub category
+
+        Args:
+            name (string): the name of the category
+            list (list): the description
+        """
+        string = f"<p>{name}:"
+        for item in my_list:
+            string += f"<br>{item}"
+        return string
+
     def get_html(self, name, my_dict):
         """
         Formats the library text for the display on library manager options
@@ -125,6 +145,8 @@ class HtmlGenerator():
                 pass
             elif item in ("repository", "url", "website"):
                 html += self.get_link(item, str(my_dict[name][item]))
+            elif isinstance(my_dict[name][item], list):
+                html += self.get_list_paragraph(item, my_dict[name][item])
             elif isinstance(item, str):
                 html += self.get_paragraph(item, str(my_dict[name][item]))
 
@@ -159,13 +181,6 @@ class JsonLibraryManager(HtmlGenerator):
                 self.libraries[library["name"]] = library
                 self.libraries[library["name"]]["version"] = [
                     self.libraries[library["name"]]["version"]]
-
-    def get_versions(self, name):
-        """
-        Returns all of the versions that are avaliable.
-        """
-
-        return list(self.libraries[name]["version"])
 
     def get_all_libraries(self, name):
         """
