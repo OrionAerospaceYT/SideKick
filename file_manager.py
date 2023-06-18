@@ -242,6 +242,7 @@ class JsonBoardsManager(HtmlGenerator):
                 if board["name"] in self.boards:
                     self.boards[board["name"]]["version"].append(board["version"])
                 else:
+                    board["architecture"] = package["name"] + ":" + board["architecture"]
                     self.boards[board["name"]] = self.format_dict(board)
 
 
