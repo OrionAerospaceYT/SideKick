@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1012</width>
-    <height>650</height>
+    <height>694</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -737,6 +737,13 @@ QLabel#logo_2{
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="boards_manager">
+           <property name="text">
+            <string>Boards Manager</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="tune_actuators">

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1012, 650)
+        MainWindow.resize(1012, 694)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -459,6 +459,9 @@ class Ui_MainWindow(object):
         self.dhsgd.addWidget(self.logo_2)
         spacerItem7 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.dhsgd.addItem(spacerItem7)
+        self.boards_manager = QtWidgets.QPushButton(self.side_menu)
+        self.boards_manager.setObjectName("boards_manager")
+        self.dhsgd.addWidget(self.boards_manager)
         self.tune_actuators = QtWidgets.QPushButton(self.side_menu)
         self.tune_actuators.setObjectName("tune_actuators")
         self.dhsgd.addWidget(self.tune_actuators)
@@ -543,6 +546,7 @@ class Ui_MainWindow(object):
         self.help.setText(_translate("MainWindow", "Help"))
         self.quit.setText(_translate("MainWindow", "x"))
         self.full_screen.setText(_translate("MainWindow", "Expand"))
+        self.boards_manager.setText(_translate("MainWindow", "Boards Manager"))
         self.tune_actuators.setText(_translate("MainWindow", "Tune Actuators"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
