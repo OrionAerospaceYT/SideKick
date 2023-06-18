@@ -18,6 +18,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtWidgets as qtw
 
 from actuator import ActuatorGUI
+from boards import BoardsManager
 from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
@@ -135,6 +136,7 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.arduino_cli]
 
         device_manager = [self.main_ui.tune_actuators,
+                          self.main_ui.boards_manager,
                           self.main_ui.baud_rate,
                           self.main_ui.disconnect,
                           self.main_ui.supported_boards]
@@ -146,6 +148,12 @@ class MainGUI(qtw.QMainWindow):
         Opens the library manager window
         """
         LibraryManager(self.file_manager, self)
+
+    def open_boards_manager(self):
+        """
+        Opens the board manager window
+        """
+        BoardsManager(self.file_manager, self)
 
     def open_actuator_gui(self):
         """
@@ -188,6 +196,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.compile.clicked.connect(self.compile_project)
         self.main_ui.disconnect.clicked.connect(self.device_manager.terminate_device)
         self.main_ui.library_manager.clicked.connect(self.open_library_manager)
+        self.main_ui.boards_manager.clicked.connect(self.open_boards_manager)
         self.main_ui.show_save.clicked.connect(self.display_save)
         self.main_ui.message.returnPressed.connect(self.send)
         self.main_ui.select_project.clicked.connect(self.open_file)
