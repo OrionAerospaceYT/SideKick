@@ -139,7 +139,7 @@ class HtmlGenerator():
         html = ""
 
         for item in list(my_dict[name].keys()):
-            if item == "name":
+            if item in ("name", "architecture"):
                 html = self.get_title(str(my_dict[name][item]))
             elif item in ("checksum", "version"):
                 pass
