@@ -244,6 +244,7 @@ class JsonBoardsManager(HtmlGenerator):
                 else:
                     board["architecture"] = package["name"] + ":" + board["architecture"]
                     self.boards[board["name"]] = self.format_dict(board)
+                    self.boards[board["name"]].update({"maintainer":package["maintainer"]})
 
 
 class FileManager(JsonLibraryManager, JsonBoardsManager):
