@@ -2,82 +2,11 @@
 Library manager
 """
 
-import math
-
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 
 from Ui.LibraryUi import Ui_MainWindow as library
 
-class CheckBox:
-    """
-    Creates a checkbox which uses a text browser + html to create a
-    good looking way of displaying all relevant information of a
-    library:
-    """
-
-    def __init__(self, name, html, versions, parent=None):
-
-        self.name = name
-
-        self.vertical_layout = qtw.QVBoxLayout()
-
-        self.versions = qtw.QComboBox()
-        for item in reversed(versions):
-            self.versions.addItem(item)
-
-        self.install = qtw.QPushButton("Install")
-
-        if parent:
-            self.install.clicked.connect(lambda: parent.install(self.get_version(),
-                                                                self.name))
-        self.vertical_layout.addWidget(self.install)
-        self.vertical_layout.addWidget(self.versions)
-
-        self.horizontal_layout = qtw.QHBoxLayout()
-
-        self.info = qtw.QTextBrowser()
-        self.info.setHtml(html)
-        self.info.setOpenExternalLinks(True)
-        self.info.setMinimumHeight(self.calculate_num_lines(html, self.info.size().width()))
-
-        self.horizontal_layout.addLayout(self.vertical_layout)
-        self.horizontal_layout.addWidget(self.info)
-
-    def calculate_num_lines(self, html, width):
-        """
-        test
-
-        Args:
-            html (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        doc = qtg.QTextDocument()
-        doc.setHtml(html)
-        num_blocks = 0
-        block = doc.begin()
-        i = 0
-        while block.isValid():
-            block_width = block.layout().boundingRect().width()
-            if block_width > width:
-                if i == 0:
-                    num_blocks += math.ceil(block_width / width) * 40
-                else:
-                    num_blocks += math.ceil(block_width / width) * 30
-            else:
-                num_blocks += 1
-            block = block.next()
-            i += 1
-        return num_blocks * 40
-
-    def get_version(self):
-        """
-        returns the version that is currently selected
-        """
-        return str(self.versions.currentText())
-
+from widgets import CheckBox
 
 class LibraryManager(qtw.QMainWindow):
     """
@@ -109,7 +38,6 @@ class LibraryManager(qtw.QMainWindow):
         # Connecting buttons
         self.library_ui.enter.clicked.connect(self.update_labels)
         self.library_ui.search.returnPressed.connect(self.update_labels)
-        self.library_ui.search.returnPressed.connect(self.update_labels)
 
         self.show()
 
@@ -131,7 +59,7 @@ class LibraryManager(qtw.QMainWindow):
         self.clear_layout(self.library_ui.libraries)
 
         for name in self.file_manager.get_all_libraries(self.library_ui.search.text()):
-            versions = self.file_manager.get_versions(name)
+            versions = self.file_manager.get_versions(name, self.file_manager.libraries)
             check_box = CheckBox(name, self.file_manager.get_html(
                 name, self.file_manager.libraries), versions, parent=self)
             self.check_boxes.append(check_box.horizontal_layout)
