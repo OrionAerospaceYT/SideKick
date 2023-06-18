@@ -9,6 +9,7 @@ TODO class RecordLight
 import math
 import time
 
+from bs4 import BeautifulSoup
 import pyqtgraph as pg
 import numpy as np
 
@@ -387,23 +388,21 @@ class CheckBox:
         Returns:
             _type_: _description_
         """
-        doc = qtg.QTextDocument()
-        doc.setHtml(html)
-        num_blocks = 0
-        block = doc.begin()
-        i = 0
-        while block.isValid():
-            block_width = block.layout().boundingRect().width()
-            if block_width > width:
-                if i == 0:
-                    num_blocks += math.ceil(block_width / width) * 40
-                else:
-                    num_blocks += math.ceil(block_width / width) * 30
-            else:
-                num_blocks += 1
-            block = block.next()
-            i += 1
-        return num_blocks * 40
+        total = html.count("</p>")
+
+        html = html.replace("<br>", "\n")
+        html = html.replace("</p>", "\n")
+        soup = BeautifulSoup(html, 'html.parser')
+        plain_text = soup.get_text(separator=' ')
+
+        plain_text = [item for item in plain_text.split("\n") if item != ""]
+
+        for string in plain_text:
+            total += 1
+            if len(string) > 0:
+                total += (len(string) * 24) // width
+
+        return total * 20 + 50
 
     def get_version(self):
         """
