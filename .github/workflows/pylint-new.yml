@@ -39,7 +39,7 @@ jobs:
         
     - name: Analysing widgets.py
       run: |
-        pylint widgets.py --disable=R0903
+        pylint widgets.py --disable=R0903,I1101
         
     - name: Analysing library.py
       run: |

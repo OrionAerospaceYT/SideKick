@@ -6,7 +6,7 @@ TODO class DeviceManagerWindow
 TODO class FileManagerWindow
 TODO class RecordLight
 """
-import math
+
 import time
 
 from bs4 import BeautifulSoup
@@ -14,7 +14,6 @@ import pyqtgraph as pg
 import numpy as np
 
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 
 # Constant list of colour orders for the graphs
 COLOUR_ORDER = ["#FF0C0C",
@@ -373,12 +372,12 @@ class CheckBox:
         self.info = qtw.QTextBrowser()
         self.info.setHtml(html)
         self.info.setOpenExternalLinks(True)
-        self.info.setMinimumHeight(self.calculate_num_lines(html, self.info.size().width()))
+        self.info.setMinimumHeight(self.get_height(html, self.info.size().width()))
 
         self.horizontal_layout.addLayout(self.vertical_layout)
         self.horizontal_layout.addWidget(self.info)
 
-    def calculate_num_lines(self, html, width):
+    def get_height(self, html, width):
         """
         test
 
