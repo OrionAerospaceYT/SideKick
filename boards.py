@@ -58,4 +58,4 @@ class BoardsManager(qtw.QMainWindow):
         """
         architecture = self.file_manager.boards[name]["architecture"]
         self.parent.cli_manager.communicate(
-            f"core install \"arduino:{architecture}@{version}\"")
+            f"core install \"{architecture}@{version}\"")
