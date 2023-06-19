@@ -85,6 +85,23 @@ class CliManager:
         """
         self.commands[f"\"{self.path}\" {cmd}"] = cmd_type
 
+    def get_cmd_output(self, cmd):
+        """
+        Runs the command in the program flow
+
+        Args:
+            cmd (string): the comand to run in terminal
+        Returns:
+            string: the output from CLI
+        """
+        print(f"\"{self.path}\" {cmd}")
+        with subprocess.Popen(
+                    f"\"{self.path}\" \"{cmd}\"", stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    shell=True) as process:
+                output = process.communicate()
+        return output
+
     def terminate(self):
         """
         Ends the threaded function if it is running.
