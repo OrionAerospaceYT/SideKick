@@ -59,3 +59,6 @@ class BoardsManager(qtw.QMainWindow):
         architecture = self.file_manager.boards[name]["architecture"]
         self.parent.cli_manager.communicate(
             f"core install \"{architecture}@{version}\"")
+
+        print(self.parent.cli_manager.get_cmd_output(
+            f"board search"))
