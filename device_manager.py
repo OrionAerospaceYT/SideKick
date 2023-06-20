@@ -90,9 +90,11 @@ class DeviceManager():
         Args:
             buffer (string): the collective data
         """
-
-        decoded_buffer = buffer.decode("UTF-8")
-
+        try:
+            decoded_buffer = buffer.decode("UTF-8")
+        except:
+            print("DEcode error")
+            decoded_buffer = "t(ERROR)"
         if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
             index = 0
         else:
