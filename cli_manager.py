@@ -96,11 +96,11 @@ class CliManager:
         """
         print(f"\"{self.path}\" {cmd}")
         with subprocess.Popen(
-                    f"\"{self.path}\" \"{cmd}\"", stdout=subprocess.PIPE,
+                    f"\"{self.path}\" {cmd}", stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     shell=True) as process:
                 output = process.communicate()
-        return output
+        return output[0]
 
     def terminate(self):
         """
