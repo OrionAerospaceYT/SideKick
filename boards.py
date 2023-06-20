@@ -60,5 +60,7 @@ class BoardsManager(qtw.QMainWindow):
         self.parent.cli_manager.communicate(
             f"core install \"{architecture}@{version}\"")
 
-        print(self.parent.cli_manager.get_cmd_output(
-            f"board search"))
+        boards_str = self.parent.cli_manager.get_cmd_output(f"board search")
+
+        boards_list = boards_str.decode("UTF-8").replace(" ","").split("\n")
+        boards_list = [item for item in boards_list if item]
