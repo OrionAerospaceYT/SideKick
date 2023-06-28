@@ -92,9 +92,10 @@ class DeviceManager():
         """
         try:
             decoded_buffer = buffer.decode("UTF-8")
-        except:
-            print("DEcode error")
+        except UnicodeDecodeError:
+            print("Decode error")
             decoded_buffer = "t(ERROR)"
+
         if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
             index = 0
         else:
