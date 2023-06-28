@@ -76,6 +76,8 @@ class MainGUI(qtw.QMainWindow):
             self.file_and_device_widgets()[1],
             self.main_ui.side_menu)
 
+        self.file_manager.update_boards(self.cli_manager)
+
         # Attributes and initial config here
         self.side_menu.hide_menu()
 
