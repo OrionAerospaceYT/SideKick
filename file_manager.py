@@ -603,3 +603,22 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             name = ""
 
         return name
+
+    def update_boards(self, cli_manager):
+        """
+        Updates the boards.csv file to include all of the new boards
+        """
+
+        boards_str = cli_manager.get_cmd_output("board listall")
+
+        boards_list = boards_str.decode("UTF-8").split("\n")
+        boards_list = [item.strip().split("  ") for item in boards_list if item]
+
+        all_boards = []
+
+        for item in boards_list:
+            all_boards.append([x for x in item if x])
+
+        all_boards.pop(0)
+
+        print(*all_boards, sep="\n")
