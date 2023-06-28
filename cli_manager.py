@@ -99,7 +99,9 @@ class CliManager:
                     f"\"{self.path}\" {cmd}", stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     shell=True) as process:
-                output = process.communicate()
+
+            output = process.communicate()
+
         return output[0]
 
     def terminate(self):
