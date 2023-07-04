@@ -8,6 +8,9 @@ import shutil
 import platform
 import json
 
+DEFAULT_BOARDS = [["Select Board", "None"],
+                  ["SK Stem", "arduino:mbed_rp2040:pico"]]
+
 class SaveManager():
     """
     loads and saves data to the saves file
@@ -604,9 +607,13 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         return name
 
-    def update_boards(self, cli_manager):
+    def get_installed_boards(self, cli_manager:str) -> list:
         """
-        Updates the boards.csv file to include all of the new boards
+        Args:
+            cli_magaer (CliManager) : the cli manager that runs commands
+
+        Returns:
+            list : the list of all boards installed
         """
 
         boards_str = cli_manager.get_cmd_output("board listall")
@@ -621,4 +628,21 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         all_boards.pop(0)
 
-        print(*all_boards, sep="\n")
+        for board in reversed(DEFAULT_BOARDS):
+            all_boards.insert(0, board)
+
+        return all_boards
+
+    def update_boards(self, cli_manager):
+        """
+        Updates the boards.csv file to include all of the new boards
+        """
+
+        installed_boards = self.get_installed_boards(cli_manager)
+
+        with open(self.boards_path, "w", encoding="UTF-8") as boards:
+
+            for board in installed_boards:
+
+                if len(board) > 1:
+                    boards.write(f"{board[0]}, {board[1]}\n")
