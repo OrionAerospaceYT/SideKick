@@ -1,39 +1,61 @@
 Select Board, None
 SK Stem, arduino:mbed_rp2040:pico
-SK Brain, None
-Teensy4.1, teensy:avr:teensy41
-Teensy4.0, teensy:avr:teensy40
-Teensy3.6, teensy:avr:teensy36
-Teensy3.5, teensy:avr:teensy35
-Teensy3.2/1, teensy:avr:teensy31
-Teensy3.0, teensy:avr:teensy30
-Teensy2.0, teensy:avr:teensy2
-TeensyLC, teensy:avr:teensyLC
-TeensyMM, teensy:avr:teensyMM
-Teensy++, teensy:avr:teensypp2
-Adafruit Circuit Playground, arduino:avr:circuitplay32u4cat
+Adafruit Circuit Playground,  arduino:avr:circuitplay32u4cat
 Arduino BT, arduino:avr:bt
-Arduino Duemilanove or Diecimila,  arduino:avr:diecimila
-Arduino Esplora, arduino:avr:esplora
+Arduino Duemilanove or Diecimila, arduino:avr:diecimila
+Arduino Esplora,  arduino:avr:esplora
 Arduino Ethernet, arduino:avr:ethernet
-Arduino Fio, arduino:avr:fio
-Arduino Gemma, arduino:avr:gemma
+Arduino Fio,  arduino:avr:fio
+Arduino Gemma,  arduino:avr:gemma
 Arduino Industrial 101, arduino:avr:chiwawa
 Arduino Leonardo, arduino:avr:leonardo
 Arduino Leonardo ETH, arduino:avr:leonardoeth
+Arduino M0, arduino:samd:mzero_bl
+Arduino M0 Pro (Native USB Port), arduino:samd:mzero_pro_bl
+Arduino M0 Pro (Programming Port),  arduino:samd:mzero_pro_bl_dbg
+Arduino MKR FOX 1200, arduino:samd:mkrfox1200
+Arduino MKR GSM 1400, arduino:samd:mkrgsm1400
+Arduino MKR NB 1500,  arduino:samd:mkrnb1500
+Arduino MKR Vidor 4000, arduino:samd:mkrvidor4000
+Arduino MKR WAN 1300, arduino:samd:mkrwan1300
+Arduino MKR WAN 1310, arduino:samd:mkrwan1310
+Arduino MKR WiFi 1010,  arduino:samd:mkrwifi1010
+Arduino MKR1000,  arduino:samd:mkr1000
+Arduino MKRZERO,  arduino:samd:mkrzero
 Arduino Mega ADK, arduino:avr:megaADK
-Arduino Mega or Mega 2560, arduino:avr:mega
-Arduino Micro, arduino:avr:micro
+Arduino Mega or Mega 2560,  arduino:avr:mega
+Arduino Micro,  arduino:avr:micro
 Arduino Mini, arduino:avr:mini
-Arduino NG or older, arduino:avr:atmegang
+Arduino NANO 33 IoT,  arduino:samd:nano_33_iot
+Arduino NG or older,  arduino:avr:atmegang
 Arduino Nano, arduino:avr:nano
-Arduino Pro or Pro Mini, arduino:avr:pro
-Arduino Robot Control, arduino:avr:robotControl
-Arduino Robot Motor, arduino:avr:robotMotor
-Arduino Uno, arduino:avr:uno
+Arduino Nano 33 BLE,  arduino:mbed_nano:nano33ble
+Arduino Nano Every, arduino:megaavr:nona4809
+Arduino Nano RP2040 Connect,  arduino:mbed_nano:nanorp2040connect
+Arduino Pro or Pro Mini,  arduino:avr:pro
+Arduino Robot Control,  arduino:avr:robotControl
+Arduino Robot Motor,  arduino:avr:robotMotor
+Arduino Tian, arduino:samd:tian
+Arduino Uno,  arduino:avr:uno
 Arduino Uno Mini, arduino:avr:unomini
 Arduino Uno WiFi, arduino:avr:unowifi
-Arduino Yún, arduino:avr:yun
+Arduino Uno WiFi Rev2,  arduino:megaavr:uno2018
+Arduino Yún,  arduino:avr:yun
 Arduino Yún Mini, arduino:avr:yunmini
-LilyPad Arduino, arduino:avr:lilypad
-LilyPad Arduino USB, arduino:avr:LilyPadUSB
+Arduino Zero (Native USB Port), arduino:samd:arduino_zero_native
+Arduino Zero (Programming Port),  arduino:samd:arduino_zero_edbg
+EMoRo 2560, emoro:avr:emoro2560
+LilyPad Arduino,  arduino:avr:lilypad
+LilyPad Arduino USB,  arduino:avr:LilyPadUSB
+Linino One, arduino:avr:one
+Raspberry Pi Pico,  arduino:mbed_rp2040:pico
+Teensy 2.0, teensy:avr:teensy2
+Teensy 3.0, teensy:avr:teensy30
+Teensy 3.2 / 3.1, teensy:avr:teensy31
+Teensy 3.5, teensy:avr:teensy35
+Teensy 3.6, teensy:avr:teensy36
+Teensy 4.0, teensy:avr:teensy40
+Teensy 4.1, teensy:avr:teensy41
+Teensy LC,  teensy:avr:teensyLC
+Teensy MicroMod,  teensy:avr:teensyMM
+Teensy++ 2.0, teensy:avr:teensypp2
