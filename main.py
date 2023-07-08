@@ -60,8 +60,10 @@ class MainGUI(qtw.QMainWindow):
         # Associative classes are initialised here
         self.actuator = None
         self.device_manager = DeviceManager(self)
+
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
         self.cli_manager = CliManager(self.file_manager.arduino_path)
+
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
         self.message_handler = MessageHandler(self.main_ui.debugger,
@@ -76,7 +78,8 @@ class MainGUI(qtw.QMainWindow):
             self.file_and_device_widgets()[1],
             self.main_ui.side_menu)
 
-        self.file_manager.update_boards(self.cli_manager)
+        self.file_manager.set_all_boards(self.cli_manager)
+        self.file_manager.update_boards()
 
         # Attributes and initial config here
         self.side_menu.hide_menu()
@@ -180,10 +183,11 @@ class MainGUI(qtw.QMainWindow):
         Adds the supported boards to the drop down so that
         they can be selected for uploads.
         """
+        print(self.file_manager.board_names)
+        boards = self.file_manager.board_names
 
-        boards = list(self.file_manager.get_all_boards().keys())
         for board in boards:
-            self.main_ui.supported_boards.addItem(board)
+            self.main_ui.supported_boards.addItem(board[0])
 
     def connect_buttons(self):
         """
@@ -378,6 +382,23 @@ class MainGUI(qtw.QMainWindow):
 
         self.side_menu.show_side_menu(device=True)
 
+    def search(self, element:str, list_of_lists:list(str)) -> str:
+        """
+        Goes through a list of lists which returns the second element
+        in the sub list given the first.
+
+        Args:
+            element (str): the element key
+            list_of_lists (list): second element in sub list
+
+        Returns:
+            str: the second element in the sub list
+        """
+        for sublist in list_of_lists:
+            if sublist[0] == element:
+                return sublist[1]
+        return None
+
     def upload_project(self, actuator=False):
         """
         Gets selected board to upload to
@@ -392,8 +413,8 @@ class MainGUI(qtw.QMainWindow):
         elif DEV:
             self.file_manager.set_dev_file()
 
-        boards_dictionary = self.file_manager.get_all_boards()
-        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+        board = self.search(self.main_ui.supported_boards.currentText(),
+                            self.file_manager.board_names)
         port = self.device_manager.port
 
         self.upload = True
@@ -414,10 +435,12 @@ class MainGUI(qtw.QMainWindow):
         Compiles the script
         """
         temp = self.file_manager.current_project
+
         if DEV:
             self.file_manager.set_dev_file()
-        boards_dictionary = self.file_manager.get_all_boards()
-        board = boards_dictionary[self.main_ui.supported_boards.currentText()]
+
+        board = self.search(self.main_ui.supported_boards.currentText(),
+                            self.file_manager.board_names)
 
         self.cli_manager.communicate(
             f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
