@@ -43,9 +43,7 @@ class CliManager:
         """
         Gets the current status of what tasks are still to be done.
         """
-        print(self.commands)
         for cmd in self.commands.items():
-            print(cmd)
             if cmd[1] == key:
                 return True
         return False
@@ -94,7 +92,6 @@ class CliManager:
         Returns:
             string: the output from CLI
         """
-        print(f"\"{self.path}\" {cmd}")
         with subprocess.Popen(
                     f"\"{self.path}\" {cmd}", stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,

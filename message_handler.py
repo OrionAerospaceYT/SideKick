@@ -13,7 +13,7 @@ TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
 >Terminal</p></h1><div style=\"margin-top:75px;\"></div>"
 
 SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
-Success</p><div style=\"margin-top:150px;\"></div>"
+Success</p><font color=\"#FFFFFF\">"
 
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
 Error "
@@ -117,7 +117,6 @@ class MessageHandler():
         if match:
             filename = match.group(1)
             first_number = int(match.group(2))
-            print(first_number)
             return filename, first_number
         return -1, -1
 
@@ -151,12 +150,12 @@ class MessageHandler():
         for item in ERROR_TERMS:
             if item in debug_output:
                 if line_num > 0:
-                    debug_output += FAILURE_MSG + "line " + str(line_num) + " in " + str(file_name)
-                    debug_output += "</p><div style=\"margin-top:150px;\"></div>"
+                    message = FAILURE_MSG + "line " + str(line_num) + " in " + str(file_name)
+                    message += "</p>"
                 else:
-                    debug_output += FAILURE_MSG + "</p><div style=\"margin-top:150px;\"></div>"
-                return debug_output
-        return debug_output + SUCCESS_MSG
+                    message = FAILURE_MSG + "</p>"
+                return message + debug_output
+        return SUCCESS_MSG + debug_output
 
 
     def decode_debug_message(self, error, cmd_type):
@@ -173,9 +172,9 @@ class MessageHandler():
         if cmd_type in ("compile", "upload"):
             html = self.format_compile_and_upload(error)
         else:
-            html = "<font color=\"#ffffff\">" + error + USER_MESSAGE
+            html = "<font color=\"#ffffff\">" + USER_MESSAGE + error
 
-        self.debug_html += html
+        self.debug_html = html + self.debug_html
 
         self.set_debug_html()
 
@@ -186,8 +185,6 @@ class MessageHandler():
         self.widget.setHtml(self.debug_html)
         self.debug_window = True
         self.layout.setVisible(self.debug_window)
-        time.sleep(0.1)
-        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum()-125)
 
     def close_debug_window(self):
         """

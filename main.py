@@ -183,7 +183,6 @@ class MainGUI(qtw.QMainWindow):
         Adds the supported boards to the drop down so that
         they can be selected for uploads.
         """
-        print(self.file_manager.board_names)
         boards = self.file_manager.board_names
 
         for board in boards:
@@ -382,7 +381,7 @@ class MainGUI(qtw.QMainWindow):
 
         self.side_menu.show_side_menu(device=True)
 
-    def search(self, element:str, list_of_lists:list(str)) -> str:
+    def search(self, element:str, list_of_lists:list) -> str:
         """
         Goes through a list of lists which returns the second element
         in the sub list given the first.
