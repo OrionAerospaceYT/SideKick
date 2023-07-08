@@ -268,16 +268,19 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
 
     def __init__(self, dev, consci_os_path):
 
+        operating_system = platform.system()
+
         self.user = os.getlogin()
         self.path = os.path.dirname(os.path.realpath(__file__))
-        self.operating_system = platform.system()
         self.save_manager = SaveManager()
         self.dev = dev
         self.consci_os_path = consci_os_path
         self.current_project = ""
 
+        self.board_names = None
+
         # Initialise for each OS
-        if self.operating_system == "Windows":
+        if operating_system == "Windows":
             self.arduino_cli = "arduino-cli-windows.exe"
             self.sep = "\\"
             inc = "C:\\Users\\"
@@ -289,7 +292,7 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
             arduino_board_path = f"{inc}{self.user}{self.sep}\
 AppData{self.sep}Local{self.sep}Arduino15{self.sep}package_index.json"
 
-        elif self.operating_system == "Darwin":
+        elif operating_system == "Darwin":
             self.arduino_cli = "arduino-cli-mac"
             self.sep = "/"
             inc = "/Users/"
@@ -301,7 +304,7 @@ Library{self.sep}Arduino15{self.sep}library_index.json"
             arduino_board_path = f"{inc}{self.user}{self.sep}\
 Library{self.sep}Arduino15{self.sep}package_index.json"
 
-        elif self.operating_system == "Linux":
+        elif operating_system == "Linux":
 
             self.arduino_cli = "arduino-cli-linux.sh"
             self.sep = "/"
@@ -415,23 +418,6 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                 shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
             except NotADirectoryError:
                 pass
-
-    def get_all_boards(self):
-        """
-        Gets all supported boards from the "./Ui/boards.csv".
-
-        Returns:
-            dictionary: the list of supported boards
-        """
-
-        board_dict = {}
-
-        with open(self.boards_path, "r", encoding="UTF-8") as boards:
-            for line in boards:
-                names = line.split(", ")
-                board_dict[names[0]] = names[1].strip()
-
-        return board_dict
 
     def get_all_projects(self):
         """
@@ -607,7 +593,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         return name
 
-    def get_installed_boards(self, cli_manager:str) -> list:
+    def set_all_boards(self, cli_manager:str) -> list:
         """
         Args:
             cli_magaer (CliManager) : the cli manager that runs commands
@@ -631,18 +617,16 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         for board in reversed(DEFAULT_BOARDS):
             all_boards.insert(0, board)
 
-        return all_boards
+        self.board_names = all_boards
 
-    def update_boards(self, cli_manager):
+    def update_boards(self):
         """
         Updates the boards.csv file to include all of the new boards
         """
 
-        installed_boards = self.get_installed_boards(cli_manager)
-
         with open(self.boards_path, "w", encoding="UTF-8") as boards:
 
-            for board in installed_boards:
+            for board in self.board_names:
 
                 if len(board) > 1:
                     boards.write(f"{board[0]}, {board[1]}\n")
