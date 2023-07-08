@@ -319,6 +319,7 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.selected_project.setText(name)
         else:
             self.main_ui.selected_project.setText("Select A Project!")
+        self.main_ui.selected_project.adjustSize()
 
         # update functions
         self.update_ports()
