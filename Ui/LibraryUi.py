@@ -16,6 +16,36 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(485, 300)
         MainWindow.setMinimumSize(QtCore.QSize(485, 300))
+        MainWindow.setStyleSheet("QScrollBar\n"
+"{\n"
+"    width: 20px;\n"
+"    border:none;\n"
+"    border-radius: 10px;\n"
+"    background: #32323C;\n"
+"}\n"
+"QScrollBar::add-page, QScrollBar::sub-page \n"
+"{\n"
+"    background-color: #32323C;\n"
+"}\n"
+"QScrollBar::add-line, QScrollBar::sub-line \n"
+"{\n"
+"    background-color: #32323C;\n"
+"}\n"
+"QScrollBar::handle\n"
+"{\n"
+"    background-color: grey;\n"
+"    min-height: 30px;\n"
+"    border-radius: 10px;\n"
+"    border:none;\n"
+"}\n"
+"QScrollBar::up-arrow\n"
+"{\n"
+"    background: none;\n"
+"}\n"
+"QScrollBar::down-arrow\n"
+"{\n"
+"    background: none;\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget.setObjectName("centralwidget")
@@ -39,7 +69,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidget = QtWidgets.QWidget()
-        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 446, 210))
+        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 443, 210))
         self.scrollAreaWidget.setObjectName("scrollAreaWidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")

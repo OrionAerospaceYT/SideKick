@@ -168,15 +168,15 @@ class Ui_MainWindow(object):
 "    width: 20px;\n"
 "    border:none;\n"
 "    border-radius: 10px;\n"
-"    background: #32323C;\n"
+"    background: #2b2b35;\n"
 "}\n"
 "QScrollBar::add-page, QScrollBar::sub-page \n"
 "{\n"
-"    background-color: #32323C;\n"
+"    background-color: #2b2b35;\n"
 "}\n"
 "QScrollBar::add-line, QScrollBar::sub-line \n"
 "{\n"
-"    background-color: #32323C;\n"
+"    background-color: #2b2b35;\n"
 "}\n"
 "QScrollBar::handle\n"
 "{\n"
@@ -357,21 +357,7 @@ class Ui_MainWindow(object):
 "  border:none;\n"
 "  border-radius:10px;\n"
 "}\n"
-"QScrollBar\n"
-"{\n"
-"    width: 20px;\n"
-"    border:none;\n"
-"    border-radius: 10px;\n"
-"    background: #2b2b35;\n"
-"}\n"
-"QScrollBar::add-page, QScrollBar::sub-page \n"
-"{\n"
-"    background-color: #2b2b35;\n"
-"}\n"
-"QScrollBar::add-line, QScrollBar::sub-line \n"
-"{\n"
-"    background-color: #2b2b35;\n"
-"}")
+"")
         self.debugger.setObjectName("debugger")
         self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
         self.debugger_1.setObjectName("debugger_1")
@@ -418,7 +404,21 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.terminal.sizePolicy().hasHeightForWidth())
         self.terminal.setSizePolicy(sizePolicy)
-        self.terminal.setStyleSheet("")
+        self.terminal.setStyleSheet("QScrollBar\n"
+"{\n"
+"    width: 20px;\n"
+"    border:none;\n"
+"    border-radius: 10px;\n"
+"    background: #2b2b35;\n"
+"}\n"
+"QScrollBar::add-page, QScrollBar::sub-page \n"
+"{\n"
+"    background-color: #2b2b35;\n"
+"}\n"
+"QScrollBar::add-line, QScrollBar::sub-line \n"
+"{\n"
+"    background-color: #2b2b35;\n"
+"}")
         self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.terminal.setObjectName("terminal")

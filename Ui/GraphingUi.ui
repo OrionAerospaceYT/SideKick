@@ -169,15 +169,15 @@ QScrollBar
 	width: 20px;
 	border:none;
     border-radius: 10px;
-    background: #32323C;
+    background: #2b2b35;
 }
 QScrollBar::add-page, QScrollBar::sub-page 
 {
-	background-color: #32323C;
+	background-color: #2b2b35;
 }
 QScrollBar::add-line, QScrollBar::sub-line 
 {
-	background-color: #32323C;
+	background-color: #2b2b35;
 }
 QScrollBar::handle
 {
@@ -498,21 +498,7 @@ QScrollArea {
   border:none;
   border-radius:10px;
 }
-QScrollBar
-{
-	width: 20px;
-	border:none;
-    border-radius: 10px;
-    background: #2b2b35;
-}
-QScrollBar::add-page, QScrollBar::sub-page 
-{
-	background-color: #2b2b35;
-}
-QScrollBar::add-line, QScrollBar::sub-line 
-{
-	background-color: #2b2b35;
-}</string>
+</string>
         </property>
         <layout class="QGridLayout" name="debugger_1">
          <item row="0" column="2">
@@ -669,7 +655,21 @@ p, li { white-space: pre-wrap; }
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">QScrollBar
+{
+	width: 20px;
+	border:none;
+    border-radius: 10px;
+    background: #2b2b35;
+}
+QScrollBar::add-page, QScrollBar::sub-page 
+{
+	background-color: #2b2b35;
+}
+QScrollBar::add-line, QScrollBar::sub-line 
+{
+	background-color: #2b2b35;
+}</string>
         </property>
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarAsNeeded</enum>

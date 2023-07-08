@@ -19,6 +19,38 @@
   <property name="windowTitle">
    <string>SideKick Library Manager</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QScrollBar
+{
+	width: 20px;
+	border:none;
+    border-radius: 10px;
+    background: #32323C;
+}
+QScrollBar::add-page, QScrollBar::sub-page 
+{
+	background-color: #32323C;
+}
+QScrollBar::add-line, QScrollBar::sub-line 
+{
+	background-color: #32323C;
+}
+QScrollBar::handle
+{
+	background-color: grey;
+	min-height: 30px;
+	border-radius: 10px;
+	border:none;
+}
+QScrollBar::up-arrow
+{
+	background: none;
+}
+QScrollBar::down-arrow
+{
+	background: none;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
     <size>
@@ -62,7 +94,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>446</width>
+           <width>443</width>
            <height>210</height>
           </rect>
          </property>

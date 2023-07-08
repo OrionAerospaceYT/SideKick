@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\NewActuatorUi.ui'
+# Form implementation generated from reading ui file '.\ActuatorUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -16,6 +16,36 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(750, 481)
         MainWindow.setMinimumSize(QtCore.QSize(750, 464))
+        MainWindow.setStyleSheet("QScrollBar\n"
+"{\n"
+"    width: 20px;\n"
+"    border:none;\n"
+"    border-radius: 10px;\n"
+"    background: #32323C;\n"
+"}\n"
+"QScrollBar::add-page, QScrollBar::sub-page \n"
+"{\n"
+"    background-color: #32323C;\n"
+"}\n"
+"QScrollBar::add-line, QScrollBar::sub-line \n"
+"{\n"
+"    background-color: #32323C;\n"
+"}\n"
+"QScrollBar::handle\n"
+"{\n"
+"    background-color: grey;\n"
+"    min-height: 30px;\n"
+"    border-radius: 10px;\n"
+"    border:none;\n"
+"}\n"
+"QScrollBar::up-arrow\n"
+"{\n"
+"    background: none;\n"
+"}\n"
+"QScrollBar::down-arrow\n"
+"{\n"
+"    background: none;\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -86,7 +116,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 713, 70))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 730, 70))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
