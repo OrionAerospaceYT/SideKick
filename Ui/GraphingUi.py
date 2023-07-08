@@ -165,16 +165,33 @@ class Ui_MainWindow(object):
 "/*ScrollBar*/\n"
 "QScrollBar\n"
 "{\n"
-"    background: #2b2b35;\n"
+"    width: 20px;\n"
+"    border:none;\n"
+"    border-radius: 10px;\n"
+"    background: #32323C;\n"
+"}\n"
+"QScrollBar::add-page, QScrollBar::sub-page \n"
+"{\n"
+"    background-color: #32323C;\n"
+"}\n"
+"QScrollBar::add-line, QScrollBar::sub-line \n"
+"{\n"
+"    background-color: #32323C;\n"
 "}\n"
 "QScrollBar::handle\n"
 "{\n"
-"background :  #32323C;\n"
-"border-radius: 10px;\n"
+"    background-color: grey;\n"
+"    min-height: 30px;\n"
+"    border-radius: 10px;\n"
+"    border:none;\n"
 "}\n"
-"QScrollBar::handle::pressed\n"
+"QScrollBar::up-arrow\n"
 "{\n"
-"background : #2b2b35;\n"
+"    background: none;\n"
+"}\n"
+"QScrollBar::down-arrow\n"
+"{\n"
+"    background: none;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -339,6 +356,21 @@ class Ui_MainWindow(object):
 "  color: #FFFFFF;\n"
 "  border:none;\n"
 "  border-radius:10px;\n"
+"}\n"
+"QScrollBar\n"
+"{\n"
+"    width: 20px;\n"
+"    border:none;\n"
+"    border-radius: 10px;\n"
+"    background: #2b2b35;\n"
+"}\n"
+"QScrollBar::add-page, QScrollBar::sub-page \n"
+"{\n"
+"    background-color: #2b2b35;\n"
+"}\n"
+"QScrollBar::add-line, QScrollBar::sub-line \n"
+"{\n"
+"    background-color: #2b2b35;\n"
 "}")
         self.debugger.setObjectName("debugger")
         self.debugger_1 = QtWidgets.QGridLayout(self.debugger)
@@ -370,6 +402,7 @@ class Ui_MainWindow(object):
         self.debugger_1.addItem(spacerItem2, 0, 0, 1, 1)
         self.debug_log = QtWidgets.QTextBrowser(self.debugger)
         self.debug_log.setMinimumSize(QtCore.QSize(0, 150))
+        self.debug_log.setStyleSheet("")
         self.debug_log.setObjectName("debug_log")
         self.debugger_1.addWidget(self.debug_log, 1, 0, 1, 3)
         self.gridLayout.addWidget(self.debugger, 4, 3, 1, 4)
@@ -561,6 +594,37 @@ class Ui_MainWindow(object):
         self.help.setText(_translate("MainWindow", "Help"))
         self.quit.setText(_translate("MainWindow", "x"))
         self.full_screen.setText(_translate("MainWindow", "Expand"))
+        self.debug_log.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dfsssssssssssssssssssssssssshjdsbcjdsf</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">]#dsf</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dscvjkdszhvjkdsbvjhkdsv</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsviusdhjkdsgvhsfdbvouidsvsdvhioudsvnbjkdsbvhdsv</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">sdidsuhgvjdsbivuds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsvnbuidsjvds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">]vds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">vds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">v</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">ds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">vds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">]grsdvhisdjbvjhdsds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsvdsvhdsijgvbiusdbvuidsvs</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dviusdvghbuiedsbvuiysdbvuidsbv</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">sdvuiewsbvuidsbuvneds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">uidsvbikudsbvuierwbgfusddb fjkvl</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">vsdhouivdsbuidbfjkewsjsv</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">uoidsvbndsujkvbuoiebnvs</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">ihousdvkjsdbsa</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">bndjskvbjsd</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsvf</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsf</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">ds</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">f</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">dsf</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14px;\">fsdoikvnsjdkinbjkdsnvjldsnmfklds</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.boards_manager.setText(_translate("MainWindow", "Boards Manager"))
         self.tune_actuators.setText(_translate("MainWindow", "Tune Actuators"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
