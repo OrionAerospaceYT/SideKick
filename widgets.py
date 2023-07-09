@@ -101,11 +101,16 @@ class Graph:
         # for each item of data
         for data in raw_list:
             data = data.split(")")
-            if "t(" not in data[0] and data[0] != "" and "\r" not in data[0]:
+            if "t(" not in data[0] and data[0] != "" and data[0].count(',') == 2:
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:
-                    graph_data.append(valid_graph_data[2])
+                    try:
+                        float(valid_graph_data[2])
+                        graph_data.append(valid_graph_data[2])
+                    except ValueError:
+                        pass
+
                     # if the label is not already existing
                     if valid_graph_data[0] not in self.labels:
                         self.labels.append(valid_graph_data[0])

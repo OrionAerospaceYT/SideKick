@@ -105,6 +105,8 @@ class MainGUI(qtw.QMainWindow):
         self.avaliable_port_list = []
         self.current_saves = []
 
+        self.last_scroll_value = 0
+
         threaded_blinking_record = threading.Thread(
             target=self.record_light.threaded_blink, args=(),)
         threaded_blinking_record.start()
@@ -333,7 +335,12 @@ class MainGUI(qtw.QMainWindow):
         self.update_compile_and_upload()
 
         if (self.device_manager.connected) or (not self.showing_data):
-            self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+            self.last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
+            if self.last_scroll_value != 0:
+                pass
+            else:
+                self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+                self.main_ui.terminal.verticalScrollBar().setValue(self.last_scroll_value)
 
         if self.device_manager.connected:
             self.main_ui.bottom_update.setText("Connected")
@@ -569,9 +576,7 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = self.device_manager.raw_data
                     self.showing_data = False
 
-                size = (self.main_ui.terminal.height(), self.main_ui.terminal.width())
-
-                self.message_handler.get_terminal(raw_data, size)
+                self.message_handler.get_terminal(raw_data)
                 self.top_graph.set_graph_data(raw_data)
                 self.bottom_graph.set_graph_data(raw_data)
 

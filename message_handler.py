@@ -67,7 +67,7 @@ class MessageHandler():
 
         return terminal_data
 
-    def get_terminal(self, raw_data, size=(0,0), live=True):
+    def get_terminal(self, raw_data, live=True):
         """
         Calculates the amount of lines the terminal can display at
         once.
@@ -78,7 +78,6 @@ class MessageHandler():
             live (bool): if the data is being live streamed
         """
         decoded_data = []
-        total_lines = 0
 
         for item in raw_data:
             decoded_string = self.decode_terminal_data(item)
@@ -90,12 +89,8 @@ class MessageHandler():
         # if live data, it cannot be scrolled through so it must be limited
         # to the screen
         if live:
-            amount_of_lines = int((size[0]-32) / 18)
-
             for data in reversed(decoded_data):
-                total_lines += len(data) // (size[1] / 8) + 2
-                if total_lines <= amount_of_lines:
-                    terminal_html += self.beginning + data + self.ending
+                terminal_html += self.beginning + data + self.ending
 
         # if not live data then all data is shown in one go
         if not live:
