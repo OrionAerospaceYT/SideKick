@@ -5,6 +5,8 @@ import subprocess
 import threading
 import time
 
+ERROR_TERMS = ["Error opening sketch", "Error during build", "exit status"]
+
 class CliManager:
     """
     Controls the flow of commands to the CLI
@@ -48,28 +50,49 @@ class CliManager:
                 return True
         return False
 
+    def check_for_upload(self, compile_out:str) -> bool:
+        """
+        Checks whether or not to upload if the compile was a success
+        or not.
+        
+        Args:
+            compile_out (str): the output of the compile
+        
+        Returns:
+            bool: whether or not to compile
+        """
+        for item in ERROR_TERMS:
+            if item in compile_out:
+                return False
+        return True
+
     def threaded_call(self):
         """
         Puts the command on the thread to be non blocking
         """
+        prev_output = ""
 
         while self.enabled:
             if not self.commands.keys():
                 time.sleep(0.25)
                 continue
 
-            cmd =  list(self.commands.keys()).pop(0)
+            cmd = list(self.commands.keys()).pop(0)
+
+            if "upload" in cmd:
+                if not self.check_for_upload(prev_output):
+                    self.commands.pop(cmd)
+                    continue
+
             cmd_type = self.commands[cmd]
 
             self.running = True
-            with subprocess.Popen(
-                    cmd, stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
-                    shell=True) as process:
-                output = process.communicate()
 
-            self.outputs[output[0].decode("UTF-8")] = cmd_type
+            prev_output = self.get_cmd_output(cmd).decode("UTF-8")
+
+            self.outputs[prev_output] = cmd_type
             self.commands.pop(cmd)
+
             self.running = False
 
     def communicate(self, cmd, cmd_type="usr"):
@@ -81,7 +104,7 @@ class CliManager:
             cmd_type (string): what type of command
             ('usr' = user input, 'compile' = compile, 'upload' = upload)
         """
-        self.commands[f"\"{self.path}\" {cmd}"] = cmd_type
+        self.commands[cmd] = cmd_type
 
     def get_cmd_output(self, cmd):
         """
