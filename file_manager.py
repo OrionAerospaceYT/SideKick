@@ -320,17 +320,17 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         else:
             raise OSError("Invalis OS. Shutting down.")
 
-        # Definitions for frequently used paths
-        self.documents_path = f"{inc}{self.user}{self.sep}{documents}"
-        self.sidekick_path = f"{self.documents_path}{self.sep}SideKick"
-        self.projects_path = f"{self.sidekick_path}{self.sep}Projects"
-        self.libraries_path = f"{self.sidekick_path}{self.sep}Libraries"
-        self.boards_path = f"{self.path}{self.sep}Settings{self.sep}boards.csv"
-        self.settings_path = f"{self.path}{self.sep}Settings{self.sep}settings.txt"
-        self.arduino_path = f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}"
-        self.actuators_test = \
-            f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"
-        self.save_manager.save_folder_path = f"{self.sidekick_path}{self.sep}Saves"
+        self.paths = {"documents" : f"{inc}{self.user}{self.sep}{documents}",
+"boards" : f"{self.path}{self.sep}Settings{self.sep}boards.csv",
+"settings" : f"{self.path}{self.sep}Settings{self.sep}settings.txt",
+"arduino" : f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}",
+"actuator" : f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"}
+
+        self.paths["sidekick"] = f"""{self.paths["documents"]}{self.sep}SideKick"""
+        self.paths["projects"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""
+        self.paths["libraries"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""
+
+        self.save_manager.save_folder_path = f"""{self.paths["sidekick"]}{self.sep}Saves"""
         self.save_manager.sep = self.sep
 
         # Creates directories if not already
@@ -341,7 +341,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         if dev:
             print("<<< WARNING >>> THIS APP IS CURRENTLY IN DEVELOPMENT MODE")
             self.move_libraries(consci_os_path)
-        elif len(os.listdir(self.libraries_path)) == 0:
+        elif len(os.listdir(self.paths["libraries"])) == 0:
             self.move_libraries()
 
         super(FileManager, self).__init__(arduino_lib_path)
@@ -352,9 +352,9 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Creates sidekick directory in documents if it does not already exist
         """
 
-        directories = os.listdir(self.documents_path)
+        directories = os.listdir(self.paths["documents"])
         if "SideKick" not in directories:
-            os.mkdir(self.sidekick_path)
+            os.mkdir(self.paths["sidekick"])
 
     def create_sub_sidekick_files(self):
         """
@@ -362,14 +362,14 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         they do not already exist.
         """
 
-        directories = os.listdir(self.sidekick_path)
+        directories = os.listdir(self.paths["sidekick"])
 
         if "Projects" not in directories:
-            os.mkdir(self.projects_path)
+            os.mkdir(self.paths["projects"])
         if "Saves" not in directories:
             os.mkdir(self.save_manager.save_folder_path)
         if "Libraries" not in directories:
-            os.mkdir(self.libraries_path)
+            os.mkdir(self.paths["libraries"])
 
     def move_source(self, raw_source):
         """
@@ -400,10 +400,10 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             source (str): the source to the new libraries
         """
 
-        if "libraries" not in os.listdir(self.libraries_path):
-            os.mkdir(f"{self.libraries_path}{self.sep}libraries")
+        if "libraries" not in os.listdir(self.paths["libraries"]):
+            os.mkdir(f"""{self.paths["libraries"]}{self.sep}libraries""")
 
-        destination = f"{self.libraries_path}{self.sep}libraries"
+        destination = f"""{self.paths["libraries"]}{self.sep}libraries"""
 
         if source is None:
             source = f"{self.path}{self.sep}ConsciOS{self.sep}libraries"
@@ -426,7 +426,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Returns:
             list: a list of all the projects
         """
-        return os.listdir(self.projects_path)
+        return os.listdir(self.paths["projects"])
 
     def get_all_saves(self):
         """
@@ -466,7 +466,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Args:
             name (str): the project name
         """
-        shutil.rmtree(f"{self.projects_path}{self.sep}{name}")
+        shutil.rmtree(f"""{self.paths["projects"]}{self.sep}{name}""")
 
     def get_cli_path(self):
         """
@@ -495,7 +495,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             project (string): the current project selected
         """
 
-        with open(self.settings_path, "r", encoding="UTF-8") as settings_file:
+        with open(self.paths["settings"], "r", encoding="UTF-8") as settings_file:
 
             settings = settings_file.readlines()
 
@@ -510,7 +510,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         settings[board_index] = f"Board: {board}\n"
         settings[project_index] = f"Project: {project}\n"
 
-        with open(self.settings_path, "w", encoding="UTF-8") as settings_file:
+        with open(self.paths["settings"], "w", encoding="UTF-8") as settings_file:
             settings_file.writelines(settings)
 
     def load_options(self):
@@ -527,7 +527,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         in_drop_down_section = False
 
-        with open(self.settings_path, "r", encoding="UTF-8") as settings:
+        with open(self.paths["settings"], "r", encoding="UTF-8") as settings:
 
             for line in settings:
 
@@ -543,9 +543,9 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                         project = project.strip()
 
         if not os.path.exists(project):
-            if len(os.listdir(self.projects_path)) > 0:
-                project_name = os.listdir(self.projects_path)[0]
-                project = f"{self.projects_path}{self.sep}{project_name}"
+            if len(os.listdir(self.paths["projects"])) > 0:
+                project_name = os.listdir(self.paths["projects"])[0]
+                project = f"""{self.paths["projects"]}{self.sep}{project_name}"""
                 project += f"{self.sep}{project_name}.ino"
                 project = project.replace("\\", "/")
             else:
@@ -624,9 +624,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Updates the boards.csv file to include all of the new boards
         """
 
-        with open(self.boards_path, "w", encoding="UTF-8") as boards:
-
+        with open(self.paths["boards"], "w", encoding="UTF-8") as boards:
             for board in self.board_names:
-
                 if len(board) > 1:
                     boards.write(f"{board[0]}, {board[1]}\n")

@@ -62,7 +62,7 @@ class MainGUI(qtw.QMainWindow):
         self.device_manager = DeviceManager(self)
 
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
-        self.cli_manager = CliManager(self.file_manager.arduino_path)
+        self.cli_manager = CliManager(self.file_manager.paths["arduino"])
 
         self.top_graph = Graph(key="1")
         self.bottom_graph = Graph(key="2")
@@ -103,7 +103,6 @@ class MainGUI(qtw.QMainWindow):
         self.upload = False
 
         self.avaliable_port_list = []
-        self.current_projects = []
         self.current_saves = []
 
         threaded_blinking_record = threading.Thread(
@@ -357,7 +356,7 @@ class MainGUI(qtw.QMainWindow):
         QFileDialog and then creates a sidekick project in that directory.
         """
         folder_path = qtw.QFileDialog.getSaveFileName(self,
-                            'Create Folder', self.file_manager.projects_path, 'Folders (*)')[0]
+                            'Create Folder', self.file_manager.paths["projects"], 'Folders (*)')[0]
 
         if folder_path:
             self.file_manager.add_new_project(folder_path)
@@ -420,7 +419,7 @@ class MainGUI(qtw.QMainWindow):
         temp = self.file_manager.current_project
 
         if actuator:
-            self.file_manager.current_project = self.file_manager.actuators_test
+            self.file_manager.current_project = self.file_manager.paths["actuator"]
         elif DEV:
             self.file_manager.set_dev_file()
 
@@ -510,7 +509,8 @@ class MainGUI(qtw.QMainWindow):
         Opens a file explorer window
         """
         file_path, _ =  qtw.QFileDialog.getOpenFileName(
-            self, "Open SideKick project", self.file_manager.projects_path, "Arduino Files (*.ino)")
+            self, "Open SideKick project",
+            self.file_manager.paths["projects"], "Arduino Files (*.ino)")
 
         if file_path:
             self.file_manager.set_current_project(file_path)
@@ -555,9 +555,6 @@ class MainGUI(qtw.QMainWindow):
         while RUNNING:
             # Com ports
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(DEV)
-
-            # Projects
-            self.current_projects = self.file_manager.get_all_projects()
 
             # Saves
             self.current_saves = self.file_manager.get_all_saves()
