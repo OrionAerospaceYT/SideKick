@@ -22,13 +22,64 @@ class DeviceManager():
         Writes
         Connect
         Disconnect
-    TODO: full class docstring
+
+    Attributes:
+        parent (MainGUI) : the main gui the app is running off of
+        device (Serial) : the serial device the app connects to
+        port (str) : the port the device is currently connected to
+        last_port (str) : the port the device was connected to
+        error (str) : the error if there was an error connecting
+        target (str) : the device to auto connect to
+        connected (bool) : wether or not a device is connected
+        auto_connect (bool) : wether the GUI should try to auto connect if there is a port
+        raw_cummulative_data (str) : the raw data from the gui that is continually added
+        raw_data (list) : the data split into lines
+
+    Methods:
+        send:
+            Sends the message given from the gui to the
+            connected device
+
+        device_parse_data:
+            Parses the data buffer into self.raw_data
+
+        device_data:
+            Gets the raw data from either the emulated device or the actual
+            arduino device that's connected
+
+        debug_device:
+            Prints out the raw data and the data on terminal
+
+        threaded_get_raw_data:
+            Raw input data from the serial device
+            Connects device and then while loops with no time.sleep
+            Checks for "(" in the data as all sidekick messages will have one
+
+        terminate_device:
+            Terminates the while True loop to disconnect the device
+            then sets the variables back to the initial states so
+            that there is no data
+
+        connect_device:
+            Connects the device in order to read the data coming
+            from the SideKick/Teensy/Arduino
+            also stars the thread to get the data from the newly connected
+            device
+
+        scan_avaliable_ports:
+            Gets all avaliable com ports and auto connects to devices
+
+        reset_difference:
+            Sets self.__change_in_data to 0 after the value
+            has been used.
+
+        device_emulator:
+            Gives dummy inputs to dev the GUI without physical hardware!
     """
 
     def __init__(self, parent=None):
         self.parent = parent
         self.device = None
-        self.get_data = None
         self.port = None
         self.last_port = None
         self.error = None
@@ -38,7 +89,6 @@ class DeviceManager():
         self.auto_connect = True
 
         self.raw_cummulative_data = ""
-        self.terminal_data = ""
 
         self.raw_data = []
 
@@ -51,7 +101,6 @@ class DeviceManager():
 
     def __call__(self):
         self.device = None
-        self.get_data = None
         self.port = None
         self.error = None
         self.target = None
@@ -60,7 +109,6 @@ class DeviceManager():
         self.auto_connect = True
 
         self.raw_cummulative_data = ""
-        self.terminal_data = ""
 
         self.raw_data = []
 
@@ -71,25 +119,29 @@ class DeviceManager():
         self.__emulating_counter = 0
         self.__emulating = False
 
-    def send(self, message):
+    def send(self, message:str):
         """
         Sends the message given from the gui to the
         connected device
 
         Args:
-            message (binary string): the message to send to the device
+            message (str): the message to send to the device
         """
 
         if self.device:
             self.device.write(f"{message}\n".encode("UTF-8"))
 
-    def device_parse_data(self, buffer):
+    def device_parse_data(self, buffer:str) -> str:
         """
-        Parses the data buffer into self.raw_data.
+        Parses the data buffer into self.raw_data
 
         Args:
-            buffer (string): the collective data
+            buffer (str): the collective data
+        
+        Returns:
+            str: the buffer of incomplete mesages
         """
+
         try:
             decoded_buffer = buffer.decode("UTF-8")
         except UnicodeDecodeError:
@@ -107,18 +159,17 @@ class DeviceManager():
 
         self.raw_data = list(filter(None, self.raw_data))
 
-        if len(self.raw_data) > 1500:
+        while len(self.raw_data) > 1500:
             self.raw_data.pop(0)
-
         return buffer
 
-    def device_data(self):
+    def device_data(self) -> str:
         """
         Gets the raw data from either the emulated device or the actual
-        arduino device that's connected.
+        arduino device that's connected
 
         Returns:
-            bytes: raw data from device
+            str: raw data from device
         """
 
         try:
@@ -134,12 +185,12 @@ class DeviceManager():
 
         return raw_data
 
-    def debug_device(self, raw_data):
+    def debug_device(self, raw_data:str):
         """
         Prints out the raw data and the data on terminal
 
         Args:
-            raw_data (b str): the raw data through the serial port
+            raw_data (str): the raw data through the serial port
         """
         self.raw_cummulative_data += raw_data.replace(b"\r\n", b"/n").decode("UTF-8")
 
@@ -151,7 +202,7 @@ class DeviceManager():
 
         print("Data on terminal >>> " + string)
 
-    def threaded_get_raw_data(self, port, baud, dev=False):
+    def threaded_get_raw_data(self, port:str, baud:int, dev=False):
         """
         Raw input data from the serial device
         Connects device and then while loops with no time.sleep
@@ -160,6 +211,7 @@ class DeviceManager():
         Args:
             port (string): the port to connect to
             baud (int): the baud rate of the connected device
+            dev (bool): whether the app is emulating or not
         """
         self.port = port
         self.raw_cummulative_data = ""
@@ -202,9 +254,9 @@ class DeviceManager():
 
     def terminate_device(self):
         """
-        terminates the while True loop to disconnect the device
+        Terminates the while True loop to disconnect the device
         then sets the variables back to the initial states so
-        that there is no data
+        that there is no data.
         """
 
         self.connected = False
@@ -212,7 +264,7 @@ class DeviceManager():
 
     def connect_device(self, port="COM1", baud=115200, dev=False):
         """
-        connects the device in order to read the data coming
+        Connects the device in order to read the data coming
         from the SideKick/Teensy/Arduino
         also stars the thread to get the data from the newly connected
         device
@@ -220,6 +272,7 @@ class DeviceManager():
         Args:
             port (string): the com port the device is connected to e.g. "COM1"
             baud (int): the baud rate of the connected board
+            dev (bool): emulates a device if the user wants
         """
         self()
 
@@ -233,11 +286,11 @@ class DeviceManager():
             self.auto_connect = True
             self.target = port
 
-        self.get_data = threading.Thread(
+        get_data = threading.Thread(
             target=self.threaded_get_raw_data, args=(port, baud, dev),)
-        self.get_data.start()
+        get_data.start()
 
-    def scan_avaliable_ports(self, dev=False):
+    def scan_avaliable_ports(self, dev=False) -> list:
         """
         Gets all avaliable com ports and auto connects to devices.
 
@@ -254,10 +307,7 @@ class DeviceManager():
 
             available_ports.append(port.device)
 
-        ###################
-        # Auto connection #
-        ###################`
-
+        # Auto connection
         if not self.connected and self.auto_connect:
 
             if self.target is not None and (self.target in available_ports):
@@ -270,7 +320,7 @@ class DeviceManager():
 
         return available_ports
 
-    def reset_difference(self, data):
+    def reset_difference(self, data:list):
         """
         Sets self.__change_in_data to 0 after the value
         has been used.
@@ -282,7 +332,7 @@ class DeviceManager():
         self.__change_in_data = self.__change_in_data[len(data):]
 
     @property
-    def change_in_data(self):
+    def change_in_data(self) -> int:
         """
         a getter for the private change_in_data_len attribute
 
