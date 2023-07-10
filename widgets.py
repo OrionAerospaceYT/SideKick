@@ -307,7 +307,7 @@ class SideMenu:
             Hides the entire display (used on startup).
     """
 
-    def __init__(self, widgets_file, widgets_device, layout):
+    def __init__(self, widgets_file:list, widgets_device:list, layout):
 
         self.widgets_file = widgets_file
         self.widgets_device = widgets_device
@@ -350,11 +350,25 @@ class SideMenu:
 class CheckBox:
     """
     Creates a checkbox which uses a text browser + html to create a
-    good looking way of displaying all relevant information of a
-    library:
+    good looking way of displaying all relevant information.
+
+    Attributes:
+        name (str) : the title of the html
+        vertical_layout (QVBoxLayout) : the vertical layout all the elements gfo in
+        versions (QComboBox) : the drop down menu
+        install (QPushButton) : the button to install
+        horizontal_layout (QHBoxLayout) : the horizontal layout
+        info (QTextBrowser) : the QTextBrowser that shows the HTML
+
+    Methods:
+        get_height:
+            Approximates the height the HTML will take up
+        
+        get_version:
+            Returns the currently selected version
     """
 
-    def __init__(self, name, html, versions, parent=None):
+    def __init__(self, name:str, html:str, versions:list, parent=None):
 
         self.name = name
 
@@ -382,15 +396,16 @@ class CheckBox:
         self.horizontal_layout.addLayout(self.vertical_layout)
         self.horizontal_layout.addWidget(self.info)
 
-    def get_height(self, html, width):
+    def get_height(self, html:str, width:int) -> int:
         """
         test
 
         Args:
-            html (_type_): _description_
+            html (str): the html that formats the textbox
+            width (int): the width of the window
 
         Returns:
-            _type_: _description_
+            int: the height of the text box *THIS IS AN ESTIMATE*
         """
         total = html.count("</p>")
 
@@ -408,8 +423,9 @@ class CheckBox:
 
         return total * 20 + 50
 
-    def get_version(self):
+    def get_version(self) -> str:
         """
-        returns the version that is currently selected
+        Returns:
+            str: the string of the currently selected version
         """
         return str(self.versions.currentText())
