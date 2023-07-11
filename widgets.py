@@ -180,6 +180,16 @@ class Graph:
 
         self.in_use = False
 
+        if not self.graph.plotItem.getViewBox().autoRangeEnabled():
+            #TODO
+            pass
+        try:
+            if len(plots) > 0:
+                last_indx = max(0, len(plots[0]) - 100)
+                self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
+        except IndexError:
+            pass
+
 
 class Widgets:
     """

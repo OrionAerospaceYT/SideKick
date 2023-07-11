@@ -70,8 +70,7 @@ class DeviceManager():
             Gets all avaliable com ports and auto connects to devices
 
         reset_difference:
-            Sets self.__change_in_data to 0 after the value
-            has been used.
+            Sets self.__change_in_data to 0 after the value has been used.
 
         device_emulator:
             Gives dummy inputs to dev the GUI without physical hardware!
@@ -355,12 +354,12 @@ class DeviceManager():
 
             self.__emulated_input += random.choice(MESSAGES)
             self.__emulated_input += bytes(
-                f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
-            if not (self.__emulating_counter - 90) % 180 == 0:
-                self.__emulated_input +=  bytes(
-                f"g(tan, 2, {np.tan(self.__emulating_counter * np.pi / 180)})", "UTF-8")
+                f"g(sin, 1, {self.__emulating_counter})", "UTF-8")
+
+            self.__emulated_input +=  bytes(
+                f"g(tan, 2, {self.__emulating_counter})", "UTF-8")
             self.__emulated_input += b"\r\n"
 
             self.__emulating_counter += 1
 
-            time.sleep(1)
+            time.sleep(0.1)
