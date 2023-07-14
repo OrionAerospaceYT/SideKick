@@ -29,7 +29,6 @@ class Graph:
     Sets up the graphing object to show it on the screen.
 
     Attributes:
-        in_use (bool): if the data is being read
         key (string): the string that says the data belongs to the graph
         graph_data (list): all of the graph data for this graph
         plots (list): the plots on the pyqtgraph object
@@ -65,7 +64,6 @@ class Graph:
     def __init__(self, key="0"):
         # variable definitions
         self.resize = True
-        self.in_use = False
         self.key = key
         self.graph_data = []
         self.plots = []
@@ -130,13 +128,15 @@ class Graph:
         """
 
         # if the graph data is not being read, change it
-        if not self.in_use:
-            self.graph_data = []
+        if not raw_data:
+            return
 
-            for data in raw_data:
-                plot = self.decode_graph_data(data)
-                if plot:
-                    self.graph_data.append(plot)
+        self.graph_data = []
+
+        for data in raw_data:
+            plot = self.decode_graph_data(data)
+            if plot:
+                self.graph_data.append(plot)
 
     def update_plots(self, num_of_plots):
         """
@@ -159,8 +159,6 @@ class Graph:
         To update the graphs displayed on the main GUI
         """
 
-        self.in_use = True
-
         # transpose the 2D list of data
         plots = list(map(list, zip(*self.graph_data)))
 
@@ -181,8 +179,6 @@ class Graph:
             # update plot
             pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
             plot.setData(np.array(plots[index], dtype=float), pen=pen)
-
-        self.in_use = False
 
         self.auto_scroll(plots)
 

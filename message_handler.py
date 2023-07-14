@@ -77,6 +77,10 @@ class MessageHandler():
             size (tuple): the x and y dimensions of the terminal
             live (bool): if the data is being live streamed
         """
+
+        if not raw_data:
+            return
+
         decoded_data = []
 
         for item in raw_data:
