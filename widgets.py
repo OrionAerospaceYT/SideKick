@@ -64,6 +64,7 @@ class Graph:
 
     def __init__(self, key="0"):
         # variable definitions
+        self.resize = True
         self.in_use = False
         self.key = key
         self.graph_data = []
@@ -85,6 +86,9 @@ class Graph:
         self.graph.getAxis("left").setTextPen((255, 255, 255))
         self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
+        # On click stop autoo scrolling
+        self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
+
     def decode_graph_data(self, raw_input):
         """
         Picks out the graph data from the raw data
@@ -101,7 +105,7 @@ class Graph:
         # for each item of data
         for data in raw_list:
             data = data.split(")")
-            if "t(" not in data[0] and data[0] != "" and data[0].count(',') == 2:
+            if "t(" not in data[0] and data[0].count(',') == 2:
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:
@@ -180,15 +184,26 @@ class Graph:
 
         self.in_use = False
 
-        if not self.graph.plotItem.getViewBox().autoRangeEnabled():
-            #TODO
-            pass
+        if self.resize:
+            print("Resizing in progrss")
+        else:
+            print("I am not resizing, be careful")
+
+        if self.graph.plotItem.getViewBox().autoRangeEnabled():
+            self.resize = True
+
         try:
-            if len(plots) > 0:
+            if len(plots) > 0 and self.resize:
                 last_indx = max(0, len(plots[0]) - 100)
                 self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
         except IndexError:
             pass
+
+    def set_auto_scroll_false(self):
+        """
+        Sets the value of resize to false
+        """
+        self.resize = False
 
 
 class Widgets:
