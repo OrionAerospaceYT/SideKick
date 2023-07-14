@@ -9,7 +9,6 @@ import threading
 import time
 import serial
 import serial.tools.list_ports
-import numpy as np
 
 MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
 
