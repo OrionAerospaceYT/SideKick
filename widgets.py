@@ -184,26 +184,34 @@ class Graph:
 
         self.in_use = False
 
-        if self.resize:
-            print("Resizing in progrss")
-        else:
-            print("I am not resizing, be careful")
+        self.auto_scroll(plots)
 
-        if self.graph.plotItem.getViewBox().autoRangeEnabled():
+    def auto_scroll(self, plots):
+        """
+        If autoscroll is enabled, focus on the last 1000 elements
+
+        Args:
+            plots (list): the data
+        """
+
+        if self.graph.plotItem.getViewBox().autoRangeEnabled()[0]:
             self.resize = True
 
         try:
             if len(plots) > 0 and self.resize:
-                last_indx = max(0, len(plots[0]) - 100)
+                last_indx = max(0, len(plots[0]) - 1000)
                 self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
         except IndexError:
             pass
+
 
     def set_auto_scroll_false(self):
         """
         Sets the value of resize to false
         """
         self.resize = False
+        self.graph.getViewBox().setAutoPan(False)
+        self.graph.getViewBox().setAutoVisible(False)
 
 
 class Widgets:
