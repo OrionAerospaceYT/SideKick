@@ -131,12 +131,20 @@ class Graph:
         if not raw_data:
             return
 
-        self.graph_data = []
+        if len(self.graph_data) >= 0:
+            prev_len = len(self.graph_data)
+        else:
+            prev_len = 0
+
+        graph_data = []
 
         for data in raw_data:
             plot = self.decode_graph_data(data)
             if plot:
-                self.graph_data.append(plot)
+                graph_data.append(plot)
+
+        if len(graph_data) >= prev_len - 25:
+            self.graph_data = graph_data
 
     def update_plots(self, num_of_plots):
         """
@@ -195,7 +203,7 @@ class Graph:
 
         try:
             if len(plots) > 0 and self.resize:
-                last_indx = max(0, len(plots[0]) - 1000)
+                last_indx = max(0, len(plots[0]) - 1500)
                 self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
         except IndexError:
             pass
