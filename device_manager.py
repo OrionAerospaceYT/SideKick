@@ -159,6 +159,7 @@ class DeviceManager():
 
         while len(self.raw_data) > 1500:
             self.raw_data.pop(0)
+
         return buffer
 
     def device_data(self) -> str:
