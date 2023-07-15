@@ -305,6 +305,7 @@ class MainGUI(qtw.QMainWindow):
         """
 
         # debug
+        start = time.time()
         output, cmd_type = self.cli_manager.get_output()
         if output is not None:
             self.message_handler.decode_debug_message(output, cmd_type)
@@ -313,8 +314,11 @@ class MainGUI(qtw.QMainWindow):
                     self.actuator.done_upload()
                 self.connect_device(self.device_manager.last_port)
                 self.upload = False
+        end = time.time()
+        #print(f" Debug {end-start}")
 
         # set labels
+        start = time.time()
         name = self.file_manager.parsed_project_name()
         if name:
             self.main_ui.selected_project.setText(name)
@@ -323,17 +327,22 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.selected_project.setFixedWidth(150)
         self.main_ui.selected_project.adjustSize()
         self.adjust_label_text()
+        end = time.time()
+        #print(f" Labels {end-start}")
 
         # update functions
+        start = time.time()
         self.update_ports()
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
+        end = time.time()
+        #print(f" Updates {end-start}")
 
         # record light
         self.turn_on_rec_light(self.record_light.show)
 
         self.update_compile_and_upload()
-
+        start = time.time()
         if (self.device_manager.connected) or (not self.showing_data):
             self.last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
             if self.last_scroll_value != 0:
@@ -341,6 +350,8 @@ class MainGUI(qtw.QMainWindow):
             else:
                 self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
                 self.main_ui.terminal.verticalScrollBar().setValue(self.last_scroll_value)
+        end = time.time()
+        #print(f" Terminal {end-start}")
 
         if self.device_manager.connected:
             self.main_ui.bottom_update.setText("Connected")
