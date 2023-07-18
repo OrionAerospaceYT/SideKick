@@ -87,6 +87,17 @@ class Graph:
         # On click stop autoo scrolling
         self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
 
+    def clear_graph(self):
+        """
+        Removes all data from graph
+        """
+        for item in self.plots:
+            self.graph.removeItem(item)
+
+        self.graph_data = []
+        self.plots = []
+        self.labels = []
+
     def decode_graph_data(self, raw_input):
         """
         Picks out the graph data from the raw data
