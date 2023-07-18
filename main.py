@@ -383,6 +383,9 @@ class MainGUI(qtw.QMainWindow):
         else:
             self.device_manager.connect_device(port, baud)
 
+        self.top_graph.clear_graph()
+        self.bottom_graph.clear_graph()
+
     def open_file_manager(self):
         """
         Opens/closes the file menu
