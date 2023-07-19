@@ -386,6 +386,9 @@ class MainGUI(qtw.QMainWindow):
         self.top_graph.clear_graph()
         self.bottom_graph.clear_graph()
 
+        self.message_handler.clear_terminal()
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+
     def open_file_manager(self):
         """
         Opens/closes the file menu

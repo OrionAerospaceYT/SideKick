@@ -103,6 +103,13 @@ class MessageHandler():
 
         self.terminal_html = terminal_html
 
+    def clear_terminal(self):
+        """
+        Sets the terminal_html to just show Terminal at the top of
+        the QTextBrowser
+        """
+        self.terminal_html = TERMINAL_HEADER
+
     def get_line_number(self, string):
         """
         Gets the line number of the error in the compile
