@@ -328,7 +328,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         self.paths["sidekick"] = f"""{self.paths["documents"]}{self.sep}SideKick"""
         self.paths["projects"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""
-        self.paths["libraries"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""
+        self.paths["libraries"] = f"""{self.paths["sidekick"]}{self.sep}Libraries"""
 
         self.save_manager.save_folder_path = f"""{self.paths["sidekick"]}{self.sep}Saves"""
         self.save_manager.sep = self.sep
@@ -393,7 +393,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
     def move_libraries(self, source=None):
         """
-        If the ConsciOS libraries are not present, then we ned to copy them from ConsciOS
+        If the ConsciOS libraries are not present, then we need to copy them from ConsciOS
         Or if the app is being used in development mode
 
         Args:
@@ -411,13 +411,13 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             source += f"{self.sep}libraries"
 
         for library in os.listdir(source):
-            try:
-                if library in os.listdir(destination):
-                    shutil.rmtree(f"{destination}{self.sep}{library}")
+            if "." in library:
+                continue
 
-                shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
-            except NotADirectoryError:
-                pass
+            if library in os.listdir(destination):
+                shutil.rmtree(f"{destination}{self.sep}{library}")
+
+            shutil.copytree(f"{source}{self.sep}{library}", f"{destination}{self.sep}{library}")
 
     def get_all_projects(self):
         """
