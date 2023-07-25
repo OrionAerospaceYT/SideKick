@@ -376,18 +376,13 @@ class MainGUI(qtw.QMainWindow):
         Args:
             port (string): the com port selected in the gui
         """
+        self.clear_all_data()
 
         baud = self.main_ui.baud_rate.itemText(0)
         if DEV and port == "emulate":
             self.device_manager.connect_device(port, baud, dev=True)
         else:
             self.device_manager.connect_device(port, baud)
-
-        self.top_graph.clear_graph()
-        self.bottom_graph.clear_graph()
-
-        self.message_handler.clear_terminal()
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
     def open_file_manager(self):
         """
@@ -479,6 +474,8 @@ class MainGUI(qtw.QMainWindow):
             save (str): the save file name
             already_called (bool): for some reason this function needs to be called twice
         """
+        self.clear_all_data()
+
         self.showing_data = True
         self.device_manager.terminate_device()
 
@@ -545,6 +542,16 @@ class MainGUI(qtw.QMainWindow):
         """
         self.message_handler.set_debug_html()
         self.message_handler.expand_debug(self.main_ui.full_screen)
+
+    def clear_all_data(self):
+        """
+        A wrapper function that clears the graphs and terminal.
+        """
+        self.top_graph.clear_graph()
+        self.bottom_graph.clear_graph()
+
+        self.message_handler.clear_terminal()
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
     def threaded_backend(self):
         """
