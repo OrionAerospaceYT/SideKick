@@ -14,7 +14,10 @@ class Slider:
     """
     Creates sliders for the actuator test window.
     """
-    def __init__(self, name, minimum, maximum):
+    def __init__(self, name, minimum, maximum, actuator_type):
+
+        self.actuator_type = actuator_type
+
         mid_point = (minimum + maximum) // 2
 
         self.horizontal_layout = qtw.QHBoxLayout()
@@ -58,8 +61,11 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.device_manager = device_manager
 
-        self.actuators = {}
-        self.sliders = []
+        self.pin_actuators = {}
+        self.pin_sliders = []
+
+        self.servo_actuators = {}
+        self.servo_sliders = []
         self.restart = True
 
         self()
@@ -77,8 +83,8 @@ class ActuatorGUI(qtw.QMainWindow):
         self.device_manager.send("reset")
 
         self.clear_layout(self.actuators_ui.verticalLayout_2)
-        self.actuators = {}
-        self.sliders = []
+        self.servo_actuators = {}
+        self.servo_sliders = []
         self.restart = False
 
         self.set_place_holder_text()
@@ -164,7 +170,7 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.loading.setVisible(False)
         self.restart = True
 
-    def update_pos(self, value, indx):
+    def update_pos(self, value, indx, actuator_type):
         """
         Sends the message to the device.
         
@@ -172,7 +178,12 @@ class ActuatorGUI(qtw.QMainWindow):
             value (int): the position to move the actuator
             indx (int): the number of the actuator to move
         """
-        self.device_manager.send(f"servo{indx}-{value}")
+        if actuator_type == "Servo":
+            self.device_manager.send(f"servo{indx}-{value}")
+            print(f"servo{indx}-{value}")
+        elif actuator_type == "Pin":
+            print(f"pin{indx}-{value}")
+            self.device_manager.send(f"pin{indx}-{value}")
 
     def update_pos_all(self, value):
         """ 
@@ -183,18 +194,31 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         value /= 100
 
-        for i, key in enumerate(self.actuators.items()):
+        for i, key in enumerate(self.servo_actuators.items()):
             position = int(key[1][1] + (key[1][2] - key[1][1]) * value)
             self.device_manager.send(f"servo{i}-{position}")
 
-    def create_new_slider(self, name, minimum, maximum):
+        for i, key in enumerate(self.pin_actuators.items()):
+            position = int(key[1][1] + (key[1][2] - key[1][1]) * value)
+            self.device_manager.send(f"pin{i}-{position}")
+
+    def create_new_slider(self, name, minimum, maximum, actuator_type):
         """
         Creates the layout for a new slider.
         """
 
-        slider = Slider(name, minimum, maximum)
-        slider.slider.valueChanged.connect(lambda: self.update_pos(slider.slider.value(),
-                                            self.sliders.index(slider.horizontal_layout)))
+        slider = Slider(name, minimum, maximum, actuator_type)
+
+        if actuator_type == "Servo":
+            slider.slider.valueChanged.connect(lambda: self.update_pos(slider.slider.value(),
+                                               self.servo_sliders.index(slider.horizontal_layout),
+                                               actuator_type))
+
+        elif actuator_type == "Pin":
+            slider.slider.valueChanged.connect(lambda: self.update_pos(slider.slider.value(),
+                                            self.pin_sliders.index(slider.horizontal_layout),
+                                            actuator_type))
+
         return slider
 
     def add_new_actuator(self):
@@ -202,6 +226,7 @@ class ActuatorGUI(qtw.QMainWindow):
         Defines a new actuator.
         """
         name = self.actuators_ui.name.text()
+        actuator_type = self.actuators_ui.type.currentText()
 
         try:
             pin = int(self.actuators_ui.pin.text().strip())
@@ -211,12 +236,23 @@ class ActuatorGUI(qtw.QMainWindow):
             print("<<< WARNING >>> PIN, MIN, MAX NEED TO BE INTEGERS")
             return
 
-        self.actuators[name] = [pin, minimum, maximum]
-        self.device_manager.send(f"addservo-{pin}")
+        if actuator_type == "Servo":
+            self.servo_actuators[name] = [pin, minimum, maximum]
 
-        slider = self.create_new_slider(name, minimum, maximum)
-        self.sliders.append(slider.horizontal_layout)
-        self.actuators_ui.verticalLayout_2.addLayout(self.sliders[-1])
+            self.device_manager.send(f"addServo-{pin}")
+
+            slider = self.create_new_slider(name, minimum, maximum, actuator_type)
+            self.servo_sliders.append(slider.horizontal_layout)
+            self.actuators_ui.verticalLayout_2.addLayout(self.servo_sliders[-1])
+
+        elif actuator_type == "Pin":
+            self.pin_actuators[name] = [pin, minimum, maximum]
+
+            self.device_manager.send(f"addPin-{pin}")
+
+            slider = self.create_new_slider(name, minimum, maximum, actuator_type)
+            self.pin_sliders.append(slider.horizontal_layout)
+            self.actuators_ui.verticalLayout_2.addLayout(self.pin_sliders[-1])
 
         self.actuators_ui.name.setText("")
         self.actuators_ui.pin.setText("")
