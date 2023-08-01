@@ -39,35 +39,49 @@ namespace task
     void Loop()
     {
       while (Serial.available()) {
+
         String command = Serial.readStringUntil('\n');
-
-        if (command.startsWith("reset")) {
-          actuators::reset();
-          PRINT("Reset all actuators.")
-        }
-
         int dividerIndex = command.indexOf('-');
 
-        if (dividerIndex != -1) {
+        if (command.startsWith("reset")) {
+
+          actuators::reset();
+          PRINTLN("Reset all actuators.");
+
+        } else if (command.startsWith("addServo")) {
+
+          String servoNumberString = command.substring(dividerIndex + 1);
+          int servoNumber = servoNumberString.toInt();
+          actuators::addServo(servoNumber);
+
+        } else if (command.startsWith("servo")) {
+
           String servoName = command.substring(0, dividerIndex);
           String servoNumberString = command.substring(dividerIndex + 1);
           int servoNumber = servoNumberString.toInt();
 
-          if (servoName.startsWith("addservo")) {
-            actuators::addServo(servoNumber);
-          }
-          if (servoName.startsWith("servo")) {
-            String indexString = servoName.substring(5);
-            int servoIndex = indexString.toInt();
-            actuators::moveServo(servoIndex, servoNumber);
-          }
+          String indexString = servoName.substring(5);
+          int servoIndex = indexString.toInt();
+          actuators::moveServo(servoIndex, servoNumber);
+
+        } else if (command.startsWith("addPin")) {
+
+          String pinNumberString = command.substring(dividerIndex + 1);
+          int pinNumber = pinNumberString.toInt();
+          actuators::addPin(pinNumber);
+
+        } else if (command.startsWith("pin")) {
+          String pinName = command.substring(0, dividerIndex);
+          String pinNumberString = command.substring(dividerIndex + 1);
+          int pinNumber = pinNumberString.toInt();
+
+          String indexString = pinName.substring(5);
+          int pinIndex = indexString.toInt();
+          actuators::movePin(pinIndex, pinNumber);
+        } else {
+          PRINTLN("Invalid command.");
         }
       }
-
-      /*for (int i=0; i<actuators::servoCount; i++)
-      {
-        GRAPH(i, actuators::positions[i], TOP);
-      }*/
     }
 
 } // namespace task
