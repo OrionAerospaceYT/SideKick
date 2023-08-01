@@ -22,9 +22,9 @@ class Slider:
 
         self.horizontal_layout = qtw.QHBoxLayout()
 
-        self.name_label = qtw.QLabel(name)
-        self.name_label.setMinimumWidth(100)
-        self.name_label.setMinimumHeight(50)
+        name_label = qtw.QLabel(name)
+        name_label.setMinimumWidth(100)
+        name_label.setMinimumHeight(50)
 
         self.slider = qtw.QSlider()
         self.slider.setOrientation(qtc.Qt.Horizontal)
@@ -39,7 +39,7 @@ class Slider:
                                 qtw.QSizePolicy.Minimum,
                                 qtw.QSizePolicy.Maximum)
 
-        self.horizontal_layout.addWidget(self.name_label)
+        self.horizontal_layout.addWidget(name_label)
         self.horizontal_layout.addWidget(self.slider)
         self.horizontal_layout.addWidget(self.pos_label)
         self.horizontal_layout.addItem(spacer)
