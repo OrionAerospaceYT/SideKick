@@ -108,6 +108,11 @@ class Ui_MainWindow(object):
         self.max = QtWidgets.QLineEdit(self.options_widget)
         self.max.setObjectName("max")
         self.options.addWidget(self.max)
+        self.type = QtWidgets.QComboBox(self.options_widget)
+        self.type.setObjectName("type")
+        self.type.addItem("")
+        self.type.addItem("")
+        self.options.addWidget(self.type)
         self.add = QtWidgets.QPushButton(self.options_widget)
         self.add.setObjectName("add")
         self.options.addWidget(self.add)
@@ -180,6 +185,8 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Uploading sketch please wait</span></p></body></html>"))
+        self.type.setItemText(0, _translate("MainWindow", "Servo"))
+        self.type.setItemText(1, _translate("MainWindow", "Pin"))
         self.add.setText(_translate("MainWindow", "Add Actuator"))
         self.name_1.setText(_translate("MainWindow", "   All   "))
         self.upload.setText(_translate("MainWindow", "Upload Tester"))

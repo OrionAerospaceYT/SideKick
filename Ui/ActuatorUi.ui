@@ -146,6 +146,20 @@ QProgressBar::chunk
         <widget class="QLineEdit" name="max"/>
        </item>
        <item>
+        <widget class="QComboBox" name="type">
+         <item>
+          <property name="text">
+           <string>Servo</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Pin</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="add">
          <property name="text">
           <string>Add Actuator</string>
