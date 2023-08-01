@@ -75,15 +75,21 @@ def welcome_prints():
 
     for i in reversed(range(5)):
         print(i + 1)
-        time.sleep(1)
+        #time.sleep(1)
 
 def sidekick_shortcut():
     """
     Creates a shortcut to the desktop.
     """
 
-    sidekick = f"..{SEP}main.py"
-    os.system(f"python {sidekick}")
+    if OPERATING_SYSTEM == "Windows":
+        import win32com.client
+
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(f"C:{SEP}Users{SEP}{USER}{SEP}Desktop{SEP}SideKick.lnk")
+        shortcut.Targetpath = f".{SEP}install.bat - Shortcut.lnk"
+        shortcut.IconLocation = f"..{SEP}Ui{SEP}SideKick.ico"
+        shortcut.save()
 
 
 if __name__ == "__main__":
@@ -139,4 +145,4 @@ if __name__ == "__main__":
     install_boards()
     install_requirements()
     welcome_prints()
-    open_sidekick()
+    sidekick_shortcut()
