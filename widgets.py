@@ -149,13 +149,13 @@ class Graph:
             if data:
                 # print(data)
                 for i, point in enumerate(data):
-                    if (i < len(plots)):
+                    if i < len(plots):
                         plots[i].append(point)
                     else:
                         plots.append([point])
 
         for i, plot in enumerate(plots):
-            if (i < len(self.graph_data)):
+            if i < len(self.graph_data):
                 self.graph_data[i] += plot
             else:
                 self.graph_data.append(plot)
