@@ -4,10 +4,13 @@ and serial devices.
 It uses pySerial and has a loop running on a thread.
 """
 
-import random
+
+# import random
+
 import threading
 import time
 import serial
+import numpy as np
 import serial.tools.list_ports
 
 MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
@@ -156,9 +159,6 @@ class DeviceManager():
         buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
         self.raw_data = list(filter(None, self.raw_data))
-
-        while len(self.raw_data) > 1500:
-            self.raw_data.pop(0)
 
         return buffer
 
@@ -314,7 +314,7 @@ class DeviceManager():
                 time.sleep(1)
             else:
                 for port in serial.tools.list_ports.comports():
-                    if "USB" in port.description:
+                    if "USB" in port.description or "dev" in port.description:
                         self.connect_device(str(port.device))
 
         return available_ports
@@ -352,14 +352,15 @@ class DeviceManager():
 
         while self.__emulating:
 
-            self.__emulated_input += random.choice(MESSAGES)
+            # self.__emulated_input += random.choice(MESSAGES)
+            self.__emulated_input += bytes(f"t({self.__emulating_counter})", "UTF-8")
             self.__emulated_input += bytes(
-                f"g(sin, 1, {self.__emulating_counter})", "UTF-8")
+                f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
 
             self.__emulated_input +=  bytes(
-                f"g(tan, 2, {self.__emulating_counter})", "UTF-8")
+                f"g(cos, 1, {np.cos(self.__emulating_counter * np.pi / 180)})", "UTF-8")
             self.__emulated_input += b"\r\n"
 
             self.__emulating_counter += 1
 
-            time.sleep(0.1)
+            time.sleep(0.001)
