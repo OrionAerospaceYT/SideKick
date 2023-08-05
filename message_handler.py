@@ -37,7 +37,8 @@ class MessageHandler():
         self.expansion_widgets = expansion_widgets
         self.line_edit = line_edit
 
-        self.terminal_html = ""
+        self.message_string = ""
+        self.terminal_html = TERMINAL_HEADER
         self.error_string = ""
         self.debug_html = ""
 
@@ -81,33 +82,29 @@ class MessageHandler():
         if not raw_data:
             return
 
+        # Decoding the raw data
         decoded_data = []
-
         for item in raw_data:
             decoded_string = self.decode_terminal_data(item)
             if len(decoded_string) != 0:
                 decoded_data.append(decoded_string)
 
-        terminal_html = TERMINAL_HEADER
-
-        # if live data, it cannot be scrolled through so it must be limited
-        # to the screen
+        # Assemble the data from the raw data
+        message_string = ""
         if live:
             for data in reversed(decoded_data):
-                terminal_html += self.beginning + data + self.ending
+                message_string += self.beginning + data + self.ending
 
-        # if not live data then all data is shown in one go
-        if not live:
-            for data in decoded_data:
-                terminal_html += self.beginning + data + self.ending
-
-        self.terminal_html = terminal_html
+        # Display data
+        self.message_string = message_string + self.message_string
+        self.terminal_html = TERMINAL_HEADER + self.message_string
 
     def clear_terminal(self):
         """
         Sets the terminal_html to just show Terminal at the top of
         the QTextBrowser
         """
+        self.message_string = ""
         self.terminal_html = TERMINAL_HEADER
 
     def get_line_number(self, string):
