@@ -1,10 +1,6 @@
 """
 A file to handle receiving and parsing graphing data and to
 display the data onto a graph.
-
-TODO class DeviceManagerWindow
-TODO class FileManagerWindow
-TODO class RecordLight
 """
 
 import time
@@ -98,7 +94,7 @@ class Graph:
         self.plots = []
         self.labels = []
 
-    def decode_graph_data(self, raw_input):
+    def decode_graph_data(self, raw_input:str) -> list:
         """
         Picks out the graph data from the raw data
 
@@ -130,7 +126,7 @@ class Graph:
 
         return graph_data
 
-    def set_graph_data(self, raw_data):
+    def set_graph_data(self, raw_data:list):
         """
         Gets the graph data and puts it in the form to be plotted
 
@@ -138,7 +134,6 @@ class Graph:
             raw_data (list): a list of all raw data
         """
 
-        # if the graph data is not being read, change it
         if not raw_data:
             return
 
@@ -160,15 +155,7 @@ class Graph:
             else:
                 self.graph_data.append(plot)
 
-#        for old_plot, new_data in zip(self.graph_data, raw_data):
-#            plot = self.decode_graph_data(new_data)
-#            print(plot)
-#            if plot:
-#                graph_data.append(old_plot + plot)
-
-#        self.graph_data = graph_data
-
-    def update_plots(self, num_of_plots):
+    def update_plots(self, num_of_plots:int):
         """
         Adds or removes old plots.
 
@@ -228,7 +215,6 @@ class Graph:
                 self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
         except IndexError:
             pass
-
 
     def set_auto_scroll_false(self):
         """
@@ -291,6 +277,7 @@ class Widgets:
             int: the width of the widget
         """
         return int(self.width)
+
 
 class RecordLight(Widgets):
     """
