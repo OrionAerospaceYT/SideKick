@@ -9,8 +9,10 @@ It uses pySerial and has a loop running on a thread.
 
 import threading
 import time
-import serial
+
 import numpy as np
+
+import serial
 import serial.tools.list_ports
 
 MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
