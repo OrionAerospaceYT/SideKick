@@ -118,6 +118,8 @@ class MainGUI(qtw.QMainWindow):
         board, project = self.file_manager.load_options()
 
         self.main_ui.supported_boards.setCurrentText(board)
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+
         self.file_manager.current_project = project
 
         timer = qtc.QTimer(self)
@@ -334,14 +336,15 @@ class MainGUI(qtw.QMainWindow):
 
         self.update_compile_and_upload()
 
+        # terminal data
         if (self.device_manager.connected) or (not self.showing_data):
             self.last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
-            if self.last_scroll_value != 0:
-                pass
-            else:
+
+            if self.last_scroll_value == 0:
                 self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
                 self.main_ui.terminal.verticalScrollBar().setValue(self.last_scroll_value)
 
+        # device messages
         if self.device_manager.connected:
             self.main_ui.bottom_update.setText("Connected")
             self.main_ui.com_ports.setCurrentText(self.device_manager.port)
@@ -587,12 +590,15 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = []
                 if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
+                    self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
                     self.showing_data = False
 
+                # Updating display data
                 self.message_handler.get_terminal(raw_data)
                 self.top_graph.set_graph_data(raw_data)
                 self.bottom_graph.set_graph_data(raw_data)
 
+            # Recording functionality
             if self.record_light.blinking:
                 data = self.device_manager.change_in_data
                 self.file_manager.save_manager.save_data(data)
