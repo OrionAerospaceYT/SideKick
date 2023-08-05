@@ -142,20 +142,31 @@ class Graph:
         if not raw_data:
             return
 
-        if len(self.graph_data) >= 0:
-            prev_len = len(self.graph_data)
-        else:
-            prev_len = 0
-
-        graph_data = []
+        plots = []
 
         for data in raw_data:
-            plot = self.decode_graph_data(data)
-            if plot:
-                graph_data.append(plot)
+            data = self.decode_graph_data(data)
+            if data:
+                # print(data)
+                for i, point in enumerate(data):
+                    if (i < len(plots)):
+                        plots[i].append(point)
+                    else:
+                        plots.append([point])
 
-        if len(graph_data) >= prev_len - 25:
-            self.graph_data = graph_data
+        for i, plot in enumerate(plots):
+            if (i < len(self.graph_data)):
+                self.graph_data[i] += plot
+            else:
+                self.graph_data.append(plot)
+
+#        for old_plot, new_data in zip(self.graph_data, raw_data):
+#            plot = self.decode_graph_data(new_data)
+#            print(plot)
+#            if plot:
+#                graph_data.append(old_plot + plot)
+
+#        self.graph_data = graph_data
 
     def update_plots(self, num_of_plots):
         """
@@ -178,8 +189,7 @@ class Graph:
         To update the graphs displayed on the main GUI
         """
 
-        # transpose the 2D list of data
-        plots = list(map(list, zip(*self.graph_data)))
+        plots = self.graph_data
 
         # if there is a change in the number of plots, update
         if len(plots) != len(self.plots):
