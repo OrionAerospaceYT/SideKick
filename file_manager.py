@@ -11,6 +11,12 @@ import json
 DEFAULT_BOARDS = [["Select Board", "None"],
                   ["SK Stem", "arduino:mbed_rp2040:pico"]]
 
+DEFAULT_SETTINGS = """
+Drop down options:\n
+Board: Select Board\n
+Project: None\n
+"""
+
 class SaveManager():
     """
     loads and saves data to the saves file
@@ -322,6 +328,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         self.paths = {"documents" : f"{inc}{self.user}{self.sep}{documents}",
 "boards" : f"{self.path}{self.sep}Settings{self.sep}boards.csv",
 "settings" : f"{self.path}{self.sep}Settings{self.sep}settings.txt",
+"settings_path" : f"{self.path}{self.sep}Settings",
 "arduino" : f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}",
 "actuator" : f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"}
 
@@ -333,7 +340,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         self.save_manager.sep = self.sep
 
         # Creates directories if not already
-        self.create_sidekick_file()
+        self.create_sidekick_files()
         self.create_sub_sidekick_files()
 
         # Checks if the GUI is being used in dev mode
@@ -349,7 +356,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         super(FileManager, self).__init__(arduino_lib_path)
         super(JsonLibraryManager, self).__init__(arduino_board_path)
 
-    def create_sidekick_file(self):
+    def create_sidekick_files(self):
         """
         Creates sidekick directory in documents if it does not already exist
         """
@@ -357,6 +364,10 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         directories = os.listdir(self.paths["documents"])
         if "SideKick" not in directories:
             os.mkdir(self.paths["sidekick"])
+
+        directories = os.listdir(self.path)
+        if "Settings" not in directories:
+            os.mkdir(self.paths["settings_path"])
 
     def create_sub_sidekick_files(self):
         """
@@ -372,6 +383,16 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             os.mkdir(self.save_manager.save_folder_path)
         if "Libraries" not in directories:
             os.mkdir(self.paths["libraries"])
+
+        directories = os.listdir(self.paths["settings_path"])
+
+        if "settings.txt" not in directories:
+            with open(self.paths["settings"], "a", encoding="UTF-8") as settings:
+                settings.write(DEFAULT_SETTINGS)
+
+        if "boards.csv" not in directories:
+            open(self.paths["boards"], "a", encoding="UTF-8").close()
+            self.update_boards()
 
     def move_source(self, raw_source):
         """
