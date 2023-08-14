@@ -1,8 +1,0 @@
-{
-    "python.linting.flake8Enables": true,
-    "python.linting.pydocstyleEnables": true,
-    "python.linting.pydocstyleArgs": [
-        "ignore=D403"
-    ],
-    "python.linting.enabled": false
-}
