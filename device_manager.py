@@ -222,7 +222,7 @@ class DeviceManager():
                 self.device = serial.Serial(port, baud, rtscts=True)
             except serial.SerialException as error:
                 self.error = str(error).replace("(","\n").replace(")","\n")
-                print(self.error)
+                print("<<< ERROR >>> " + self.error)
                 return
 
         self.connected = True
