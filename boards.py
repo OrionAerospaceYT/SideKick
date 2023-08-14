@@ -1,6 +1,9 @@
 """
 Controls the gui which allows the user to install other boards    
 """
+
+import threading
+
 from PyQt5 import QtWidgets as qtw
 
 from Ui.BoardsUi import Ui_MainWindow as boards
@@ -20,13 +23,14 @@ class BoardsManager(qtw.QMainWindow):
         installable (list): the list of installable libraries
     """
 
-    def __init__(self, file_manager, parent=None):
+    def __init__(self, file_manager, cli_manmager, parent=None):
         super().__init__(parent=parent)
 
         # Definition of attributes
         self.parent = parent
         self.boards_ui = boards()
         self.file_manager = file_manager
+        self.cli_manager = cli_manmager
         self.check_boxes = []
 
         self.boards_ui.setupUi(self)
@@ -59,3 +63,16 @@ class BoardsManager(qtw.QMainWindow):
         architecture = self.file_manager.boards[name]["architecture"]
         self.parent.cli_manager.communicate(
             f"core install \"{architecture}@{version}\"")
+
+        threaded_wait = threading.Thread(
+            target=self.wait_yo_update_boards,
+            args=(f"core install \"{architecture}@{version}\"",),)
+        threaded_wait.start()
+
+    def wait_yo_update_boards(self, cmd):
+        """
+        Waits for the install command to be run before
+        """
+        while (cmd in self.cli_manager.commands.keys()) or self.cli_manager.running:
+            pass
+        self.file_manager.set_all_boards(self.cli_manager)
