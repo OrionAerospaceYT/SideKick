@@ -163,5 +163,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-Installer/Setup.ipf
-Settings/settings.txt
+
+# Ignoring files
+Settings
+ConsciOS
+.vscode
