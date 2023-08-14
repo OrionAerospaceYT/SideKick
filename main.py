@@ -78,9 +78,6 @@ class MainGUI(qtw.QMainWindow):
             self.file_and_device_widgets()[1],
             self.main_ui.side_menu)
 
-        self.file_manager.set_all_boards(self.cli_manager)
-        self.file_manager.update_boards()
-
         # Attributes and initial config here
         self.side_menu.hide_menu()
 
@@ -96,7 +93,6 @@ class MainGUI(qtw.QMainWindow):
         self.connect_keyboard_shortcuts()
         self.main_ui.message.setPlaceholderText("Enter device message here.")
         self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
-        self.add_supported_boards()
 
         # Attributes for event handling are defined here
         self.showing_data = False
@@ -161,7 +157,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the board manager window
         """
-        BoardsManager(self.file_manager, self)
+        BoardsManager(self.file_manager, self.cli_manager, self)
 
     def open_actuator_gui(self):
         """
@@ -305,6 +301,11 @@ class MainGUI(qtw.QMainWindow):
         """
         calls all update functions
         """
+
+        # update the boards
+        if self.file_manager.update:
+            self.add_supported_boards()
+            self.file_manager.update = False
 
         # debug
         output, cmd_type = self.cli_manager.get_output()
