@@ -232,7 +232,6 @@ class JsonBoardsManager(HtmlGenerator):
         """
         Loads all libraries from the library.json file in arduino15.
         """
-
         with open(self.board_path, encoding="utf-8") as file:
             data = json.load(file)
 
@@ -343,6 +342,9 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             self.move_libraries(consci_os_path)
         elif len(os.listdir(self.paths["libraries"])) == 0:
             self.move_libraries()
+
+        self.load_boards_csv()
+        self.update = True
 
         super(FileManager, self).__init__(arduino_lib_path)
         super(JsonLibraryManager, self).__init__(arduino_board_path)
@@ -553,6 +555,19 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         return board, project
 
+    def load_boards_csv(self):
+        """
+        Gets all of the boards from ./Ui/boards.csv so
+        that they can be displayed on the GUI.
+        """
+        self.board_names = DEFAULT_BOARDS
+
+        with open(self.paths["boards"], "r", encoding="UTF-8") as boards:
+
+            for line in boards:
+
+                self.board_names.append(line.strip().split(", "))
+
     def set_current_project(self, file_path, manual=False):
         """
         Sets the current_project variable
@@ -619,10 +634,14 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         self.board_names = all_boards
 
+        self.update_boards()
+
     def update_boards(self):
         """
         Updates the boards.csv file to include all of the new boards
         """
+
+        self.update = True
 
         with open(self.paths["boards"], "w", encoding="UTF-8") as boards:
             for board in self.board_names:
