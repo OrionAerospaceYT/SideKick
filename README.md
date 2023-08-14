@@ -3,7 +3,7 @@
 </img>
 </p>
 
-[![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint-new.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint-new.yml)
+[![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml)
 
 ## Table of Contents 
 
