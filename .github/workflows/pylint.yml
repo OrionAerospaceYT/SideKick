@@ -45,6 +45,10 @@ jobs:
       run: |
         pylint library.py --disable=I1101,R1732 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
 
+    - name: Analysing boards.py
+      run: |
+        pylint boards.py
+
     - name: Analysing actuator.py
       run: |
         pylint actuator.py --disable=I1101,R0903 --extension-pkg-whitelist=<PyQt5,PyQt5.QtWidgets,PyQt5.QtGui>
