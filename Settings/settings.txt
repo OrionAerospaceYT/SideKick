@@ -1,3 +1,0 @@
-Drop down options:
-Board: Select Board
-Project: C:/Users/Alexander_Armitage/Documents/GitHub/Quadruped/PICO_Robotic_Dog/PICO_Robotic_Dog.ino
