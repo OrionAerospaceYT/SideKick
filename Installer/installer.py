@@ -4,7 +4,6 @@ development mode
 """
 
 import os
-import time
 import platform
 
 def change_user():
@@ -56,6 +55,15 @@ def install_requirements():
     requirements_path = f"..{SEP}requirements.txt"
     os.system(f"pip install -r {requirements_path}")
 
+def sidekick_shortcut():
+    """
+    Creates a shortcut to the desktop.
+    """
+
+    if OPERATING_SYSTEM == "Windows":
+        os.system("pip install pyinstaller")
+        os.system("pyinstaller --onefile --icon=\"../Ui/SideKick.ico\" ../main.py")
+
 def welcome_prints():
     """
     Prints a welcome message to the screen in the command
@@ -76,21 +84,6 @@ def welcome_prints():
     for i in reversed(range(5)):
         print(i + 1)
         #time.sleep(1)
-
-def sidekick_shortcut():
-    """
-    Creates a shortcut to the desktop.
-    """
-
-    if OPERATING_SYSTEM == "Windows":
-        import win32com.client
-
-        shell = win32com.client.Dispatch("WScript.Shell")
-        shortcut = shell.CreateShortCut(f"C:{SEP}Users{SEP}{USER}{SEP}Desktop{SEP}SideKick.lnk")
-        shortcut.Targetpath = f".{SEP}install.bat - Shortcut.lnk"
-        shortcut.IconLocation = f"..{SEP}Ui{SEP}SideKick.ico"
-        shortcut.save()
-
 
 if __name__ == "__main__":
 
@@ -144,5 +137,5 @@ if __name__ == "__main__":
     change_user()
     install_boards()
     install_requirements()
-    welcome_prints()
     sidekick_shortcut()
+    welcome_prints()
