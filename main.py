@@ -307,6 +307,9 @@ class MainGUI(qtw.QMainWindow):
             self.add_supported_boards()
             self.file_manager.update = False
 
+            board, _ = self.file_manager.load_options()
+            self.main_ui.supported_boards.setCurrentText(board)
+
         # debug
         output, cmd_type = self.cli_manager.get_output()
         if output is not None:
@@ -643,4 +646,5 @@ if __name__ == "__main__":
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
 
+    print(board_selected)
     main_gui.file_manager.save_options(board_selected, project_selected)
