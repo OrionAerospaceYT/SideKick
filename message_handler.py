@@ -68,7 +68,7 @@ class MessageHandler():
 
         return terminal_data
 
-    def get_terminal(self, raw_data, live=True):
+    def get_terminal(self, raw_data, live=True, showing_data=False):
         """
         Calculates the amount of lines the terminal can display at
         once.
@@ -90,9 +90,9 @@ class MessageHandler():
 
         # Assemble the data from the raw data
         message_string = ""
-
-        for data in reversed(decoded_data):
-            message_string += self.beginning + data + self.ending
+        if live or showing_data:
+            for data in reversed(decoded_data):
+                message_string += self.beginning + data + self.ending
 
         # Display data
         self.message_string = message_string + self.message_string

@@ -496,7 +496,7 @@ class MainGUI(qtw.QMainWindow):
         else:
             return
 
-        self.message_handler.get_terminal(raw_data, live=False)
+        self.message_handler.get_terminal(raw_data, live=False, showing_data=True)
         self.top_graph.set_graph_data(raw_data)
         self.bottom_graph.set_graph_data(raw_data)
 
@@ -646,5 +646,4 @@ if __name__ == "__main__":
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
 
-    print(board_selected)
     main_gui.file_manager.save_options(board_selected, project_selected)
