@@ -78,7 +78,6 @@ class MessageHandler():
             size (tuple): the x and y dimensions of the terminal
             live (bool): if the data is being live streamed
         """
-
         if not raw_data:
             return
 
@@ -91,13 +90,14 @@ class MessageHandler():
 
         # Assemble the data from the raw data
         message_string = ""
-        if live:
-            for data in reversed(decoded_data):
-                message_string += self.beginning + data + self.ending
+
+        for data in reversed(decoded_data):
+            message_string += self.beginning + data + self.ending
 
         # Display data
         self.message_string = message_string + self.message_string
         self.terminal_html = TERMINAL_HEADER + self.message_string
+
 
     def clear_terminal(self):
         """

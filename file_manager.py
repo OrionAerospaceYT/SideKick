@@ -282,7 +282,7 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
         self.consci_os_path = consci_os_path
         self.current_project = ""
 
-        self.board_names = None
+        self.board_names = DEFAULT_BOARDS
 
         # Initialise for each OS
         if operating_system == "Windows":
@@ -581,7 +581,6 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Gets all of the boards from ./Ui/boards.csv so
         that they can be displayed on the GUI.
         """
-        self.board_names = DEFAULT_BOARDS
 
         with open(self.paths["boards"], "r", encoding="UTF-8") as boards:
 
