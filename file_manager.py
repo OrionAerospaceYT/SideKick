@@ -391,7 +391,8 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                 settings.write(DEFAULT_SETTINGS)
 
         if "boards.csv" not in directories:
-            open(self.paths["boards"], "a", encoding="UTF-8").close()
+            with open(self.paths["boards"], "a", encoding="UTF-8") as _:
+                pass
             self.update_boards()
 
     def move_source(self, raw_source):
