@@ -316,7 +316,7 @@ class DeviceManager():
                 time.sleep(1)
             else:
                 for port in serial.tools.list_ports.comports():
-                    if "USB" in port.description or "dev" in port.description:
+                    if "usb" in port.description.lower() or "dev" in port.description:
                         self.connect_device(str(port.device))
 
         return available_ports
