@@ -6,6 +6,8 @@ This file imports device manager and gets the data
 import re
 import time
 
+NUM_OF_DATA_PTS = 500
+
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
@@ -47,7 +49,7 @@ class MessageHandler():
         self.running = True
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
-        self.ending = "</p>"
+        self.ending = "</p><!---->"
 
     def decode_terminal_data(self, raw_input):
         """
@@ -94,10 +96,18 @@ class MessageHandler():
             for data in reversed(decoded_data):
                 message_string += self.beginning + data + self.ending
 
-        # Display data
-        self.message_string = message_string + self.message_string
-        self.terminal_html = TERMINAL_HEADER + self.message_string
+        temp_string = message_string + self.message_string
 
+        self.message_string = ""
+
+        for index, item in enumerate(temp_string.split("<!---->")):
+            if index < NUM_OF_DATA_PTS:
+                self.message_string += item
+            else:
+                break
+
+        # Display data
+        self.terminal_html = TERMINAL_HEADER + self.message_string
 
     def clear_terminal(self):
         """
