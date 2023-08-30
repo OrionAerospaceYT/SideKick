@@ -20,6 +20,8 @@ COLOUR_ORDER = ["#FF0C0C",
                 "#fce803",
                 "#fc03b1"]
 
+NUM_OF_DATA_PTS = 3000
+
 class Graph:
     """
     Sets up the graphing object to show it on the screen.
@@ -81,7 +83,8 @@ class Graph:
         self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
         # On click stop autoo scrolling
-        self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
+        #self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
+        #self.set_auto_scroll_false()
 
     def clear_graph(self):
         """
@@ -152,6 +155,8 @@ class Graph:
         for i, plot in enumerate(plots):
             if i < len(self.graph_data):
                 self.graph_data[i] += plot
+                while len(self.graph_data[i]) > NUM_OF_DATA_PTS:
+                        self.graph_data[i].pop(0)
             else:
                 self.graph_data.append(plot)
 
@@ -196,7 +201,7 @@ class Graph:
             pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
             plot.setData(np.array(plots[index], dtype=float), pen=pen)
 
-        self.auto_scroll(plots)
+        #self.auto_scroll(plots)
 
     def auto_scroll(self, plots):
         """
