@@ -6,7 +6,7 @@ This file imports device manager and gets the data
 import re
 import time
 
-NUM_OF_DATA_PTS = 500
+NUM_OF_DATA_PTS = 250
 
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
@@ -23,7 +23,10 @@ Error "
 USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
 User command</p><div style=\"margin-top:150px;\"></div>"
 
-ERROR_TERMS = ["Error opening sketch", "Error during build", "exit status"]
+ERROR_TERMS = ["Error opening sketch",
+               "Error during build",
+               "exit status",
+               "error during reset"]
 
 class MessageHandler():
     """
@@ -97,13 +100,11 @@ class MessageHandler():
                 message_string += self.beginning + data + self.ending
 
         temp_string = message_string + self.message_string
-
         self.message_string = ""
 
         for index, item in enumerate(temp_string.split("<!---->")):
-            if index < NUM_OF_DATA_PTS:
-                self.message_string += item
-            else:
+            self.message_string += item + "<!---->"
+            if index > NUM_OF_DATA_PTS:
                 break
 
         # Display data
