@@ -89,7 +89,7 @@ class DeviceManager():
         self.target = None
 
         self.connected = False
-        self.auto_connect = True
+        self.auto_connect = False
 
         self.raw_cummulative_data = ""
 
@@ -157,7 +157,6 @@ class DeviceManager():
             index = 1
 
         self.raw_data.append(decoded_buffer.split("\r\n")[index])
-        self.__change_in_data.append(decoded_buffer.split("\r\n")[index])
         buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
         self.raw_data = list(filter(None, self.raw_data))
@@ -177,6 +176,7 @@ class DeviceManager():
             if not self.__emulating:
                 raw_data = self.device.read_all()
             else:
+
                 raw_data = self.__emulated_input
                 self.__emulated_input = b""
             self.__failed_recv = 0
@@ -240,11 +240,11 @@ class DeviceManager():
 
             buffer += raw_data
             buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
+
             if buffer.startswith(b"\r\n"):
                 buffer = buffer[2:]
 
             while buffer.count(b"\r\n") > 1 or buffer.endswith(b"\r\n"):
-
                 buffer = self.device_parse_data(buffer)
 
         if self.device:
