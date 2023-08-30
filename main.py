@@ -118,6 +118,8 @@ class MainGUI(qtw.QMainWindow):
 
         self.file_manager.current_project = project
 
+        self.device_manager.auto_connect = True
+
         timer = qtc.QTimer(self)
         timer.setInterval(25)
         timer.timeout.connect(self.update)
@@ -604,9 +606,7 @@ class MainGUI(qtw.QMainWindow):
 
             # Recording functionality
             if self.record_light.blinking:
-                data = self.device_manager.change_in_data
-                self.file_manager.save_manager.save_data(data)
-                self.device_manager.reset_difference(data)
+                self.file_manager.save_manager.save_data(raw_data)
             else:
                 self.file_manager.save_manager.stop_save()
 
