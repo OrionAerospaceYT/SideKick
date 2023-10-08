@@ -103,9 +103,10 @@ class MessageHandler():
         self.message_string = ""
 
         for index, item in enumerate(temp_string.split("<!---->")):
-            self.message_string += item + "<!---->"
             if index > NUM_OF_DATA_PTS:
                 break
+            self.message_string += item + "<!---->"
+            print(item)
 
         # Display data
         self.terminal_html = TERMINAL_HEADER + self.message_string
