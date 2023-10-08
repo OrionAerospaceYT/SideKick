@@ -156,7 +156,7 @@ class Graph:
             if i < len(self.graph_data):
                 self.graph_data[i] += plot
                 while len(self.graph_data[i]) > NUM_OF_DATA_PTS:
-                        self.graph_data[i].pop(0)
+                    self.graph_data[i].pop(0)
             else:
                 self.graph_data.append(plot)
 
