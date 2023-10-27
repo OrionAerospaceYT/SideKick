@@ -117,7 +117,6 @@ class MessageHandler():
         # this should save some memory
         while True:
             last_html_str = self.terminal_html[-len(MARKER):]
-            print(last_html_str)
             if last_html_str == MARKER:
                 self.terminal_html = self.terminal_html[:-len(MARKER)]
             else:
