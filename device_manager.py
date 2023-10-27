@@ -355,14 +355,15 @@ class DeviceManager():
         while self.__emulating:
 
             # self.__emulated_input += random.choice(MESSAGES)
-            self.__emulated_input += bytes(f"t({self.__emulating_counter})", "UTF-8")
+            """self.__emulated_input += bytes(f"t({self.__emulating_counter})", "UTF-8")
             self.__emulated_input += bytes(
                 f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
 
             self.__emulated_input +=  bytes(
                 f"g(cos, 1, {np.cos(self.__emulating_counter * np.pi / 180)})", "UTF-8")
-            self.__emulated_input += b"\r\n"
+            self.__emulated_input += b"\r\n"""
+            self.__emulated_input += bytes(f"t({self.__emulating_counter})\r\n", "UTF-8")
 
             self.__emulating_counter += 1
 
-            time.sleep(0.001)
+            time.sleep(0.5)

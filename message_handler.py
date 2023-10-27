@@ -28,6 +28,9 @@ ERROR_TERMS = ["Error opening sketch",
                "exit status",
                "error during reset"]
 
+MARKER = "<!-- A break -->"
+
+
 class MessageHandler():
     """
     Gets all text/graph data to be displayed on the front end
@@ -52,7 +55,7 @@ class MessageHandler():
         self.running = True
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
-        self.ending = "</p><!---->"
+        self.ending = "</p>" + MARKER
 
     def decode_terminal_data(self, raw_input):
         """
@@ -102,14 +105,23 @@ class MessageHandler():
         temp_string = message_string + self.message_string
         self.message_string = ""
 
-        for index, item in enumerate(temp_string.split("<!---->")):
+        for index, item in enumerate(temp_string.split(MARKER)):
             if index > NUM_OF_DATA_PTS:
                 break
-            self.message_string += item + "<!---->"
-            print(item)
+            self.message_string += item + MARKER
 
         # Display data
         self.terminal_html = TERMINAL_HEADER + self.message_string
+
+        # Remove unnecessary comments from the end of the HTML
+        # this should save some memory
+        while True:
+            last_html_str = self.terminal_html[-len(MARKER):]
+            print(last_html_str)
+            if last_html_str == MARKER:
+                self.terminal_html = self.terminal_html[:-len(MARKER)]
+            else:
+                break
 
     def clear_terminal(self):
         """

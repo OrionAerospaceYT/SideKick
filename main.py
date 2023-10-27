@@ -1,10 +1,6 @@
 """
 This is the main python file responsible for having
 the debugging window open.
-
-TODO:
-make the debug html not be displayed every loop so the user can scroll through it
-perhaps pass in the widget to message handler
 """
 
 import os
@@ -349,6 +345,7 @@ class MainGUI(qtw.QMainWindow):
             if self.last_scroll_value == 0:
                 self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
                 self.main_ui.terminal.verticalScrollBar().setValue(self.last_scroll_value)
+                print(self.message_handler.terminal_html)
 
         # device messages
         if self.device_manager.connected:
