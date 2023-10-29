@@ -82,7 +82,7 @@ class Graph:
         self.graph.getAxis("left").setTextPen((255, 255, 255))
         self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
-        # On click stop autoo scrolling
+        # On click stop auto scrolling
         #self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
         #self.set_auto_scroll_false()
 
@@ -117,11 +117,11 @@ class Graph:
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:
-                    try:
-                        float(valid_graph_data[2])
-                        graph_data.append(valid_graph_data[2])
-                    except ValueError:
-                        pass
+                    # if the data is numerical and can be graphed
+                    if valid_graph_data[2].replace(".","").isnumeric():
+                        graph_data.append(float(valid_graph_data[2]))
+                    else:
+                        print(f"Non numeric value in: {valid_graph_data[0]}, {valid_graph_data[2]}")
 
                     # if the label is not already existing
                     if valid_graph_data[0] not in self.labels:
