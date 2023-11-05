@@ -118,7 +118,7 @@ class Graph:
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:
                     # if the data is numerical and can be graphed
-                    if valid_graph_data[2].replace(".","").isnumeric():
+                    if valid_graph_data[2].replace(".","").replace("-","").isnumeric():
                         graph_data.append(float(valid_graph_data[2]))
                     else:
                         print(f"Non numeric value in: {valid_graph_data[0]}, {valid_graph_data[2]}")
