@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\GraphingUi.ui'
+# Form implementation generated from reading ui file 'GraphingUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -147,42 +147,23 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "/*Removes the border from the scroll area*/\n"
-"QScrollArea {\n"
-"  border: none;\n"
-"}\n"
-"\n"
-"/*Changes the graphs colours*/\n"
-"QWidget #top_widget{\n"
-"  border: none;\n"
-"  border-radius: 10px;\n"
-"  background-color: #2b2b35;\n"
-"}\n"
-"QWidget #bottom_widget{\n"
-"  border: none;\n"
-"  border-radius: 10px;\n"
-"  background-color: #2b2b35;\n"
-"}\n"
-"\n"
-"/*ScrollBar*/\n"
 "QScrollBar\n"
 "{\n"
-"    width: 20px;\n"
 "    border:none;\n"
-"    border-radius: 10px;\n"
 "    background: #2b2b35;\n"
 "}\n"
 "QScrollBar::add-page, QScrollBar::sub-page \n"
 "{\n"
-"    background-color: #2b2b35;\n"
+"    background: #2b2b35;\n"
 "}\n"
 "QScrollBar::add-line, QScrollBar::sub-line \n"
 "{\n"
-"    background-color: #2b2b35;\n"
+"    background: #2b2b35;\n"
 "}\n"
 "QScrollBar::handle\n"
 "{\n"
+"    width: 5px;\n"
 "    background-color: grey;\n"
-"    min-height: 30px;\n"
 "    border-radius: 10px;\n"
 "    border:none;\n"
 "}\n"
@@ -600,12 +581,17 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.terminal.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.boards_manager.setText(_translate("MainWindow", "Boards Manager"))
         self.tune_actuators.setText(_translate("MainWindow", "Tune Actuators"))
         self.baud_rate.setItemText(0, _translate("MainWindow", "115200"))
         self.baud_rate.setItemText(1, _translate("MainWindow", "57600"))
         self.baud_rate.setItemText(2, _translate("MainWindow", "38400"))
-        self.baud_rate.setItemText(3, _translate("MainWindow", "9200"))
+        self.baud_rate.setItemText(3, _translate("MainWindow", "9600"))
         self.disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.select_project.setText(_translate("MainWindow", "Select Project"))
         self.new_project.setText(_translate("MainWindow", "New Project"))

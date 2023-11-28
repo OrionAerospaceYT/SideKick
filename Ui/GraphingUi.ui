@@ -148,42 +148,23 @@ QMenuBar {
 }
 
 /*Removes the border from the scroll area*/
-QScrollArea {
-  border: none;
-}
-
-/*Changes the graphs colours*/
-QWidget #top_widget{
-  border: none;
-  border-radius: 10px;
-  background-color: #2b2b35;
-}
-QWidget #bottom_widget{
-  border: none;
-  border-radius: 10px;
-  background-color: #2b2b35;
-}
-
-/*ScrollBar*/
 QScrollBar
 {
-	width: 20px;
 	border:none;
-    border-radius: 10px;
     background: #2b2b35;
 }
 QScrollBar::add-page, QScrollBar::sub-page 
 {
-	background-color: #2b2b35;
+	background: #2b2b35;
 }
 QScrollBar::add-line, QScrollBar::sub-line 
 {
-	background-color: #2b2b35;
+	background: #2b2b35;
 }
 QScrollBar::handle
 {
+	width: 5px;
 	background-color: grey;
-	min-height: 30px;
 	border-radius: 10px;
 	border:none;
 }
@@ -652,6 +633,13 @@ QScrollBar::add-line, QScrollBar::sub-line
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto '; font-size:14px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="1" rowspan="5">
@@ -829,7 +817,7 @@ QLabel#logo_2{
            </item>
            <item>
             <property name="text">
-             <string>9200</string>
+             <string>9600</string>
             </property>
            </item>
           </widget>
