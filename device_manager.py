@@ -15,7 +15,7 @@ import time
 import serial
 import serial.tools.list_ports
 
-MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]
+from globals import * # pylint: disable=wildcard-import
 
 class DeviceManager():
     """
@@ -144,14 +144,15 @@ class DeviceManager():
         Returns:
             str: the buffer of incomplete mesages
         """
-
         try:
             decoded_buffer = buffer.decode("UTF-8")
         except UnicodeDecodeError:
-            print("Decode error")
-            decoded_buffer = "t(ERROR)"
+            decoded_buffer = TERMINAL_BEGINNING + "ERROR" + TERMINAL_ENDING
 
-        if decoded_buffer.startswith("t(") or decoded_buffer.startswith("g("):
+        terminal_beginning = decoded_buffer.startswith(TERMINAL_BEGINNING)
+        graph_beginning = decoded_buffer.startswith(GRAPH_BEGINNING)
+
+        if terminal_beginning or graph_beginning:
             index = 0
         else:
             index = 1

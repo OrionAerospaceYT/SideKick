@@ -41,3 +41,5 @@ GRAPH_ENDING = "0x3B3*"
 
 TERMINAL_BEGINNING = "0x3A4*"
 TERMINAL_ENDING = "0x3C4*"
+
+MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]

@@ -97,8 +97,6 @@ class MainGUI(qtw.QMainWindow):
         self.avaliable_port_list = []
         self.current_saves = []
 
-        self.last_scroll_value = 0
-
         threaded_blinking_record = threading.Thread(
             target=self.record_light.threaded_blink, args=(),)
         threaded_blinking_record.start()
@@ -340,11 +338,11 @@ class MainGUI(qtw.QMainWindow):
 
         # terminal data
         if (self.device_manager.connected) or (not self.showing_data):
-            self.last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
+            last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
 
-            if self.last_scroll_value == 0:
+            if last_scroll_value == 0:
                 self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-                self.main_ui.terminal.verticalScrollBar().setValue(self.last_scroll_value)
+                self.main_ui.terminal.verticalScrollBar().setValue(last_scroll_value)
 
         # device messages
         if self.device_manager.connected:
