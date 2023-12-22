@@ -6,21 +6,13 @@ display the data onto a graph.
 import time
 
 from bs4 import BeautifulSoup
+
 import pyqtgraph as pg
 import numpy as np
 
 from PyQt5 import QtWidgets as qtw
 
-# Constant list of colour orders for the graphs
-COLOUR_ORDER = ["#FF0C0C",
-                "#31f78e",
-                "#02acf5",
-                "#fc7703",
-                "#9d03fc",
-                "#fce803",
-                "#fc03b1"]
-
-NUM_OF_DATA_PTS = 3000
+from globals import * # pylint: disable=wildcard-import
 
 class Graph:
     """
@@ -108,12 +100,12 @@ class Graph:
         """
 
         graph_data = []
-        raw_list = raw_input.split("g(")
+        raw_list = raw_input.split(GRAPH_BEGINNING)
 
         # for each item of data
         for data in raw_list:
-            data = data.split(")")
-            if "t(" not in data[0] and data[0].count(',') == 2:
+            data = data.split(GRAPH_ENDING)
+            if TERMINAL_BEGINNING not in data[0] and data[0].count(',') == 2:
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:

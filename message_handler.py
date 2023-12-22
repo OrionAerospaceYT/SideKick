@@ -5,31 +5,7 @@ This file imports device manager and gets the data
 
 import re
 import time
-
-NUM_OF_DATA_PTS = 250
-
-ACCENT_COLOUR = "#252530"
-TEXT_COLOUR = "#00f0c3"
-
-TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
->Terminal</p></h1>"
-
-SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
-Success</p><font color=\"#FFFFFF\">"
-
-FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
-Error "
-
-USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
-User command</p>"
-
-ERROR_TERMS = ["Error opening sketch",
-               "Error during build",
-               "exit status",
-               "error during reset"]
-
-MARKER = "<!-- A break -->"
-
+from globals import * # pylint: disable=wildcard-import
 
 class MessageHandler():
     """
@@ -66,12 +42,12 @@ class MessageHandler():
         Returns:
             terminal_data (strig): a single line string to have html added to it later
         """
-        raw_list = raw_input.split("t(")
+        raw_list = raw_input.split(TERMINAL_BEGINNING)
         terminal_data = ""
 
         for data in raw_list:
-            data = data.split(")")
-            if "g(" not in data[0] and data[0] != "" and "\r" not in data[0]:
+            data = data.split(TERMINAL_ENDING)
+            if GRAPH_BEGINNING not in data[0] and data[0] != "" and "\r" not in data[0]:
                 terminal_data += " " + data[0]
 
         return terminal_data
