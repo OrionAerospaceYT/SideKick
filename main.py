@@ -64,7 +64,7 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph = Graph(key="2")
         self.message_handler = MessageHandler(self.main_ui.debugger,
                                               self.main_ui.debug_log,
-                                              [self.main_ui.terminal,
+                                              [self.main_ui.terminal_container,
                                                self.main_ui.top_widget,
                                                self.main_ui.bottom_widget],
                                               self.main_ui.message)

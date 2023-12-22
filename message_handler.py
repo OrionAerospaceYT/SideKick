@@ -12,7 +12,7 @@ ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
 TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
->Terminal</p></h1><div style=\"margin-top:75px;\"></div>"
+>Terminal</p></h1>"
 
 SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
 Success</p><font color=\"#FFFFFF\">"
@@ -21,7 +21,7 @@ FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
 Error "
 
 USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
-User command</p><div style=\"margin-top:150px;\"></div>"
+User command</p>"
 
 ERROR_TERMS = ["Error opening sketch",
                "Error during build",
@@ -194,7 +194,6 @@ class MessageHandler():
             cmd_type (string): the type of command e.g. usr
         """
         error = error.replace("\n", "<br>")
-
 
         if cmd_type in ("compile", "upload"):
             html = self.format_compile_and_upload(error)
