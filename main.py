@@ -443,8 +443,7 @@ class MainGUI(qtw.QMainWindow):
             f"compile --fqbn {board} \"{self.file_manager.current_project}\"",
             "upload")
 
-        while self.device_manager.connected:
-            self.device_manager.terminate_device()
+        self.device_manager.terminate_device()
 
         self.cli_manager.communicate(
             f"upload -p {port} --fqbn {board} \"{self.file_manager.current_project}\"",

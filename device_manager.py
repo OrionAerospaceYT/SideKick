@@ -261,8 +261,10 @@ class DeviceManager():
         that there is no data.
         """
 
-        self.connected = False
-        self.last_port = self.port
+        while self.connected:
+            self.connected = False
+            self.last_port = self.port
+            time.sleep(0.2)
 
     def connect_device(self, port="COM1", baud=115200, dev=False):
         """
