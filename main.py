@@ -590,6 +590,7 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = []
                 if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
+                    print(raw_data)
                     self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
                     self.showing_data = False
 
