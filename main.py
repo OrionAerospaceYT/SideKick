@@ -342,7 +342,6 @@ class MainGUI(qtw.QMainWindow):
 
             if last_scroll_value == 0:
                 self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-                self.main_ui.terminal.verticalScrollBar().setValue(last_scroll_value)
 
         # device messages
         if self.device_manager.connected:
