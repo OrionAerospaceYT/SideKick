@@ -381,6 +381,13 @@ class MainGUI(qtw.QMainWindow):
         self.clear_all_data()
 
         baud = self.main_ui.baud_rate.itemText(0)
+
+        if self.device_manager.port == port:
+            self.device_manager.terminate_device()
+            return
+        elif self.device_manager.port is not None:
+            self.device_manager.terminate_device()
+
         if DEV and port == "emulate":
             self.device_manager.connect_device(port, baud, dev=True)
         else:
@@ -590,7 +597,6 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = []
                 if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
-                    print(raw_data)
                     self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
                     self.showing_data = False
 

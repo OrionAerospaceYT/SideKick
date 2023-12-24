@@ -283,7 +283,6 @@ class DeviceManager():
         if dev:
             self.__emulating = True
             print("<<< WARNING >>> EMULATING DEVICE")
-
             emulator = threading.Thread(target=self.device_emulator)
             emulator.start()
         else:
@@ -365,7 +364,8 @@ class DeviceManager():
             #self.__emulated_input +=  bytes(
             #    f"g(cos, 1, {np.cos(self.__emulating_counter * np.pi / 180)})", "UTF-8")
             #self.__emulated_input += b"\r\n
-            self.__emulated_input += bytes(f"t({self.__emulating_counter})\r\n", "UTF-8")
+            self.__emulated_input += bytes(
+                f"{TERMINAL_BEGINNING}{self.__emulating_counter}{TERMINAL_ENDING}\r\n", "UTF-8")
 
             self.__emulating_counter += 1
 
