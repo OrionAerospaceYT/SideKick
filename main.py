@@ -342,9 +342,12 @@ class MainGUI(qtw.QMainWindow):
         # terminal data
         if (self.device_manager.connected) or (not self.showing_data):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
-        
+
             if last_scroll_value == 0:
-                self.main_ui.terminal.setHtml(self.message_handler.terminal_html) # THIS FUNCTION IS UNUSABLY SLOW #TODO
+                start_time = time.perf_counter()
+                self.main_ui.terminal.setText(self.message_handler.terminal_html)
+                end_time = time.perf_counter()
+                print(start_time - end_time)
 
         # device messages
         if self.device_manager.connected:
