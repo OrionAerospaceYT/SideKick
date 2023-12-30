@@ -344,10 +344,24 @@ class MainGUI(qtw.QMainWindow):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
 
             if last_scroll_value == 0:
+                html = "<p>"
+                for item in reversed(self.message_handler.html_list):
+                    html += f'<font color="#00f0c3">$></font><font color="#ffffff">{item}</font><br>'
+                html += "</p>"
                 start_time = time.perf_counter()
-                self.main_ui.terminal.setText(self.message_handler.terminal_html)
+                cursor = self.main_ui.terminal.textCursor()
+                cursor.movePosition(qtg.QTextCursor.Start)
+                cursor.movePosition(qtg.QTextCursor.NextBlock)
+                cursor.insertHtml(html)
                 end_time = time.perf_counter()
-                print(start_time - end_time)
+                print(start_time - end_time, self.main_ui.terminal.document().blockCount())
+                count = self.main_ui.terminal.document().blockCount()
+                while count > 50:
+                    cursor = self.main_ui.terminal.textCursor()
+                    cursor.movePosition(qtg.QTextCursor.End)
+                    cursor.movePosition(qtg.QTextCursor.Up, qtg.QTextCursor.KeepAnchor, count - 50)
+                    cursor.removeSelectedText()
+                    count = self.main_ui.terminal.document().blockCount()
 
         # device messages
         if self.device_manager.connected:

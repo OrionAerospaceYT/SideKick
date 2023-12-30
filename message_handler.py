@@ -23,6 +23,7 @@ class MessageHandler():
 
         self.message_string = ""
         self.terminal_html = TERMINAL_HEADER
+        self.terminal_html_list = []
         self.error_string = ""
         self.debug_html = ""
 
@@ -62,9 +63,16 @@ class MessageHandler():
             size (tuple): the x and y dimensions of the terminal
             live (bool): if the data is being live streamed
         """
+        prev_html = self.terminal_html
         if not raw_data:
             return
-
+        else:
+            terminal_data = []
+            for data in raw_data:
+                if GRAPH_BEGINNING not in data and GRAPH_ENDING not in data:
+                    terminal_data.append(data.replace(TERMINAL_BEGINNING, "").replace(TERMINAL_ENDING, ""))
+            self.html_list = terminal_data
+            return
         # Decoding the raw data
         decoded_data = []
         for item in raw_data:
@@ -97,6 +105,9 @@ class MessageHandler():
                 self.terminal_html = self.terminal_html[:-len(MARKER)]
             else:
                 break
+
+        # If live data is being displayed, append rather than set
+        self.terminal_html_diff = self.terminal_html[len(prev_html):]
 
     def clear_terminal(self):
         """
