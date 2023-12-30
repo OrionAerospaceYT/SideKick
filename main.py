@@ -344,10 +344,11 @@ class MainGUI(qtw.QMainWindow):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
 
             if last_scroll_value == 0:
+                data = self.message_handler.html_list
+                self.message_handler.html_list = self.message_handler.html_list[len(data):]
                 html = "<p>"
-                for item in reversed(self.message_handler.html_list):
-                    html += f'<font color="#00f0c3">$></font><font color="#ffffff">{item}</font><br>'
-                html += "</p>"
+                for item in reversed(data):
+                    html += f'<p><font color="#00f0c3">$></font><font color="#ffffff">{item}</font><br></p>'
                 start_time = time.perf_counter()
                 cursor = self.main_ui.terminal.textCursor()
                 cursor.movePosition(qtg.QTextCursor.Start)
