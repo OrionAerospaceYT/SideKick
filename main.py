@@ -1,6 +1,9 @@
 """
 This is the main python file responsible for having
 the debugging window open.
+
+#TODO -> Fix the terminal HTML being slow
+#TODO -> Add warnings for uploading without a device being selected
 """
 
 import os
@@ -339,9 +342,9 @@ class MainGUI(qtw.QMainWindow):
         # terminal data
         if (self.device_manager.connected) or (not self.showing_data):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
-
+        
             if last_scroll_value == 0:
-                self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+                self.main_ui.terminal.setHtml(self.message_handler.terminal_html) # THIS FUNCTION IS UNUSABLY SLOW #TODO
 
         # device messages
         if self.device_manager.connected:

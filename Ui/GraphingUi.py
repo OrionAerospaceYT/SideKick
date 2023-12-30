@@ -512,7 +512,7 @@ class Ui_MainWindow(object):
         self.com_ports.setObjectName("com_ports")
         self.horizontalLayout.addWidget(self.com_ports)
         self.record = QtWidgets.QPushButton(self.horizontalFrame)
-        self.record.setMinimumSize(QtCore.QSize(75, 0))
+        self.record.setMinimumSize(QtCore.QSize(0, 0))
         self.record.setObjectName("record")
         self.horizontalLayout.addWidget(self.record)
         self.record_light = QtWidgets.QLabel(self.horizontalFrame)
