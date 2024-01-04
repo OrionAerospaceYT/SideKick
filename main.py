@@ -344,18 +344,19 @@ class MainGUI(qtw.QMainWindow):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
 
             if last_scroll_value == 0:
+                prev_block_count = self.main_ui.terminal.document().blockCount()
                 data = self.message_handler.html_list
                 self.message_handler.html_list = self.message_handler.html_list[len(data):]
-                html = "<p>"
+                html = '<p><font color: "#000000">.</font></p>'
                 for item in reversed(data):
-                    html += f'<p><font color="#00f0c3">$></font><font color="#ffffff">{item}</font><br></p>'
-                start_time = time.perf_counter()
+                    html += f'<p><font color="#00f0c3">$></font><font color="#ffffff">{item}</font></p>'
                 cursor = self.main_ui.terminal.textCursor()
                 cursor.movePosition(qtg.QTextCursor.Start)
                 cursor.movePosition(qtg.QTextCursor.NextBlock)
                 cursor.insertHtml(html)
-                end_time = time.perf_counter()
-                print(start_time - end_time, self.main_ui.terminal.document().blockCount())
+                block_count = self.main_ui.terminal.document().blockCount()
+                if prev_block_count + len(data) != block_count:
+                    print(html, prev_block_count+len(data), block_count)
                 count = self.main_ui.terminal.document().blockCount()
                 while count > 50:
                     cursor = self.main_ui.terminal.textCursor()
