@@ -320,6 +320,18 @@ class RecordLight(Widgets):
         """
         self.blinking = not self.blinking
 
+    def start_recording(self):
+        """
+        If not already record, record.
+        """
+        self.blinking = True
+
+    def end_recording(self):
+        """
+        If recording, stop.
+        """
+        self.blinking = False
+
     def terminate_record(self):
         """
         stops the threaded loop

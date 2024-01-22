@@ -27,6 +27,7 @@ from widgets import Graph
 from widgets import RecordLight
 from widgets import SideMenu
 
+from globals import *
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
@@ -344,10 +345,9 @@ class MainGUI(qtw.QMainWindow):
             last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
 
             if last_scroll_value == 0:
-                start_time = time.perf_counter()
+                #start_time = time.perf_counter()
                 self.main_ui.terminal.setText(self.message_handler.terminal_html)
-                end_time = time.perf_counter()
-                print(start_time - end_time)
+                #end_time = time.perf_counter()
 
         # device messages
         if self.device_manager.connected:
@@ -605,6 +605,13 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = self.device_manager.raw_data
                     self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
                     self.showing_data = False
+
+                if self.device_manager.start_rec:
+                    self.device_manager.start_rec = False
+                    self.record_light.start_recording()
+                elif self.device_manager.end_rec:
+                    self.device_manager.end_rec = False
+                    self.record_light.end_recording()
 
                 # Updating display data
                 self.message_handler.get_terminal(raw_data)

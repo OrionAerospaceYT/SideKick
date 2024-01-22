@@ -74,7 +74,7 @@ class DeviceManager():
             Gets all avaliable com ports and auto connects to devices
 
         reset_difference:
-            Sets self.__change_in_data to 0 after the value has been used.
+            Sets self.change_in_data to 0 after the value has been used.
 
         device_emulator:
             Gives dummy inputs to dev the GUI without physical hardware!
@@ -95,12 +95,14 @@ class DeviceManager():
 
         self.raw_data = []
 
-        # private definitions
-        self.__failed_recv = 0
-        self.__change_in_data = []
-        self.__emulated_input = b""
-        self.__emulating_counter = 0
-        self.__emulating = False
+        self.failed_recv = 0
+        self.change_in_data = []
+        self.emulated_input = b""
+        self.emulating_counter = 0
+        self.emulating = False
+
+        self.start_rec = False
+        self.end_rec = False
 
     def __call__(self):
         self.device = None
@@ -116,11 +118,11 @@ class DeviceManager():
         self.raw_data = []
 
         # private definitions
-        self.__failed_recv = 0
-        self.__change_in_data = []
-        self.__emulated_input = b""
-        self.__emulating_counter = 0
-        self.__emulating = False
+        self.failed_recv = 0
+        self.change_in_data = []
+        self.emulated_input = b""
+        self.emulating_counter = 0
+        self.emulating = False
 
     def send(self, message:str):
         """
@@ -160,6 +162,14 @@ class DeviceManager():
         self.raw_data.append(decoded_buffer.split("\r\n")[index])
         buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
+        if START_REC in buffer:
+            self.start_rec = True
+        elif END_REC in buffer:
+            self.end_rec = True
+
+        buffer = buffer.replace(START_REC, b"")
+        buffer = buffer.replace(END_REC, b"")
+
         self.raw_data = list(filter(None, self.raw_data))
 
         return buffer
@@ -174,16 +184,16 @@ class DeviceManager():
         """
 
         try:
-            if not self.__emulating:
+            if not self.emulating:
                 raw_data = self.device.read_all()
             else:
 
-                raw_data = self.__emulated_input
-                self.__emulated_input = b""
-            self.__failed_recv = 0
+                raw_data = self.emulated_input
+                self.emulated_input = b""
+            self.failed_recv = 0
         except serial.SerialException:
             raw_data = ""
-            self.__failed_recv += 1
+            self.failed_recv += 1
 
         return raw_data
 
@@ -233,7 +243,7 @@ class DeviceManager():
 
             raw_data = self.device_data()
 
-            if self.__failed_recv > 10:
+            if self.failed_recv > 10:
                 break
 
             if not (raw_data != b"" and isinstance(raw_data, bytes)):
@@ -281,7 +291,7 @@ class DeviceManager():
         self()
 
         if dev:
-            self.__emulating = True
+            self.emulating = True
             print("<<< WARNING >>> EMULATING DEVICE")
             emulator = threading.Thread(target=self.device_emulator)
             emulator.start()
@@ -325,25 +335,14 @@ class DeviceManager():
 
     def reset_difference(self, data:list):
         """
-        Sets self.__change_in_data to 0 after the value
+        Sets self.change_in_data to 0 after the value
         has been used.
 
         Args:
             data (list): the data that is saved
         """
 
-        self.__change_in_data = self.__change_in_data[len(data):]
-
-    @property
-    def change_in_data(self) -> int:
-        """
-        a getter for the private change_in_data_len attribute
-
-        Returns:
-            int: change_in_data_len
-        """
-
-        return self.__change_in_data
+        self.change_in_data = self.change_in_data[len(data):]
 
     def device_emulator(self):
         """
@@ -354,19 +353,19 @@ class DeviceManager():
         being disconnected from the whole system.
         """
 
-        while self.__emulating:
+        while self.emulating:
 
-            # self.__emulated_input += random.choice(MESSAGES)
-            #self.__emulated_input += bytes(f"t({self.__emulating_counter})", "UTF-8")
-            #self.__emulated_input += bytes(
-            #    f"g(sin, 1, {np.sin(self.__emulating_counter * np.pi / 180)})", "UTF-8")
+            # self.emulated_input += random.choice(MESSAGES)
+            #self.emulated_input += bytes(f"t({self.emulating_counter})", "UTF-8")
+            #self.emulated_input += bytes(
+            #    f"g(sin, 1, {np.sin(self.emulating_counter * np.pi / 180)})", "UTF-8")
 
-            #self.__emulated_input +=  bytes(
-            #    f"g(cos, 1, {np.cos(self.__emulating_counter * np.pi / 180)})", "UTF-8")
-            #self.__emulated_input += b"\r\n
-            self.__emulated_input += bytes(
-                f"{TERMINAL_BEGINNING}{self.__emulating_counter}{TERMINAL_ENDING}\r\n", "UTF-8")
+            #self.emulated_input +=  bytes(
+            #    f"g(cos, 1, {np.cos(self.emulating_counter * np.pi / 180)})", "UTF-8")
+            #self.emulated_input += b"\r\n
+            self.emulated_input += bytes(
+                f"{TERMINAL_BEGINNING}{self.emulating_counter}{TERMINAL_ENDING}\r\n", "UTF-8")
 
-            self.__emulating_counter += 1
+            self.emulating_counter += 1
 
             time.sleep(0.5)
