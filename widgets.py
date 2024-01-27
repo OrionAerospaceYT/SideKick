@@ -12,7 +12,8 @@ import numpy as np
 
 from PyQt5 import QtWidgets as qtw
 
-from globals import * # pylint: disable=wildcard-import
+from globals import GRAPH_BEGINNING, GRAPH_ENDING, TERMINAL_BEGINNING, TERMINAL_ENDING
+from globals import NUM_OF_DATA_PTS, COLOUR_ORDER
 
 class Graph:
     """
@@ -105,7 +106,8 @@ class Graph:
         # for each item of data
         for data in raw_list:
             data = data.split(GRAPH_ENDING)
-            if TERMINAL_BEGINNING not in data[0] and data[0].count(',') == 2:
+            not_terminal = TERMINAL_BEGINNING not in data[0] and TERMINAL_ENDING not in data[0]
+            if not_terminal and data[0].count(',') == 2:
                 valid_graph_data = data[0].replace(" ", "").split(",")
                 # if the data belongs to this graph
                 if valid_graph_data[1] == self.key:
