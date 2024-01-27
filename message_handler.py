@@ -65,6 +65,14 @@ class MessageHandler():
         if not raw_data:
             return
 
+        # Make data HTML friendly
+        for i, data in enumerate(raw_data):
+            data = data.replace("&", "&amp;")
+            data = data.replace("<", "&lt;")
+            data = data.replace("\"", "&quot;")
+            data = data.replace("'", "&#39;")
+            raw_data[i] = data.replace(">", "&gt;")
+
         # Decoding the raw data
         decoded_data = []
         for item in raw_data:

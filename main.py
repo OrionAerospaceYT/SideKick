@@ -27,7 +27,6 @@ from widgets import Graph
 from widgets import RecordLight
 from widgets import SideMenu
 
-from globals import *
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
@@ -112,11 +111,14 @@ class MainGUI(qtw.QMainWindow):
         board, project = self.file_manager.load_options()
 
         self.main_ui.supported_boards.setCurrentText(board)
+
         self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
         self.file_manager.current_project = project
 
         self.device_manager.auto_connect = True
+
+        self.displayed_save = None
 
         timer = qtc.QTimer(self)
         timer.setInterval(25)
@@ -137,7 +139,8 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.new_project,
                         self.main_ui.show_save,
                         self.main_ui.library_manager,
-                        self.main_ui.arduino_cli]
+                        self.main_ui.arduino_cli,
+                        self.main_ui.export_save]
 
         device_manager = [self.main_ui.tune_actuators,
                           self.main_ui.boards_manager,
@@ -211,6 +214,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.arduino_cli.clicked.connect(self.display_cli)
         self.main_ui.full_screen.clicked.connect(
             lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
+        self.main_ui.export_save.clicked.connect(self.export_save)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -347,6 +351,7 @@ class MainGUI(qtw.QMainWindow):
             if last_scroll_value == 0:
                 #start_time = time.perf_counter()
                 self.main_ui.terminal.setText(self.message_handler.terminal_html)
+                #print(self.message_handler.terminal_html)
                 #end_time = time.perf_counter()
 
         # device messages
@@ -498,7 +503,8 @@ class MainGUI(qtw.QMainWindow):
         if not already_called:
             save, _ =  qtw.QFileDialog.getOpenFileName(
                 self, "Open SideKick project", self.file_manager.save_manager.save_folder_path,
-                "Save Files (*.txt)")
+                "Save Files (*.sk)")
+            self.displayed_save = save
 
         if save:
             raw_data = self.file_manager.save_manager.get_saved_data(save)
@@ -569,6 +575,18 @@ class MainGUI(qtw.QMainWindow):
         self.message_handler.clear_terminal()
         self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
+    def export_save(self):
+        """
+        Export the currently displayed save.
+        """
+        if self.showing_data:
+            folder_path = qtw.QFileDialog.getSaveFileName(self,
+                            'Create Folder',
+                            self.file_manager.save_manager.save_folder_path,
+                            'Save Files (*.csv)')[0]
+            if folder_path:
+                self.file_manager.save_manager.export_save(self.displayed_save, folder_path)
+
     def threaded_backend(self):
         """
         All backend tasks that need to be performed continually
@@ -620,6 +638,12 @@ class MainGUI(qtw.QMainWindow):
 
             # Recording functionality
             if self.record_light.blinking:
+                for i, data in enumerate(raw_data):
+                    data = data.replace("&amp;", "&")
+                    data = data.replace("&lt;", "<")
+                    data = data.replace("&quot;", "\"")
+                    data = data.replace("&#39;", "'")
+                    raw_data[i] = data.replace("&gt;", ">")
                 self.file_manager.save_manager.save_data(raw_data)
             else:
                 self.file_manager.save_manager.stop_save()

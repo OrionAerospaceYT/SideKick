@@ -593,6 +593,13 @@ QLabel#logo_2{
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="export_save">
+           <property name="text">
+            <string>Export Save</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="library_manager">
            <property name="text">
             <string>Library Manager</string>

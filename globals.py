@@ -42,7 +42,7 @@ GRAPH_ENDING = "zC43_"
 TERMINAL_BEGINNING = "q8_Q7"
 TERMINAL_ENDING = "I761r"
 
-START_REC = b"#r3cK"
-END_REC = b"!r3Ck"
+START_REC = "#r3cK"
+END_REC = "!r3Ck"
 
 MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]

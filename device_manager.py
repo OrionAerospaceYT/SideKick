@@ -162,13 +162,13 @@ class DeviceManager():
         self.raw_data.append(decoded_buffer.split("\r\n")[index])
         buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
 
-        if START_REC in buffer:
+        if START_REC.encode("UTF-8") in buffer:
             self.start_rec = True
-        elif END_REC in buffer:
+        elif END_REC.encode("UTF-8") in buffer:
             self.end_rec = True
 
-        buffer = buffer.replace(START_REC, b"")
-        buffer = buffer.replace(END_REC, b"")
+        buffer = buffer.replace(START_REC.encode("UTF-8"), b"")
+        buffer = buffer.replace(END_REC.encode("UTF-8"), b"")
 
         self.raw_data = list(filter(None, self.raw_data))
 
@@ -187,7 +187,6 @@ class DeviceManager():
             if not self.emulating:
                 raw_data = self.device.read_all()
             else:
-
                 raw_data = self.emulated_input
                 self.emulated_input = b""
             self.failed_recv = 0
@@ -231,6 +230,9 @@ class DeviceManager():
         if not dev:
             try:
                 self.device = serial.Serial(port, baud, rtscts=True)
+                #initial_data = b""
+                #while not initial_data:
+                #    initial_data = self.device_data()
             except serial.SerialException as error:
                 self.error = str(error).replace("(","\n").replace(")","\n")
                 print("<<< ERROR >>> " + self.error)
