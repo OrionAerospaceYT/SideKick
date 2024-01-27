@@ -5,7 +5,9 @@ This file imports device manager and gets the data
 
 import re
 import time
-from globals import * # pylint: disable=wildcard-import
+from globals import TERMINAL_HEADER, TERMINAL_BEGINNING, TERMINAL_ENDING
+from globals import MARKER, NUM_OF_DATA_PTS, ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
+from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
 class MessageHandler():
     """
@@ -47,7 +49,8 @@ class MessageHandler():
 
         for data in raw_list:
             data = data.split(TERMINAL_ENDING)
-            if GRAPH_BEGINNING not in data[0] and data[0] != "" and "\r" not in data[0]:
+            not_graph = GRAPH_BEGINNING not in data[0] and GRAPH_ENDING not in data[0]
+            if not_graph and data[0] != "" and "\r" not in data[0]:
                 terminal_data += " " + data[0]
 
         return terminal_data

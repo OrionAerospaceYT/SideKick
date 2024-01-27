@@ -15,7 +15,9 @@ import time
 import serial
 import serial.tools.list_ports
 
-from globals import * # pylint: disable=wildcard-import
+from globals import TERMINAL_BEGINNING, TERMINAL_ENDING
+from globals import GRAPH_BEGINNING, START_REC, END_REC
+
 
 class DeviceManager():
     """
