@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1012, 694)
+        MainWindow.resize(1195, 724)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
 "  background-color: #252535;\n"
 "  border: none;\n"
 "  border-radius: 10px;\n"
-"  height: 20px;\n"
+"  height: 40px;\n"
 "}\n"
 "QComboBox:pressed {\n"
 "  background-color: #000;\n"
@@ -174,6 +174,10 @@ class Ui_MainWindow(object):
 "QScrollBar::down-arrow\n"
 "{\n"
 "    background: none;\n"
+"}\n"
+"\n"
+"QScrollArea {\n"
+"    border:none;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")

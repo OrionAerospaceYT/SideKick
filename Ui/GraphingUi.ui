@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1012</width>
-    <height>694</height>
+    <width>1195</width>
+    <height>724</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -78,7 +78,7 @@ QComboBox {
   background-color: #252535;
   border: none;
   border-radius: 10px;
-  height: 20px;
+  height: 40px;
 }
 QComboBox:pressed {
   background-color: #000;
@@ -175,6 +175,10 @@ QScrollBar::up-arrow
 QScrollBar::down-arrow
 {
 	background: none;
+}
+
+QScrollArea {
+	border:none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
