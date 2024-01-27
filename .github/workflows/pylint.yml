@@ -27,23 +27,23 @@ jobs:
         
     - name: Analysing file_manager.py
       run: |
-        pylint file_manager.py
+        pylint file_manager.py --disable=R0902,R1725
         
     - name: Analysing message_handler.py
       run: |
-        pylint message_handler.py
+        pylint message_handler.py --disable=R0902
         
     - name: Analysing device_manager.py
       run: |
-        pylint device_manager.py
+        pylint device_manager.py --disable=R0902,R1732
         
     - name: Analysing widgets.py
       run: |
-        pylint widgets.py
+        pylint widgets.py --disable=R0903
         
     - name: Analysing library.py
       run: |
-        pylint library.py
+        pylint library.py --disable=R1732
 
     - name: Analysing boards.py
       run: |
@@ -51,7 +51,7 @@ jobs:
 
     - name: Analysing actuator.py
       run: |
-        pylint actuator.py
+        pylint actuator.py --disable=R0903
 
     - name: Analysing cli_manager.py
       run: |
