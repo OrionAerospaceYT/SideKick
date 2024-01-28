@@ -215,6 +215,41 @@ class DeviceManager():
 
         print("Data on terminal >>> " + string)
 
+    def parse_raw_data(self, raw_data):
+        """
+        Processes raw data to ensure that graph names that are the same are
+        not on the same line and so inserts new lines where they should be
+        in case they are skipped or the user forgot.
+
+        Args:
+            raw_data (str): the raw data that may be missing newlines.
+
+        Returns:
+            str: the raw data with new lines
+        """
+        marker = GRAPH_BEGINNING.encode("UTF-8")
+        output_list = []
+        new_line_data = raw_data.split(b"\r\n")
+
+        for line in new_line_data:
+            split_data = line.split(marker)
+            graph_keys = []
+
+            for i, data in enumerate(split_data):
+                if not line.startswith(marker) and i == 0:
+                    continue
+                if data.count(b",") > 1:
+                    split = data.split(b",")
+                    if split[0]+b","+split[1] not in graph_keys:
+                        graph_keys.append(split[0]+b","+split[1])
+                    else:
+                        split_data[i-1] = split_data[i-1]+b"\r\n"
+                        graph_keys = []
+
+            output_list.append(marker.join(split_data))
+
+        return b"\r\n".join(output_list)
+
     def threaded_get_raw_data(self, port:str, baud:int, dev=False):
         """
         Raw input data from the serial device
@@ -255,6 +290,7 @@ class DeviceManager():
 
             buffer += raw_data
             buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
+            buffer = self.parse_raw_data(buffer)
 
             if buffer.startswith(b"\r\n"):
                 buffer = buffer[2:]

@@ -139,7 +139,6 @@ class Graph:
         for data in raw_data:
             data = self.decode_graph_data(data)
             if data:
-                # print(data)
                 for i, point in enumerate(data):
                     if i < len(plots):
                         plots[i].append(point)
@@ -161,7 +160,6 @@ class Graph:
         Args:
             num_of_plots (int): the number of plots
         """
-
         # remove all graphs
         for item in self.plots:
             self.graph.removeItem(item)
