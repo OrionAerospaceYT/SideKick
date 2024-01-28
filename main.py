@@ -119,6 +119,7 @@ class MainGUI(qtw.QMainWindow):
         self.device_manager.auto_connect = True
 
         self.displayed_save = None
+        self.export_error = False
 
         timer = qtc.QTimer(self)
         timer.setInterval(25)
@@ -273,6 +274,8 @@ class MainGUI(qtw.QMainWindow):
                 self.message_handler.get_status("Running"))
         elif self.device_manager.error is not None and self.device_manager.device is None:
             self.main_ui.top_update.setText("Error, could not connect!")
+        elif self.export_error:
+            self.main_ui.top_update.setText("Please show save first!")
         else:
             self.main_ui.top_update.setStyleSheet("QLabel{font-size:14pt}")
             self.main_ui.top_update.setText("")
@@ -587,6 +590,9 @@ class MainGUI(qtw.QMainWindow):
                             'Save Files (*.csv)')[0]
             if folder_path:
                 self.file_manager.save_manager.export_save(self.displayed_save, folder_path)
+            self.export_error = False
+        else:
+            self.export_error = True
 
     def threaded_backend(self):
         """

@@ -102,6 +102,8 @@ class SaveManager():
                 indx = line.index(GRAPH_ENDING)
                 graph_data.append(line[len(GRAPH_BEGINNING):indx])
                 line = line[indx+len(GRAPH_ENDING):]
+            else:
+                line = line[1:]
 
         if not terminal_data:
             terminal_data = None
