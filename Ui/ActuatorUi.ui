@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>464</height>
+    <width>915</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -188,7 +188,7 @@ QProgressBar::chunk
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>730</width>
+         <width>895</width>
          <height>70</height>
         </rect>
        </property>

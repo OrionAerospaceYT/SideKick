@@ -8,6 +8,8 @@ import shutil
 import platform
 import json
 
+from globals import TERMINAL_BEGINNING, TERMINAL_ENDING, GRAPH_BEGINNING, GRAPH_ENDING
+
 DEFAULT_BOARDS = [["Select Board", "None"],
                   ["SK Stem", "arduino:mbed_rp2040:pico"]]
 
@@ -34,7 +36,7 @@ class SaveManager():
         creates a new save file
         """
         num_of_saves = len(os.listdir(self.save_folder_path))
-        with open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.txt", "w",
+        with open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.sk", "w",
                     encoding="UTF-8"):
             pass
 
@@ -50,7 +52,7 @@ class SaveManager():
         if self.record_status != self.prev_record_status:
             self.create_new_file()
 
-        save_name = f"Save{len(os.listdir(self.save_folder_path))}.txt"
+        save_name = f"Save{len(os.listdir(self.save_folder_path))}.sk"
         save_path = f"{self.save_folder_path}{self.sep}{save_name}"
 
         with open(save_path, "a", encoding="UTF-8") as save:
@@ -78,6 +80,57 @@ class SaveManager():
             data = save.readlines()
 
         return [item.strip() for item in data]
+
+    def parse_line(self, line:str) -> (list, list, bool):
+        """
+        Returns:
+            list: the terminal data
+            list: the graph_data
+            bool: the recording status
+        """
+        terminal_data = ""
+        graph_data = []
+
+        line = line.replace("\n", "")
+
+        while line:
+            if line.startswith(TERMINAL_BEGINNING):
+                indx = line.index(TERMINAL_ENDING)
+                terminal_data += line[len(TERMINAL_BEGINNING):indx]
+                line = line[indx+len(TERMINAL_ENDING):]
+            elif line.startswith(GRAPH_BEGINNING):
+                indx = line.index(GRAPH_ENDING)
+                graph_data.append(line[len(GRAPH_BEGINNING):indx])
+                line = line[indx+len(GRAPH_ENDING):]
+
+        if not terminal_data:
+            terminal_data = None
+        if not graph_data:
+            graph_data = None
+        return terminal_data, graph_data
+
+    def export_save(self, file_dir:str, new_name:str):
+        """
+        Convert the sidekick data to a .csv file for the user.
+        """
+        output = "Terminal,Graphs\n"
+
+        with open(file_dir, "r", encoding="UTF-8") as my_file:
+            for line in my_file:
+                parsed_line = self.parse_line(line)
+                if parsed_line[0] is None:
+                    output += ","
+                else:
+                    output += parsed_line[0] + ","
+                if parsed_line[1] is None:
+                    output += ","
+                else:
+                    for graph in parsed_line[1]:
+                        output += graph + ","
+                output += "\n"
+
+        with open(f"{new_name}", "w", encoding="UTF-8") as my_file:
+            my_file.write(output)
 
 
 class HtmlGenerator():

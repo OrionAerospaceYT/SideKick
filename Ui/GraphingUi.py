@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1012, 694)
+        MainWindow.resize(1195, 724)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
 "  background-color: #252535;\n"
 "  border: none;\n"
 "  border-radius: 10px;\n"
-"  height: 20px;\n"
+"  height: 40px;\n"
 "}\n"
 "QComboBox:pressed {\n"
 "  background-color: #000;\n"
@@ -174,6 +174,10 @@ class Ui_MainWindow(object):
 "QScrollBar::down-arrow\n"
 "{\n"
 "    background: none;\n"
+"}\n"
+"\n"
+"QScrollArea {\n"
+"    border:none;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -381,6 +385,9 @@ class Ui_MainWindow(object):
         self.show_save.setMinimumSize(QtCore.QSize(0, 0))
         self.show_save.setObjectName("show_save")
         self.dhsgd.addWidget(self.show_save)
+        self.export_save = QtWidgets.QPushButton(self.side_menu)
+        self.export_save.setObjectName("export_save")
+        self.dhsgd.addWidget(self.export_save)
         self.library_manager = QtWidgets.QPushButton(self.side_menu)
         self.library_manager.setObjectName("library_manager")
         self.dhsgd.addWidget(self.library_manager)
@@ -599,6 +606,7 @@ class Ui_MainWindow(object):
         self.select_project.setText(_translate("MainWindow", "Select Project"))
         self.new_project.setText(_translate("MainWindow", "New Project"))
         self.show_save.setText(_translate("MainWindow", "Show Save"))
+        self.export_save.setText(_translate("MainWindow", "Export Save"))
         self.library_manager.setText(_translate("MainWindow", "Library Manager"))
         self.arduino_cli.setText(_translate("MainWindow", "Arduino CLI"))
         self.file.setText(_translate("MainWindow", "Menu"))
