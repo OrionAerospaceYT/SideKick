@@ -109,7 +109,7 @@ class SaveManager():
             graph_data = None
         return terminal_data, graph_data
 
-    def export_save(self, file_dir, new_name):
+    def export_save(self, file_dir:str, new_name:str):
         """
         Convert the sidekick data to a .csv file for the user.
         """
