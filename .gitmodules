@@ -1,3 +1,6 @@
 [submodule "ConsciOS"]
 	path = ConsciOS
 	url = https://github.com/OrionAerospaceYT/ConsciOS
+[submodule "Macros"]
+	path = Macros
+	url = https://github.com/OrionAerospaceYT/Macros.git
