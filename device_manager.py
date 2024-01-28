@@ -266,6 +266,7 @@ class DeviceManager():
             self.device.close()
 
         self()
+        self.target = self.last_port
         self.auto_connect = False
 
     def terminate_device(self):
@@ -321,19 +322,13 @@ class DeviceManager():
         available_ports = ["emulate"] if dev else []
 
         for port in serial.tools.list_ports.comports():
-
             available_ports.append(port.device)
 
         # Auto connection
         if not self.connected and self.auto_connect:
-
             if self.target is not None and (self.target in available_ports):
                 self.connect_device(self.target)
                 time.sleep(1)
-            else:
-                for port in serial.tools.list_ports.comports():
-                    if "usb" in port.description.lower() or "dev" in port.description:
-                        self.connect_device(str(port.device))
 
         return available_ports
 
