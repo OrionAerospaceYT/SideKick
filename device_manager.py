@@ -215,7 +215,7 @@ class DeviceManager():
 
         print("Data on terminal >>> " + string)
 
-    def parse_raw_data(self, raw_data):
+    def parse_buffer(self, raw_data):
         """
         Processes raw data to ensure that graph names that are the same are
         not on the same line and so inserts new lines where they should be
@@ -290,8 +290,8 @@ class DeviceManager():
 
             buffer += raw_data
             buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
-            buffer = self.parse_raw_data(buffer)
-
+            buffer = self.parse_buffer(buffer)
+            print(len(buffer))
             if buffer.startswith(b"\r\n"):
                 buffer = buffer[2:]
 
