@@ -12,11 +12,13 @@ import time
 
 #import numpy as np
 
+import re
+
 import serial
 import serial.tools.list_ports
 
 from globals import TERMINAL_BEGINNING, TERMINAL_ENDING
-from globals import GRAPH_BEGINNING, START_REC, END_REC
+from globals import GRAPH_BEGINNING, GRAPH_ENDING, START_REC, END_REC
 
 
 class DeviceManager():
@@ -83,6 +85,7 @@ class DeviceManager():
     """
 
     def __init__(self, parent=None):
+        self.terminal = ""
         self.parent = parent
         self.device = None
         self.port = None
@@ -291,7 +294,13 @@ class DeviceManager():
             buffer += raw_data
             buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
             buffer = self.parse_buffer(buffer)
-            print(len(buffer))
+
+            self.terminal += raw_data.decode("UTF-8")
+            self.terminal = re.sub(f'{GRAPH_BEGINNING}.*?{GRAPH_ENDING}', '', self.terminal)
+            self.terminal = self.terminal.replace("\r\n\r\n", "\r\n")
+            if GRAPH_ENDING in self.terminal:
+                self.terminal = self.terminal.split(GRAPH_ENDING)[1]
+            print(self.terminal.split(GRAPH_BEGINNING)[0].encode("UTF-8"))
             if buffer.startswith(b"\r\n"):
                 buffer = buffer[2:]
 
