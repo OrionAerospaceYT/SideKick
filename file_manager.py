@@ -9,9 +9,9 @@ import shutil
 import platform
 import json
 
-from globals import GRAPH_BEGINNING, GRAPH_ENDING
-
 from PyQt5 import QtWidgets as qtw
+
+from globals import GRAPH_BEGINNING, GRAPH_ENDING
 
 DEFAULT_BOARDS = [["Select Board", "None"],
                   ["SK Stem", "arduino:mbed_rp2040:pico"]]
