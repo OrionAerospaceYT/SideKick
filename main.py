@@ -298,12 +298,6 @@ class MainGUI(qtw.QMainWindow):
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
 
-    def update_terminal(self):
-        """
-        updates the html of the terminal
-        """
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-
     def update(self):
         """
         calls all update functions
@@ -628,7 +622,7 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = []
                 if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
-                    self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
+                    self.device_manager.raw_data = []
                     self.showing_data = False
 
                 if self.device_manager.start_rec:

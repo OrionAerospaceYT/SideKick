@@ -4,11 +4,14 @@ deletion of files.
 """
 
 import os
+import re
 import shutil
 import platform
 import json
 
-from globals import TERMINAL_BEGINNING, TERMINAL_ENDING, GRAPH_BEGINNING, GRAPH_ENDING
+from globals import GRAPH_BEGINNING, GRAPH_ENDING
+
+from PyQt5 import QtWidgets as qtw
 
 DEFAULT_BOARDS = [["Select Board", "None"],
                   ["SK Stem", "arduino:mbed_rp2040:pico"]]
@@ -81,7 +84,7 @@ class SaveManager():
 
         return [item.strip() for item in data]
 
-    def parse_line(self, line:str) -> (list, list, bool):
+    def parse_line(self, line:str) -> list:
         """
         Returns:
             list: the terminal data
@@ -93,22 +96,18 @@ class SaveManager():
 
         line = line.replace("\n", "")
 
-        while line:
-            if line.startswith(TERMINAL_BEGINNING):
-                indx = line.index(TERMINAL_ENDING)
-                terminal_data += line[len(TERMINAL_BEGINNING):indx]
-                line = line[indx+len(TERMINAL_ENDING):]
-            elif line.startswith(GRAPH_BEGINNING):
-                indx = line.index(GRAPH_ENDING)
-                graph_data.append(line[len(GRAPH_BEGINNING):indx])
-                line = line[indx+len(GRAPH_ENDING):]
-            else:
-                line = line[1:]
+        graph_data = re.findall(f"{GRAPH_BEGINNING}.*?{GRAPH_ENDING}", line)
+
+        for indx, item in enumerate(graph_data):
+            graph_data[indx] = item.replace(GRAPH_BEGINNING, "").replace(GRAPH_ENDING, "")
+
+        terminal_data = re.sub(f'{GRAPH_BEGINNING}.*?{GRAPH_ENDING}', '', line)
 
         if not terminal_data:
             terminal_data = None
         if not graph_data:
             graph_data = None
+
         return terminal_data, graph_data
 
     def export_save(self, file_dir:str, new_name:str):
@@ -131,9 +130,14 @@ class SaveManager():
                         output += graph + ","
                 output += "\n"
 
-        with open(f"{new_name}", "w", encoding="UTF-8") as my_file:
-            my_file.write(output)
-
+        try:
+            with open(f"{new_name}", "w", encoding="UTF-8") as my_file:
+                my_file.write(output)
+        except PermissionError:
+            qtw.QMessageBox.critical(None,
+                                        "Permission error", 
+                                        "Could not save - file already in use!",
+                                        qtw.QMessageBox.Cancel)
 
 class HtmlGenerator():
     """
