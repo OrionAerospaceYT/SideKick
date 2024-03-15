@@ -66,6 +66,8 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.restart = True
 
+        print(parent.file_manager.get_examples())
+
         self()
 
         timer = qtc.QTimer(self)

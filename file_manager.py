@@ -727,3 +727,21 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             for board in self.board_names:
                 if len(board) > 1:
                     boards.write(f"{board[0]}, {board[1]}\n")
+
+    def get_examples(self):
+        """
+        Get all of the arduino sketches from the libraries path.
+
+        Returns:
+            list: the fild directories of the arduino examples.
+        """
+        libraries_path = self.paths["libraries"]+f"{self.sep}libraries"
+        files = os.listdir(libraries_path)
+        examples = []
+        for file in files:
+            if os.path.isfile(libraries_path+f"{self.sep}{file}"):
+                continue
+            elif "examples" not in os.listdir(libraries_path+f"{self.sep}{file}"):
+                continue
+            examples.append(file)
+        return examples
