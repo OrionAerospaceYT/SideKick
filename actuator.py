@@ -66,8 +66,6 @@ class ActuatorGUI(qtw.QMainWindow):
 
         self.restart = True
 
-        print(parent.file_manager.get_examples())
-
         self()
 
         timer = qtc.QTimer(self)
@@ -242,6 +240,7 @@ class ActuatorGUI(qtw.QMainWindow):
             self.actuators["servos"][name] = [pin, minimum, maximum]
 
             self.device_manager.send(f"addServo-{pin}")
+            print(f"addServo-{pin}")
 
             slider = self.create_new_slider(name, minimum, maximum, actuator_type)
             self.sliders["servos"].append(slider.horizontal_layout)

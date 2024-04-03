@@ -125,7 +125,7 @@ class Graph:
                 graph_data.append(float(data))
             else:
                 graph_data.append(0.0)
-                print("Error decoding graph data!")
+                print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
 
         return graph_data
 
