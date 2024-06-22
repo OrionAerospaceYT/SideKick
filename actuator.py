@@ -180,7 +180,6 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         if actuator_type == "Servo":
             self.device_manager.send(f"servo{indx}-{value}")
-            print(f"servo{indx}-{value}")
         elif actuator_type == "Pin":
             print(f"pin{indx}-{value}")
             self.device_manager.send(f"pin{indx}-{value}")

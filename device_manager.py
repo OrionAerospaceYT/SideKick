@@ -133,7 +133,6 @@ class DeviceManager():
         Args:
             message (str): the message to send to the device
         """
-
         if self.device:
             self.device.write(f"{message}\n".encode("UTF-8"))
 
