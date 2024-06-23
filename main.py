@@ -442,6 +442,9 @@ class MainGUI(qtw.QMainWindow):
         Disconnects the device to upload
         Compiles the script and then uploads the script
         """
+        if self.upload:
+            return
+
         temp = self.file_manager.current_project
 
         if actuator:
