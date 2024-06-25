@@ -21,7 +21,7 @@ class FakeData():
             self.counter += 1
             new_string = "This is a very long example with a new value: " + str(self.counter) + "<br>"
             #print(new_string)
-            self.data.append(new_string)
+            ex.terminal.append_data([new_string])
             time.sleep(0.01)
 
 class RealTimeTextDisplay(QMainWindow):
@@ -30,7 +30,7 @@ class RealTimeTextDisplay(QMainWindow):
 
         self.initUI()
         
-        self.terminal = Terminal(self.text_edit, my_data)
+        self.terminal = Terminal(self.text_edit)
 
         # Set up a timer to update the text periodically
         self.timer = QTimer(self)
@@ -55,10 +55,10 @@ class RealTimeTextDisplay(QMainWindow):
         self.terminal.update_text()
 
 if __name__ == '__main__':
-    my_data = FakeData()
 
     app = QApplication(sys.argv)
     ex = RealTimeTextDisplay()
+    my_data = FakeData()
     ex.show()
     data = threading.Thread(target=my_data.append_data)
     data.start()

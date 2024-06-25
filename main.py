@@ -22,6 +22,7 @@ from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
 from cli_manager import CliManager
+from terminal_manager import Terminal
 
 from widgets import Graph
 from widgets import RecordLight
@@ -77,6 +78,8 @@ class MainGUI(qtw.QMainWindow):
             self.file_and_device_widgets()[1],
             self.main_ui.side_menu)
 
+        self.terminal = Terminal(self.main_ui.terminal)
+
         # Attributes and initial config here
         self.side_menu.hide_menu()
 
@@ -112,8 +115,6 @@ class MainGUI(qtw.QMainWindow):
 
         self.main_ui.supported_boards.setCurrentText(board)
 
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-
         self.file_manager.current_project = project
 
         self.device_manager.auto_connect = True
@@ -122,7 +123,7 @@ class MainGUI(qtw.QMainWindow):
         self.export_error = False
 
         timer = qtc.QTimer(self)
-        timer.setInterval(25)
+        timer.setInterval(0)
         timer.timeout.connect(self.update)
         timer.start()
 
@@ -342,14 +343,7 @@ class MainGUI(qtw.QMainWindow):
         self.update_compile_and_upload()
 
         # terminal data
-        if (self.device_manager.connected) or (not self.showing_data):
-            last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
-
-            if last_scroll_value == 0:
-                #start_time = time.perf_counter()
-                self.main_ui.terminal.setText(self.message_handler.terminal_html)
-                #print(self.message_handler.terminal_html)
-                #end_time = time.perf_counter()
+        self.terminal.update_text()
 
         # device messages
         if self.device_manager.connected:
@@ -574,7 +568,7 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph.clear_graph()
 
         self.message_handler.clear_terminal()
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+        self.terminal.clear()
 
     def export_save(self):
         """
@@ -625,7 +619,7 @@ class MainGUI(qtw.QMainWindow):
                     raw_data = []
                 if self.device_manager.connected:
                     raw_data = self.device_manager.raw_data
-                    self.device_manager.raw_data = []
+                    self.device_manager.raw_data = self.device_manager.raw_data[len(raw_data):]
                     self.showing_data = False
 
                 if self.device_manager.start_rec:
@@ -639,6 +633,7 @@ class MainGUI(qtw.QMainWindow):
                 self.message_handler.get_terminal(raw_data)
                 self.top_graph.set_graph_data(raw_data)
                 self.bottom_graph.set_graph_data(raw_data)
+                self.terminal.append_data(raw_data)
 
             # Recording functionality
             if self.record_light.blinking:
