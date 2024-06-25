@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1195, 761)
+        MainWindow.resize(1195, 770)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -169,7 +169,6 @@ class Ui_MainWindow(object):
 "    background-color: grey;\n"
 "    border-radius: 4px;\n"
 "    border:none;\n"
-"    min-height: 100px;\n"
 "}\n"
 "QScrollBar::up-arrow\n"
 "{\n"

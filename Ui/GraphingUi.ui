@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1195</width>
-    <height>761</height>
+    <height>770</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -170,7 +170,6 @@ QScrollBar::handle
 	background-color: grey;
 	border-radius: 4px;
 	border:none;
-	min-height: 100px;
 }
 QScrollBar::up-arrow
 {

@@ -3,7 +3,7 @@ import copy
 
 from PyQt5.QtGui import QTextDocumentFragment, QTextBlockFormat
 
-from globals import GRAPH_BEGINNING, GRAPH_ENDING
+from globals import GRAPH_BEGINNING, GRAPH_ENDING, NUM_OF_DATA_PTS
 
 class Terminal():
 
@@ -14,6 +14,8 @@ class Terminal():
         self.data_stream = []
         self.prev_scroll_pos = None
 
+        self.running_average = []
+
     def append_data(self, raw_data):
         # Append the new data to the data stream
         for item in raw_data:
@@ -21,20 +23,22 @@ class Terminal():
 
     def compile_batch(self):
         # Compile the batch into a correctly formatted string
-        new_data = copy.deepcopy(self.data_stream)
-        self.data_stream = self.data_stream[len(new_data):]
+        batch = ""
         msg_format = "<span style=\"color:#00f0c3;\">>>></span>{}"
-        batch = " "
-        for item in reversed(new_data):
+        new_data = copy.deepcopy(self.data_stream)
+        length = len(new_data)-1
+        self.data_stream = self.data_stream[len(new_data):]
+
+        for i, item in enumerate(reversed(new_data)):
             msg = re.sub(f'{GRAPH_BEGINNING}.*?{GRAPH_ENDING}', '', item)
             if not msg:
                 continue
             batch += msg_format.format(msg)
-            batch += "<br>"
-        if batch.endswith("<br>"):
-            batch = batch[:-4]
-        print("New Batch")
-        print(repr(batch))
+            if i != length:
+                batch += "<br>"
+
+        self.running_average.append(length)
+
         return batch
 
     def write_text(self, fragment):
@@ -49,12 +53,18 @@ class Terminal():
 
     def limit_line_count(self):
         # Limit the number of lines in the QTextEdit
+        num_of_blocks = self.text_edit.document().blockCount()
         cursor = self.text_edit.textCursor()
         cursor.movePosition(cursor.End)
-        for _ in range(self.text_edit.document().blockCount() - 500):
+        for _ in range(num_of_blocks - self.calculate_num_of_blocks()):
             cursor.movePosition(cursor.PreviousBlock, cursor.KeepAnchor)
+        self.running_average = self.running_average[num_of_blocks:]
         cursor.removeSelectedText()
         cursor.deleteChar()
+
+    def calculate_num_of_blocks(self):
+        # Calculates the average number of lines
+        return int(NUM_OF_DATA_PTS * len(self.running_average) / (sum(self.running_average) + 1))
 
     def update_text(self):
         # Check if there is any new data to write
@@ -82,10 +92,12 @@ class Terminal():
         self.text_edit.setTextCursor(cursor)
 
         # Restore the scroll position relative to the maximum value
-        if current_scroll_pos > 20:
+        if current_scroll_pos > 100:
             new_max_scroll_pos = scroll_bar.maximum()
             new_scroll_pos = new_max_scroll_pos - (max_scroll_pos - current_scroll_pos)
             scroll_bar.setValue(new_scroll_pos)
+            if new_scroll_pos > scroll_bar.value():
+                scroll_bar.setValue(0)
 
         self.limit_line_count()
 

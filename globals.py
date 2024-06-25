@@ -2,8 +2,6 @@
 An auxillary file which holds global constants.
 """
 
-NUM_OF_DATA_PTS = 250
-
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
@@ -34,7 +32,7 @@ COLOUR_ORDER = ["#FF0C0C",
                 "#fce803",
                 "#fc03b1"]
 
-NUM_OF_DATA_PTS = 5000
+NUM_OF_DATA_PTS = 1000
 
 GRAPH_BEGINNING = "l058~"
 GRAPH_ENDING = "zC43_"
