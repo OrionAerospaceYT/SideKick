@@ -31,6 +31,8 @@ from widgets import SideMenu
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
+from globals import NUM_OF_DATA_PTS
+
 RUNNING = True
 DEV = False
 CONSCIOS_PATH = ""
@@ -142,7 +144,8 @@ class MainGUI(qtw.QMainWindow):
                         self.main_ui.show_save,
                         self.main_ui.library_manager,
                         self.main_ui.arduino_cli,
-                        self.main_ui.export_save]
+                        self.main_ui.export_save,
+                        self.main_ui.data_points]
 
         device_manager = [self.main_ui.tune_actuators,
                           self.main_ui.boards_manager,
@@ -217,6 +220,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.full_screen.clicked.connect(
             lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
         self.main_ui.export_save.clicked.connect(self.export_save)
+        self.main_ui.data_points.valueChanged.connect(self.update_data_points)
 
     def connect_keyboard_shortcuts(self):
         """
@@ -584,6 +588,13 @@ class MainGUI(qtw.QMainWindow):
             self.export_error = False
         else:
             self.export_error = True
+
+    def update_data_points(self):
+        """
+        Update the number of data points shown to the user.
+        """
+        NUM_OF_DATA_PTS = self.main_ui.data_points.value()
+        print(NUM_OF_DATA_PTS)
 
     def threaded_backend(self):
         """

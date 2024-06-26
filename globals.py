@@ -32,7 +32,7 @@ COLOUR_ORDER = ["#FF0C0C",
                 "#fce803",
                 "#fc03b1"]
 
-NUM_OF_DATA_PTS = 1000
+NUM_OF_DATA_PTS = 2500
 
 GRAPH_BEGINNING = "l058~"
 GRAPH_ENDING = "zC43_"
