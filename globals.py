@@ -39,5 +39,3 @@ GRAPH_ENDING = "zC43_"
 
 START_REC = "#r3cK"
 END_REC = "!r3Ck"
-
-MESSAGES = [b"t(Hello World)", b"t(This is working)", b"t(Not skipping data!)"]

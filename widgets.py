@@ -68,16 +68,12 @@ class Graph:
         self.graph.setMenuEnabled(False)
         self.graph.setBackground('#2b2b35')
         self.legend.setLabelTextColor("#FFFFFF")
-        self.graph.getAxis(
-            'left').setPen(pg.mkPen(color='#FFFFFF'))
-        self.graph.getAxis(
-            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        self.graph.getAxis("left").setTextPen((255, 255, 255))
-        self.graph.getAxis("bottom").setTextPen((255, 255, 255))
-
-        # On click stop auto scrolling
-        #self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
-        #self.set_auto_scroll_false()
+        #self.graph.getAxis(
+        #    'left').setPen(pg.mkPen(color='#FFFFFF'))
+        #self.graph.getAxis(
+        #    'bottom').setPen(pg.mkPen(color='#FFFFFF'))
+        #self.graph.getAxis("left").setTextPen((255, 255, 255))
+        #self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
     def clear_graph(self):
         """
@@ -124,7 +120,7 @@ class Graph:
             if -1 < data.count("-") < 2 and -1 < data.count(".") < 2 and is_num:
                 graph_data.append(float(data))
             else:
-                graph_data.append(0.0)
+                graph_data.append(np.nan)
                 print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
 
         return graph_data
@@ -198,34 +194,6 @@ class Graph:
             # update plot
             pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
             plot.setData(np.array(plots[index], dtype=float), pen=pen)
-
-        #self.auto_scroll(plots)
-
-    def auto_scroll(self, plots):
-        """
-        If autoscroll is enabled, focus on the last 1000 elements
-
-        Args:
-            plots (list): the data
-        """
-
-        if self.graph.plotItem.getViewBox().autoRangeEnabled()[0]:
-            self.resize = True
-
-        try:
-            if len(plots) > 0 and self.resize:
-                last_indx = max(0, len(plots[0]) - 1500)
-                self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
-        except IndexError:
-            pass
-
-    def set_auto_scroll_false(self):
-        """
-        Sets the value of resize to false
-        """
-        self.resize = False
-        self.graph.getViewBox().setAutoPan(False)
-        self.graph.getViewBox().setAutoVisible(False)
 
 
 class Widgets:

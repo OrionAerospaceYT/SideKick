@@ -10,7 +10,7 @@ It uses pySerial and has a loop running on a thread.
 import threading
 import time
 
-#import numpy as np
+import numpy as np
 
 import serial
 import serial.tools.list_ports
@@ -386,18 +386,16 @@ class DeviceManager():
         """
 
         while self.emulating:
+            if self.emulating_counter % 100 > 49:
+                self.emulated_input += bytes("l058~Step Func,1,1zC43_","UTF-8")
+            else:
+                self.emulated_input += bytes("l058~Step Func,1,-1zC43_","UTF-8")
 
-            # self.emulated_input += random.choice(MESSAGES)
-            #self.emulated_input += bytes(f"t({self.emulating_counter})", "UTF-8")
-            #self.emulated_input += bytes(
-            #    f"g(sin, 1, {np.sin(self.emulating_counter * np.pi / 180)})", "UTF-8")
+            self.emulated_input += bytes(f"l058~Sin(x),1,{np.sin(self.emulating_counter*3.1415/180)}zC43_","UTF-8")
 
-            #self.emulated_input +=  bytes(
-            #    f"g(cos, 1, {np.cos(self.emulating_counter * np.pi / 180)})", "UTF-8")
-            #self.emulated_input += b"\r\n
             self.emulated_input += bytes(
                 f"{self.emulating_counter}\r\n", "UTF-8")
 
             self.emulating_counter += 1
 
-            time.sleep(0.5)
+            time.sleep(0.005)
