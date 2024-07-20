@@ -68,12 +68,12 @@ class Graph:
         self.graph.setMenuEnabled(False)
         self.graph.setBackground('#2b2b35')
         self.legend.setLabelTextColor("#FFFFFF")
-        #self.graph.getAxis(
-        #    'left').setPen(pg.mkPen(color='#FFFFFF'))
-        #self.graph.getAxis(
-        #    'bottom').setPen(pg.mkPen(color='#FFFFFF'))
-        #self.graph.getAxis("left").setTextPen((255, 255, 255))
-        #self.graph.getAxis("bottom").setTextPen((255, 255, 255))
+        self.graph.getAxis(
+            'left').setPen(pg.mkPen(color='#FFFFFF'))
+        self.graph.getAxis(
+            'bottom').setPen(pg.mkPen(color='#FFFFFF'))
+        self.graph.getAxis("left").setTextPen((255, 255, 255))
+        self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
     def clear_graph(self):
         """
@@ -119,6 +119,8 @@ class Graph:
 
             if -1 < data.count("-") < 2 and -1 < data.count(".") < 2 and is_num:
                 graph_data.append(float(data))
+                if float(data) > 60:
+                    print(data)
             else:
                 graph_data.append(np.nan)
                 print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
