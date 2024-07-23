@@ -482,41 +482,40 @@ class MainGUI(qtw.QMainWindow):
 
         self.file_manager.current_project = temp
 
-    def display_save(self, already_called=False, save=None):
+    def display_save(self, save=None):
         """
         Loads the saved data onto the graphs on the GUI
 
         Args:
             save (str): the save file name
-            already_called (bool): for some reason this function needs to be called twice
         """
-        self.clear_all_data()
 
+        # Disconnect all devices and set the GUI to the showing save mode
         self.showing_data = True
         self.device_manager.terminate_device()
+        self.clear_all_data()
 
-        if not already_called:
-            save, _ =  qtw.QFileDialog.getOpenFileName(
-                self, "Open SideKick project", self.file_manager.save_manager.save_folder_path,
-                "Save Files (*.sk)")
-            self.displayed_save = save
+        # Load the save's data into a variable and check there is data
+        save, _ =  qtw.QFileDialog.getOpenFileName(
+            self, "Open SideKick project",
+            self.file_manager.save_manager.save_folder_path,
+            "Save Files (*.sk)")
 
-        if save:
-            raw_data = self.file_manager.save_manager.get_saved_data(save)
-        else:
+        if not save:
             return
 
+        self.displayed_save = save
+        raw_data = self.file_manager.save_manager.get_saved_data(save)
+
+        # Set the data for the graph and the HTML for the terminal
         self.message_handler.get_terminal(raw_data, live=False, showing_data=True)
         self.top_graph.set_graph_data(raw_data)
         self.bottom_graph.set_graph_data(raw_data)
 
-        self.update_terminal()
+        # Display the save's data to the user on the screen
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
-
-        if not already_called:
-            time.sleep(0.1)
-            self.display_save(True, save)
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
     def demo_function(self):
         """
@@ -537,7 +536,8 @@ class MainGUI(qtw.QMainWindow):
         """
         file_path, _ =  qtw.QFileDialog.getOpenFileName(
             self, "Open SideKick project",
-            self.file_manager.paths["projects"], "Arduino Files (*.ino)")
+            self.file_manager.paths["projects"],
+            "Arduino Files (*.ino)")
 
         if file_path:
             self.file_manager.set_current_project(file_path)

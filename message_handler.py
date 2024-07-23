@@ -5,7 +5,6 @@ This file imports device manager and gets the data
 
 import re
 import time
-from globals import TERMINAL_HEADER
 from globals import MARKER, NUM_OF_DATA_PTS, ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
@@ -24,7 +23,7 @@ class MessageHandler():
         self.line_edit = line_edit
 
         self.message_string = ""
-        self.terminal_html = TERMINAL_HEADER
+        self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
 
@@ -78,7 +77,7 @@ class MessageHandler():
             self.message_string += item + MARKER
 
         # Display data
-        self.terminal_html = TERMINAL_HEADER + self.message_string
+        self.terminal_html = self.message_string
 
         # Remove unnecessary comments from the end of the HTML
         # this should save some memory
@@ -95,7 +94,7 @@ class MessageHandler():
         the QTextBrowser
         """
         self.message_string = ""
-        self.terminal_html = TERMINAL_HEADER
+        self.terminal_html = ""
 
     def get_line_number(self, string):
         """
