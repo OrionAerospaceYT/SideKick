@@ -8,14 +8,14 @@ TEXT_COLOUR = "#00f0c3"
 TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
 >Terminal</p></h1>"
 
-SUCCESS_MSG = "<p style=\"font-weight:bold; color:#00f0c3; font-size:24px\">\
-Success</p><font color=\"#FFFFFF\">"
+SUCCESS_MSG = "<h1 style=\"color:#00f0c3\">\
+Success</h1><font color=\"#FFFFFF\">"
 
 FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
 Error "
 
-USER_MESSAGE = "<p style=\"font-weight: bold;color:#34c0eb; font-size:24px\">\
-User command</p>"
+USER_MESSAGE = "<h1 style=\"color:#34c0eb\">\
+User command</h1>"
 
 ERROR_TERMS = ["Error opening sketch",
                "Error during build",
