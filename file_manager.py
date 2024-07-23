@@ -586,12 +586,11 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
             if "Board: " in item:
                 board_index = settings.index(item)
+                settings[board_index] = f"Board: {board}\n"
 
             if "Project: " in item:
                 project_index = settings.index(item)
-
-        settings[board_index] = f"Board: {board}\n"
-        settings[project_index] = f"Project: {project}\n"
+                settings[project_index] = f"Project: {project}\n"
 
         with open(self.paths["settings"], "w", encoding="UTF-8") as settings_file:
             settings_file.writelines(settings)
@@ -741,7 +740,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         for file in files:
             if os.path.isfile(libraries_path+f"{self.sep}{file}"):
                 continue
-            elif "examples" not in os.listdir(libraries_path+f"{self.sep}{file}"):
+            if "examples" not in os.listdir(libraries_path+f"{self.sep}{file}"):
                 continue
             examples.append(file)
         return examples
