@@ -391,8 +391,9 @@ class DeviceManager():
             else:
                 self.emulated_input += bytes("l058~Step Func,1,-1zC43_","UTF-8")
 
-            self.emulated_input += bytes(f"l058~Sin(x),1,{np.sin(
-                self.emulating_counter*3.1415/180)}zC43_","UTF-8")
+            self.emulated_input += bytes(
+                f"l058~Sin(x),1,{np.sin(self.emulating_counter*3.1415/180)}zC43_",
+                "UTF-8")
 
             self.emulated_input += bytes(
                 f"{self.emulating_counter}\r\n", "UTF-8")
