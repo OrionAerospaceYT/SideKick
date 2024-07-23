@@ -6,7 +6,18 @@ from PyQt5.QtGui import QTextDocumentFragment, QTextBlockFormat
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, NUM_OF_DATA_PTS
 
 class Terminal():
+    """
+    Handles the terminal data and widget to show the inputs from the hardware to the user.
 
+    Attributes:
+        text_edit(QTextEdit): the terminal widget
+        data_stream(list): all of the data which is still to be written to the terminal 
+        prev_scroll_pos(int): the last position of the scroll bar
+        running_average(list): a list of the lengths of every block of data written to the terminal
+
+    Methods:
+        TODO
+    """
     def __init__(self, text_edit):
         self.text_edit = text_edit
         self.text_edit.setReadOnly(True)
@@ -17,12 +28,19 @@ class Terminal():
         self.running_average = []
 
     def append_data(self, raw_data):
-        # Append the new data to the data stream
+        """
+        Append the new data to the data stream.
+
+        Args:
+            raw_data(list): all of the new input items from the device
+        """
         for item in raw_data:
             self.data_stream.append(item)
 
     def compile_batch(self):
-        # Compile the batch into a correctly formatted string
+        """
+        Compile the batch into a correctly formatted string.
+        """
         batch = ""
         msg_format = "<span style=\"color:#00f0c3;\">>>></span>{}"
         new_data = copy.deepcopy(self.data_stream)
@@ -42,7 +60,9 @@ class Terminal():
         return batch
 
     def write_text(self, fragment):
-         # Create the cursor and write the data to the screen
+        """
+        Create the cursor and write the data to the screen
+        """
         cursor = self.text_edit.textCursor()
         block_format = QTextBlockFormat()
         block_format.setBottomMargin(0)
@@ -52,7 +72,9 @@ class Terminal():
         cursor.insertFragment(fragment)
 
     def limit_line_count(self):
-        # Limit the number of lines in the QTextEdit
+        """
+        Limit the number of lines in the QTextEdit
+        """
         num_of_blocks = self.text_edit.document().blockCount()
         cursor = self.text_edit.textCursor()
         cursor.movePosition(cursor.End)
@@ -63,11 +85,16 @@ class Terminal():
         cursor.deleteChar()
 
     def calculate_num_of_blocks(self):
-        # Calculates the average number of lines
+        """
+        Calculates the average number of lines
+        """
         return int(NUM_OF_DATA_PTS * len(self.running_average) / (sum(self.running_average) + 1))
 
     def update_text(self):
-        # Check if there is any new data to write
+        """
+        Adds the new block of data to the terminal and maintains scrolling on the same data
+        that the user was looking at prior to the new data being added
+        """
         if not self.data_stream:
             return
 
@@ -102,4 +129,7 @@ class Terminal():
         self.limit_line_count()
 
     def clear(self):
+        """
+        Clear all of the text from the temrinal widget
+        """
         self.text_edit.setText("")
