@@ -4,9 +4,6 @@ and serial devices.
 It uses pySerial and has a loop running on a thread.
 """
 
-
-# import random
-
 import threading
 import time
 

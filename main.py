@@ -662,7 +662,6 @@ if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
-    app.setAttribute(qtc.Qt.AA_Use96Dpi)
 
     main_gui = MainGUI()
 
