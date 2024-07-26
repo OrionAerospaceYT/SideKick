@@ -180,7 +180,6 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         if actuator_type == "Servo":
             self.device_manager.send(f"servo{indx}-{value}")
-            print(f"servo{indx}-{value}")
         elif actuator_type == "Pin":
             print(f"pin{indx}-{value}")
             self.device_manager.send(f"pin{indx}-{value}")
@@ -233,13 +232,19 @@ class ActuatorGUI(qtw.QMainWindow):
             minimum = int(self.actuators_ui.min.text().strip())
             maximum = int(self.actuators_ui.max.text().strip())
         except ValueError:
-            print("<<< WARNING >>> PIN, MIN, MAX NEED TO BE INTEGERS")
-            return
+            pin = self.actuators_ui.pin.text().strip()
+            if pin in ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12"]:
+                minimum = int(self.actuators_ui.min.text().strip())
+                maximum = int(self.actuators_ui.max.text().strip())
+            else:
+                print("<<< WARNING >>> PIN, MIN, MAX NEED TO BE INTEGERS")
+                return
 
         if actuator_type == "Servo":
             self.actuators["servos"][name] = [pin, minimum, maximum]
 
             self.device_manager.send(f"addServo-{pin}")
+            print(f"addServo-{pin}")
 
             slider = self.create_new_slider(name, minimum, maximum, actuator_type)
             self.sliders["servos"].append(slider.horizontal_layout)

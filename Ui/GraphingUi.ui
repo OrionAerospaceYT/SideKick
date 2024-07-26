@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1195</width>
-    <height>724</height>
+    <height>770</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -133,7 +133,11 @@ QLabel {
   font-size: 20px;
   font-weight: bold;
 }
-
+QLabel#title {
+	color:#00f0c3;
+	font-size: 30px;
+ 	font-weight: bold;
+}
 /*Text Box Styling*/
 QTextBrowser {
   border: none; 
@@ -166,7 +170,6 @@ QScrollBar::handle
 	background-color: grey;
 	border-radius: 4px;
 	border:none;
-	min-height: 100px;
 }
 QScrollBar::up-arrow
 {
@@ -618,6 +621,35 @@ QLabel#logo_2{
           </widget>
          </item>
          <item>
+          <widget class="QSlider" name="data_points">
+           <property name="maximum">
+            <number>5000</number>
+           </property>
+           <property name="value">
+            <number>2500</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -632,6 +664,13 @@ QLabel#logo_2{
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox">
+           <property name="text">
+            <string>SideKick Lite</string>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_5">
@@ -935,6 +974,22 @@ border-radius: 20px;
 }</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
+         <item row="2" column="2">
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Maximum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="0" column="1">
           <spacer name="verticalSpacer_4">
            <property name="orientation">
@@ -951,8 +1006,24 @@ border-radius: 20px;
            </property>
           </spacer>
          </item>
-         <item row="1" column="2">
-          <spacer name="horizontalSpacer_8">
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Maximum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <spacer name="horizontalSpacer_7">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -967,8 +1038,8 @@ border-radius: 20px;
            </property>
           </spacer>
          </item>
-         <item row="1" column="1">
-          <widget class="QTextBrowser" name="terminal">
+         <item row="2" column="1">
+          <widget class="QTextEdit" name="terminal">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -993,37 +1064,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="1" column="1">
+          <widget class="QLabel" name="title">
+           <property name="text">
+            <string>Terminal</string>
            </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Maximum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1">
-          <spacer name="verticalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Maximum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>10</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
         </layout>
        </widget>

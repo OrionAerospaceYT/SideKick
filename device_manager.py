@@ -4,18 +4,14 @@ and serial devices.
 It uses pySerial and has a loop running on a thread.
 """
 
-
-# import random
-
 import threading
 import time
 
-#import numpy as np
+import numpy as np
 
 import serial
 import serial.tools.list_ports
 
-from globals import TERMINAL_BEGINNING, TERMINAL_ENDING
 from globals import GRAPH_BEGINNING, START_REC, END_REC
 
 
@@ -119,7 +115,6 @@ class DeviceManager():
 
         self.raw_data = []
 
-        # private definitions
         self.failed_recv = 0
         self.change_in_data = []
         self.emulated_input = b""
@@ -134,9 +129,10 @@ class DeviceManager():
         Args:
             message (str): the message to send to the device
         """
-
         if self.device:
+            print("Sending...")
             self.device.write(f"{message}\n".encode("UTF-8"))
+            print("Sent")
 
     def device_parse_data(self, buffer:str) -> str:
         """
@@ -151,18 +147,18 @@ class DeviceManager():
         try:
             decoded_buffer = buffer.decode("UTF-8")
         except UnicodeDecodeError:
-            decoded_buffer = TERMINAL_BEGINNING + "ERROR" + TERMINAL_ENDING
+            decoded_buffer = "ERROR"
+            return buffer
 
-        terminal_beginning = decoded_buffer.startswith(TERMINAL_BEGINNING)
-        graph_beginning = decoded_buffer.startswith(GRAPH_BEGINNING)
-
-        if terminal_beginning or graph_beginning:
-            index = 0
+        split_data = decoded_buffer.split("\r\n")
+        if decoded_buffer.endswith("\r\n"):
+            for item in split_data[1:]:
+                self.raw_data.append(item)
+            buffer = (split_data[0] + "\r\n").encode("UTF-8")
         else:
-            index = 1
-
-        self.raw_data.append(decoded_buffer.split("\r\n")[index])
-        buffer = buffer.replace(buffer.split(b"\r\n")[index] + b"\r\n", b"")
+            for item in split_data[1:-1]:
+                self.raw_data.append(item)
+            buffer = (split_data[0] + "\r\n" + split_data[-1]).encode("UTF-8")
 
         if START_REC.encode("UTF-8") in buffer:
             self.start_rec = True
@@ -175,6 +171,41 @@ class DeviceManager():
         self.raw_data = list(filter(None, self.raw_data))
 
         return buffer
+
+    def parse_buffer(self, raw_data):
+        """
+        Processes raw data to ensure that graph names that are the same are
+        not on the same line and so inserts new lines where they should be
+        in case they are skipped or the user forgot.
+
+        Args:
+            raw_data (str): the raw data that may be missing newlines.
+
+        Returns:
+            str: the raw data with new lines
+        """
+        marker = GRAPH_BEGINNING.encode("UTF-8")
+        output_list = []
+        new_line_data = raw_data.split(b"\r\n")
+
+        for line in new_line_data:
+            split_data = line.split(marker)
+            graph_keys = []
+
+            for i, data in enumerate(split_data):
+                if not line.startswith(marker) and i == 0:
+                    continue
+                if data.count(b",") > 1:
+                    split = data.split(b",")
+                    if split[0]+b","+split[1] not in graph_keys:
+                        graph_keys.append(split[0]+b","+split[1])
+                    else:
+                        split_data[i-1] = split_data[i-1]+b"\r\n"
+                        graph_keys = []
+
+            output_list.append(marker.join(split_data))
+
+        return b"\r\n".join(output_list)
 
     def device_data(self) -> str:
         """
@@ -215,41 +246,6 @@ class DeviceManager():
 
         print("Data on terminal >>> " + string)
 
-    def parse_raw_data(self, raw_data):
-        """
-        Processes raw data to ensure that graph names that are the same are
-        not on the same line and so inserts new lines where they should be
-        in case they are skipped or the user forgot.
-
-        Args:
-            raw_data (str): the raw data that may be missing newlines.
-
-        Returns:
-            str: the raw data with new lines
-        """
-        marker = GRAPH_BEGINNING.encode("UTF-8")
-        output_list = []
-        new_line_data = raw_data.split(b"\r\n")
-
-        for line in new_line_data:
-            split_data = line.split(marker)
-            graph_keys = []
-
-            for i, data in enumerate(split_data):
-                if not line.startswith(marker) and i == 0:
-                    continue
-                if data.count(b",") > 1:
-                    split = data.split(b",")
-                    if split[0]+b","+split[1] not in graph_keys:
-                        graph_keys.append(split[0]+b","+split[1])
-                    else:
-                        split_data[i-1] = split_data[i-1]+b"\r\n"
-                        graph_keys = []
-
-            output_list.append(marker.join(split_data))
-
-        return b"\r\n".join(output_list)
-
     def threaded_get_raw_data(self, port:str, baud:int, dev=False):
         """
         Raw input data from the serial device
@@ -266,7 +262,7 @@ class DeviceManager():
 
         if not dev:
             try:
-                self.device = serial.Serial(port, baud, rtscts=True)
+                self.device = serial.Serial(port, baud)
                 #initial_data = b""
                 #while not initial_data:
                 #    initial_data = self.device_data()
@@ -290,13 +286,12 @@ class DeviceManager():
 
             buffer += raw_data
             buffer = buffer.replace(b"\r\n\r\n", b"\r\n")
-            buffer = self.parse_raw_data(buffer)
+            buffer = self.parse_buffer(buffer)
 
             if buffer.startswith(b"\r\n"):
                 buffer = buffer[2:]
 
-            while buffer.count(b"\r\n") > 1 or buffer.endswith(b"\r\n"):
-                buffer = self.device_parse_data(buffer)
+            buffer = self.device_parse_data(buffer)
 
         if self.device:
             self.device.close()
@@ -389,18 +384,18 @@ class DeviceManager():
         """
 
         while self.emulating:
+            if self.emulating_counter % 100 > 49:
+                self.emulated_input += bytes("l058~Step Func,1,1zC43_","UTF-8")
+            else:
+                self.emulated_input += bytes("l058~Step Func,1,-1zC43_","UTF-8")
 
-            # self.emulated_input += random.choice(MESSAGES)
-            #self.emulated_input += bytes(f"t({self.emulating_counter})", "UTF-8")
-            #self.emulated_input += bytes(
-            #    f"g(sin, 1, {np.sin(self.emulating_counter * np.pi / 180)})", "UTF-8")
-
-            #self.emulated_input +=  bytes(
-            #    f"g(cos, 1, {np.cos(self.emulating_counter * np.pi / 180)})", "UTF-8")
-            #self.emulated_input += b"\r\n
             self.emulated_input += bytes(
-                f"{TERMINAL_BEGINNING}{self.emulating_counter}{TERMINAL_ENDING}\r\n", "UTF-8")
+                f"l058~Sin(x),1,{np.sin(self.emulating_counter*3.1415/180)}zC43_",
+                "UTF-8")
+
+            self.emulated_input += bytes(
+                f"{self.emulating_counter}\r\n", "UTF-8")
 
             self.emulating_counter += 1
 
-            time.sleep(0.5)
+            time.sleep(0.005)

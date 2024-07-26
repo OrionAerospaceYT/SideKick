@@ -1,45 +1,43 @@
 #pragma once
 
-//-----Internals------
+// -----Internals------
 #include "sensors.h"
 #include "actuators.h"
 #include "sub_task.h"
 #include "utility.h"
-#include "sidekick.h"
-//-----Internals------
+#include "control.h"
+#include "time_handler.h"
+// -----Internals------
+
+#include "orientation.h"
 
 // Tasks go here-- this keeps the main file clean and focused on the "flow" of tasks
 // Our general functions will be defined here things like our main loops
 // Long sections of code or repeated code loops can be moved to sub_task.h
 
 // The functions in place here can be changed to suit your needs
-// The ones listed here serve as inspiration--feel free to change them as you need -- but remember to change your Tasks in main.h
-namespace task
-{
+// The ones listed here serve as inspiration--feel free to change them as
+// you need -- but remember to change your Tasks in main.h
+
+namespace task {
 
     // Globals can be defined here
-    String inputString = "";
-
     // Can be used for code that only runs once
     // This can also be run multiple times by changing the code flow in main.h
-    void Setup(){
-        subtask::exampleLongFunc(); // you can delete this purely for demonstration
+    void Setup() {
+      String inputString = "";
     }
 
     // Can be used to automatically test actuators
     // Very useful for quick plug and play testing
-    void ActuatorTest(){
-    }
+    void ActuatorTest() {}
 
     // Can be used to print sensor values and any other required calibration
-    void Calibration(){
-    }
+    void Calibration() {}
 
     // Code that loops
-    void Loop()
-    {
+    void Loop() {
       while (Serial.available()) {
-
         String command = Serial.readStringUntil('\n');
         int dividerIndex = command.indexOf('-');
 
@@ -51,8 +49,7 @@ namespace task
         } else if (command.startsWith("addServo")) {
 
           String servoNumberString = command.substring(dividerIndex + 1);
-          int servoNumber = servoNumberString.toInt();
-          actuators::addServo(servoNumber);
+          actuators::addServo(servoNumberString);
 
         } else if (command.startsWith("servo")) {
 
@@ -84,4 +81,4 @@ namespace task
       }
     }
 
-} // namespace task
+}  // namespace task

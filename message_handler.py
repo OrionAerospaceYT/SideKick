@@ -5,7 +5,6 @@ This file imports device manager and gets the data
 
 import re
 import time
-from globals import TERMINAL_HEADER, TERMINAL_BEGINNING, TERMINAL_ENDING
 from globals import MARKER, NUM_OF_DATA_PTS, ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
@@ -24,7 +23,7 @@ class MessageHandler():
         self.line_edit = line_edit
 
         self.message_string = ""
-        self.terminal_html = TERMINAL_HEADER
+        self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
 
@@ -34,26 +33,6 @@ class MessageHandler():
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>" + MARKER
-
-    def decode_terminal_data(self, raw_input):
-        """
-        Combines all terminals in one message to a single line for terminal
-
-        Args:
-            raw_input (string): raw data in the form of "g(name,1,data)t(text)g(name,2,data)"
-        Returns:
-            terminal_data (strig): a single line string to have html added to it later
-        """
-        raw_list = raw_input.split(TERMINAL_BEGINNING)
-        terminal_data = ""
-
-        for data in raw_list:
-            data = data.split(TERMINAL_ENDING)
-            not_graph = GRAPH_BEGINNING not in data[0] and GRAPH_ENDING not in data[0]
-            if not_graph and data[0] != "" and "\r" not in data[0]:
-                terminal_data += " " + data[0]
-
-        return terminal_data
 
     def get_terminal(self, raw_data, live=True, showing_data=False):
         """
@@ -79,7 +58,7 @@ class MessageHandler():
         # Decoding the raw data
         decoded_data = []
         for item in raw_data:
-            decoded_string = self.decode_terminal_data(item)
+            decoded_string = re.sub(f'{GRAPH_BEGINNING}.*?{GRAPH_ENDING}', '', item)
             if len(decoded_string) != 0:
                 decoded_data.append(decoded_string)
 
@@ -98,7 +77,7 @@ class MessageHandler():
             self.message_string += item + MARKER
 
         # Display data
-        self.terminal_html = TERMINAL_HEADER + self.message_string
+        self.terminal_html = self.message_string
 
         # Remove unnecessary comments from the end of the HTML
         # this should save some memory
@@ -115,7 +94,7 @@ class MessageHandler():
         the QTextBrowser
         """
         self.message_string = ""
-        self.terminal_html = TERMINAL_HEADER
+        self.terminal_html = ""
 
     def get_line_number(self, string):
         """

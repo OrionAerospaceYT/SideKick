@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\GraphingUi.ui'
+# Form implementation generated from reading ui file 'GraphingUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1195, 724)
+        MainWindow.resize(1195, 770)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("/*General Styling*/\n"
 "* {\n"
@@ -132,7 +132,11 @@ class Ui_MainWindow(object):
 "  font-size: 20px;\n"
 "  font-weight: bold;\n"
 "}\n"
-"\n"
+"QLabel#title {\n"
+"    color:#00f0c3;\n"
+"    font-size: 30px;\n"
+"     font-weight: bold;\n"
+"}\n"
 "/*Text Box Styling*/\n"
 "QTextBrowser {\n"
 "  border: none; \n"
@@ -165,7 +169,6 @@ class Ui_MainWindow(object):
 "    background-color: grey;\n"
 "    border-radius: 4px;\n"
 "    border:none;\n"
-"    min-height: 100px;\n"
 "}\n"
 "QScrollBar::up-arrow\n"
 "{\n"
@@ -394,10 +397,21 @@ class Ui_MainWindow(object):
         self.arduino_cli = QtWidgets.QPushButton(self.side_menu)
         self.arduino_cli.setObjectName("arduino_cli")
         self.dhsgd.addWidget(self.arduino_cli)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 1000, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.data_points = QtWidgets.QSlider(self.side_menu)
+        self.data_points.setMaximum(5000)
+        self.data_points.setProperty("value", 2500)
+        self.data_points.setOrientation(QtCore.Qt.Horizontal)
+        self.data_points.setObjectName("data_points")
+        self.dhsgd.addWidget(self.data_points)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.dhsgd.addItem(spacerItem5)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 1000, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.dhsgd.addItem(spacerItem6)
+        self.checkBox = QtWidgets.QCheckBox(self.side_menu)
+        self.checkBox.setObjectName("checkBox")
+        self.dhsgd.addWidget(self.checkBox)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.dhsgd.addItem(spacerItem7)
         self.gridLayout.addWidget(self.side_menu, 2, 1, 5, 1)
         self.bottom_update = QtWidgets.QLabel(self.centralwidget)
         self.bottom_update.setText("")
@@ -526,8 +540,8 @@ class Ui_MainWindow(object):
         self.record_light.setText("")
         self.record_light.setObjectName("record_light")
         self.horizontalLayout.addWidget(self.record_light)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem7)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem8)
         self.top_update = QtWidgets.QLabel(self.horizontalFrame)
         self.top_update.setMinimumSize(QtCore.QSize(400, 0))
         self.top_update.setMaximumSize(QtCore.QSize(400, 16777215))
@@ -540,10 +554,10 @@ class Ui_MainWindow(object):
         self.help.setObjectName("help")
         self.horizontalLayout.addWidget(self.help)
         self.gridLayout.addWidget(self.horizontalFrame, 0, 0, 1, 9)
-        spacerItem8 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem8, 6, 8, 1, 1)
-        spacerItem9 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem9, 6, 0, 1, 1)
+        spacerItem9 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem9, 6, 8, 1, 1)
+        spacerItem10 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem10, 6, 0, 1, 1)
         self.terminal_container = QtWidgets.QWidget(self.centralwidget)
         self.terminal_container.setStyleSheet("QWidget {\n"
 "    background-color: #2b2b35;\n"
@@ -552,11 +566,15 @@ class Ui_MainWindow(object):
         self.terminal_container.setObjectName("terminal_container")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.terminal_container)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        spacerItem10 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        self.gridLayout_4.addItem(spacerItem10, 0, 1, 1, 1)
         spacerItem11 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_4.addItem(spacerItem11, 1, 2, 1, 1)
-        self.terminal = QtWidgets.QTextBrowser(self.terminal_container)
+        self.gridLayout_4.addItem(spacerItem11, 2, 2, 1, 1)
+        spacerItem12 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.gridLayout_4.addItem(spacerItem12, 0, 1, 1, 1)
+        spacerItem13 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        self.gridLayout_4.addItem(spacerItem13, 3, 1, 1, 1)
+        spacerItem14 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout_4.addItem(spacerItem14, 2, 0, 1, 1)
+        self.terminal = QtWidgets.QTextEdit(self.terminal_container)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -566,18 +584,17 @@ class Ui_MainWindow(object):
         self.terminal.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.terminal.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.terminal.setObjectName("terminal")
-        self.gridLayout_4.addWidget(self.terminal, 1, 1, 1, 1)
-        spacerItem12 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_4.addItem(spacerItem12, 1, 0, 1, 1)
-        spacerItem13 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        self.gridLayout_4.addItem(spacerItem13, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.terminal, 2, 1, 1, 1)
+        self.title = QtWidgets.QLabel(self.terminal_container)
+        self.title.setObjectName("title")
+        self.gridLayout_4.addWidget(self.title, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.terminal_container, 2, 3, 3, 2)
-        spacerItem14 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem14, 1, 6, 1, 1)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem15, 2, 5, 1, 1)
-        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem16, 3, 6, 1, 1)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem15, 1, 6, 1, 1)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem16, 2, 5, 1, 1)
+        spacerItem17 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem17, 3, 6, 1, 1)
         self.gridLayout.setColumnStretch(3, 2)
         self.gridLayout.setColumnStretch(6, 3)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
@@ -609,6 +626,7 @@ class Ui_MainWindow(object):
         self.export_save.setText(_translate("MainWindow", "Export Save"))
         self.library_manager.setText(_translate("MainWindow", "Library Manager"))
         self.arduino_cli.setText(_translate("MainWindow", "Arduino CLI"))
+        self.checkBox.setText(_translate("MainWindow", "SideKick Lite"))
         self.file.setText(_translate("MainWindow", "Menu"))
         self.device.setText(_translate("MainWindow", "Device"))
         self.upload.setText(_translate("MainWindow", "Upload"))
@@ -620,6 +638,7 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.title.setText(_translate("MainWindow", "Terminal"))
 
 
 if __name__ == "__main__":

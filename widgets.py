@@ -12,7 +12,7 @@ import numpy as np
 
 from PyQt5 import QtWidgets as qtw
 
-from globals import GRAPH_BEGINNING, GRAPH_ENDING, TERMINAL_BEGINNING, TERMINAL_ENDING
+from globals import GRAPH_BEGINNING, GRAPH_ENDING
 from globals import NUM_OF_DATA_PTS, COLOUR_ORDER
 
 class Graph:
@@ -75,10 +75,6 @@ class Graph:
         self.graph.getAxis("left").setTextPen((255, 255, 255))
         self.graph.getAxis("bottom").setTextPen((255, 255, 255))
 
-        # On click stop auto scrolling
-        #self.graph.scene().sigMouseClicked.connect(self.set_auto_scroll_false)
-        #self.set_auto_scroll_false()
-
     def clear_graph(self):
         """
         Removes all data from graph
@@ -100,26 +96,34 @@ class Graph:
             graph_data (list): holds the values for the graph
         """
 
+        raw_list = []
         graph_data = []
-        raw_list = raw_input.split(GRAPH_BEGINNING)
+        raw_input = raw_input.split(GRAPH_BEGINNING)
 
-        # for each item of data
-        for data in raw_list:
-            data = data.split(GRAPH_ENDING)
-            not_terminal = TERMINAL_BEGINNING not in data[0] and TERMINAL_ENDING not in data[0]
-            if not_terminal and data[0].count(',') == 2:
-                valid_graph_data = data[0].replace(" ", "").split(",")
-                # if the data belongs to this graph
-                if valid_graph_data[1] == self.key:
-                    # if the data is numerical and can be graphed
-                    if valid_graph_data[2].replace(".","").replace("-","").isnumeric():
-                        graph_data.append(float(valid_graph_data[2]))
-                    else:
-                        print(f"Non numeric value in: {valid_graph_data[0]}, {valid_graph_data[2]}")
+        for i, data in enumerate(raw_input):
+            if GRAPH_ENDING in data:
+                raw_list.append(raw_input[i].split(GRAPH_ENDING)[0])
 
-                    # if the label is not already existing
-                    if valid_graph_data[0] not in self.labels:
-                        self.labels.append(valid_graph_data[0])
+        for graph in raw_list:
+
+            graph = graph.split(",")
+            name, key, data = graph[0], graph[1], graph[2]
+
+            if key != self.key:
+                continue
+
+            if name not in self.labels:
+                self.labels.append(name)
+
+            is_num = data.replace("-", "").replace(".", "").isnumeric()
+
+            if -1 < data.count("-") < 2 and -1 < data.count(".") < 2 and is_num:
+                graph_data.append(float(data))
+                if float(data) > 60:
+                    print(data)
+            else:
+                graph_data.append(np.nan)
+                print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
 
         return graph_data
 
@@ -192,34 +196,6 @@ class Graph:
             # update plot
             pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
             plot.setData(np.array(plots[index], dtype=float), pen=pen)
-
-        #self.auto_scroll(plots)
-
-    def auto_scroll(self, plots):
-        """
-        If autoscroll is enabled, focus on the last 1000 elements
-
-        Args:
-            plots (list): the data
-        """
-
-        if self.graph.plotItem.getViewBox().autoRangeEnabled()[0]:
-            self.resize = True
-
-        try:
-            if len(plots) > 0 and self.resize:
-                last_indx = max(0, len(plots[0]) - 1500)
-                self.graph.plotItem.setXRange(last_indx, len(plots[0])-1, padding=0)
-        except IndexError:
-            pass
-
-    def set_auto_scroll_false(self):
-        """
-        Sets the value of resize to false
-        """
-        self.resize = False
-        self.graph.getViewBox().setAutoPan(False)
-        self.graph.getViewBox().setAutoVisible(False)
 
 
 class Widgets:

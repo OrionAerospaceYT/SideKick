@@ -22,6 +22,7 @@ from library import LibraryManager
 from device_manager import DeviceManager
 from file_manager import FileManager
 from cli_manager import CliManager
+from terminal_manager import Terminal
 
 from widgets import Graph
 from widgets import RecordLight
@@ -77,6 +78,8 @@ class MainGUI(qtw.QMainWindow):
             self.file_and_device_widgets()[1],
             self.main_ui.side_menu)
 
+        self.terminal = Terminal(self.main_ui.terminal)
+
         # Attributes and initial config here
         self.side_menu.hide_menu()
 
@@ -112,8 +115,6 @@ class MainGUI(qtw.QMainWindow):
 
         self.main_ui.supported_boards.setCurrentText(board)
 
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-
         self.file_manager.current_project = project
 
         self.device_manager.auto_connect = True
@@ -122,7 +123,7 @@ class MainGUI(qtw.QMainWindow):
         self.export_error = False
 
         timer = qtc.QTimer(self)
-        timer.setInterval(25)
+        timer.setInterval(0)
         timer.timeout.connect(self.update)
         timer.start()
 
@@ -298,12 +299,6 @@ class MainGUI(qtw.QMainWindow):
                 target = self.main_ui.com_ports.findText(port)
                 self.main_ui.com_ports.removeItem(target)
 
-    def update_terminal(self):
-        """
-        updates the html of the terminal
-        """
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
-
     def update(self):
         """
         calls all update functions
@@ -348,14 +343,7 @@ class MainGUI(qtw.QMainWindow):
         self.update_compile_and_upload()
 
         # terminal data
-        if (self.device_manager.connected) or (not self.showing_data):
-            last_scroll_value = self.main_ui.terminal.verticalScrollBar().value()
-
-            if last_scroll_value == 0:
-                #start_time = time.perf_counter()
-                self.main_ui.terminal.setText(self.message_handler.terminal_html)
-                #print(self.message_handler.terminal_html)
-                #end_time = time.perf_counter()
+        self.terminal.update_text()
 
         # device messages
         if self.device_manager.connected:
@@ -448,6 +436,9 @@ class MainGUI(qtw.QMainWindow):
         Disconnects the device to upload
         Compiles the script and then uploads the script
         """
+        if self.upload:
+            return
+
         temp = self.file_manager.current_project
 
         if actuator:
@@ -491,41 +482,40 @@ class MainGUI(qtw.QMainWindow):
 
         self.file_manager.current_project = temp
 
-    def display_save(self, already_called=False, save=None):
+    def display_save(self, save=None):
         """
         Loads the saved data onto the graphs on the GUI
 
         Args:
             save (str): the save file name
-            already_called (bool): for some reason this function needs to be called twice
         """
-        self.clear_all_data()
 
+        # Disconnect all devices and set the GUI to the showing save mode
         self.showing_data = True
         self.device_manager.terminate_device()
+        self.clear_all_data()
 
-        if not already_called:
-            save, _ =  qtw.QFileDialog.getOpenFileName(
-                self, "Open SideKick project", self.file_manager.save_manager.save_folder_path,
-                "Save Files (*.sk)")
-            self.displayed_save = save
+        # Load the save's data into a variable and check there is data
+        save, _ =  qtw.QFileDialog.getOpenFileName(
+            self, "Open SideKick project",
+            self.file_manager.save_manager.save_folder_path,
+            "Save Files (*.sk)")
 
-        if save:
-            raw_data = self.file_manager.save_manager.get_saved_data(save)
-        else:
+        if not save:
             return
 
+        self.displayed_save = save
+        raw_data = self.file_manager.save_manager.get_saved_data(save)
+
+        # Set the data for the graph and the HTML for the terminal
         self.message_handler.get_terminal(raw_data, live=False, showing_data=True)
         self.top_graph.set_graph_data(raw_data)
         self.bottom_graph.set_graph_data(raw_data)
 
-        self.update_terminal()
+        # Display the save's data to the user on the screen
         self.top_graph.update_graph()
         self.bottom_graph.update_graph()
-
-        if not already_called:
-            time.sleep(0.1)
-            self.display_save(True, save)
+        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
 
     def demo_function(self):
         """
@@ -546,7 +536,8 @@ class MainGUI(qtw.QMainWindow):
         """
         file_path, _ =  qtw.QFileDialog.getOpenFileName(
             self, "Open SideKick project",
-            self.file_manager.paths["projects"], "Arduino Files (*.ino)")
+            self.file_manager.paths["projects"],
+            "Arduino Files (*.ino)")
 
         if file_path:
             self.file_manager.set_current_project(file_path)
@@ -577,7 +568,7 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph.clear_graph()
 
         self.message_handler.clear_terminal()
-        self.main_ui.terminal.setHtml(self.message_handler.terminal_html)
+        self.terminal.clear()
 
     def export_save(self):
         """
@@ -642,6 +633,7 @@ class MainGUI(qtw.QMainWindow):
                 self.message_handler.get_terminal(raw_data)
                 self.top_graph.set_graph_data(raw_data)
                 self.bottom_graph.set_graph_data(raw_data)
+                self.terminal.append_data(raw_data)
 
             # Recording functionality
             if self.record_light.blinking:
@@ -670,7 +662,6 @@ if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
-    app.setAttribute(qtc.Qt.AA_Use96Dpi)
 
     main_gui = MainGUI()
 
