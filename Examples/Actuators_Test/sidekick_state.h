@@ -1,9 +1,8 @@
 #pragma once
 
 #include "utility.h"
-#include "vector.h"
+#include "quat_vec.h"
 
-template <typename T = float>
 struct SideKickState {
     Vec ypr;        // yaw pitch roll
     Vec ypr_rate;   // yaw pitch roll rates

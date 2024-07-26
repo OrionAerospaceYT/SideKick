@@ -1,4 +1,5 @@
 #include "internal.h"
+#include "quat_vec.h"
 void setup() {
 sm::SM_INIT();
   }

@@ -9,9 +9,10 @@
 // ------Internals----
 
 Timer sk_timer = Timer();
-SideKickState<> state_info = SideKickState<>();
+SideKickState state_info = SideKickState();
+
+
+
 void SideKick() {
     Serial.begin(115200);
-    actuators::init();
-    sensors::init();
 }

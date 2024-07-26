@@ -1,22 +1,23 @@
 #pragma once
 
-//-----Internals------
+// -----Internals------
 #include "utility.h"
 #include "array.h"
 #include "transition_map.h"
 #include "task.h"
-//-----Internals------
+// -----Internals------
 
 // You can change the Tasks in here, but make sure to follow the naming convention
 // These are the set of tasks our robot will complete
-//(Note: this does not specify the order)
-const int TASK_COUNT = 4;
+// (Note: this does not specify the order)
+#define TASK_COUNT 4
 enum Task
 {
     Setup,
     ActuatorTest,
     Calibration,
-    Loop
+    Loop,
+    Loop2
 };
 Array<taskFunc, TASK_COUNT> TaskFlow(task::Setup, task::ActuatorTest, task::Calibration,
  task::Loop);
@@ -34,5 +35,4 @@ void taskSchedule()
     transition_map.add(Setup, LOOP_ONCE, ActuatorTest);
     transition_map.add(ActuatorTest, LOOP_ONCE, Calibration);
     transition_map.add(Calibration, LOOP_ONCE, Loop);
-
 }
