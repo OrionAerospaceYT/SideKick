@@ -115,7 +115,6 @@ class DeviceManager():
 
         self.raw_data = []
 
-        # private definitions
         self.failed_recv = 0
         self.change_in_data = []
         self.emulated_input = b""
@@ -131,7 +130,9 @@ class DeviceManager():
             message (str): the message to send to the device
         """
         if self.device:
+            print("Sending...")
             self.device.write(f"{message}\n".encode("UTF-8"))
+            print("Sent")
 
     def device_parse_data(self, buffer:str) -> str:
         """
@@ -261,7 +262,7 @@ class DeviceManager():
 
         if not dev:
             try:
-                self.device = serial.Serial(port, baud, rtscts=True)
+                self.device = serial.Serial(port, baud)
                 #initial_data = b""
                 #while not initial_data:
                 #    initial_data = self.device_data()
