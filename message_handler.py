@@ -13,13 +13,13 @@ class MessageHandler():
     Gets all text/graph data to be displayed on the front end
     """
 
-    def __init__(self, layout, widget, expansion_widgets=None, line_edit=None):
+    def __init__(self, layout, widget, expansion_screen=None, line_edit=None):
 
         self.debug_window = False
         self.minimized = True
         self.widget = widget
         self.layout = layout
-        self.expansion_widgets = expansion_widgets
+        self.expansion_screen = expansion_screen
         self.line_edit = line_edit
 
         self.message_string = ""
@@ -244,12 +244,10 @@ class MessageHandler():
             if button is not None:
                 button.setText("Minimize")
             self.line_edit.setPlaceholderText("Enter arduino-cli message here.")
-            for item in self.expansion_widgets:
-                item.setVisible(False)
+            self.expansion_screen.setVisible(False)
         else:
             if button is not None:
                 button.setText("Expand")
             self.line_edit.setPlaceholderText("Enter device message here.")
-            for item in self.expansion_widgets:
-                item.setVisible(True)
+            self.expansion_screen.setVisible(True)
         self.minimized = not self.minimized

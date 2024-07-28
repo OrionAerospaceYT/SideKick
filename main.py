@@ -68,14 +68,12 @@ class MainGUI(qtw.QMainWindow):
         self.bottom_graph = Graph(key="2")
         self.message_handler = MessageHandler(self.main_ui.debugger,
                                               self.main_ui.debug_log,
-                                              [self.main_ui.terminal_container,
-                                               self.main_ui.top_widget,
-                                               self.main_ui.bottom_widget],
+                                              self.main_ui.home_screen,
                                               self.main_ui.message)
         self.record_light = RecordLight()
         self.side_menu = SideMenu(
-            self.file_and_device_widgets()[0],
-            self.file_and_device_widgets()[1],
+            self.main_ui.settings,
+            self.main_ui.device_settings,
             self.main_ui.side_menu)
 
         self.terminal = Terminal(self.main_ui.terminal)
@@ -126,31 +124,6 @@ class MainGUI(qtw.QMainWindow):
         timer.setInterval(0)
         timer.timeout.connect(self.update)
         timer.start()
-
-    def file_and_device_widgets(self):
-        """
-        Connects all of the buttons and other widgets
-        to the side menu class
-
-        Returns:
-            list: the list of file manager widgets
-            list: the list of device manager widgets
-        """
-        file_manager = [self.main_ui.selected_project,
-                        self.main_ui.select_project,
-                        self.main_ui.new_project,
-                        self.main_ui.show_save,
-                        self.main_ui.library_manager,
-                        self.main_ui.arduino_cli,
-                        self.main_ui.export_save]
-
-        device_manager = [self.main_ui.tune_actuators,
-                          self.main_ui.boards_manager,
-                          self.main_ui.baud_rate,
-                          self.main_ui.disconnect,
-                          self.main_ui.supported_boards]
-
-        return file_manager, device_manager
 
     def open_library_manager(self):
         """

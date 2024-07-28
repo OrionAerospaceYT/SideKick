@@ -337,7 +337,7 @@ class SideMenu:
             Hides the entire display (used on startup).
     """
 
-    def __init__(self, widgets_file:list, widgets_device:list, layout):
+    def __init__(self, widgets_file, widgets_device, layout):
 
         self.widgets_file = widgets_file
         self.widgets_device = widgets_device
@@ -361,14 +361,15 @@ class SideMenu:
             self.showing_device = not self.showing_device
             self.showing_file = False
 
+        if self.showing_device:
+            self.widgets_file.setVisible(self.showing_file)
+            self.widgets_device.setVisible(self.showing_device)
+        elif self.showing_file:
+            self.widgets_device.setVisible(self.showing_device)
+            self.widgets_file.setVisible(self.showing_file)
+
         self.layout.setVisible(
             self.showing_file or self.showing_device)
-
-        for item in self.widgets_device:
-            item.setVisible(self.showing_device)
-
-        for item in self.widgets_file:
-            item.setVisible(self.showing_file)
 
     def hide_menu(self):
         """
