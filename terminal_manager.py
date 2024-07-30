@@ -42,7 +42,7 @@ class Terminal():
         Compile the batch into a correctly formatted string.
         """
         batch = ""
-        msg_format = "<span style=\"color:#00f0c3;\">>>></span>{}"
+        msg_format = "<span style=\"color:#00f0c3;\">&> </span>{}"
         new_data = copy.deepcopy(self.data_stream)
         length = len(new_data)-1
         self.data_stream = self.data_stream[len(new_data):]
