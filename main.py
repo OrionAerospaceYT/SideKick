@@ -298,12 +298,11 @@ class MainGUI(qtw.QMainWindow):
         # set labels
         name = self.file_manager.parsed_project_name()
         if name:
+            if len(name) > 21:
+                name = name[0:18] + "..."
             self.main_ui.selected_project.setText(name)
         else:
             self.main_ui.selected_project.setText("Select A Project!")
-        self.main_ui.selected_project.setFixedWidth(150)
-        self.main_ui.selected_project.adjustSize()
-        self.adjust_label_text()
 
         # update functions
         self.update_ports()
@@ -324,15 +323,6 @@ class MainGUI(qtw.QMainWindow):
             self.main_ui.com_ports.setCurrentText(self.device_manager.port)
         else:
             self.main_ui.bottom_update.setText("Not Connected")
-
-    def adjust_label_text(self):
-        """
-        Adds an ellipsis to the end of the message on a label if it is too long
-        """
-        available_width = self.main_ui.selected_project.contentsRect().width()
-        elided_text = self.main_ui.selected_project.fontMetrics().elidedText(
-            self.main_ui.selected_project.text(), qtc.Qt.ElideRight, available_width)
-        self.main_ui.selected_project.setText(elided_text)
 
     def new_project(self):
         """
