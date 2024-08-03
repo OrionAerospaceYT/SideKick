@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1303</width>
-    <height>1154</height>
+    <height>805</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -179,7 +179,47 @@ QScrollBar::down-arrow
 
 QScrollArea {
 	border:none;
-}</string>
+}
+
+/*Slider style*/
+QSlider {
+    min-height: 20px;
+    max-height: 20px;
+}
+
+QSlider::groove:horizontal {
+    border: none;
+    height: 8px;
+    border-radius: 1px;
+}
+
+QSlider::handle:horizontal {
+    background: #00f0c3;
+    border: none;
+    width: 20px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    border-radius: 6px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #00d0a1;
+}
+
+QSlider::sub-page:horizontal {
+    background: #ffffff;
+    border: none;
+    height: 10px;
+    border-radius: 4px;
+}
+
+QSlider::add-page:horizontal {
+    background: #ffffff;
+    border: none;
+    height: 10px;
+    border-radius: 4px;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -295,7 +335,7 @@ QScrollArea {
            <property name="styleSheet">
             <string notr="true">QWidget {
 	background-color: #2b2b35;
-border-radius: 20px;
+	border-radius: 20px;
 }</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -515,7 +555,7 @@ p, li { white-space: pre-wrap; }
         <property name="styleSheet">
          <string notr="true">/*General Styling*/
 * {
-  font: 12pt &quot;Roboto &quot;;
+  font: 18pt &quot;Roboto &quot;;
   background-color: #25252f;
   color: #FFFFFF;
 }
@@ -993,7 +1033,7 @@ p, li { white-space: pre-wrap; }
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
