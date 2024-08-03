@@ -20,7 +20,6 @@
    <string notr="true">/*General Styling*/
 * {
   font: 18px &quot;Roboto &quot;;
-  line-height: 20px;
   background-color: #32323C;
   color: #FFFFFF;
 }
@@ -133,7 +132,9 @@ QLabel {
 QLabel#title {
 	color:#00f0c3;
 	font-size: 30px;
- 	font-weight: bold;
+}
+QLabel#bottom_update {
+	font-size: 24px;
 }
 /*Text Box Styling*/
 QTextBrowser {
@@ -555,7 +556,7 @@ p, li { white-space: pre-wrap; }
         <property name="styleSheet">
          <string notr="true">/*General Styling*/
 * {
-  font: 18pt &quot;Roboto &quot;;
+  font: 24px &quot;Roboto &quot;;
   background-color: #25252f;
   color: #FFFFFF;
 }
@@ -1054,8 +1055,8 @@ p, li { white-space: pre-wrap; }
          <string notr="true">/*General Styling*/
 * {
    font: 18px &quot;Roboto &quot;;
-  background-color: #2b2b35;
-  color: #FFFFFF;
+   background-color: #2b2b35;
+   color: #FFFFFF;
 }
 
 QFrame#side_menu {
