@@ -19,10 +19,10 @@
   <property name="styleSheet">
    <string notr="true">/*General Styling*/
 * {
-  font: 18px &quot;Roboto &quot;;
   background-color: #32323C;
   color: #FFFFFF;
 }
+
 
 /*Button Styling*/
 QPushButton {
@@ -45,20 +45,17 @@ QPushButton#new_project {
   padding-left: 10px;
   width: 10px;
 }
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
 QPushButton#render {
   image: url(Ui/SideKick_White.png);
   image-position: left;
   padding-left: 10px;
   width: 20px;
 }
-QPushButton#quit{
-  background-color: #2b2b35;
+QPushButton#disconnect {
+  image: url(Ui/Plug.png);
+  image-position: left;
+  padding-left: 10px;
+  width: 10px;
 }
 QPushButton:pressed {
   background-color: #000;
@@ -75,7 +72,7 @@ QComboBox {
   background-color: #252535;
   border: none;
   border-radius: 10px;
-  height: 40px;
+  height: 20px;
 }
 QComboBox:pressed {
   background-color: #000;
@@ -126,16 +123,16 @@ QLineEdit:hover:!pressed{
 }
 
 /*Label Styling*/
-QLabel {
-  font-weight: bold;
+QLabel{
+	font-weight: bold;
 }
-QLabel#title {
-	color:#00f0c3;
-	font-size: 30px;
+QLabel#logo_2{
+  background-color: #2b2b35;
+  image: url(Ui/SideKick_Logo.png);
+  width:200px;
+  height:100px;
 }
-QLabel#bottom_update {
-	font-size: 24px;
-}
+
 /*Text Box Styling*/
 QTextBrowser {
   border: none; 
@@ -220,9 +217,68 @@ QSlider::add-page:horizontal {
     height: 10px;
     border-radius: 4px;
 }
+
+/* Homescreen styling*/
+QWidget #bottom_widget{ 
+	background-color: #2b2b35;
+	border-radius:20px;
+}
+QWidget #top_widget{ 
+	background-color: #2b2b35;
+	border-radius:20px;
+}
+QWidget #terminal_container{
+	background-color: #2b2b35;
+	border-radius: 20px;
+}
+QTextEdit {
+	background-color: #2b2b35;
+	border: none;
+}
+QLabel#title {
+	color:#00f0c3;
+    background-color: #2b2b35;
+}
+
+/*Debugger styling*/
+QFrame#debugger_coloured{
+  background-color: #2b2b35;
+  border:none;
+  border-radius:20px;
+}
+QPushButton#full_screen{
+  background-color: #2b2b35;
+}
+QPushButton#quit{
+  background-color: #2b2b35;
+}
+QPushButton:pressed#full_screen{
+  background-color: #000;
+}
+QPushButton:hover:!pressed#full_screen{
+  background-color: #151525;
+}
+QPushButton:hover:!pressed#quit{
+  background-color: #ff0000;
+}
+
+/*Side menu styling*/
+QFrame#side_menu * {	
+	background-color: #2b2b35;
+}
+
+QFrame#side_menu {
+	background-color: #2b2b35;
+	border-radius:20px;
+	border: 3px solid;
+	border-color: #00f0c3;
+}
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <property name="leftMargin">
      <number>0</number>
@@ -334,10 +390,7 @@ QSlider::add-page:horizontal {
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true">QWidget {
-	background-color: #2b2b35;
-	border-radius: 20px;
-}</string>
+            <string notr="true"/>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
             <item row="2" column="2">
@@ -361,8 +414,8 @@ QSlider::add-page:horizontal {
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto '; font-size:18px; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Roboto '; font-size:14px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -439,10 +492,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">* {
-	background-color: #2b2b35;
-	border-radius:20px;
-}</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -461,10 +511,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">* {
-	background-color: #2b2b35;
-	border-radius:20px;
-}</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -556,81 +603,13 @@ p, li { white-space: pre-wrap; }
         <property name="styleSheet">
          <string notr="true">/*General Styling*/
 * {
-  font: 24px &quot;Roboto &quot;;
   background-color: #25252f;
-  color: #FFFFFF;
 }
 
 /*Button Styling*/
-QPushButton {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  border: none;
-  border-radius: 10px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
+
 QPushButton:hover:!pressed{
   background-color: #151525;
-}
-
-/*Combo Box Styling*/
-QComboBox {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
-}
-QComboBox:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Line Edit Styling*/
-QLineEdit {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
-  background-color: #252535;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QLineEdit:hover:!pressed{
-  background-color: #151525;
-}
-
-/*Label Styling*/
-QLabel {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 6px;
-}
-
-/*Text Box Styling*/
-QTextBrowser {
-  border: none;
-  padding-left: 40px;
-  background-color: #171727;
-}
-
-QMenuBar {
-  background-color: #151525;
-}
-
-/*Removes the border from the scroll area*/
-QScrollArea {
-  border: none;
 }</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -826,15 +805,7 @@ QScrollArea {
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true">QFrame{
-   font: 10pt &quot;Roboto &quot;;
-  font-size: 14px;
-  background-color: #2b2b35;
-  color: #FFFFFF;
-  border:none;
-  border-radius:20px;
-}
-</string>
+            <string notr="true"/>
            </property>
            <layout class="QGridLayout" name="debugger_1">
             <property name="sizeConstraint">
@@ -846,20 +817,7 @@ QScrollArea {
             <item row="1" column="1">
              <widget class="QPushButton" name="full_screen">
               <property name="styleSheet">
-               <string notr="true">QPushButton{
-   font: 10pt &quot;Roboto &quot;;
-  font-size: 14px;
-  background-color: #2b2b35;
-  color: #FFFFFF;
-  border:none;
-  border-radius:10px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
-QPushButton:hover:!pressed{
-  background-color: #151525;
-}</string>
+               <string notr="true"/>
               </property>
               <property name="text">
                <string>Expand</string>
@@ -869,9 +827,7 @@ QPushButton:hover:!pressed{
             <item row="1" column="2">
              <widget class="QPushButton" name="quit">
               <property name="styleSheet">
-               <string notr="true">QPushButton:hover:!pressed{
-  background-color: #ff0000;
-}</string>
+               <string notr="true"/>
               </property>
               <property name="text">
                <string>x</string>
@@ -906,8 +862,8 @@ QPushButton:hover:!pressed{
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto '; font-size:14px; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Roboto '; font-size:14px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -1052,68 +1008,19 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">/*General Styling*/
-* {
-   font: 18px &quot;Roboto &quot;;
-   background-color: #2b2b35;
-   color: #FFFFFF;
-}
-
-QFrame#side_menu {
-	border-radius:20px;
-	border: 3px solid;
-	border-color: #00f0c3;
-}
-/*Button Styling*/
-QPushButton {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
+         <string notr="true">/*Button Styling*/
+QPushButton{
   background-color: #25252f;
-  border: none;
-  border-radius: 10px;
 }
-QPushButton#disconnect {
-  image: url(Ui/Plug.png);
-  image-position: left;
-  padding-left: 10px;
-  width: 10px;
-}
-QPushButton:pressed {
-  background-color: #000;
-}
-QPushButton:hover:!pressed{
-  background-color: #151525;
+QPushButton:hover:!pressed {
+	background-color: #151525;
 }
 
 /*Combo Box Styling*/
 QComboBox {
-  padding: 10px 10px;
-  text-align: center;
-  outline: none;
   background-color: #25252f;
-  border: none;
-  border-radius: 10px;
-  height: 20px;
-}
-QComboBox::down-arrow {
-  image: url(Ui/D_Arrow.png);
-  image-position: right;
-  padding-right: 50px;
-  width: 50px;
-  height: 20px;
 }
 
-/*Label Styling*/
-QLabel {
-  font-weight: bold;
-}
-QLabel#logo_2{
-  background-color: #2b2b35;
-  image: url(Ui/SideKick_Logo.png);
-  width:100px;
-  height:50px;
-}
 </string>
         </property>
         <layout class="QVBoxLayout" name="dhsgd">

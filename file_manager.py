@@ -744,3 +744,43 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                 continue
             examples.append(file)
         return examples
+
+    def change_size_stylesheet(self, increase:bool):
+        """
+        Either increases or decreases the size of the font on the GUI.
+        """
+        with open(
+            f".{self.sep}Ui{self.sep}size_guide.qss",
+            "r",
+            encoding="UTF-8") as sizes:
+            scale = float(sizes.readline())
+            stylesheet = sizes.read()
+
+        if increase:
+            scale += 0.1
+        else:
+            scale -=0.1
+
+        with open(
+            f".{self.sep}Ui{self.sep}size_guide.qss",
+            "w",
+            encoding="UTF-8") as sizes:
+            sizes.write(str(round(scale,1))+"\n"+stylesheet)
+
+    def get_size_stylesheet(self) -> str:
+        """
+        Gets and formats the size style guide for the GUI.
+        """
+
+        with open(
+            f".{self.sep}Ui{self.sep}size_guide.qss",
+            "r",
+            encoding="UTF-8") as sizes:
+            scale = float(sizes.readline())
+            stylesheet = sizes.read()
+
+        stylesheet = stylesheet.replace("18", str(int(18*scale)))
+        stylesheet = stylesheet.replace("24", str(int(24*scale)))
+        stylesheet = stylesheet.replace("30", str(int(30*scale)))
+
+        return stylesheet

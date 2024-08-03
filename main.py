@@ -120,6 +120,8 @@ class MainGUI(qtw.QMainWindow):
         self.displayed_save = None
         self.export_error = False
 
+        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
+
         timer = qtc.QTimer(self)
         timer.setInterval(0)
         timer.timeout.connect(self.update)
@@ -222,6 +224,12 @@ class MainGUI(qtw.QMainWindow):
         full_screen = qtw.QShortcut(qtg.QKeySequence("ctrl+q"), self)
         full_screen.activated.connect(
             lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
+
+        zoom_in = qtw.QShortcut(qtg.QKeySequence("ctrl+="), self)
+        zoom_in.activated.connect(self.increase_font_size)
+
+        zoom_out = qtw.QShortcut(qtg.QKeySequence("ctrl+-"), self)
+        zoom_out.activated.connect(self.decrease_font_size)
 
     def turn_on_rec_light(self, is_on):
         """
@@ -547,6 +555,22 @@ class MainGUI(qtw.QMainWindow):
             self.export_error = False
         else:
             self.export_error = True
+
+    def increase_font_size(self):
+        """
+        Increases the font sizes by 10% if the user wants.
+        """
+        print("INCRESUBG")
+        self.file_manager.change_size_stylesheet(increase=True)
+        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
+
+    def decrease_font_size(self):
+        """
+        Decreases the font sizes by 10% if the user wants.
+        """
+        print("DECRAIUH")
+        self.file_manager.change_size_stylesheet(increase=False)
+        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
 
     def threaded_backend(self):
         """
