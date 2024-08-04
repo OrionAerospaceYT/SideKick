@@ -120,7 +120,7 @@ class MainGUI(qtw.QMainWindow):
         self.displayed_save = None
         self.export_error = False
 
-        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
+        self.display_size()
 
         timer = qtc.QTimer(self)
         timer.setInterval(0)
@@ -560,17 +560,23 @@ class MainGUI(qtw.QMainWindow):
         """
         Increases the font sizes by 10% if the user wants.
         """
-        print("INCRESUBG")
         self.file_manager.change_size_stylesheet(increase=True)
-        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
+        self.display_size()
 
     def decrease_font_size(self):
         """
         Decreases the font sizes by 10% if the user wants.
         """
-        print("DECRAIUH")
         self.file_manager.change_size_stylesheet(increase=False)
-        self.main_ui.centralwidget.setStyleSheet(self.file_manager.get_size_stylesheet())
+        self.display_size()
+
+    def display_size(self):
+        """
+        Display the new size to the screen.
+        """
+        stylesheet, scale = self.file_manager.get_size_stylesheet()
+        self.main_ui.centralwidget.setStyleSheet(stylesheet)
+        self.main_ui.side_menu.setMinimumWidth(int(300*scale))
 
     def threaded_backend(self):
         """

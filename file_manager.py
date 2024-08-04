@@ -758,16 +758,28 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         if increase:
             scale += 0.1
+            scale = round(scale,1)
+            print("scale")
+            if scale == 1.7:
+                print("1.8")
+                scale = 1.8
         else:
             scale -=0.1
+            scale = round(scale,1)
+            print(scale)
+            if scale < 0.7:
+                scale = 0.7
+            elif scale == 1.7:
+                print("1.6")
+                scale = 1.6
 
         with open(
             f".{self.sep}Ui{self.sep}size_guide.qss",
             "w",
             encoding="UTF-8") as sizes:
-            sizes.write(str(round(scale,1))+"\n"+stylesheet)
+            sizes.write(str(scale)+"\n"+stylesheet)
 
-    def get_size_stylesheet(self) -> str:
+    def get_size_stylesheet(self) -> tuple:
         """
         Gets and formats the size style guide for the GUI.
         """
@@ -783,4 +795,4 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         stylesheet = stylesheet.replace("24", str(int(24*scale)))
         stylesheet = stylesheet.replace("30", str(int(30*scale)))
 
-        return stylesheet
+        return stylesheet, scale

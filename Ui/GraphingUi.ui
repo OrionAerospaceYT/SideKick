@@ -72,22 +72,9 @@ QComboBox {
   background-color: #252535;
   border: none;
   border-radius: 10px;
-  height: 20px;
 }
-QComboBox:pressed {
-  background-color: #000;
-}
-QComboBox:hover:!pressed{
+QComboBox:hover{
   background-color: #151525;
-}
-QComboBox:editable {
-  background: #252535;
-}
-  QComboBox:!editable,
-  QComboBox::drop-down:editable,
-  QComboBox:!editable:on,
-  QComboBox::drop-down:editable:on {
-  background: #252535;
 }
 QComboBox::drop-down {
   subcontrol-origin: padding;
@@ -98,16 +85,19 @@ QComboBox::drop-down {
 QComboBox::down-arrow {
   image: url(Ui/D_Arrow.png);
   image-position: right;
-  padding-right: 50px;
+  padding-right: 70px;
   width: 50px;
   height: 20px;
 }
 QComboBox QAbstractItemView {
   background: #252535;
-  border: none;
-  color: #00f0c3;
+  border: 2px solid #00f0c3;
+  border-radius: 6px;
+  color: #ffffff;
+  selection-color:#00f0c3;
+  selection-background-color:#252535;
+  outline: 0px;
 }
-
 /*Line Edit Styling*/
 QLineEdit {
   padding: 10px 10px;
@@ -940,7 +930,14 @@ p, li { white-space: pre-wrap; }
           </spacer>
          </item>
          <item>
-          <widget class="QLineEdit" name="message"/>
+          <widget class="QLineEdit" name="message">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_14">
@@ -990,7 +987,7 @@ p, li { white-space: pre-wrap; }
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>

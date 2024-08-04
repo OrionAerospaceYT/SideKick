@@ -71,22 +71,9 @@ class Ui_MainWindow(object):
 "  background-color: #252535;\n"
 "  border: none;\n"
 "  border-radius: 10px;\n"
-"  height: 20px;\n"
 "}\n"
-"QComboBox:pressed {\n"
-"  background-color: #000;\n"
-"}\n"
-"QComboBox:hover:!pressed{\n"
+"QComboBox:hover{\n"
 "  background-color: #151525;\n"
-"}\n"
-"QComboBox:editable {\n"
-"  background: #252535;\n"
-"}\n"
-"  QComboBox:!editable,\n"
-"  QComboBox::drop-down:editable,\n"
-"  QComboBox:!editable:on,\n"
-"  QComboBox::drop-down:editable:on {\n"
-"  background: #252535;\n"
 "}\n"
 "QComboBox::drop-down {\n"
 "  subcontrol-origin: padding;\n"
@@ -97,16 +84,19 @@ class Ui_MainWindow(object):
 "QComboBox::down-arrow {\n"
 "  image: url(Ui/D_Arrow.png);\n"
 "  image-position: right;\n"
-"  padding-right: 50px;\n"
+"  padding-right: 70px;\n"
 "  width: 50px;\n"
 "  height: 20px;\n"
 "}\n"
 "QComboBox QAbstractItemView {\n"
 "  background: #252535;\n"
-"  border: none;\n"
-"  color: #00f0c3;\n"
+"  border: 2px solid #00f0c3;\n"
+"  border-radius: 6px;\n"
+"  color: #ffffff;\n"
+"  selection-color:#00f0c3;\n"
+"  selection-background-color:#252535;\n"
+"  outline: 0px;\n"
 "}\n"
-"\n"
 "/*Line Edit Styling*/\n"
 "QLineEdit {\n"
 "  padding: 10px 10px;\n"
@@ -472,6 +462,11 @@ class Ui_MainWindow(object):
         spacerItem17 = QtWidgets.QSpacerItem(10, 10, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self._2.addItem(spacerItem17)
         self.message = QtWidgets.QLineEdit(self.bottom_bar)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.message.sizePolicy().hasHeightForWidth())
+        self.message.setSizePolicy(sizePolicy)
         self.message.setObjectName("message")
         self._2.addWidget(self.message)
         spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -488,7 +483,7 @@ class Ui_MainWindow(object):
         self.main_grid.addWidget(self.bottom_bar, 4, 2, 1, 1)
         self.side_menu = QtWidgets.QFrame(self.centralwidget)
         self.side_menu.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.side_menu.sizePolicy().hasHeightForWidth())

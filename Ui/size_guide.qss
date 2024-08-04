@@ -1,10 +1,10 @@
-0.8
+0.7
 /*Sizing definitions*/
 * {
-font: 18px "Roboto ";
+font: 18px "Roboto";
 }
 QFrame#top_bar * {
-font: 24px "Roboto ";
+font-size: 24px;
 }
 QLabel#bottom_update {
 font-size: 24px;
