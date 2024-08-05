@@ -694,7 +694,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         for item in boards_list:
             self.board_names.append([x for x in item if x])
 
-        self.board_names.pop(0)
+        self.board_names.pop(2)
 
         self.update_boards()
 
