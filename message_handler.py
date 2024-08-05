@@ -5,7 +5,7 @@ This file imports device manager and gets the data
 
 import re
 import time
-from globals import MARKER, NUM_OF_DATA_PTS, ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
+from globals import ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
 class MessageHandler():
@@ -22,7 +22,6 @@ class MessageHandler():
         self.expansion_screen = expansion_screen
         self.line_edit = line_edit
 
-        self.message_string = ""
         self.terminal_html = ""
         self.error_string = ""
         self.debug_html = ""
@@ -32,9 +31,9 @@ class MessageHandler():
         self.running = True
 
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
-        self.ending = "</p>" + MARKER
+        self.ending = "</p>"
 
-    def get_terminal(self, raw_data, live=True, showing_data=False):
+    def get_terminal(self, raw_data):
         """
         Calculates the amount of lines the terminal can display at
         once.
@@ -64,36 +63,17 @@ class MessageHandler():
 
         # Assemble the data from the raw data
         message_string = ""
-        if live or showing_data:
-            for data in reversed(decoded_data):
-                message_string += self.beginning + data + self.ending
-
-        temp_string = message_string + self.message_string
-        self.message_string = ""
-
-        for index, item in enumerate(temp_string.split(MARKER)):
-            if index > NUM_OF_DATA_PTS:
-                break
-            self.message_string += item + MARKER
+        for data in reversed(decoded_data):
+            message_string += self.beginning + data + self.ending
 
         # Display data
-        self.terminal_html = self.message_string
-
-        # Remove unnecessary comments from the end of the HTML
-        # this should save some memory
-        while True:
-            last_html_str = self.terminal_html[-len(MARKER):]
-            if last_html_str == MARKER:
-                self.terminal_html = self.terminal_html[:-len(MARKER)]
-            else:
-                break
+        self.terminal_html = message_string
 
     def clear_terminal(self):
         """
         Sets the terminal_html to just show Terminal at the top of
         the QTextBrowser
         """
-        self.message_string = ""
         self.terminal_html = ""
 
     def get_line_number(self, string):
