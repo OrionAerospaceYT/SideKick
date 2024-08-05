@@ -683,13 +683,13 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Args:
             cli_magaer (CliManager) : the cli manager that runs commands
         """
-
+        self.board_names = DEFAULT_BOARDS
         boards_str = cli_manager.get_cmd_output("board listall")
 
-        boards_list = boards_str.decode("UTF-8").split("\n")
-        boards_list = [item.strip().split("  ") for item in boards_list if item]
-
-        self.board_names = DEFAULT_BOARDS
+        boards_list = []
+        for item in boards_str.decode("UTF-8").split("\n"):
+            if item:
+                boards_list.append(item.strip().split("  "))
 
         for item in boards_list:
             self.board_names.append([x for x in item if x])
