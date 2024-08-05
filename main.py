@@ -122,6 +122,9 @@ class MainGUI(qtw.QMainWindow):
 
         self.display_size()
 
+        self.file_manager.set_all_boards(self.cli_manager)
+        self.reset_supported_boards()
+
         timer = qtc.QTimer(self)
         timer.setInterval(0)
         timer.timeout.connect(self.update)
@@ -156,13 +159,14 @@ class MainGUI(qtw.QMainWindow):
         """
         self.actuator = None
 
-    def add_supported_boards(self):
+    def reset_supported_boards(self):
         """
-        main_ui_top_graph
-        Adds the supported boards to the drop down so that
-        they can be selected for uploads.
+        Resets all of the shown widgets on the boards drop down menu.
         """
         boards = self.file_manager.board_names
+
+        while self.main_ui.supported_boards.currentText():
+            self.main_ui.supported_boards.removeItem(0)
 
         for board in boards:
             self.main_ui.supported_boards.addItem(board[0])
@@ -287,7 +291,7 @@ class MainGUI(qtw.QMainWindow):
 
         # update the boards
         if self.file_manager.update:
-            self.add_supported_boards()
+            self.reset_supported_boards()
             self.file_manager.update = False
 
             board, _ = self.file_manager.load_options()
@@ -479,7 +483,7 @@ class MainGUI(qtw.QMainWindow):
         raw_data = self.file_manager.save_manager.get_saved_data(save)
 
         # Set the data for the graph and the HTML for the terminal
-        self.message_handler.get_terminal(raw_data, live=False, showing_data=True)
+        self.message_handler.get_terminal(raw_data)
         self.top_graph.set_graph_data(raw_data)
         self.bottom_graph.set_graph_data(raw_data)
 

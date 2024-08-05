@@ -11,16 +11,9 @@ import json
 
 from PyQt5 import QtWidgets as qtw
 
+from globals import DEFAULT_SETTINGS, DEFAULT_BOARDS
 from globals import GRAPH_BEGINNING, GRAPH_ENDING
 
-DEFAULT_BOARDS = [["Select Board", "None"],
-                  ["SK Stem", "arduino:mbed_rp2040:pico"]]
-
-DEFAULT_SETTINGS = """
-Drop down options:\n
-Board: Select Board\n
-Project: None\n
-"""
 
 class SaveManager():
     """
@@ -341,7 +334,7 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
         self.consci_os_path = consci_os_path
         self.current_project = ""
 
-        self.board_names = DEFAULT_BOARDS
+        self.board_names = []
 
         # Initialise for each OS
         if operating_system == "Windows":
@@ -642,9 +635,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         """
 
         with open(self.paths["boards"], "r", encoding="UTF-8") as boards:
-
             for line in boards:
-
                 self.board_names.append(line.strip().split(", "))
 
     def set_current_project(self, file_path, manual=False):
@@ -687,13 +678,10 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         return name
 
-    def set_all_boards(self, cli_manager:str) -> list:
+    def set_all_boards(self, cli_manager:str):
         """
         Args:
             cli_magaer (CliManager) : the cli manager that runs commands
-
-        Returns:
-            list : the list of all boards installed
         """
 
         boards_str = cli_manager.get_cmd_output("board listall")
@@ -701,17 +689,12 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         boards_list = boards_str.decode("UTF-8").split("\n")
         boards_list = [item.strip().split("  ") for item in boards_list if item]
 
-        all_boards = []
+        self.board_names = DEFAULT_BOARDS
 
         for item in boards_list:
-            all_boards.append([x for x in item if x])
+            self.board_names.append([x for x in item if x])
 
-        all_boards.pop(0)
-
-        for board in reversed(DEFAULT_BOARDS):
-            all_boards.insert(0, board)
-
-        self.board_names = all_boards
+        self.board_names.pop(0)
 
         self.update_boards()
 

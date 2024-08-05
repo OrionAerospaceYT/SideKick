@@ -5,9 +5,6 @@ An auxillary file which holds global constants.
 ACCENT_COLOUR = "#252530"
 TEXT_COLOUR = "#00f0c3"
 
-TERMINAL_HEADER = "<h1><p style=\"color:#00f0c3;font-size:30px\"\
->Terminal</p></h1>"
-
 SUCCESS_MSG = "<h1 style=\"color:#00f0c3\">\
 Success</h1><font color=\"#FFFFFF\">"
 
@@ -39,3 +36,12 @@ GRAPH_ENDING = "zC43_"
 
 START_REC = "#r3cK"
 END_REC = "!r3Ck"
+
+DEFAULT_BOARDS = [["Select Board", "None"],
+                  ["SK Stem", "arduino:mbed_rp2040:pico"]]
+
+DEFAULT_SETTINGS = """
+Drop down options:\n
+Board: Select Board\n
+Project: None\n
+"""
