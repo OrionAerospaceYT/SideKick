@@ -91,7 +91,7 @@ QComboBox::down-arrow {
 }
 QComboBox QAbstractItemView {
   background: #252535;
-  border: 2px solid #00f0c3;
+  /*border: 2px solid #00f0c3;*/
   border-radius: 6px;
   color: #ffffff;
   selection-color:#00f0c3;
@@ -987,7 +987,7 @@ p, li { white-space: pre-wrap; }
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
