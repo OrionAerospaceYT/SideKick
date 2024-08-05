@@ -759,18 +759,14 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         if increase:
             scale += 0.1
             scale = round(scale,1)
-            print("scale")
             if scale == 1.7:
-                print("1.8")
                 scale = 1.8
         else:
             scale -=0.1
             scale = round(scale,1)
-            print(scale)
             if scale < 0.7:
                 scale = 0.7
             elif scale == 1.7:
-                print("1.6")
                 scale = 1.6
 
         with open(
