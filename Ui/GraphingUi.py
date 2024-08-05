@@ -90,13 +90,13 @@ class Ui_MainWindow(object):
 "}\n"
 "QComboBox QAbstractItemView {\n"
 "  background: #252535;\n"
-"  /*border: 2px solid #00f0c3;*/\n"
 "  border-radius: 6px;\n"
 "  color: #ffffff;\n"
 "  selection-color:#00f0c3;\n"
 "  selection-background-color:#252535;\n"
 "  outline: 0px;\n"
 "}\n"
+"\n"
 "/*Line Edit Styling*/\n"
 "QLineEdit {\n"
 "  padding: 10px 10px;\n"
@@ -483,7 +483,7 @@ class Ui_MainWindow(object):
         self.main_grid.addWidget(self.bottom_bar, 4, 2, 1, 1)
         self.side_menu = QtWidgets.QFrame(self.centralwidget)
         self.side_menu.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.side_menu.sizePolicy().hasHeightForWidth())
