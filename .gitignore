@@ -168,3 +168,4 @@ cython_debug/
 Settings
 ConsciOS
 .vscode
+Ui/size_guide.qss
