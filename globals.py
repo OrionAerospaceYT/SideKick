@@ -45,3 +45,15 @@ Drop down options:\n
 Board: Select Board\n
 Project: None\n
 """
+
+SK_LITE_ON_QSS = """
+QPushButton {
+border: 3px solid #00f0c3;
+}
+"""
+
+SK_LITE_OFF_QSS = """
+QPushButton {
+border: none;
+}
+"""
