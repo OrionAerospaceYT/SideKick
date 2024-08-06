@@ -116,12 +116,6 @@ QLineEdit:hover:!pressed{
 QLabel{
 	font-weight: bold;
 }
-QLabel#logo_2{
-  background-color: #2b2b35;
-  image: url(Ui/SideKick_Logo.png);
-  width:200px;
-  height:100px;
-}
 
 /*Text Box Styling*/
 QTextBrowser {
@@ -1378,12 +1372,9 @@ QComboBox {
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="sidekick_lite">
-              <property name="autoFillBackground">
-               <bool>false</bool>
-              </property>
+             <widget class="QPushButton" name="sk_lite">
               <property name="text">
-               <string>SideKick Lite</string>
+               <string>SideKick Lite:OFF</string>
               </property>
              </widget>
             </item>

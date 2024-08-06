@@ -115,12 +115,6 @@ class Ui_MainWindow(object):
 "QLabel{\n"
 "    font-weight: bold;\n"
 "}\n"
-"QLabel#logo_2{\n"
-"  background-color: #2b2b35;\n"
-"  image: url(Ui/SideKick_Logo.png);\n"
-"  width:200px;\n"
-"  height:100px;\n"
-"}\n"
 "\n"
 "/*Text Box Styling*/\n"
 "QTextBrowser {\n"
@@ -629,10 +623,9 @@ class Ui_MainWindow(object):
         self.data_points.setTickPosition(QtWidgets.QSlider.NoTicks)
         self.data_points.setObjectName("data_points")
         self.verticalLayout_2.addWidget(self.data_points)
-        self.sidekick_lite = QtWidgets.QCheckBox(self.settings)
-        self.sidekick_lite.setAutoFillBackground(False)
-        self.sidekick_lite.setObjectName("sidekick_lite")
-        self.verticalLayout_2.addWidget(self.sidekick_lite)
+        self.sk_lite = QtWidgets.QPushButton(self.settings)
+        self.sk_lite.setObjectName("sk_lite")
+        self.verticalLayout_2.addWidget(self.sk_lite)
         spacerItem28 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem28)
         self.dhsgd.addWidget(self.settings)
@@ -686,7 +679,7 @@ class Ui_MainWindow(object):
         self.library_manager.setText(_translate("MainWindow", "Library Manager"))
         self.arduino_cli.setText(_translate("MainWindow", "Arduino CLI"))
         self.label_2.setText(_translate("MainWindow", "Advanced"))
-        self.sidekick_lite.setText(_translate("MainWindow", "SideKick Lite"))
+        self.sk_lite.setText(_translate("MainWindow", "SideKick Lite:OFF"))
 
 
 if __name__ == "__main__":
