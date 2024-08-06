@@ -33,7 +33,7 @@ class MessageHandler():
         self.beginning = """<p><font color="#00f0c3">$> <font color="#FFFFFF">"""
         self.ending = "</p>"
 
-    def get_terminal(self, raw_data):
+    def get_save_html(self, raw_data):
         """
         Calculates the amount of lines the terminal can display at
         once.
