@@ -27,6 +27,7 @@ from terminal_manager import Terminal
 from widgets import Graph
 from widgets import RecordLight
 from widgets import SideMenu
+from widgets import SideKickLite
 
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
@@ -62,6 +63,10 @@ class MainGUI(qtw.QMainWindow):
         self.device_manager = DeviceManager(self)
 
         self.file_manager = FileManager(DEV, CONSCIOS_PATH)
+
+        board, project, lite = self.file_manager.load_options()
+        self.sk_lite = SideKickLite(self.main_ui.sk_lite, lite)
+
         self.cli_manager = CliManager(self.file_manager.paths["arduino"])
 
         self.top_graph = Graph(key="1")
@@ -108,8 +113,6 @@ class MainGUI(qtw.QMainWindow):
         threaded_backend_loop = threading.Thread(
             target=self.threaded_backend, args=(),)
         threaded_backend_loop.start()
-
-        board, project = self.file_manager.load_options()
 
         self.main_ui.supported_boards.setCurrentText(board)
 
@@ -294,7 +297,7 @@ class MainGUI(qtw.QMainWindow):
             self.reset_supported_boards()
             self.file_manager.update = False
 
-            board, _ = self.file_manager.load_options()
+            board = self.file_manager.load_options()[0]
             self.main_ui.supported_boards.setCurrentText(board)
 
         # debug
@@ -483,7 +486,7 @@ class MainGUI(qtw.QMainWindow):
         raw_data = self.file_manager.save_manager.get_saved_data(save)
 
         # Set the data for the graph and the HTML for the terminal
-        self.message_handler.get_terminal(raw_data)
+        self.message_handler.get_save_html(raw_data)
         self.top_graph.set_graph_data(raw_data)
         self.bottom_graph.set_graph_data(raw_data)
 
@@ -509,9 +512,13 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens a file explorer window
         """
+        path = ""
+        for item in self.file_manager.current_project.split("/")[:-2]:
+            path += item + self.file_manager.sep
+
         file_path, _ =  qtw.QFileDialog.getOpenFileName(
             self, "Open SideKick project",
-            self.file_manager.paths["projects"],
+            path,
             "Arduino Files (*.ino)")
 
         if file_path:
@@ -627,7 +634,6 @@ class MainGUI(qtw.QMainWindow):
                     self.record_light.end_recording()
 
                 # Updating display data
-                self.message_handler.get_terminal(raw_data)
                 self.top_graph.set_graph_data(raw_data)
                 self.bottom_graph.set_graph_data(raw_data)
                 self.terminal.append_data(raw_data)
@@ -678,5 +684,6 @@ if __name__ == "__main__":
 
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
+    sk_lite = main_gui.sk_lite.state
 
-    main_gui.file_manager.save_options(board_selected, project_selected)
+    main_gui.file_manager.save_options(board_selected, project_selected, sk_lite)

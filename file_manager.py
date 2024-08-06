@@ -561,7 +561,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             self.move_libraries(f"{self.consci_os_path}")
             self.current_project = f"{self.consci_os_path}{self.sep}Source{self.sep}Source.ino"
 
-    def save_options(self, board, project):
+    def save_options(self, board, project, lite):
         """
         Saves selected options in drop downs to the settings.txt file so
         that the user doesn"t need to keep selecting drop downs on startup
@@ -581,9 +581,13 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                 board_index = settings.index(item)
                 settings[board_index] = f"Board: {board}\n"
 
-            if "Project: " in item:
+            elif "Project: " in item:
                 project_index = settings.index(item)
                 settings[project_index] = f"Project: {project}\n"
+
+            elif "Lite: " in item:
+                lite_index = settings.index(item)
+                settings[lite_index] = f"Lite: {lite}\n"
 
         with open(self.paths["settings"], "w", encoding="UTF-8") as settings_file:
             settings_file.writelines(settings)
@@ -613,9 +617,16 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                     if "Board: " in line:
                         board = line.replace("Board: ", "")
                         board = board.strip()
-                    if "Project: " in line:
+                    elif "Project: " in line:
                         project = line.replace("Project: ", "")
                         project = project.strip()
+                    elif "Lite: " in line:
+                        lite = line.replace("Lite: ", "")
+                        lite = lite.strip()
+                        if lite == "True":
+                            lite = True
+                        else:
+                            lite = False
 
         if not os.path.exists(project):
             if len(os.listdir(self.paths["projects"])) > 0:
@@ -626,7 +637,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             else:
                 project = ""
 
-        return board, project
+        return board, project, lite
 
     def load_boards_csv(self):
         """
@@ -773,5 +784,6 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         stylesheet = stylesheet.replace("18", str(int(18*scale)))
         stylesheet = stylesheet.replace("24", str(int(24*scale)))
         stylesheet = stylesheet.replace("30", str(int(30*scale)))
-
+        stylesheet = stylesheet.replace("100", str(int(100*scale)))
+        stylesheet = stylesheet.replace("200", str(int(200*scale)))
         return stylesheet, scale
