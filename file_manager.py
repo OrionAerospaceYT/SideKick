@@ -623,9 +623,10 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                     elif "Lite: " in line:
                         lite = line.replace("Lite: ", "")
                         lite = lite.strip()
-                        lite = True
                         if lite == "False":
                             lite = False
+                        else:
+                            lite = True
 
         if not os.path.exists(project):
             if len(os.listdir(self.paths["projects"])) > 0:
