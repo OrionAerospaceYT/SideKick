@@ -58,6 +58,8 @@ class MainGUI(qtw.QMainWindow):
 
         self.main_ui.debugger.setVisible(False)
 
+        self.set_screen_size()
+
         # Associative classes are initialised here
         self.actuator = None
         self.device_manager = DeviceManager(self)
@@ -132,6 +134,16 @@ class MainGUI(qtw.QMainWindow):
         timer.setInterval(0)
         timer.timeout.connect(self.update)
         timer.start()
+
+    def set_screen_size(self):
+        """
+        On opening, set the screen size to a good dimensions relative to the monitor.
+        """
+        desktop = qtw.QApplication.desktop()
+        height = int(desktop.screenGeometry().height() * 0.75)
+        width = int(height * 1.618)
+
+        self.resize(width, height)
 
     def open_library_manager(self):
         """
@@ -508,7 +520,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Takes you to the help website
         """
-        webbrowser.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        webbrowser.open("https://github.com/OrionAerospaceYT/SideKick/blob/main/README.md")
 
     def open_file(self):
         """

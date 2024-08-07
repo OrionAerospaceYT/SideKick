@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1303, 805)
+        MainWindow.resize(1303, 785)
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -237,7 +237,7 @@ class Ui_MainWindow(object):
         self.main_grid.addWidget(self.bottom_bar, 4, 2, 1, 1)
         self.side_menu = QtWidgets.QFrame(self.centralwidget)
         self.side_menu.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.side_menu.sizePolicy().hasHeightForWidth())

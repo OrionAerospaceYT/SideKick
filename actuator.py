@@ -59,6 +59,8 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui = actuator()
         self.actuators_ui.setupUi(self)
 
+        self.resize(int(self.parent.width()*0.8), int(self.parent.height()*0.8))
+
         self.connect_keyboard_shortcuts()
 
         self.actuators = {"pins" : {}, "servos" : {}}
