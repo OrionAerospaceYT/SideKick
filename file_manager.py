@@ -756,23 +756,25 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             scale = round(scale, 1)
             if scale == 0.7:
                 scale = 0.8
+            elif scale == 1.2:
+                scale = 1.3
             elif scale == 1.7:
                 scale = 1.8
             elif scale == 2.1:
                 scale = 2.2
-            if scale > 2.3:
-                scale = 2.3
+            scale = min(scale, 2.3)
         else:
             scale -=0.1
             scale = round(scale, 1)
             if scale == 0.7:
                 scale = 0.6
+            elif scale == 1.2:
+                scale = 1.1
             elif scale == 1.7:
                 scale = 1.6
             elif scale == 2.1:
                 scale = 2.0
-            if scale < 0.5:
-                scale = 0.5
+            scale = max(scale, 0.5)
 
         with open(
             f".{self.sep}Ui{self.sep}stylesheet.qss",
