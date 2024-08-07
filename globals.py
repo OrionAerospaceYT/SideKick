@@ -8,16 +8,24 @@ TEXT_COLOUR = "#00f0c3"
 SUCCESS_MSG = "<h1 style=\"color:#00f0c3\">\
 Success</h1><font color=\"#FFFFFF\">"
 
-FAILURE_MSG = "<p style=\"font-weight: bold;color:#E21919; font-size:24px\">\
+FAILURE_MSG = "<h1 style=\"font-weight: bold;color:#E21919; font-size:24px\">\
 Error "
 
 USER_MESSAGE = "<h1 style=\"color:#34c0eb\">\
 User command</h1>"
 
+SELECT_BOARD_MESSAGE = """
+<h1 style=\"font-weight: bold; color:#E21919; font-size:24px;\">
+Error: Please select a board type!
+</h1>
+"""
+
 ERROR_TERMS = ["Error opening sketch",
                "Error during build",
                "exit status",
                "error during reset"]
+
+FQBN_ERROR_TERM = "Invalid FQBN: not an FQBN"
 
 MARKER = "<!-- A break -->"
 

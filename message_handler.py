@@ -5,6 +5,7 @@ This file imports device manager and gets the data
 
 import re
 import time
+from globals import FQBN_ERROR_TERM, SELECT_BOARD_MESSAGE
 from globals import ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
@@ -119,14 +120,18 @@ class MessageHandler():
         debug_output = debug_output.replace("\x1B[93m", "<font color=\"#00f0c3\">")
         debug_output = debug_output.replace("<br><br><br>", "<br>")
 
+        if FQBN_ERROR_TERM in debug_output:
+            return SELECT_BOARD_MESSAGE
+
         for item in ERROR_TERMS:
             if item in debug_output:
                 if line_num > 0:
                     message = FAILURE_MSG + "line " + str(line_num) + " in " + str(file_name)
-                    message += "</p>"
+                    message += "</h1>"
                 else:
-                    message = FAILURE_MSG + "</p>"
+                    message = FAILURE_MSG + "</h1>"
                 return message + debug_output
+
         return SUCCESS_MSG + debug_output
 
 
