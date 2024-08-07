@@ -11,6 +11,7 @@ import json
 
 from PyQt5 import QtWidgets as qtw
 
+from globals import SIZES_IN_QSS
 from globals import DEFAULT_SETTINGS, DEFAULT_BOARDS
 from globals import GRAPH_BEGINNING, GRAPH_ENDING
 
@@ -744,7 +745,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Either increases or decreases the size of the font on the GUI.
         """
         with open(
-            f".{self.sep}Ui{self.sep}size_guide.qss",
+            f".{self.sep}Ui{self.sep}stylesheet.qss",
             "r",
             encoding="UTF-8") as sizes:
             scale = float(sizes.readline())
@@ -752,21 +753,32 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         if increase:
             scale += 0.1
-            scale = round(scale,1)
-            if scale == 1.7:
+            scale = round(scale, 1)
+            if scale == 0.7:
+                scale = 0.8
+            elif scale == 1.7:
                 scale = 1.8
+            elif scale == 2.1:
+                scale = 2.2
+            if scale > 2.3:
+                scale = 2.3
         else:
             scale -=0.1
-            scale = round(scale,1)
-            if scale < 0.7:
-                scale = 0.7
+            scale = round(scale, 1)
+            if scale == 0.7:
+                scale = 0.6
             elif scale == 1.7:
                 scale = 1.6
+            elif scale == 2.1:
+                scale = 2.0
+            if scale < 0.5:
+                scale = 0.5
 
         with open(
-            f".{self.sep}Ui{self.sep}size_guide.qss",
+            f".{self.sep}Ui{self.sep}stylesheet.qss",
             "w",
             encoding="UTF-8") as sizes:
+            scale = round(scale, 1)
             sizes.write(str(scale)+"\n"+stylesheet)
 
     def get_size_stylesheet(self) -> tuple:
@@ -775,15 +787,13 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         """
 
         with open(
-            f".{self.sep}Ui{self.sep}size_guide.qss",
+            f".{self.sep}Ui{self.sep}stylesheet.qss",
             "r",
             encoding="UTF-8") as sizes:
             scale = float(sizes.readline())
             stylesheet = sizes.read()
 
-        stylesheet = stylesheet.replace("18", str(int(18*scale)))
-        stylesheet = stylesheet.replace("24", str(int(24*scale)))
-        stylesheet = stylesheet.replace("30", str(int(30*scale)))
-        stylesheet = stylesheet.replace("100", str(int(100*scale)))
-        stylesheet = stylesheet.replace("200", str(int(200*scale)))
+        for size in SIZES_IN_QSS:
+            stylesheet = stylesheet.replace(str(size) + "px", str(int(size*scale))+ "px")
+
         return stylesheet, scale

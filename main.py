@@ -586,8 +586,12 @@ class MainGUI(qtw.QMainWindow):
         Display the new size to the screen.
         """
         stylesheet, scale = self.file_manager.get_size_stylesheet()
-        self.main_ui.centralwidget.setStyleSheet(stylesheet)
+        self.setStyleSheet(stylesheet)
         self.main_ui.side_menu.setMinimumWidth(int(300*scale))
+        if scale > 0.8:
+            self.main_ui.com_ports.setFixedWidth(100+int(20*scale**2))
+        else:
+            self.main_ui.com_ports.setFixedWidth(120 - int(20/scale))
 
     def threaded_backend(self):
         """

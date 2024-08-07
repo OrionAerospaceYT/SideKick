@@ -57,3 +57,5 @@ QPushButton {
 border: none;
 }
 """
+
+SIZES_IN_QSS = [18, 21, 24, 30, 50, 70, 100, 200]
