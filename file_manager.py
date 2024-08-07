@@ -604,6 +604,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 
         board = None
         project = None
+        lite = None
 
         in_drop_down_section = False
 
@@ -628,6 +629,11 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
                             lite = False
                         else:
                             lite = True
+
+        if lite is None:
+            with open(self.paths["settings"], "a", encoding="UTF-8") as settings:
+                settings.write("Lite: False")
+                lite = False
 
         if not os.path.exists(project):
             if len(os.listdir(self.paths["projects"])) > 0:
