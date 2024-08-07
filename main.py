@@ -151,9 +151,11 @@ class MainGUI(qtw.QMainWindow):
         """
         if self.actuator is not None:
             return
+
         self.actuator = ActuatorGUI(self.device_manager, self)
         self.actuator.setAttribute(qtc.Qt.WA_DeleteOnClose)
         self.actuator.show()
+        self.display_size()
         self.actuator.destroyed.connect(self.close_actuator_gui)
 
     def close_actuator_gui(self):
@@ -588,10 +590,13 @@ class MainGUI(qtw.QMainWindow):
         stylesheet, scale = self.file_manager.get_size_stylesheet()
         self.setStyleSheet(stylesheet)
         self.main_ui.side_menu.setMinimumWidth(int(300*scale))
+        combo_box_width = 120 - int(20/scale)
         if scale > 0.8:
-            self.main_ui.com_ports.setFixedWidth(100+int(20*scale**2))
-        else:
-            self.main_ui.com_ports.setFixedWidth(120 - int(20/scale))
+            combo_box_width = 100+int(20*scale**2.4)
+
+        self.main_ui.com_ports.setFixedWidth(combo_box_width)
+        if self.actuator is not None:
+            self.actuator.actuators_ui.type.setFixedWidth(combo_box_width-20)
 
     def threaded_backend(self):
         """

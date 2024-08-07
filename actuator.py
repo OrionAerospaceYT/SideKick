@@ -59,6 +59,8 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui = actuator()
         self.actuators_ui.setupUi(self)
 
+        self.connect_keyboard_shortcuts()
+
         self.actuators = {"pins" : {}, "servos" : {}}
         self.sliders = {"pins" : [], "servos" : []}
 
@@ -108,6 +110,16 @@ class ActuatorGUI(qtw.QMainWindow):
                 self.actuators_ui.value.value()))
 
         self.restart = False
+
+    def connect_keyboard_shortcuts(self):
+        """
+        Connects the resizing keyboard shortcut.
+        """
+        zoom_in = qtw.QShortcut(qtg.QKeySequence("ctrl+="), self)
+        zoom_in.activated.connect(self.parent.increase_font_size)
+
+        zoom_out = qtw.QShortcut(qtg.QKeySequence("ctrl+-"), self)
+        zoom_out.activated.connect(self.parent.decrease_font_size)
 
     def clear_layout(self, layout):
         """

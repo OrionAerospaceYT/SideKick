@@ -54,25 +54,10 @@ class Ui_MainWindow(object):
         self.loading.setObjectName("loading")
         self.loading_screen = QtWidgets.QVBoxLayout(self.loading)
         self.loading_screen.setObjectName("loading_screen")
-        self.textBrowser = QtWidgets.QTextBrowser(self.loading)
-        self.textBrowser.setStyleSheet("/*General Styling*/\n"
-"* {\n"
-"  \n"
-"  font: 10pt \"Roboto \";\n"
-"  font-size: 14px;\n"
-"  background-color: #32323C;\n"
-"  color: #FFFFFF;\n"
-"}\n"
-"\n"
-"/*Text Box Styling*/\n"
-"QTextBrowser {\n"
-"  border: none; \n"
-"  padding-left:10px; \n"
-"  padding-top:10px;\n"
-"  border-radius: 10px;\n"
-"}")
-        self.textBrowser.setObjectName("textBrowser")
-        self.loading_screen.addWidget(self.textBrowser)
+        self.uploading_screen = QtWidgets.QTextBrowser(self.loading)
+        self.uploading_screen.setStyleSheet("")
+        self.uploading_screen.setObjectName("uploading_screen")
+        self.loading_screen.addWidget(self.uploading_screen)
         self.progressBar = QtWidgets.QProgressBar(self.loading)
         self.progressBar.setStyleSheet("QProgressBar\n"
 "{\n"
@@ -96,19 +81,39 @@ class Ui_MainWindow(object):
         self.temp = QtWidgets.QHBoxLayout(self.options_widget)
         self.temp.setObjectName("temp")
         self.name = QtWidgets.QLineEdit(self.options_widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.name.sizePolicy().hasHeightForWidth())
+        self.name.setSizePolicy(sizePolicy)
         self.name.setObjectName("name")
         self.temp.addWidget(self.name)
         self.pin = QtWidgets.QLineEdit(self.options_widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pin.sizePolicy().hasHeightForWidth())
+        self.pin.setSizePolicy(sizePolicy)
         self.pin.setObjectName("pin")
         self.temp.addWidget(self.pin)
         self.min = QtWidgets.QLineEdit(self.options_widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.min.sizePolicy().hasHeightForWidth())
+        self.min.setSizePolicy(sizePolicy)
         self.min.setObjectName("min")
         self.temp.addWidget(self.min)
         self.max = QtWidgets.QLineEdit(self.options_widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.max.sizePolicy().hasHeightForWidth())
+        self.max.setSizePolicy(sizePolicy)
         self.max.setObjectName("max")
         self.temp.addWidget(self.max)
         self.type = QtWidgets.QComboBox(self.options_widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.type.sizePolicy().hasHeightForWidth())
@@ -118,7 +123,7 @@ class Ui_MainWindow(object):
         self.type.addItem("")
         self.temp.addWidget(self.type)
         self.add = QtWidgets.QPushButton(self.options_widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.add.sizePolicy().hasHeightForWidth())
@@ -150,30 +155,20 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem1)
         self.upload = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.upload.sizePolicy().hasHeightForWidth())
         self.upload.setSizePolicy(sizePolicy)
-        self.upload.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.upload.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.upload.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.upload.setObjectName("upload")
         self.horizontalLayout_6.addWidget(self.upload)
-        self.logo = QtWidgets.QLabel(self.centralwidget)
-        self.logo.setMinimumSize(QtCore.QSize(0, 50))
-        self.logo.setStyleSheet("QLabel#logo{\n"
-"  background-color: #32323C;\n"
-"  image: url(Ui/SideKick_Logo.png);\n"
-"  width:100px;\n"
-"  height:50px;\n"
-"}\n"
-"")
-        self.logo.setText("")
-        self.logo.setObjectName("logo")
-        self.horizontalLayout_6.addWidget(self.logo)
-        spacerItem1 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -186,14 +181,14 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Actuator Test"))
-        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.uploading_screen.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Roboto \'; font-size:14px; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Uploading sketch please wait</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Roboto \'; font-size:14px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Roboto \'; font-size:14px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Roboto \'; font-size:14px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Roboto \'; font-size:14pt; font-weight:600;\">Uploading sketch please wait</span></p></body></html>"))
         self.type.setItemText(0, _translate("MainWindow", "Servo"))
         self.type.setItemText(1, _translate("MainWindow", "Pin"))
         self.add.setText(_translate("MainWindow", "Add Actuator"))

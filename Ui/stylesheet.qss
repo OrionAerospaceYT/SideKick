@@ -1,4 +1,4 @@
-1.1
+0.8
 /*General Styling*/
 * {
   font: 18px "Roboto";
@@ -87,7 +87,7 @@ QLineEdit {
   outline: none;
   background-color: #21212a;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   height: 20px;
 }
 QLineEdit:hover:!pressed{
@@ -106,6 +106,9 @@ QTextBrowser {
   padding-top:10px;
   background-color: #2b2b35;
   border-radius: 10px;
+}
+QTextBrowser#uploading_screen{
+  background-color: #32323C;
 }
 
 QMenuBar {
@@ -216,8 +219,14 @@ QLabel#top_update {
     font-size: 24px;
     font-weight: bold;
 }
-QLabel#logo_2{
+QLabel#logo {
     background-color: #2b2b35;
+    image: url(Ui/SideKick_Logo.png);
+    width:200px;
+    height:100px;
+}
+QLabel#actuator_logo {
+    background-color: #32323C;
     image: url(Ui/SideKick_Logo.png);
     width:200px;
     height:100px;
