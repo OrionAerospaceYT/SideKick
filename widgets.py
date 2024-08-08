@@ -5,11 +5,14 @@ display the data onto a graph.
 
 import time
 
+import webbrowser
+
 from bs4 import BeautifulSoup
 
 import pyqtgraph as pg
 import numpy as np
 
+from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
 
 from globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
@@ -491,3 +494,42 @@ class SideKickLite:
         else:
             self.button.setStyleSheet(SK_LITE_OFF_QSS)
             self.button.setText("SideKick Lite: OFF")
+
+class BoardWidget(qtw.QTextBrowser):
+    """
+    Testing
+    """
+    def __init__(self, name, versions, html, index, parent=None):
+        self.name = name
+        self.index = index
+        self.parent = parent
+        self.versions = versions
+
+        super().__init__(parent)
+
+        self.setHtml(html)
+        self.setTextInteractionFlags(qtc.Qt.LinksAccessibleByMouse | qtc.Qt.NoTextInteraction)
+        self.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
+
+        document = self.document()
+        document.adjustSize()
+        scale = max(self.parent.file_manager.get_scale() * 1.7, 0.7*1.7)
+        self.setMinimumHeight(int(document.size().height()*scale))
+
+        self.anchorClicked.connect(self.handle_anchor_clicked)
+
+    def handle_anchor_clicked(self, url):
+        """
+        Open the URL in the default web browser
+        """
+        html = self.toHtml()
+        webbrowser.open(url.toString())
+        self.setHtml(html)
+
+    def mousePressEvent(self, event):
+        """
+        Testing.
+        """
+        if event.button() == qtc.Qt.LeftButton:
+            self.parent.update_selected(self.index)
+        super().mousePressEvent(event)

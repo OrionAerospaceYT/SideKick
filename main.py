@@ -155,7 +155,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the board manager window
         """
-        BoardsManager(self.file_manager, self.cli_manager, self)
+        BoardsManager(self)
 
     def open_actuator_gui(self):
         """

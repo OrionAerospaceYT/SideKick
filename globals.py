@@ -67,3 +67,15 @@ border: none;
 """
 
 SIZES_IN_QSS = [18, 21, 24, 30, 50, 70, 100, 200]
+
+SELECTED_WIDGET_QSS = """
+QTextBrowser {
+    border: 3px solid #00f0c3;
+}
+"""
+
+NORMAL_WIDGET_QSS = """
+QTextBroswer {
+    border: none;
+}
+"""
