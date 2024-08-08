@@ -56,8 +56,7 @@ class BoardsManager(qtw.QMainWindow):
         """
         for name in list(self.file_manager.boards.keys()):
             versions = self.file_manager.get_versions(name, self.file_manager.boards)
-            html = self.file_manager.get_html(name, self.file_manager.boards)
-            self.widgets.append(BoardWidget(name, versions, html, len(self.widgets), self))
+            self.widgets.append(BoardWidget(name, versions, len(self.widgets), self))
             self.boards_ui.boards.addWidget(self.widgets[-1])
 
     def update_selected(self, index):

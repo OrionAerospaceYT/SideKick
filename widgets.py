@@ -499,7 +499,7 @@ class BoardWidget(qtw.QTextBrowser):
     """
     Testing
     """
-    def __init__(self, name, versions, html, index, parent=None):
+    def __init__(self, name, versions, index, parent=None):
         self.name = name
         self.index = index
         self.parent = parent
@@ -507,7 +507,7 @@ class BoardWidget(qtw.QTextBrowser):
 
         super().__init__(parent)
 
-        self.setHtml(html)
+        self.setHtml(self.parent.file_manager.get_html(name, self.parent.file_manager.boards))
         self.setTextInteractionFlags(qtc.Qt.LinksAccessibleByMouse | qtc.Qt.NoTextInteraction)
         self.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
@@ -520,7 +520,7 @@ class BoardWidget(qtw.QTextBrowser):
 
     def handle_anchor_clicked(self, url):
         """
-        Open the URL in the default web browser
+        Open the URL in the default web browser.
         """
         html = self.toHtml()
         webbrowser.open(url.toString())
@@ -528,7 +528,7 @@ class BoardWidget(qtw.QTextBrowser):
 
     def mousePressEvent(self, event):
         """
-        Testing.
+        Adds an event if the QTextBrowser is clicked.
         """
         if event.button() == qtc.Qt.LeftButton:
             self.parent.update_selected(self.index)
