@@ -33,6 +33,8 @@ jobs:
 
     - name: Install sidekick and arduino
       run: |
+        with:
+          submodules: 'true'
         cd ./Installer
         python ./installer.py
         cd ..
