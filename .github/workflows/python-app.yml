@@ -25,7 +25,7 @@ jobs:
     # This is linux specific setup as linux needs to be run in an environment on GitHub actions to not
     # trigger the error code 134.
     - name: Set up environment variables (Linux)
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' || runner.os == 'macOs'
       run: echo "DISPLAY=:99.0" >> $GITHUB_ENV
 
     - uses: tlambert03/setup-qt-libs@v1
