@@ -32,7 +32,6 @@ from widgets import SideKickLite
 from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
-RUNNING = True
 DEV = False
 CONSCIOS_PATH = ""
 
@@ -102,6 +101,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
 
         # Attributes for event handling are defined here
+        self.running = True
         self.showing_data = False
         self.upload = False
 
@@ -629,7 +629,7 @@ class MainGUI(qtw.QMainWindow):
         cli = threading.Thread(target=self.cli_manager.threaded_call, args=(),)
         cli.start()
 
-        while RUNNING:
+        while self.running:
             # Com ports
             self.avaliable_port_list = self.device_manager.scan_avaliable_ports(DEV)
 
@@ -671,6 +671,19 @@ class MainGUI(qtw.QMainWindow):
             else:
                 self.file_manager.save_manager.stop_save()
 
+    def close_gui(self):
+        """
+        Safely closes down the GUI.
+        """
+        self.running = False
+        # waits for whole backend call to finish before ending all of the other threads
+        # prevents errors
+        time.sleep(1)
+
+        self.device_manager.terminate_device()
+        self.record_light.terminate_record()
+        self.message_handler.terminate_ellipsis()
+        self.cli_manager.terminate()
 
 if __name__ == "__main__":
 
@@ -692,16 +705,7 @@ if __name__ == "__main__":
     main_gui.show()
     app.exec_()
 
-    RUNNING = False
-
-    # waits for whole backend call to finish before ending all of the other threads
-    # prevents errors
-    time.sleep(1)
-
-    main_gui.device_manager.terminate_device()
-    main_gui.record_light.terminate_record()
-    main_gui.message_handler.terminate_ellipsis()
-    main_gui.cli_manager.terminate()
+    main_gui.close_gui()
 
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
