@@ -413,7 +413,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         """
         Creates sidekick directory in documents if it does not already exist
         """
-
+        print(os.listdir("/home/runner"))
         directories = os.listdir(self.paths["documents"])
         if "SideKick" not in directories:
             os.mkdir(self.paths["sidekick"])
@@ -487,7 +487,6 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         else:
             source += f"{self.sep}libraries"
 
-        print(os.listdir(self.path + self.sep + "ConsciOS"))
         for library in os.listdir(source):
             if "." in library:
                 continue
