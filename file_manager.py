@@ -328,7 +328,7 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
 
         operating_system = platform.system()
 
-        self.user = os.getlogin()
+        self.user = os.getenv("USER") or os.getenv("USERNAME")
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.save_manager = SaveManager()
         self.dev = dev

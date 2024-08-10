@@ -10,7 +10,7 @@ class SideKickInstaller():
         print("<<< STARTING >>> Initialising installer")
 
         self.os = platform.system()
-        self.user = os.getlogin()
+        self.user = os.getenv("USER") or os.getenv("USERNAME")
 
         if self.os == "Windows":
             self.sep = "\\"
