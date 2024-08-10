@@ -487,7 +487,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         else:
             source += f"{self.sep}libraries"
 
-        print(os.listdir(self.path))
+        print(os.listdir(self.path + self.sep + "ConsciOS"))
         for library in os.listdir(source):
             if "." in library:
                 continue
