@@ -23,5 +23,8 @@ class SideKickGuiTester(unittest.TestCase):
     def setUp(self):
         self.gui = MainGUI()
 
+    def testing_tests(self):
+        self.assertEqual(0,0)
+
 if __name__ == "__main__":
     unittest.main()
