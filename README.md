@@ -4,6 +4,7 @@
 </p>
 
 [![Pylint](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/pylint.yml)
+[![UnitTests](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/unittests.yml/badge.svg)](https://github.com/OrionAerospaceYT/SideKick/actions/workflows/unittests.yml)
 
 ## Table of Contents 
 
