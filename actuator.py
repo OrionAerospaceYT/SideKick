@@ -4,9 +4,9 @@ SideKick GUI.
 """
 
 
-from PyQt5 import QtCore as qtc
-from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
+from PyQt6 import QtCore as qtc
+from PyQt6 import QtWidgets as qtw
+from PyQt6 import QtGui as qtg
 
 from Ui.ActuatorUi import Ui_MainWindow as actuator
 
@@ -27,7 +27,7 @@ class Slider:
         name_label.setMinimumHeight(50)
 
         self.slider = qtw.QSlider()
-        self.slider.setOrientation(qtc.Qt.Horizontal)
+        self.slider.setOrientation(qtc.Qt.Orientation.Horizontal)
         self.slider.setMinimum(minimum)
         self.slider.setMaximum(maximum)
         self.slider.setValue(mid_point)
@@ -36,8 +36,8 @@ class Slider:
 
         spacer = qtw.QSpacerItem(20,
                                 40,
-                                qtw.QSizePolicy.Minimum,
-                                qtw.QSizePolicy.Maximum)
+                                qtw.QSizePolicy.Policy.Minimum,
+                                qtw.QSizePolicy.Policy.Maximum)
 
         self.horizontal_layout.addWidget(name_label)
         self.horizontal_layout.addWidget(self.slider)
@@ -101,9 +101,6 @@ class ActuatorGUI(qtw.QMainWindow):
         self.actuators_ui.add.clicked.connect(self.add_new_actuator)
         self.actuators_ui.upload.clicked.connect(self.upload)
 
-        upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
-        upload.activated.connect(self.upload)
-
         self.actuators_ui.value.setMinimum(0)
         self.actuators_ui.value.setValue(50)
         self.actuators_ui.value.setMaximum(100)
@@ -117,10 +114,13 @@ class ActuatorGUI(qtw.QMainWindow):
         """
         Connects the resizing keyboard shortcut.
         """
-        zoom_in = qtw.QShortcut(qtg.QKeySequence("ctrl+="), self)
+        upload = qtg.QShortcut(qtg.QKeySequence("ctrl+u"), self)
+        upload.activated.connect(self.upload)
+
+        zoom_in = qtg.QShortcut(qtg.QKeySequence("ctrl+="), self)
         zoom_in.activated.connect(self.parent.increase_font_size)
 
-        zoom_out = qtw.QShortcut(qtg.QKeySequence("ctrl+-"), self)
+        zoom_out = qtg.QShortcut(qtg.QKeySequence("ctrl+-"), self)
         zoom_out.activated.connect(self.parent.decrease_font_size)
 
     def clear_layout(self, layout):

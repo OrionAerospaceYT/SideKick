@@ -4,7 +4,7 @@ Controls the gui which allows the user to install other boards
 
 import threading
 
-from PyQt5 import QtWidgets as qtw
+from PyQt6 import QtWidgets as qtw
 
 from Ui.BoardsUi import Ui_MainWindow as boards
 

@@ -56,3 +56,7 @@ jobs:
     - name: Analysing cli_manager.py
       run: |
         pylint cli_manager.py
+
+    - name: Analysing terminal_manager.py
+      run: |
+        pylint terminal_manager.py

@@ -12,9 +12,9 @@ import threading
 import time
 import webbrowser
 
-from PyQt5 import QtCore as qtc
-from PyQt5 import QtGui as qtg
-from PyQt5 import QtWidgets as qtw
+from PyQt6 import QtCore as qtc
+from PyQt6 import QtGui as qtg
+from PyQt6 import QtWidgets as qtw
 
 from actuator import ActuatorGUI
 from boards import BoardsManager
@@ -39,7 +39,7 @@ class MainGUI(qtw.QMainWindow):
     """
     Launches the main window (debugging window)
 
-    This class inherits QMainWindow from PyQt5.QtWidgets as
+    This class inherits QMainWindow from PyQt6.QtWidgets as
     it holds the gui object which we need to modify.
 
     This class also usues the Graph class from graphs.py
@@ -98,7 +98,8 @@ class MainGUI(qtw.QMainWindow):
         self.connect_buttons()
         self.connect_keyboard_shortcuts()
         self.main_ui.message.setPlaceholderText("Enter device message here.")
-        self.main_ui.bottom_update.setAlignment(qtc.Qt.AlignRight | qtc.Qt.AlignVCenter)
+        self.main_ui.bottom_update.setAlignment(
+            qtc.Qt.AlignmentFlag.AlignRight | qtc.Qt.AlignmentFlag.AlignVCenter)
 
         # Attributes for event handling are defined here
         self.running = True
@@ -139,9 +140,10 @@ class MainGUI(qtw.QMainWindow):
         """
         On opening, set the screen size to a good dimensions relative to the monitor.
         """
-        desktop = qtw.QApplication.desktop()
-        height = int(desktop.screenGeometry().height() * 0.75)
-        width = int(height * 1.618)
+        desktop = qtg.QGuiApplication.primaryScreen().availableGeometry()
+        print(desktop.height(), desktop.width())
+        height = int(desktop.height() * 0.75)
+        width = min(int(height * 1.618), desktop.width() * 0.75)
 
         self.resize(width, height)
 
@@ -165,7 +167,7 @@ class MainGUI(qtw.QMainWindow):
             return
 
         self.actuator = ActuatorGUI(self.device_manager, self)
-        self.actuator.setAttribute(qtc.Qt.WA_DeleteOnClose)
+        self.actuator.setAttribute(qtc.Qt.WidgetAttribute.WA_DeleteOnClose)
         self.actuator.show()
         self.display_size()
         self.actuator.destroyed.connect(self.close_actuator_gui)
@@ -207,7 +209,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.select_project.clicked.connect(self.open_file)
         self.main_ui.new_project.clicked.connect(self.new_project)
         self.main_ui.help.clicked.connect(self.show_help)
-        self.main_ui.com_ports.activated[str].connect(self.connect_device)
+        self.main_ui.com_ports.currentIndexChanged.connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
         self.main_ui.arduino_cli.clicked.connect(self.display_cli)
         self.main_ui.full_screen.clicked.connect(
@@ -224,32 +226,32 @@ class MainGUI(qtw.QMainWindow):
             ctrl + h (help)
         """
 
-        disconnect = qtw.QShortcut(qtg.QKeySequence("ctrl+x"), self)
+        disconnect = qtg.QShortcut(qtg.QKeySequence("ctrl+x"), self)
         disconnect.activated.connect(self.device_manager.terminate_device)
 
-        compile_code = qtw.QShortcut(qtg.QKeySequence("ctrl+s"), self)
+        compile_code = qtg.QShortcut(qtg.QKeySequence("ctrl+s"), self)
         compile_code.activated.connect(self.compile_project)
 
-        upload = qtw.QShortcut(qtg.QKeySequence("ctrl+u"), self)
+        upload = qtg.QShortcut(qtg.QKeySequence("ctrl+u"), self)
         upload.activated.connect(self.upload_project)
 
-        record = qtw.QShortcut(qtg.QKeySequence("ctrl+r"), self)
+        record = qtg.QShortcut(qtg.QKeySequence("ctrl+r"), self)
         record.activated.connect(self.record_light.update_recording)
 
-        help_website = qtw.QShortcut(qtg.QKeySequence("ctrl+h"), self)
+        help_website = qtg.QShortcut(qtg.QKeySequence("ctrl+h"), self)
         help_website.activated.connect(self.demo_function)
 
-        tune_actuators = qtw.QShortcut(qtg.QKeySequence("ctrl+a"), self)
+        tune_actuators = qtg.QShortcut(qtg.QKeySequence("ctrl+a"), self)
         tune_actuators.activated.connect(self.open_actuator_gui)
 
-        full_screen = qtw.QShortcut(qtg.QKeySequence("ctrl+q"), self)
+        full_screen = qtg.QShortcut(qtg.QKeySequence("ctrl+q"), self)
         full_screen.activated.connect(
             lambda: self.message_handler.expand_debug(self.main_ui.full_screen))
 
-        zoom_in = qtw.QShortcut(qtg.QKeySequence("ctrl+="), self)
+        zoom_in = qtg.QShortcut(qtg.QKeySequence("ctrl+="), self)
         zoom_in.activated.connect(self.increase_font_size)
 
-        zoom_out = qtw.QShortcut(qtg.QKeySequence("ctrl+-"), self)
+        zoom_out = qtg.QShortcut(qtg.QKeySequence("ctrl+-"), self)
         zoom_out.activated.connect(self.decrease_font_size)
 
     def turn_on_rec_light(self, is_on):
@@ -703,7 +705,7 @@ if __name__ == "__main__":
     main_gui = MainGUI()
 
     main_gui.show()
-    app.exec_()
+    app.exec()
 
     main_gui.close_gui()
 

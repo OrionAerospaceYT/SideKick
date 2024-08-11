@@ -9,7 +9,7 @@ import shutil
 import platform
 import json
 
-from PyQt5 import QtWidgets as qtw
+from PyQt6 import QtWidgets as qtw
 
 from globals import SIZES_IN_QSS
 from globals import DEFAULT_SETTINGS, DEFAULT_BOARDS

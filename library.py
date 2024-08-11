@@ -2,7 +2,7 @@
 Library manager
 """
 
-from PyQt5 import QtWidgets as qtw
+from PyQt6 import QtWidgets as qtw
 
 from Ui.LibraryUi import Ui_MainWindow as library
 
