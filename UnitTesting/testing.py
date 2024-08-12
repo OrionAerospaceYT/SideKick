@@ -43,7 +43,7 @@ class TestGui(unittest.TestCase):
         """
         print(gui.main_ui.com_ports.currentText())
         self.assertEqual(gui.main_ui.bottom_update.text(), "Not Connected")
-        self.assertEqual(0,0)
+        self.assertEqual(0,1)
 
 if __name__ == "__main__":
     unittest.main()
