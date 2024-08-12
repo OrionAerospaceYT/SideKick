@@ -141,9 +141,8 @@ class MainGUI(qtw.QMainWindow):
         On opening, set the screen size to a good dimensions relative to the monitor.
         """
         desktop = qtg.QGuiApplication.primaryScreen().availableGeometry()
-        print(desktop.height(), desktop.width())
         height = int(desktop.height() * 0.75)
-        width = min(int(height * 1.618), desktop.width() * 0.75)
+        width = min(int(height * 1.618), int(desktop.width() * 0.75))
 
         self.resize(width, height)
 
