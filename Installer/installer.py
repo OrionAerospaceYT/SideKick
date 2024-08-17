@@ -51,7 +51,7 @@ class SideKickInstaller():
         Download the file, https://www.pjrc.com/teensy/td_156/package_teensy_index.json, and move
         it into arduino15.
         """
-        url = 'https://www.pjrc.com/teensy/td_156/package_teensy_index.json'
+        url = 'https://www.pjrc.com/teensy/package_teensy_index.json'
         package_index = requests.get(url, allow_redirects=True, timeout=1000)
         with open(f"{self.arduino}{self.sep}package_teensy_index.json", "wb") as teensy:
             teensy.write(package_index.content)
@@ -89,7 +89,7 @@ class SideKickInstaller():
         print("<<< RUNNING >>> Installing your boards")
 
         os.system(self.cli + " core install arduino:avr")
-        os.system(self.cli + " core install teensy:avr")
+        os.system(self.cli + " core install teensy:avr@1.56.2")
         os.system(self.cli + " core install arduino:mbed_rp2040")
 
     def setup_folders(self):
