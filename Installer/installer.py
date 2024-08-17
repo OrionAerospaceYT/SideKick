@@ -1,4 +1,9 @@
+"""
+This file has all of the functions necessary to install the SideKick GUI by setting up
+the arduino cli.
+"""
 import os
+import requests
 import platform
 
 class SideKickInstaller():
@@ -38,6 +43,19 @@ class SideKickInstaller():
             exit()
 
         os.system(self.cli + " config init")
+
+        self.clone_teensy_package_file()
+
+    def clone_teensy_package_file(self):
+        """
+        Download the file, https://www.pjrc.com/teensy/td_156/package_teensy_index.json, and move
+        it into arduino15.
+        """
+        url = 'https://www.pjrc.com/teensy/td_156/package_teensy_index.json'
+        package_index = requests.get(url, allow_redirects=True, timeout=1000)
+        with open(f"{self.arduino}{self.sep}package_teensy_index.json",
+                  "w", encoding="UTF-8") as teensy:
+            teensy.write(package_index.content)
 
     def change_user_yaml(self):
         """
