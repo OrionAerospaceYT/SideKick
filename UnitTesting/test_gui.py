@@ -42,6 +42,7 @@ class TestGui(unittest.TestCase):
         """
         boards = []
         for i in range(gui.main_ui.supported_boards.count()):
+            print(gui.main_ui.supported_boards.itemText(i))
             boards.append(gui.main_ui.supported_boards.itemText(i))
         self.assertEqual(boards, [])
         self.assertEqual(gui.main_ui.bottom_update.text(), "Not Connected")
