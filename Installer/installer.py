@@ -54,8 +54,8 @@ class SideKickInstaller():
         url = 'https://www.pjrc.com/teensy/td_156/package_teensy_index.json'
         package_index = requests.get(url, allow_redirects=True, timeout=1000)
         with open(f"{self.arduino}{self.sep}package_teensy_index.json",
-                  "w", encoding="UTF-8") as teensy:
-            teensy.write(package_index.content)
+                  "wb", encoding="UTF-8") as teensy:
+            teensy.write(package_index.content.decode("UTF-8"))
 
     def change_user_yaml(self):
         """
