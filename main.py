@@ -208,7 +208,7 @@ class MainGUI(qtw.QMainWindow):
         self.main_ui.select_project.clicked.connect(self.open_file)
         self.main_ui.new_project.clicked.connect(self.new_project)
         self.main_ui.help.clicked.connect(self.show_help)
-        self.main_ui.com_ports.currentIndexChanged.connect(self.connect_device)
+        self.main_ui.com_ports.activated.connect(self.connect_device)
         self.main_ui.tune_actuators.clicked.connect(self.open_actuator_gui)
         self.main_ui.arduino_cli.clicked.connect(self.display_cli)
         self.main_ui.full_screen.clicked.connect(
