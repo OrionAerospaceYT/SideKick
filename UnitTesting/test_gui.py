@@ -41,6 +41,7 @@ class TestGui(unittest.TestCase):
         Verifies the installation of the SideKick GUI.
         """
         print(gui.main_ui.com_ports.currentText())
+        print([gui.main_ui.com_ports.itemText(i) for i in range(gui.main_ui.com_ports.itemText(i).count())])
         self.assertEqual(gui.main_ui.bottom_update.text(), "Not Connected")
         self.assertEqual(0,0)
 
