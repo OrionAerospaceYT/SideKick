@@ -3,7 +3,6 @@ Testing
 """
 import os
 import sys
-import time
 import unittest
 
 from PyQt6 import QtGui as qtg

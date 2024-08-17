@@ -71,7 +71,7 @@ class Terminal():
         block_format = qtg.QTextBlockFormat()
         block_format.setBottomMargin(0)
 
-        cursor.movePosition(cursor.Start)
+        cursor.movePosition(qtg.QTextCursor.MoveOperation.Start)
         cursor.insertBlock(block_format)
         cursor.insertFragment(fragment)
 
@@ -81,7 +81,7 @@ class Terminal():
         """
         num_of_blocks = self.text_edit.document().blockCount()
         cursor = self.text_edit.textCursor()
-        cursor.movePosition(cursor.End)
+        cursor.movePosition(qtg.QTextCursor.MoveOperation.End)
         for _ in range(num_of_blocks - self.calculate_num_of_blocks()):
             cursor.movePosition(cursor.PreviousBlock, cursor.KeepAnchor)
         self.running_average = self.running_average[num_of_blocks:]

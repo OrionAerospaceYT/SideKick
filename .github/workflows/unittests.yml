@@ -60,6 +60,6 @@ jobs:
         python ./installer.py
         cd ..
 
-    - name: Test with pytest
+    - name: Test the PyQt6 GUI
       run: |
-        pytest ./UnitTesting/testing.py
+        pytest ./UnitTesting/test_gui.py

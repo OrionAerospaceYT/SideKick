@@ -367,7 +367,7 @@ class MainGUI(qtw.QMainWindow):
 
     def connect_device(self, port):
         """
-        Connects new devices through device manager and updates com por[t in
+        Connects new devices through device manager and updates com port in
         self.message_handler
 
         Args:
@@ -387,6 +387,7 @@ class MainGUI(qtw.QMainWindow):
         if DEV and port == "emulate":
             self.device_manager.connect_device(port, baud, dev=True)
         else:
+            port = self.main_ui.com_ports.itemText(port)
             self.device_manager.connect_device(port, baud)
 
     def open_file_manager(self):
