@@ -56,3 +56,15 @@ jobs:
     - name: Analysing cli_manager.py
       run: |
         pylint cli_manager.py
+
+    - name: Analysing terminal_manager.py
+      run: |
+        pylint terminal_manager.py
+
+    - name: Analysing manager.py
+      run: |
+        pylint manager.py
+
+    - name: Analysing globals.py
+      run: |
+        pylint globals.py
