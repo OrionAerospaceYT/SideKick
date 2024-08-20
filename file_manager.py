@@ -155,7 +155,7 @@ class HtmlGenerator():
             name (string): the text for the title (name)
         """
 
-        return f"<h1><p style=\"color:#00f0c3; font-size:20px\">{name}</p></h1><br>"
+        return f"<h1><p style=\"color:#00f0c3\">{name}</p></h1><br>"
 
     def get_link(self, link):
         """

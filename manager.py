@@ -11,6 +11,29 @@ from Ui.ManagerUi import Ui_MainWindow as manager
 
 from globals import SELECTED_WIDGET_QSS, NORMAL_WIDGET_QSS
 
+def library_no_results():
+    """
+    Create a QTextBrowser to show the user that there are no results
+    """
+    no_results = qtw.QTextBrowser()
+    no_results.setHtml("""
+<h2><p style="color:#00f0c3">No results found!</p></h2><br>
+<p>Please check your spelling or try another search term.</p><br>
+""")
+    return no_results
+
+def library_instructions():
+    """
+    Create a QTextBrowser to explain to the user how to use the library manager
+    """
+    instructions = qtw.QTextBrowser()
+    instructions.setHtml("""
+<h2><p style="color:#00f0c3">Search for your library!</p></h2><br>
+<p>Please enter a key word or phrase of the library you are looking
+for which is at least three characters long.</p>
+""")
+    return instructions
+
 class ManagerWidget(qtw.QTextBrowser):
     """
     Testing
@@ -111,7 +134,7 @@ class Manager(qtw.QMainWindow):
         self.widgets.append(ManagerWidget(name, versions, html, len(self.widgets), self))
         self.manager_ui.selectable_items.addWidget(self.widgets[-1])
 
-    def update_selected(self, index):
+    def update_selected(self, index:int):
         """
         Update the selected library and if the one which is already selected is clicked then
         set selected to -1 as it is an impossible index otherwise

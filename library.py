@@ -1,7 +1,7 @@
 """
 Library manager
 """
-from manager import Manager
+from manager import Manager, library_no_results, library_instructions
 
 class LibraryManager(Manager):
     """
@@ -16,16 +16,38 @@ class LibraryManager(Manager):
 
         self.manager_ui.search_bar.setPlaceholderText("Search for your library here")
 
+        self.manager_ui.selectable_items.addWidget(library_instructions())
+
         self.show()
+
+    def get_search_term(self) -> str | None:
+        """
+        Checks that the search term the user has entered is valid
+        """
+        search_term = self.manager_ui.search_bar.text()
+        if len(search_term) < 3:
+            return None
+        return search_term
 
     def update_labels(self):
         """
         Update the libraries which are on display for the user to select
         """
         self.clear_widgets()
-        for name in self.file_manager.get_all_libraries(self.manager_ui.search_bar.text()):
+
+        search_term = self.get_search_term()
+
+        if not search_term:
+            self.manager_ui.selectable_items.addWidget(library_instructions())
+            return
+
+        for name in self.file_manager.get_all_libraries(search_term):
             super().add_widget(name, self.file_manager.libraries)
+
         self.manager_ui.search_bar.setText("")
+
+        if len(self.widgets) == 0:
+            self.manager_ui.selectable_items.addWidget(library_no_results())
 
     def install(self):
         """
