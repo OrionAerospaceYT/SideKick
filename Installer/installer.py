@@ -89,7 +89,7 @@ class SideKickInstaller():
         print("<<< RUNNING >>> Installing your boards")
 
         os.system(self.cli + " core install arduino:avr")
-        os.system(self.cli + " core install teensy:avr@1.56.2")
+        os.system(self.cli + " core install teensy:avr")
         os.system(self.cli + " core install arduino:mbed_rp2040")
 
     def setup_folders(self):
