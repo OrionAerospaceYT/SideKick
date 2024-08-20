@@ -20,7 +20,7 @@ class LibraryManager(Manager):
 
         self.show()
 
-    def get_search_term(self) -> str | None:
+    def get_search_term(self) -> str:
         """
         Checks that the search term the user has entered is valid
         """
