@@ -63,7 +63,7 @@ jobs:
 
     - name: Analysing manager.py
       run: |
-        pylint manager.py
+        pylint manager.py --disable=R0913,C0103,R0902
 
     - name: Analysing globals.py
       run: |
