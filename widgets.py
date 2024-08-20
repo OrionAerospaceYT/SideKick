@@ -5,12 +5,8 @@ display the data onto a graph.
 
 import time
 
-from bs4 import BeautifulSoup
-
 import pyqtgraph as pg
 import numpy as np
-
-from PyQt5 import QtWidgets as qtw
 
 from globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
 from globals import GRAPH_BEGINNING, GRAPH_ENDING
