@@ -5,14 +5,11 @@ display the data onto a graph.
 
 import time
 
-import webbrowser
-
 from bs4 import BeautifulSoup
 
 import pyqtgraph as pg
 import numpy as np
 
-from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
 
 from globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
@@ -381,90 +378,6 @@ class SideMenu:
         """
         self.layout.setVisible(False)
 
-
-class CheckBox:
-    """
-    Creates a checkbox which uses a text browser + html to create a
-    good looking way of displaying all relevant information.
-
-    Attributes:
-        name (str) : the title of the html
-        vertical_layout (QVBoxLayout) : the vertical layout all the elements gfo in
-        versions (QComboBox) : the drop down menu
-        install (QPushButton) : the button to install
-        horizontal_layout (QHBoxLayout) : the horizontal layout
-        info (QTextBrowser) : the QTextBrowser that shows the HTML
-
-    Methods:
-        get_height:
-            Approximates the height the HTML will take up
-        
-        get_version:
-            Returns the currently selected version
-    """
-
-    def __init__(self, name:str, html:str, versions:list, parent=None):
-
-        self.name = name
-
-        self.vertical_layout = qtw.QVBoxLayout()
-
-        self.versions = qtw.QComboBox()
-        for item in reversed(versions):
-            self.versions.addItem(item)
-
-        self.install = qtw.QPushButton("Install")
-
-        if parent:
-            self.install.clicked.connect(lambda: parent.install(self.get_version(),
-                                                                self.name))
-        self.vertical_layout.addWidget(self.install)
-        self.vertical_layout.addWidget(self.versions)
-
-        self.horizontal_layout = qtw.QHBoxLayout()
-
-        self.info = qtw.QTextBrowser()
-        self.info.setHtml(html)
-        self.info.setOpenExternalLinks(True)
-        self.info.setMinimumHeight(self.get_height(html, self.info.size().width()))
-
-        self.horizontal_layout.addLayout(self.vertical_layout)
-        self.horizontal_layout.addWidget(self.info)
-
-    def get_height(self, html:str, width:int) -> int:
-        """
-        test
-
-        Args:
-            html (str): the html that formats the textbox
-            width (int): the width of the window
-
-        Returns:
-            int: the height of the text box *THIS IS AN ESTIMATE*
-        """
-        total = html.count("</p>")
-
-        html = html.replace("<br>", "\n")
-        html = html.replace("</p>", "\n")
-        soup = BeautifulSoup(html, 'html.parser')
-        plain_text = soup.get_text(separator=' ')
-
-        plain_text = [item for item in plain_text.split("\n") if item != ""]
-
-        for string in plain_text:
-            total += 1
-            if len(string) > 0:
-                total += (len(string) * 24) // width
-
-        return total * 20 + 50
-
-    def get_version(self) -> str:
-        """
-        Returns:
-            str: the string of the currently selected version
-        """
-        return str(self.versions.currentText())
-
 class SideKickLite:
     """
     Converts the sidekick lite button to a checkbox
@@ -494,42 +407,3 @@ class SideKickLite:
         else:
             self.button.setStyleSheet(SK_LITE_OFF_QSS)
             self.button.setText("SideKick Lite: OFF")
-
-class BoardWidget(qtw.QTextBrowser):
-    """
-    Testing
-    """
-    def __init__(self, name, versions, index, parent=None):
-        self.name = name
-        self.index = index
-        self.parent = parent
-        self.versions = versions
-
-        super().__init__(parent)
-
-        self.setHtml(self.parent.file_manager.get_html(name, self.parent.file_manager.boards))
-        self.setTextInteractionFlags(qtc.Qt.LinksAccessibleByMouse | qtc.Qt.NoTextInteraction)
-        self.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
-
-        document = self.document()
-        document.adjustSize()
-        scale = max(self.parent.file_manager.get_scale() * 1.7, 0.7*1.7)
-        self.setMinimumHeight(int(document.size().height()*scale))
-
-        self.anchorClicked.connect(self.handle_anchor_clicked)
-
-    def handle_anchor_clicked(self, url):
-        """
-        Open the URL in the default web browser.
-        """
-        html = self.toHtml()
-        webbrowser.open(url.toString())
-        self.setHtml(html)
-
-    def mousePressEvent(self, event):
-        """
-        Adds an event if the QTextBrowser is clicked.
-        """
-        if event.button() == qtc.Qt.LeftButton:
-            self.parent.update_selected(self.index)
-        super().mousePressEvent(event)

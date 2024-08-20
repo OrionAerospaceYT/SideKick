@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\LibraryUi.ui'
+# Form implementation generated from reading ui file '.\ManagerUi.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -14,13 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(485, 300)
+        MainWindow.resize(669, 362)
         MainWindow.setMinimumSize(QtCore.QSize(485, 300))
-        MainWindow.setStyleSheet("QScrollBar\n"
+        MainWindow.setStyleSheet("QScrollBar:vertical\n"
 "{\n"
-"    width: 20px;\n"
-"    border:none;\n"
-"    border-radius: 10px;\n"
+"    width: 8px;\n"
 "    background: #32323C;\n"
 "}\n"
 "QScrollBar::add-page, QScrollBar::sub-page \n"
@@ -30,21 +28,6 @@ class Ui_MainWindow(object):
 "QScrollBar::add-line, QScrollBar::sub-line \n"
 "{\n"
 "    background-color: #32323C;\n"
-"}\n"
-"QScrollBar::handle\n"
-"{\n"
-"    background-color: grey;\n"
-"    min-height: 30px;\n"
-"    border-radius: 10px;\n"
-"    border:none;\n"
-"}\n"
-"QScrollBar::up-arrow\n"
-"{\n"
-"    background: none;\n"
-"}\n"
-"QScrollBar::down-arrow\n"
-"{\n"
-"    background: none;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 0))
@@ -53,31 +36,34 @@ class Ui_MainWindow(object):
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.search = QtWidgets.QLineEdit(self.centralwidget)
-        self.search.setObjectName("search")
-        self.gridLayout.addWidget(self.search, 1, 0, 1, 1)
-        self.logo = QtWidgets.QLabel(self.centralwidget)
-        self.logo.setText("")
-        self.logo.setObjectName("logo")
-        self.gridLayout.addWidget(self.logo, 0, 0, 1, 2)
-        self.enter = QtWidgets.QPushButton(self.centralwidget)
-        self.enter.setObjectName("enter")
-        self.gridLayout.addWidget(self.enter, 1, 1, 1, 1)
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidget = QtWidgets.QWidget()
-        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 443, 210))
+        self.scrollAreaWidget.setGeometry(QtCore.QRect(0, 0, 639, 263))
         self.scrollAreaWidget.setObjectName("scrollAreaWidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.libraries = QtWidgets.QVBoxLayout()
-        self.libraries.setObjectName("libraries")
-        self.verticalLayout_2.addLayout(self.libraries)
+        self.selectable_items = QtWidgets.QVBoxLayout()
+        self.selectable_items.setObjectName("selectable_items")
+        self.verticalLayout_2.addLayout(self.selectable_items)
         self.scrollArea.setWidget(self.scrollAreaWidget)
-        self.gridLayout.addWidget(self.scrollArea, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 3)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.install = QtWidgets.QPushButton(self.centralwidget)
+        self.install.setObjectName("install")
+        self.horizontalLayout_2.addWidget(self.install)
+        self.versions = QtWidgets.QComboBox(self.centralwidget)
+        self.versions.setObjectName("versions")
+        self.versions.addItem("")
+        self.horizontalLayout_2.addWidget(self.versions)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 2, 0, 1, 3)
+        self.search_bar = QtWidgets.QLineEdit(self.centralwidget)
+        self.search_bar.setObjectName("search_bar")
+        self.gridLayout.addWidget(self.search_bar, 0, 0, 1, 3)
         self.gridLayout_7.addLayout(self.gridLayout, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -89,8 +75,9 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "SideKick Library Manager"))
-        self.enter.setText(_translate("MainWindow", "Enter"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Manager"))
+        self.install.setText(_translate("MainWindow", "Install"))
+        self.versions.setItemText(0, _translate("MainWindow", "N/A"))
 
 
 if __name__ == "__main__":

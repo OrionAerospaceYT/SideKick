@@ -4,85 +4,27 @@ Controls the gui which allows the user to install other boards
 
 import threading
 
-from PyQt5 import QtWidgets as qtw
+from manager import Manager
 
-from Ui.BoardsUi import Ui_MainWindow as boards
-
-from widgets import BoardWidget
-
-from globals import SELECTED_WIDGET_QSS, NORMAL_WIDGET_QSS
-
-class BoardsManager(qtw.QMainWindow):
+class BoardsManager(Manager):
     """
-    updates and maintains the library manager window
-    inherits qtw.QMainWindow so it inherits the properties needed
-    for the gui
-
-    Attributes:
-        file_manager (FileManager): the file manager from MainGUI
-        check_boxes (list): the checkboxes that are on display
-        boards_ui (TODO): the library GUI
-        installable (list): the list of installable libraries
+    Re-Write this docstring TODO
     """
 
     def __init__(self, parent=None):
-        super().__init__(parent=parent)
-        self.boards_ui = boards()
-        self.boards_ui.setupUi(self)
+        super().__init__("SideKick Boards Manager", "board", parent=parent)
 
-        # Definition of attributes
-        self.parent = parent
-        self.file_manager = self.parent.file_manager
-        self.cli_manager = self.parent.cli_manager
-        self.widgets = []
-
-
-        self.selected = -1
-
-        # Connecting buttons
-        self.boards_ui.install.clicked.connect(self.install)
-
+        self.manager_ui.install.clicked.connect(self.install)
         self.update_labels()
-
-        self.resize(int(self.parent.width()*0.8), int(self.parent.height()*0.8))
-
-        self.setWindowModality(2)
 
         self.show()
 
     def update_labels(self):
         """
-        Updates the libraries that are on display.
+        Updates the boards that are on display.
         """
         for name in list(self.file_manager.boards.keys()):
-            versions = self.file_manager.get_versions(name, self.file_manager.boards)
-            self.widgets.append(BoardWidget(name, versions, len(self.widgets), self))
-            self.boards_ui.boards.addWidget(self.widgets[-1])
-
-    def update_selected(self, index):
-        """
-        Testing parent function calls
-        """
-        while self.boards_ui.versions.currentText():
-            self.boards_ui.versions.removeItem(0)
-
-        self.boards_ui.install.setText("Select a board to install")
-
-        if index == self.selected:
-            self.selected = -1
-        else:
-            self.selected = index
-
-        for indx, widget in enumerate(self.widgets):
-            widget.setStyleSheet(NORMAL_WIDGET_QSS)
-            if indx == self.selected:
-                widget.setStyleSheet(SELECTED_WIDGET_QSS)
-                self.boards_ui.install.setText("Install: " + widget.name)
-                for item in widget.versions:
-                    self.boards_ui.versions.addItem(item)
-
-        if not self.boards_ui.versions.currentText():
-            self.boards_ui.versions.addItem("N/A")
+            super().add_widget(name, self.file_manager.boards)
 
     def install(self):
         """
@@ -92,21 +34,18 @@ class BoardsManager(qtw.QMainWindow):
             return
 
         name = self.widgets[self.selected].name
-        version = self.boards_ui.versions.currentText()
-
+        version = self.manager_ui.versions.currentText()
         architecture = self.file_manager.boards[name]["architecture"]
-        self.parent.cli_manager.communicate(
-            f"core install \"{architecture}@{version}\"")
 
-        threaded_wait = threading.Thread(
-            target=self.wait_to_update_boards,
-            args=(f"core install \"{architecture}@{version}\"",),)
+        command = f"core install \"{architecture}@{version}\""
+
+        self.parent.cli_manager.communicate(command)
+        threaded_wait = threading.Thread(target=self.wait_to_update_boards, args=(command,),)
         threaded_wait.start()
 
     def wait_to_update_boards(self, cmd):
         """
         Waits for the install command to be run before
-        TODO
         """
         while (cmd in self.cli_manager.commands.keys()) or self.cli_manager.running:
             pass

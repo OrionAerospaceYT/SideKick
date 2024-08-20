@@ -149,7 +149,7 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the library manager window
         """
-        LibraryManager(self.file_manager, self)
+        LibraryManager(self)
 
     def open_boards_manager(self):
         """
