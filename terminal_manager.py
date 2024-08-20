@@ -5,7 +5,7 @@ the terminal and displaying information on it.
 import re
 import copy
 
-from PyQt5.QtGui import QTextDocumentFragment, QTextBlockFormat
+from PyQt5 import QtGui as qtg
 
 from globals import GRAPH_BEGINNING, GRAPH_ENDING, NUM_OF_DATA_PTS
 
@@ -68,7 +68,7 @@ class Terminal():
         Create the cursor and write the data to the screen
         """
         cursor = self.text_edit.textCursor()
-        block_format = QTextBlockFormat()
+        block_format = qtg.QTextBlockFormat()
         block_format.setBottomMargin(0)
 
         cursor.movePosition(cursor.Start)
@@ -115,7 +115,7 @@ class Terminal():
         batch = self.compile_batch()
         if not batch:
             return
-        fragment = QTextDocumentFragment.fromHtml(batch)
+        fragment = qtg.QTextDocumentFragment.fromHtml(batch)
         self.write_text(fragment)
 
         # Restore the cursor position
