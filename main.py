@@ -684,6 +684,7 @@ class MainGUI(qtw.QMainWindow):
         self.message_handler.terminate_ellipsis()
         self.cli_manager.terminate()
 
+print(os.getcwd())
 print(os.listdir("./"))
 print(os.listdir("./Externals/"))
 
