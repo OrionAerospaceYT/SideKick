@@ -1,6 +1,6 @@
 """
-This file deals with terminal in an efficient way using blocks and no longer uses HTML to make the
-terminal text look good.
+To speed up the GUI, the terminal is written to in batches and class terminal deals with managing
+the terminal and displaying information on it. The terminal is styled using HTML syntax.
 """
 import re
 import copy

@@ -23,13 +23,13 @@ from device_manager import DeviceManager
 from file_manager import FileManager
 from cli_manager import CliManager
 from terminal_manager import Terminal
+from message_handler import MessageHandler
 
 from widgets import Graph
 from widgets import RecordLight
 from widgets import SideMenu
 from widgets import SideKickLite
 
-from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
 DEV = False
@@ -150,13 +150,13 @@ class MainGUI(qtw.QMainWindow):
         """
         Opens the library manager window
         """
-        LibraryManager(self.file_manager, self)
+        LibraryManager(self)
 
     def open_boards_manager(self):
         """
         Opens the board manager window
         """
-        BoardsManager(self.file_manager, self.cli_manager, self)
+        BoardsManager(self)
 
     def open_actuator_gui(self):
         """
@@ -689,6 +689,7 @@ class MainGUI(qtw.QMainWindow):
 
 if __name__ == "__main__":
 
+    # Check if the application is being run in development mode
     if "-d" in sys.argv:
         DEV = True
 
@@ -698,17 +699,27 @@ if __name__ == "__main__":
             print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
             sys.exit()
 
+    # Create the QApplication which is necessary for all PyQt widgets
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
 
+    # Create a Loading screen while the main GUI is being setup
+    loading_image = qtg.QPixmap("Ui/Loading_Screen.png")
+    loading_screen = qtw.QSplashScreen(loading_image, qtc.Qt.WindowType.WindowStaysOnTopHint)
+    loading_screen.show()
+
+    # Setup the main GUI
     main_gui = MainGUI()
 
+    # Show the main GUI and run the application
+    loading_screen.close()
     main_gui.show()
     app.exec()
 
     main_gui.close_gui()
 
+    # Save all of the preferences of the user
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
     sk_lite = main_gui.sk_lite.state

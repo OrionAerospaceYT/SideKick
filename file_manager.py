@@ -155,9 +155,9 @@ class HtmlGenerator():
             name (string): the text for the title (name)
         """
 
-        return f"<h1><p style=\"color:#00f0c3; font-size:20px\">{name}</p></h1><br>"
+        return f"<h1><p style=\"color:#00f0c3\">{name}</p></h1><br>"
 
-    def get_link(self, name, link):
+    def get_link(self, link):
         """
         Returns the html link for categories which are links.
 
@@ -165,7 +165,7 @@ class HtmlGenerator():
             name (string): the link
         """
 
-        return f"<a style=\"color:#8ab4f8\" href={link}>{name}</a><br>"
+        return f"<a style=\"color:#8ab4f8\" href={link}>{link}</a><br>"
 
     def get_paragraph(self, name, text):
         """
@@ -198,15 +198,15 @@ class HtmlGenerator():
             name (str): the name of the dictionary item
             my_dict (dictionary): the dictionary to parse into html
         """
-        html = ""
+        html = self.get_title(name)
 
         for item in list(my_dict[name].keys()):
             if item in ("name", "architecture"):
-                html = self.get_title(str(my_dict[name][item]))
+                html += self.get_paragraph("FQBN", str(my_dict[name][item]))
             elif item in ("checksum", "version"):
                 pass
             elif item in ("repository", "url", "website"):
-                html += self.get_link(item, str(my_dict[name][item]))
+                html += self.get_link(str(my_dict[name][item]))
             elif isinstance(my_dict[name][item], list):
                 html += self.get_list_paragraph(item, my_dict[name][item])
             elif isinstance(item, str):
@@ -787,6 +787,16 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             encoding="UTF-8") as sizes:
             scale = round(scale, 1)
             sizes.write(str(scale)+"\n"+stylesheet)
+
+    def get_scale(self) -> float:
+        """
+        Gets the scale from the stylesheet.
+        """
+        with open(
+            f".{self.sep}Ui{self.sep}stylesheet.qss",
+            "r",
+            encoding="UTF-8") as scale:
+            return float(scale.readline())
 
     def get_size_stylesheet(self) -> tuple:
         """

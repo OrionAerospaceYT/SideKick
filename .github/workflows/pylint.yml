@@ -27,7 +27,7 @@ jobs:
         
     - name: Analysing file_manager.py
       run: |
-        pylint file_manager.py --disable=R0902,R1725
+        pylint file_manager.py --disable=R0902,R1725,R0904
         
     - name: Analysing message_handler.py
       run: |
@@ -39,7 +39,7 @@ jobs:
         
     - name: Analysing widgets.py
       run: |
-        pylint widgets.py --disable=R0903
+        pylint widgets.py --disable=R0903,C0103
         
     - name: Analysing library.py
       run: |
@@ -60,3 +60,11 @@ jobs:
     - name: Analysing terminal_manager.py
       run: |
         pylint terminal_manager.py
+
+    - name: Analysing manager.py
+      run: |
+        pylint manager.py --disable=R0913,C0103,R0902
+
+    - name: Analysing globals.py
+      run: |
+        pylint globals.py

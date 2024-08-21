@@ -4,72 +4,46 @@ Controls the gui which allows the user to install other boards
 
 import threading
 
-from PyQt6 import QtWidgets as qtw
+from manager import Manager
 
-from Ui.BoardsUi import Ui_MainWindow as boards
-
-from widgets import CheckBox
-
-class BoardsManager(qtw.QMainWindow):
+class BoardsManager(Manager):
     """
-    updates and maintains the library manager window
-    inherits qtw.QMainWindow so it inherits the properties needed
-    for the gui
-
-    Attributes:
-        file_manager (FileManager): the file manager from MainGUI
-        check_boxes (list): the checkboxes that are on display
-        boards_ui (TODO): the library GUI
-        installable (list): the list of installable libraries
+    Re-Write this docstring TODO
     """
 
-    def __init__(self, file_manager, cli_manmager, parent=None):
-        super().__init__(parent=parent)
+    def __init__(self, parent=None):
+        super().__init__("SideKick Boards Manager", "board", parent=parent)
 
-        # Definition of attributes
-        self.parent = parent
-        self.boards_ui = boards()
-        self.file_manager = file_manager
-        self.cli_manager = cli_manmager
-        self.check_boxes = []
-
-        self.boards_ui.setupUi(self)
-
-        # Connecting buttons
+        self.manager_ui.install.clicked.connect(self.install)
         self.update_labels()
 
         self.show()
 
     def update_labels(self):
         """
-        Updates the libraries that are on display.
+        Updates the boards that are on display.
         """
-
         for name in list(self.file_manager.boards.keys()):
-            versions = self.file_manager.get_versions(name, self.file_manager.boards)
-            check_box = CheckBox(name, self.file_manager.get_html(
-                name, self.file_manager.boards), versions, parent=self)
-            self.check_boxes.append(check_box.horizontal_layout)
-            self.boards_ui.boards.addLayout(self.check_boxes[-1])
+            super().add_widget(name, self.file_manager.boards)
 
-    def install(self, version, name):
+    def install(self):
         """
-        calls the actuall install function on a thread
+        Calls the actuall install function on a thread.
+        """
+        if self.selected == -1:
+            return
 
-        Args:
-            version (string): the selected version to install
-            name (string): the name of the library to install   
-        """
+        name = self.widgets[self.selected].name
+        version = self.manager_ui.versions.currentText()
         architecture = self.file_manager.boards[name]["architecture"]
-        self.parent.cli_manager.communicate(
-            f"core install \"{architecture}@{version}\"")
 
-        threaded_wait = threading.Thread(
-            target=self.wait_yo_update_boards,
-            args=(f"core install \"{architecture}@{version}\"",),)
+        command = f"core install \"{architecture}@{version}\""
+
+        self.parent.cli_manager.communicate(command)
+        threaded_wait = threading.Thread(target=self.wait_to_update_boards, args=(command,),)
         threaded_wait.start()
 
-    def wait_yo_update_boards(self, cmd):
+    def wait_to_update_boards(self, cmd):
         """
         Waits for the install command to be run before
         """

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>300</height>
+    <width>669</width>
+    <height>362</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,14 +17,12 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>SideKick Library Manager</string>
+   <string>Manager</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QScrollBar
+   <string notr="true">QScrollBar:vertical
 {
-	width: 20px;
-	border:none;
-    border-radius: 10px;
+	width: 8px;
     background: #32323C;
 }
 QScrollBar::add-page, QScrollBar::sub-page 
@@ -34,21 +32,6 @@ QScrollBar::add-page, QScrollBar::sub-page
 QScrollBar::add-line, QScrollBar::sub-line 
 {
 	background-color: #32323C;
-}
-QScrollBar::handle
-{
-	background-color: grey;
-	min-height: 30px;
-	border-radius: 10px;
-	border:none;
-}
-QScrollBar::up-arrow
-{
-	background: none;
-}
-QScrollBar::down-arrow
-{
-	background: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -60,25 +43,8 @@ QScrollBar::down-arrow
    </property>
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="1">
-     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0">
-      <item row="1" column="0">
-       <widget class="QLineEdit" name="search"/>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="logo">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="enter">
-        <property name="text">
-         <string>Enter</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+      <item row="1" column="0" colspan="3">
        <widget class="QScrollArea" name="scrollArea">
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOn</enum>
@@ -94,17 +60,40 @@ QScrollBar::down-arrow
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>443</width>
-           <height>210</height>
+           <width>639</width>
+           <height>263</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <layout class="QVBoxLayout" name="libraries"/>
+           <layout class="QVBoxLayout" name="selectable_items"/>
           </item>
          </layout>
         </widget>
        </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="install">
+          <property name="text">
+           <string>Install</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="versions">
+          <item>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QLineEdit" name="search_bar"/>
       </item>
      </layout>
     </item>

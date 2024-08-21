@@ -5,12 +5,8 @@ display the data onto a graph.
 
 import time
 
-from bs4 import BeautifulSoup
-
 import pyqtgraph as pg
 import numpy as np
-
-from PyQt6 import QtWidgets as qtw
 
 from globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
 from globals import GRAPH_BEGINNING, GRAPH_ENDING
@@ -377,90 +373,6 @@ class SideMenu:
         Hides the entire display (used on startup).
         """
         self.layout.setVisible(False)
-
-
-class CheckBox:
-    """
-    Creates a checkbox which uses a text browser + html to create a
-    good looking way of displaying all relevant information.
-
-    Attributes:
-        name (str) : the title of the html
-        vertical_layout (QVBoxLayout) : the vertical layout all the elements gfo in
-        versions (QComboBox) : the drop down menu
-        install (QPushButton) : the button to install
-        horizontal_layout (QHBoxLayout) : the horizontal layout
-        info (QTextBrowser) : the QTextBrowser that shows the HTML
-
-    Methods:
-        get_height:
-            Approximates the height the HTML will take up
-        
-        get_version:
-            Returns the currently selected version
-    """
-
-    def __init__(self, name:str, html:str, versions:list, parent=None):
-
-        self.name = name
-
-        self.vertical_layout = qtw.QVBoxLayout()
-
-        self.versions = qtw.QComboBox()
-        for item in reversed(versions):
-            self.versions.addItem(item)
-
-        self.install = qtw.QPushButton("Install")
-
-        if parent:
-            self.install.clicked.connect(lambda: parent.install(self.get_version(),
-                                                                self.name))
-        self.vertical_layout.addWidget(self.install)
-        self.vertical_layout.addWidget(self.versions)
-
-        self.horizontal_layout = qtw.QHBoxLayout()
-
-        self.info = qtw.QTextBrowser()
-        self.info.setHtml(html)
-        self.info.setOpenExternalLinks(True)
-        self.info.setMinimumHeight(self.get_height(html, self.info.size().width()))
-
-        self.horizontal_layout.addLayout(self.vertical_layout)
-        self.horizontal_layout.addWidget(self.info)
-
-    def get_height(self, html:str, width:int) -> int:
-        """
-        test
-
-        Args:
-            html (str): the html that formats the textbox
-            width (int): the width of the window
-
-        Returns:
-            int: the height of the text box *THIS IS AN ESTIMATE*
-        """
-        total = html.count("</p>")
-
-        html = html.replace("<br>", "\n")
-        html = html.replace("</p>", "\n")
-        soup = BeautifulSoup(html, 'html.parser')
-        plain_text = soup.get_text(separator=' ')
-
-        plain_text = [item for item in plain_text.split("\n") if item != ""]
-
-        for string in plain_text:
-            total += 1
-            if len(string) > 0:
-                total += (len(string) * 24) // width
-
-        return total * 20 + 50
-
-    def get_version(self) -> str:
-        """
-        Returns:
-            str: the string of the currently selected version
-        """
-        return str(self.versions.currentText())
 
 class SideKickLite:
     """
