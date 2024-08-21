@@ -69,6 +69,7 @@ class TestGui(unittest.TestCase):
         print("Setting up the tests...")
         app.setWindowIcon(qtg.QIcon("Ui/SideKick.ico"))
         gui.show()
+        app.processEvents()
         print("Done.")
 
     @classmethod
@@ -77,13 +78,6 @@ class TestGui(unittest.TestCase):
         app.closeAllWindows()
         gui.close_gui()
         print("Done.")
-
-    def test_running_gui(self):
-        """
-        Verifies the installation of the SideKick GUI
-        """
-        app.processEvents()
-        self.assertEqual(0, 0)
 
     def test_check_installed_boards(self):
         """
