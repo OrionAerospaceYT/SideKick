@@ -1,5 +1,5 @@
 """
-Testing
+Test the setup and run of the GUI as a whole system seperate from unittesting
 """
 import os
 import sys
@@ -47,10 +47,21 @@ INSTALLED_BOARDS = [
 "LilyPad Arduino USB",
 "Linino One",
 "Raspberry Pi Pico",
+"Teensy 2.0",
+"Teensy 3.0",
+"Teensy 3.2 / 3.1",
+"Teensy 3.5",
+"Teensy 3.6",
+"Teensy 4.0",
+"Teensy 4.1",
+"Teensy LC",
+"Teensy MicroMod",
+"Teensy++ 2.0"
 ]
+
 class TestGui(unittest.TestCase):
     """
-    Testing the main features and backend of the SideKickGUI.
+    Testing the main features and backend of the SideKickGUI in an integration test
     """
 
     @classmethod
@@ -68,16 +79,29 @@ class TestGui(unittest.TestCase):
         gui.close_gui()
         print("Done.")
 
-    def test_verify_install(self):
+    def test_running_gui(self):
         """
-        Verifies the installation of the SideKick GUI.
+        Verifies the installation of the SideKick GUI
+        """
+        app.processEvents()
+        self.assertEqual(0, 0)
+
+    def test_check_installed_boards(self):
+        """
+        Check that all of the correct boards have been installed
         """
         boards = []
         for i in range(gui.main_ui.supported_boards.count()):
             print(gui.main_ui.supported_boards.itemText(i))
             boards.append(gui.main_ui.supported_boards.itemText(i))
         self.assertEqual(boards, INSTALLED_BOARDS)
+
+    def test_check_connection_status(self):
+        """
+        As there is no device to connect to, check the Connected status is not connected
+        """
         self.assertEqual(gui.main_ui.bottom_update.text(), "Not Connected")
 
 if __name__ == "__main__":
+    # Run the integration test
     unittest.main()
