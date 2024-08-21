@@ -34,15 +34,23 @@ class CliManager:
         """
         Updates the arduino core packages available and waits for command to finish
         """
-        with subprocess.Popen(f"\"{self.path}\"", "core update-index") as update_cores:
-            update_cores.communicate()
+        with subprocess.Popen(
+                    f"\"{self.path}\" core update-index", stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    shell=True) as process:
+
+            process.communicate()
 
     def update_library_index(self):
         """
         Update the arduino library packages available and waits for command to finish
         """
-        with subprocess.Popen(f"\"{self.path}\"", "lib update-index") as  update_libraries:
-            update_libraries.communicate()
+        with subprocess.Popen(
+                    f"\"{self.path}\" lib update-index", stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    shell=True) as process:
+
+            process.communicate()
 
     def get_output(self):
         """
