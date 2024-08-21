@@ -686,6 +686,9 @@ class MainGUI(qtw.QMainWindow):
 
 if __name__ == "__main__":
 
+    print(os.listdir("../"))
+    print(os.listdir("../Externals/"))
+
     # Check if the application is being run in development mode
     if "-d" in sys.argv:
         DEV = True
