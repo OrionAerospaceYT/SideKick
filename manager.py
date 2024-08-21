@@ -4,8 +4,8 @@ setup.
 """
 import webbrowser
 
-from PyQt5 import QtCore as qtc
-from PyQt5 import QtWidgets as qtw
+from PyQt6 import QtCore as qtc
+from PyQt6 import QtWidgets as qtw
 
 from Ui.ManagerUi import Ui_MainWindow as manager
 
@@ -47,8 +47,9 @@ class ManagerWidget(qtw.QTextBrowser):
         super().__init__(parent)
 
         self.setHtml(html)
-        self.setTextInteractionFlags(qtc.Qt.LinksAccessibleByMouse | qtc.Qt.NoTextInteraction)
-        self.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
+        self.setTextInteractionFlags(
+qtc.Qt.TextInteractionFlag.LinksAccessibleByMouse | qtc.Qt.TextInteractionFlag.NoTextInteraction)
+        self.setSizePolicy(qtw.QSizePolicy.Policy.Expanding, qtw.QSizePolicy.Policy.Expanding)
 
         document = self.document()
         document.adjustSize()
@@ -69,7 +70,7 @@ class ManagerWidget(qtw.QTextBrowser):
         """
         Adds an event if the QTextBrowser is clicked.
         """
-        if event.button() == qtc.Qt.LeftButton:
+        if event.button() == qtc.Qt.MouseButton.LeftButton:
             self.parent.update_selected(self.index)
         super().mousePressEvent(event)
 
@@ -105,7 +106,7 @@ class Manager(qtw.QMainWindow):
 
         self.setWindowTitle(self.window_title)
         self.resize(int(self.parent.width()*0.8), int(self.parent.height()*0.8))
-        self.setWindowModality(2)
+        self.setWindowModality(qtc.Qt.WindowModality.ApplicationModal)
 
         self.manager_ui.install.setText(f"Select a {self.manager_type} to install")
 
@@ -116,12 +117,13 @@ class Manager(qtw.QMainWindow):
         """
         Removes all of the widgets in the scroll area
         """
+        self.update_selected(-1)
+
         while self.manager_ui.selectable_items.count():
             child = self.manager_ui.selectable_items.takeAt(0)
             child.widget().deleteLater()
 
         self.widgets = []
-        self.update_selected(-1)
 
     def add_widget(self, name:str, widget_dictionary:dict):
         """
