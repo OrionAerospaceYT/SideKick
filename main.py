@@ -684,10 +684,6 @@ class MainGUI(qtw.QMainWindow):
         self.message_handler.terminate_ellipsis()
         self.cli_manager.terminate()
 
-print(os.getcwd())
-print(os.listdir("./"))
-print(os.listdir("./Externals/"))
-
 if __name__ == "__main__":
 
     # Check if the application is being run in development mode
