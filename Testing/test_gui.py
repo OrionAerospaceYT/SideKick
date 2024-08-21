@@ -69,7 +69,6 @@ class TestGui(unittest.TestCase):
         print("Setting up the tests...")
         app.setWindowIcon(qtg.QIcon("Ui/SideKick.ico"))
         gui.show()
-        app.processEvents()
         print("Done.")
 
     @classmethod
