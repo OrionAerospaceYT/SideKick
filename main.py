@@ -23,13 +23,13 @@ from device_manager import DeviceManager
 from file_manager import FileManager
 from cli_manager import CliManager
 from terminal_manager import Terminal
+from message_handler import MessageHandler
 
 from widgets import Graph
 from widgets import RecordLight
 from widgets import SideMenu
 from widgets import SideKickLite
 
-from message_handler import MessageHandler
 from Ui.GraphingUi import Ui_MainWindow as main_window
 
 RUNNING = True
@@ -674,6 +674,7 @@ class MainGUI(qtw.QMainWindow):
 
 if __name__ == "__main__":
 
+    # Check if the application is being run in development mode
     if "-d" in sys.argv:
         DEV = True
 
@@ -683,13 +684,23 @@ if __name__ == "__main__":
             print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
             sys.exit()
 
+    # Create the QApplication which is necessary for all PyQt widgets
     app = qtw.QApplication(sys.argv)
     app_icon = qtg.QIcon("Ui/SideKick.ico")
     app.setWindowIcon(app_icon)
 
+    # Create a Loading screen while the main GUI is being setup
+    loading_image = qtg.QPixmap("Ui/Loading_Screen.png")
+    loading_screen = qtw.QSplashScreen(loading_image, qtc.Qt.WindowStaysOnTopHint)
+    loading_screen.show()
+
+    # Setup the main GUI
     main_gui = MainGUI()
 
+    # Show the main GUI and run the application
+    loading_screen.close()
     main_gui.show()
+
     app.exec_()
 
     RUNNING = False
@@ -703,6 +714,7 @@ if __name__ == "__main__":
     main_gui.message_handler.terminate_ellipsis()
     main_gui.cli_manager.terminate()
 
+    # Save all of the preferences of the user
     project_selected = main_gui.file_manager.current_project
     board_selected = main_gui.main_ui.supported_boards.currentText()
     sk_lite = main_gui.sk_lite.state
