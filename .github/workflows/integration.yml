@@ -1,11 +1,11 @@
-# This file will install and test the SideKick GUI in Linux, Windows, and MacOs.
-name: UnitTests 
+# This file will install and test the SideKick GUI on Linux, Windows, and MacOs.
+name: Integration testing
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: "0 0 * * *"
 
 permissions:
   contents: read
