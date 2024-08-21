@@ -1,9 +1,6 @@
 """
 This is the main python file responsible for having
 the debugging window open.
-
-#TODO -> Fix the terminal HTML being slow
-#TODO -> Add warnings for uploading without a device being selected
 """
 
 import os

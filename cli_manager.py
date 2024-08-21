@@ -27,6 +27,23 @@ class CliManager:
         self.running = False
         self.enabled = True
 
+        self.update_core_index()
+        self.update_library_index()
+
+    def update_core_index(self):
+        """
+        Updates the arduino core packages available and waits for command to finish
+        """
+        update_cores = subprocess.Popen(f"\"{self.path}\" core update-index")
+        update_cores.communicate()
+
+    def update_library_index(self):
+        """
+        Update the arduino library packages available and waits for command to finish
+        """
+        update_libraries = subprocess.Popen(f"\"{self.path}\" lib update-index")
+        update_libraries.communicate()
+
     def get_output(self):
         """
         Removes first output from the queue
