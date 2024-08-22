@@ -17,6 +17,8 @@ Settings/settings.txt
 *.swo
 *~
 
+# Venv
+bin/
 
 # Distribution / packaging
 .Python
