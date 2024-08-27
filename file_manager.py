@@ -205,7 +205,7 @@ class HtmlGenerator():
 
             if item == "version":
                 continue
-            elif item in ("repository", "url", "website"):
+            if item in ("repository", "url", "website"):
                 html += self.get_link(str(info))
             elif isinstance(info, list):
                 html += self.get_list_paragraph(item, info)
