@@ -201,16 +201,16 @@ class HtmlGenerator():
         html = self.get_title(name)
 
         for item in list(my_dict[name].keys()):
-            if item in ("name", "architecture"):
-                html += self.get_paragraph("FQBN", str(my_dict[name][item]))
-            elif item in ("checksum", "version"):
-                pass
+            info = my_dict[name][item]
+
+            if item == "version":
+                continue
             elif item in ("repository", "url", "website"):
-                html += self.get_link(str(my_dict[name][item]))
-            elif isinstance(my_dict[name][item], list):
-                html += self.get_list_paragraph(item, my_dict[name][item])
+                html += self.get_link(str(info))
+            elif isinstance(info, list):
+                html += self.get_list_paragraph(item, info)
             elif isinstance(item, str):
-                html += self.get_paragraph(item, str(my_dict[name][item]))
+                html += self.get_paragraph(item, str(info))
 
         return html
 
