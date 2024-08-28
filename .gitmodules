@@ -1,6 +1,6 @@
 [submodule "ConsciOS"]
 	path = ConsciOS
-	url = https://github.com/OrionAerospaceYT/ConsciOS
+	url = https://github.com/OrionAerospaceYT/ConsciOS.git
 [submodule "goose"]
 	path = goose
 	url = https://github.com/OrionAerospaceYT/goose.git
