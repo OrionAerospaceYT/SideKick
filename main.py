@@ -370,6 +370,7 @@ class MainGUI(qtw.QMainWindow):
 
         Args:
             port (string): the com port selected in the gui
+            last_device_flag (bool): flag for if last device com is used
         """
         self.clear_all_data()
 
