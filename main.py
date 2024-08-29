@@ -291,6 +291,7 @@ class MainGUI(qtw.QMainWindow):
         # adds new items
         for port in self.avaliable_port_list:
             if port not in ports_on_gui:
+                print(port)
                 self.main_ui.com_ports.addItem(port)
 
         # removes old items
@@ -319,7 +320,7 @@ class MainGUI(qtw.QMainWindow):
             if self.upload and not self.cli_manager.get_status():
                 if self.actuator is not None:
                     self.actuator.done_upload()
-                self.connect_device(self.device_manager.last_port)
+                self.connect_device(self.device_manager.last_port, last_device_flag=True)
                 self.upload = False
 
         # set labels
@@ -362,7 +363,7 @@ class MainGUI(qtw.QMainWindow):
         if folder_path:
             self.file_manager.add_new_project(folder_path)
 
-    def connect_device(self, port):
+    def connect_device(self, port, last_device_flag = False):
         """
         Connects new devices through device manager and updates com port in
         self.message_handler
@@ -384,7 +385,8 @@ class MainGUI(qtw.QMainWindow):
         if DEV and port == "emulate":
             self.device_manager.connect_device(port, baud, dev=True)
         else:
-            port = self.main_ui.com_ports.itemText(port)
+            if not last_device_flag:
+                port = self.main_ui.com_ports.itemText(port)
             self.device_manager.connect_device(port, baud)
 
     def open_file_manager(self):
