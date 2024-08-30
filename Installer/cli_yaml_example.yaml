@@ -5,9 +5,6 @@ board_manager:
 daemon:
   port: "50051"
 directories:
-  data: C:\Users\mackj\AppData\Local\Arduino15
-  downloads: C:\Users\mackj\AppData\Local\Arduino15\staging
-  user: C:\Users\mackj\Documents\SideKick\Libraries
 library:
   enable_unsafe_install: false
 logging:
