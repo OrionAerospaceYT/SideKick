@@ -1,15 +1,11 @@
 """
 Test the setup and run of the GUI as a whole system seperate from unittesting
 """
-import os
 import sys
 import unittest
 
 from PyQt6 import QtGui as qtg
 from PyQt6 import QtWidgets as qtw
-
-parent = os.path.abspath('.')
-sys.path.insert(1, parent)
 
 from main import MainGUI
 
