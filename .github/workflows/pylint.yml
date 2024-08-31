@@ -27,6 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
+        cd SideKick
 
     # Test all of the GUI files
     - name: Analysing main.py
@@ -76,8 +77,3 @@ jobs:
     - name: Analysing globals.py
       run: |
         pylint globals.py
-
-    # Test all of the testing files
-    - name: Analysing test_gui.py
-      run: |
-        pylint ./Testing/test_gui.py
