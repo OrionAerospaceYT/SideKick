@@ -363,7 +363,7 @@ class MainGUI(qtw.QMainWindow):
         if folder_path:
             self.file_manager.add_new_project(folder_path)
 
-    def connect_device(self, port, last_device_flag = False):
+    def connect_device(self, port, last_device_flag=False):
         """
         Connects new devices through device manager and updates com port in
         self.message_handler
@@ -384,11 +384,11 @@ class MainGUI(qtw.QMainWindow):
             self.device_manager.terminate_device()
 
         if DEV and port == "emulate":
-            self.device_manager.connect_device(port, baud, dev=True)
+            self.device_manager.connect_serial(port, baud, dev=True)
         else:
             if not last_device_flag:
                 port = self.main_ui.com_ports.itemText(port)
-            self.device_manager.connect_device(port, baud)
+            self.device_manager.connect_serial(port, baud)
 
     def open_file_manager(self):
         """

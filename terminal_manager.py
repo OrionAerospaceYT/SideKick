@@ -83,7 +83,8 @@ class Terminal():
         cursor = self.text_edit.textCursor()
         cursor.movePosition(qtg.QTextCursor.MoveOperation.End)
         for _ in range(num_of_blocks - self.calculate_num_of_blocks()):
-            cursor.movePosition(cursor.PreviousBlock, cursor.KeepAnchor)
+            cursor.movePosition(
+                qtg.QTextCursor.MoveOperation.PreviousBlock, qtg.QTextCursor.MoveMode.KeepAnchor)
         self.running_average = self.running_average[num_of_blocks:]
         cursor.removeSelectedText()
         cursor.deleteChar()

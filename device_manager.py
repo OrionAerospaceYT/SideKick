@@ -62,7 +62,7 @@ class DeviceManager():
             then sets the variables back to the initial states so
             that there is no data
 
-        connect_device:
+        connect_serial:
             Connects the device in order to read the data coming
             from the SideKick/Teensy/Arduino
             also stars the thread to get the data from the newly connected
@@ -312,7 +312,7 @@ class DeviceManager():
             self.last_port = self.port
             time.sleep(0.2)
 
-    def connect_device(self, port="COM1", baud=115200, dev=False):
+    def connect_serial(self, port="COM1", baud=115200, dev=False):
         """
         Connects the device in order to read the data coming
         from the SideKick/Teensy/Arduino
@@ -358,7 +358,7 @@ class DeviceManager():
         # Auto connection
         if not self.connected and self.auto_connect:
             if self.target is not None and (self.target in available_ports):
-                self.connect_device(self.target)
+                self.connect_serial(self.target)
                 time.sleep(1)
 
         return available_ports
