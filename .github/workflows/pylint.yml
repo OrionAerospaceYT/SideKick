@@ -29,9 +29,9 @@ jobs:
         pip install -r requirements.txt
 
     # Test all of the GUI files
-    - name: Analysing __main__.py
+    - name: Analysing main.py
       run: |
-        pylint ./SideKick/main.py --disable=E1136,R1725,R0902,R0904,E0611
+        pylint ./SideKick/__main__.py --disable=E1136,R1725,R0902,R0904,E0611
         
     - name: Analysing file_manager.py
       run: |
