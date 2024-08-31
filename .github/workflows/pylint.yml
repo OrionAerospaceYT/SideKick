@@ -9,7 +9,7 @@ on:
   
 
 jobs:
-  build:
+  pylint:
     runs-on: windows-latest
     strategy:
       matrix:
