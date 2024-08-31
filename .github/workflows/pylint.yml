@@ -27,53 +27,52 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
-        cd SideKick
 
     # Test all of the GUI files
     - name: Analysing main.py
       run: |
-        pylint main.py --disable=E1136,R1725,R0902,R0904,E0611
+        pylint ./SideKick/main.py --disable=E1136,R1725,R0902,R0904,E0611
         
     - name: Analysing file_manager.py
       run: |
-        pylint file_manager.py --disable=R0902,R1725,R0904
+        pylint ./SideKick/file_manager.py --disable=R0902,R1725,R0904
         
     - name: Analysing message_handler.py
       run: |
-        pylint message_handler.py --disable=R0902
+        pylint ./SideKick/message_handler.py --disable=R0902
         
     - name: Analysing device_manager.py
       run: |
-        pylint device_manager.py --disable=R0902,R1732
+        pylint ./SideKick/device_manager.py --disable=R0902,R1732
         
     - name: Analysing widgets.py
       run: |
-        pylint widgets.py --disable=R0903,C0103
+        pylint ./SideKick/widgets.py --disable=R0903,C0103
         
     - name: Analysing library.py
       run: |
-        pylint library.py --disable=R1732
+        pylint ./SideKick/library.py --disable=R1732
 
     - name: Analysing boards.py
       run: |
-        pylint boards.py
+        pylint ./SideKick/boards.py
 
     - name: Analysing actuator.py
       run: |
-        pylint actuator.py --disable=R0903
+        pylint ./SideKick/actuator.py --disable=R0903
 
     - name: Analysing cli_manager.py
       run: |
-        pylint cli_manager.py
+        pylint ./SideKick/cli_manager.py
 
     - name: Analysing terminal_manager.py
       run: |
-        pylint terminal_manager.py
+        pylint ./SideKick/terminal_manager.py
 
     - name: Analysing manager.py
       run: |
-        pylint manager.py --disable=R0913,C0103,R0902
+        pylint ./SideKick/manager.py --disable=R0913,C0103,R0902
 
     - name: Analysing globals.py
       run: |
-        pylint globals.py
+        pylint ./SideKick/globals.py
