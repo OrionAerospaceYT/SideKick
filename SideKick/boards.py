@@ -4,7 +4,7 @@ Controls the gui which allows the user to install other boards
 
 import threading
 
-from manager import Manager
+from SideKick.manager import Manager
 
 class BoardsManager(Manager):
     """

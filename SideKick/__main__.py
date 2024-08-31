@@ -13,21 +13,23 @@ from PyQt6 import QtCore as qtc
 from PyQt6 import QtGui as qtg
 from PyQt6 import QtWidgets as qtw
 
-from actuator import ActuatorGUI
-from boards import BoardsManager
-from library import LibraryManager
-from device_manager import DeviceManager
-from file_manager import FileManager
-from cli_manager import CliManager
-from terminal_manager import Terminal
-from message_handler import MessageHandler
+from SideKick.actuator import ActuatorGUI
+from SideKick.boards import BoardsManager
+from SideKick.library import LibraryManager
+from SideKick.device_manager import DeviceManager
+from SideKick.file_manager import FileManager
+from SideKick.cli_manager import CliManager
+from SideKick.terminal_manager import Terminal
+from SideKick.message_handler import MessageHandler
 
-from widgets import Graph
-from widgets import RecordLight
-from widgets import SideMenu
-from widgets import SideKickLite
+from SideKick.widgets import Graph
+from SideKick.widgets import RecordLight
+from SideKick.widgets import SideMenu
+from SideKick.widgets import SideKickLite
 
-from Ui.GraphingUi import Ui_MainWindow as main_window
+from SideKick.globals import RECORD_LIGHT_QSS
+
+from SideKick.Ui.GraphingUi import Ui_MainWindow as main_window
 
 DEV = False
 CONSCIOS_PATH = ""
@@ -45,7 +47,7 @@ class MainGUI(qtw.QMainWindow):
         qtw (QtWidgets): the main window functions
     """
 
-    def __init__(self):
+    def __init__(self, file_manager_inner:FileManager):
 
         super().__init__()
 
@@ -60,7 +62,7 @@ class MainGUI(qtw.QMainWindow):
         self.actuator = None
         self.device_manager = DeviceManager(self)
 
-        self.file_manager = FileManager(DEV, CONSCIOS_PATH)
+        self.file_manager = file_manager_inner
 
         board, project, lite = self.file_manager.load_options()
         self.sk_lite = SideKickLite(self.main_ui.sk_lite, lite)
@@ -180,8 +182,8 @@ class MainGUI(qtw.QMainWindow):
         """
         boards = self.file_manager.board_names
 
-        while self.main_ui.supported_boards.currentText():
-            self.main_ui.supported_boards.removeItem(0)
+        self.main_ui.supported_boards.clear()
+        self.main_ui.supported_boards.update()
 
         for board in boards:
             self.main_ui.supported_boards.addItem(board[0])
@@ -259,8 +261,8 @@ class MainGUI(qtw.QMainWindow):
         """
 
         if is_on:
-            self.main_ui.record_light.setStyleSheet("""image: url(Ui/Record.png);
-                                                    image-position: center;""")
+            self.main_ui.record_light.setStyleSheet(
+                self.file_manager.fix_ui_path(RECORD_LIGHT_QSS))
         else:
             self.main_ui.record_light.setStyleSheet("")
 
@@ -291,7 +293,6 @@ class MainGUI(qtw.QMainWindow):
         # adds new items
         for port in self.avaliable_port_list:
             if port not in ports_on_gui:
-                print(port)
                 self.main_ui.com_ports.addItem(port)
 
         # removes old items
@@ -699,18 +700,20 @@ if __name__ == "__main__":
             print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
             sys.exit()
 
+    file_manager = FileManager(DEV, CONSCIOS_PATH)
+
     # Create the QApplication which is necessary for all PyQt widgets
     app = qtw.QApplication(sys.argv)
-    app_icon = qtg.QIcon("Ui/SideKick.ico")
+    app_icon = qtg.QIcon(file_manager.get_icon())
     app.setWindowIcon(app_icon)
 
     # Create a Loading screen while the main GUI is being setup
-    loading_image = qtg.QPixmap("Ui/Loading_Screen.png")
+    loading_image = qtg.QPixmap(file_manager.get_loading_screen())
     loading_screen = qtw.QSplashScreen(loading_image, qtc.Qt.WindowType.WindowStaysOnTopHint)
     loading_screen.show()
 
     # Setup the main GUI
-    main_gui = MainGUI()
+    main_gui = MainGUI(file_manager)
 
     # Show the main GUI and run the application
     loading_screen.close()

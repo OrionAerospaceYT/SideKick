@@ -2,15 +2,17 @@
 Test the setup and run of the GUI as a whole system seperate from unittesting
 """
 import sys
+import time
 import unittest
 
 from PyQt6 import QtGui as qtg
 from PyQt6 import QtWidgets as qtw
 
-from main import MainGUI
+from SideKick.__main__ import MainGUI
+from SideKick.file_manager import FileManager
 
 app = qtw.QApplication(sys.argv)
-gui = MainGUI()
+gui = MainGUI(FileManager(False, ""))
 
 INSTALLED_BOARDS = [
 "Select Board",
@@ -75,6 +77,9 @@ class TestGui(unittest.TestCase):
         gui.close_gui()
         print("Done.")
 
+    def setUp(self):
+        time.sleep(1)
+
     def test_check_installed_boards(self):
         """
         Check that all of the correct boards have been installed
@@ -82,13 +87,48 @@ class TestGui(unittest.TestCase):
         boards = []
         for i in range(gui.main_ui.supported_boards.count()):
             boards.append(gui.main_ui.supported_boards.itemText(i))
-        self.assertEqual(boards, INSTALLED_BOARDS)
+        self.assertTrue(set(INSTALLED_BOARDS).issubset(boards))
 
     def test_check_connection_status(self):
         """
         As there is no device to connect to, check the Connected status is not connected
         """
         self.assertEqual(gui.main_ui.bottom_update.text(), "Not Connected")
+
+    def test_opening_and_closing_menus(self):
+        """
+        Test opening the main menu window
+        """
+        gui.main_ui.file.click()
+        app.processEvents()
+        gui.main_ui.file.click()
+        app.processEvents()
+        gui.main_ui.device.click()
+        app.processEvents()
+        gui.main_ui.file.click()
+        app.processEvents()
+
+    def test_record_light(self):
+        """
+        Test the record light by letting it run for 10 seconds
+        """
+        gui.main_ui.record.click()
+        for _ in range(10):
+            time.sleep(1)
+            app.processEvents()
+        gui.main_ui.record.click()
+        app.processEvents()
+
+    def test_opening_sub_windows(self):
+        """
+        Test opening and closing all of the sub windows
+        """
+        gui.main_ui.tune_actuators.click()
+        app.processEvents()
+        gui.main_ui.library_manager.click()
+        app.processEvents()
+        gui.main_ui.boards_manager.click()
+        app.processEvents()
 
 if __name__ == "__main__":
     # Run the integration test

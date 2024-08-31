@@ -5,9 +5,10 @@ This file imports device manager and gets the data
 
 import re
 import time
-from globals import FQBN_ERROR_TERM, SELECT_BOARD_MESSAGE
-from globals import ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
-from globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
+
+from SideKick.globals import FQBN_ERROR_TERM, SELECT_BOARD_MESSAGE
+from SideKick.globals import ERROR_TERMS, FAILURE_MSG, SUCCESS_MSG
+from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING, USER_MESSAGE
 
 class MessageHandler():
     """

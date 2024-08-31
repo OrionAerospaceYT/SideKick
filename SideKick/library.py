@@ -1,7 +1,7 @@
 """
 Library manager
 """
-from manager import Manager, library_no_results, library_instructions
+from SideKick.manager import Manager, library_no_results, library_instructions
 
 class LibraryManager(Manager):
     """

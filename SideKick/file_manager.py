@@ -11,10 +11,9 @@ import json
 
 from PyQt6 import QtWidgets as qtw
 
-from globals import SIZES_IN_QSS
-from globals import DEFAULT_SETTINGS, DEFAULT_BOARDS
-from globals import GRAPH_BEGINNING, GRAPH_ENDING
-
+from SideKick.globals import SIZES_IN_QSS
+from SideKick.globals import DEFAULT_SETTINGS, DEFAULT_BOARDS
+from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING
 
 class SaveManager():
     """
@@ -325,7 +324,6 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
     """
 
     def __init__(self, dev, consci_os_path):
-
         operating_system = platform.system()
 
         self.user = os.getenv("USER") or os.getenv("USERNAME")
@@ -383,7 +381,9 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
 "settings" : f"{self.path}{self.sep}Settings{self.sep}settings.txt",
 "settings_path" : f"{self.path}{self.sep}Settings",
 "arduino" : f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}",
-"actuator" : f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino"}
+"actuator" : f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino",
+"images" : f"{self.path}{self.sep}Images{self.sep}".replace(f"{self.sep}", "/"),
+"stylesheet" : f"{self.path}{self.sep}Ui{self.sep}StyleSheet{self.sep}stylesheet.qss"}
 
         self.paths["sidekick"] = f"""{self.paths["documents"]}{self.sep}SideKick"""
         self.paths["projects"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""
@@ -750,7 +750,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Either increases or decreases the size of the font on the GUI.
         """
         with open(
-            f".{self.sep}Ui{self.sep}stylesheet.qss",
+            self.paths["stylesheet"],
             "r",
             encoding="UTF-8") as sizes:
             scale = float(sizes.readline())
@@ -782,7 +782,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             scale = max(scale, 0.5)
 
         with open(
-            f".{self.sep}Ui{self.sep}stylesheet.qss",
+            self.paths["stylesheet"],
             "w",
             encoding="UTF-8") as sizes:
             scale = round(scale, 1)
@@ -793,7 +793,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         Gets the scale from the stylesheet.
         """
         with open(
-            f".{self.sep}Ui{self.sep}stylesheet.qss",
+            self.paths["stylesheet"],
             "r",
             encoding="UTF-8") as scale:
             return float(scale.readline())
@@ -804,13 +804,41 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         """
 
         with open(
-            f".{self.sep}Ui{self.sep}stylesheet.qss",
+            self.paths["stylesheet"],
             "r",
             encoding="UTF-8") as sizes:
             scale = float(sizes.readline())
             stylesheet = sizes.read()
 
+        stylesheet = self.fix_ui_path(stylesheet)
+
         for size in SIZES_IN_QSS:
-            stylesheet = stylesheet.replace(str(size) + "px", str(int(size*scale))+ "px")
+            stylesheet = stylesheet.replace(str(size) + "px", str(int(size*scale)) + "px")
 
         return stylesheet, scale
+
+    def fix_ui_path(self, qss:str) -> str:
+        """
+        Args:
+            qss(str): the qss which has a relative Ui/* path
+        
+        Returns:
+            str: the fixed qss with a proper path
+        """
+        return qss.replace("Ui", self.paths["images"])
+
+    def get_loading_screen(self) -> str:
+        """
+        Returns:
+            str: the directory of the loading screen.
+        """
+        path = self.paths["images"]
+        return f"{path}Loading_Screen.png"
+
+    def get_icon(self) -> str:
+        """
+        Returns:
+            str: the directory of the SideKick icon.
+        """
+        path = self.paths["images"]
+        return f"{path}SideKick.ico"

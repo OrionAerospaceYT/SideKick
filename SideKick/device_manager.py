@@ -12,8 +12,7 @@ import numpy as np
 import serial
 import serial.tools.list_ports
 
-from globals import GRAPH_BEGINNING, START_REC, END_REC
-
+from SideKick.globals import GRAPH_BEGINNING, START_REC, END_REC
 
 class DeviceManager():
     """

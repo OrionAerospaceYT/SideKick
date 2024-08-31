@@ -79,3 +79,8 @@ QTextBroswer {
     border: none;
 }
 """
+
+RECORD_LIGHT_QSS = """
+image: url(Ui/Record.png);
+image-position: center;
+"""

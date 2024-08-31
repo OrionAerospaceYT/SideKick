@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  integration:
     strategy:
       matrix:
         os: ['ubuntu-latest', windows-latest, macos-latest]

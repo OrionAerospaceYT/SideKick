@@ -7,7 +7,7 @@ import copy
 
 from PyQt6 import QtGui as qtg
 
-from globals import GRAPH_BEGINNING, GRAPH_ENDING, NUM_OF_DATA_PTS
+from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING, NUM_OF_DATA_PTS
 
 class Terminal():
     """

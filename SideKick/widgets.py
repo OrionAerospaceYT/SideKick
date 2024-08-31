@@ -8,9 +8,9 @@ import time
 import pyqtgraph as pg
 import numpy as np
 
-from globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
-from globals import GRAPH_BEGINNING, GRAPH_ENDING
-from globals import NUM_OF_DATA_PTS, COLOUR_ORDER
+from SideKick.globals import SK_LITE_OFF_QSS, SK_LITE_ON_QSS
+from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING
+from SideKick.globals import NUM_OF_DATA_PTS, COLOUR_ORDER
 
 class Graph:
     """
