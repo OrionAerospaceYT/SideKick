@@ -76,3 +76,7 @@ jobs:
     - name: Analysing globals.py
       run: |
         pylint ./SideKick/globals.py
+
+    - name: Analysing tests
+      run: |
+        pylint ./tests
