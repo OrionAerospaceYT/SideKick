@@ -359,7 +359,9 @@ class MainGUI(qtw.QMainWindow):
         QFileDialog and then creates a sidekick project in that directory.
         """
         folder_path = qtw.QFileDialog.getSaveFileName(self,
-                            'Create Folder', self.file_manager.paths["projects"], 'Folders (*)')[0]
+                            'Create new project',
+                            self.file_manager.paths["projects"],
+                            'Folders (*)')[0]
 
         if folder_path:
             self.file_manager.add_new_project(folder_path)
@@ -575,9 +577,9 @@ class MainGUI(qtw.QMainWindow):
         """
         if self.showing_data:
             folder_path = qtw.QFileDialog.getSaveFileName(self,
-                            'Create Folder',
+                            'Export save',
                             self.file_manager.save_manager.save_folder_path,
-                            'Save Files (*.csv)')[0]
+                            'Export file (*.csv)')[0]
             if folder_path:
                 self.file_manager.save_manager.export_save(self.displayed_save, folder_path)
             self.export_error = False
