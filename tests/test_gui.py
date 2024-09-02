@@ -77,9 +77,6 @@ class TestGui(unittest.TestCase):
         gui.close_gui()
         print("Done.")
 
-    def setUp(self):
-        time.sleep(1)
-
     def test_check_installed_boards(self):
         """
         Check that all of the correct boards have been installed
