@@ -33,9 +33,9 @@ jobs:
       run: |
         pylint ./SideKick/__main__.py --disable=E1136,R1725,R0902,R0904,E0611
         
-    - name: Analysing file_manager.py
+    - name: Analysing file_manager
       run: |
-        pylint ./SideKick/file_manager.py --disable=R0902,R1725,R0904
+        pylint ./SideKick/file_manager --disable=R0902,R1725,R0904
         
     - name: Analysing message_handler.py
       run: |

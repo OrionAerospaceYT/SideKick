@@ -700,7 +700,8 @@ if __name__ == "__main__":
             print(f"<<< ERROR >>> Please enter a valid file path! {sys.argv[2]}")
             sys.exit()
 
-    file_manager = FileManager(DEV, CONSCIOS_PATH)
+    file_manager = FileManager(
+        os.path.dirname(os.path.realpath(__file__)), DEV, CONSCIOS_PATH)
 
     # Create the QApplication which is necessary for all PyQt widgets
     app = qtw.QApplication(sys.argv)

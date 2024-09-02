@@ -1,311 +1,15 @@
 """
-This file is responsible for handling all creation and
-deletion of files.
+When the library_module is imported - the FileManager class is included by default.
 """
-
 import os
-import re
 import shutil
 import platform
-import json
-
-from PyQt6 import QtWidgets as qtw
 
 from SideKick.globals import SIZES_IN_QSS
 from SideKick.globals import DEFAULT_SETTINGS, DEFAULT_BOARDS
-from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING
 
-class SaveManager():
-    """
-    loads and saves data to the saves file
-    """
-
-    def __init__(self):
-        self.record_status = False
-        self.prev_record_status = False
-        self.save_folder_path = ""
-        self.sep = ""
-        self.prev_save_data = []
-
-    def create_new_file(self):
-        """
-        creates a new save file
-        """
-        num_of_saves = len(os.listdir(self.save_folder_path))
-        with open(f"{self.save_folder_path}{self.sep}Save{num_of_saves+1}.sk", "w",
-                    encoding="UTF-8"):
-            pass
-
-    def save_data(self, save_data):
-        """
-        saves the raw data to the latest save_file
-
-        Args:
-            raw_data (str): the raw data from com device
-        """
-        self.record_status = True
-
-        if self.record_status != self.prev_record_status:
-            self.create_new_file()
-
-        save_name = f"Save{len(os.listdir(self.save_folder_path))}.sk"
-        save_path = f"{self.save_folder_path}{self.sep}{save_name}"
-
-        with open(save_path, "a", encoding="UTF-8") as save:
-            for data in save_data:
-                save.write(data)
-                save.write("\n")
-
-        self.prev_record_status = True
-
-    def stop_save(self):
-        """
-        sets record_status to false
-        """
-        self.record_status = False
-        self.prev_record_status = False
-
-    def get_saved_data(self, file_dir):
-        """
-        loads the file and gets all data from it
-
-        Returns:
-            list: the saved raw data
-        """
-        with open(file_dir, "r", encoding="UTF-8") as save:
-            data = save.readlines()
-
-        return [item.strip() for item in data]
-
-    def parse_line(self, line:str) -> list:
-        """
-        Returns:
-            list: the terminal data
-            list: the graph_data
-            bool: the recording status
-        """
-        terminal_data = ""
-        graph_data = []
-
-        line = line.replace("\n", "")
-
-        graph_data = re.findall(f"{GRAPH_BEGINNING}.*?{GRAPH_ENDING}", line)
-
-        for indx, item in enumerate(graph_data):
-            graph_data[indx] = item.replace(GRAPH_BEGINNING, "").replace(GRAPH_ENDING, "")
-
-        terminal_data = re.sub(f'{GRAPH_BEGINNING}.*?{GRAPH_ENDING}', '', line)
-
-        if not terminal_data:
-            terminal_data = None
-        if not graph_data:
-            graph_data = None
-
-        return terminal_data, graph_data
-
-    def export_save(self, file_dir:str, new_name:str):
-        """
-        Convert the sidekick data to a .csv file for the user.
-        """
-        output = "Terminal,Graphs\n"
-
-        with open(file_dir, "r", encoding="UTF-8") as my_file:
-            for line in my_file:
-                parsed_line = self.parse_line(line)
-                if parsed_line[0] is None:
-                    output += ","
-                else:
-                    output += parsed_line[0] + ","
-                if parsed_line[1] is None:
-                    output += ","
-                else:
-                    for graph in parsed_line[1]:
-                        output += graph + ","
-                output += "\n"
-
-        try:
-            with open(f"{new_name}", "w", encoding="UTF-8") as my_file:
-                my_file.write(output)
-        except PermissionError:
-            qtw.QMessageBox.critical(None,
-                                        "Permission error", 
-                                        "Could not save - file already in use!",
-                                        qtw.QMessageBox.Cancel)
-
-class HtmlGenerator():
-    """
-    Holds the functions which generate html for JsonLibraryManager and
-    JsonBoardsManager.
-    """
-
-    def get_versions(self, name, my_dict):
-        """
-        Returns all of the versions that are avaliable.
-        """
-
-        return list(my_dict[name]["version"])
-
-    def get_title(self, name):
-        """
-        Returns the formatting for a title on the QTextBrowser of libraries
-        that can be installed.
-
-        Args:
-            name (string): the text for the title (name)
-        """
-
-        return f"<h1><p style=\"color:#00f0c3\">{name}</p></h1><br>"
-
-    def get_link(self, link):
-        """
-        Returns the html link for categories which are links.
-
-        Args:
-            name (string): the link
-        """
-
-        return f"<a style=\"color:#8ab4f8\" href={link}>{link}</a><br>"
-
-    def get_paragraph(self, name, text):
-        """
-        Makes a paragraph for each sub category
-
-        Args:
-            name (string): the name of the category
-            text (string): the description
-        """
-        return f"<p>{name}: {text}</p>"
-
-    def get_list_paragraph(self, name, my_list):
-        """
-        Makes a paragraph for each sub category
-
-        Args:
-            name (string): the name of the category
-            list (list): the description
-        """
-        string = f"<p>{name}:"
-        for item in my_list:
-            string += f"<br>{item}"
-        return string
-
-    def get_html(self, name, my_dict):
-        """
-        Formats the library text for the display on library manager options
-        
-        Args:
-            name (str): the name of the dictionary item
-            my_dict (dictionary): the dictionary to parse into html
-        """
-        html = self.get_title(name)
-
-        for item in list(my_dict[name].keys()):
-            info = my_dict[name][item]
-
-            if item == "version":
-                continue
-            if item in ("repository", "url", "website"):
-                html += self.get_link(str(info))
-            elif isinstance(info, list):
-                html += self.get_list_paragraph(item, info)
-            elif isinstance(item, str):
-                html += self.get_paragraph(item, str(info))
-
-        return html
-
-
-class JsonLibraryManager(HtmlGenerator):
-    """
-    Json loader class that gets all information for the arduino
-    library manager.
-    """
-
-    def __init__(self, path):
-
-        self.lib_path = path
-        self.libraries = {}
-        self.load_libs()
-        #self.get_info(list(self.libraries.keys())[0])
-
-    def load_libs(self):
-        """
-        Loads all libraries from the library.json file in arduino15.
-        """
-        with open(self.lib_path, encoding="utf-8") as file:
-            data = json.load(file)
-
-        libraries = data.get("libraries")
-        for library in libraries:
-            if library["name"] in self.libraries:
-                self.libraries[library["name"]]["version"].append(library["version"])
-            else:
-                self.libraries[library["name"]] = library
-                self.libraries[library["name"]]["version"] = [
-                    self.libraries[library["name"]]["version"]]
-
-    def get_all_libraries(self, name):
-        """
-        Returns all keys with the name in them.
-
-        Args:
-            name (string): the keyword to look for in the name
-        """
-
-        keys = list(self.libraries.keys())
-
-        libraries = []
-
-        for key in keys:
-            if name.lower() in key.lower():
-                libraries.append(key)
-
-        return libraries
-
-class JsonBoardsManager(HtmlGenerator):
-    """
-    Processes and parses the boards json file.
-    """
-    def __init__(self, path):
-
-        self.board_path = path
-        self.boards = {}
-        self.load_boards()
-
-    def format_dict(self, input_dict):
-        """
-        Formats the dictionary into a better form to be displayed
-        on the screen.
-
-        Args:
-            dict (dictionary) : The dictionary to be formatted
-        """
-        formatted_dict = {"architecture": input_dict["architecture"],
-        "version": [input_dict["version"]],
-        "url": input_dict["url"],
-        "boards": [board["name"] for board in input_dict["boards"]]}
-
-        return formatted_dict
-
-    def load_boards(self):
-        """
-        Loads all libraries from the library.json file in arduino15.
-        """
-        with open(self.board_path, encoding="utf-8") as file:
-            data = json.load(file)
-
-        packages = data.get("packages")
-
-        for package in packages:
-            for board in package["platforms"]:
-                if board["name"].startswith("[DEPRECATED"):
-                    continue
-                if board["name"] in self.boards:
-                    self.boards[board["name"]]["version"].append(board["version"])
-                else:
-                    board["architecture"] = package["name"] + ":" + board["architecture"]
-                    self.boards[board["name"]] = self.format_dict(board)
-                    self.boards[board["name"]].update({"maintainer":package["maintainer"]})
-
+from SideKick.file_manager.save_manager import SaveManager
+from SideKick.file_manager.json_managers import JsonLibraryManager, JsonBoardsManager
 
 class FileManager(JsonLibraryManager, JsonBoardsManager):
     """
@@ -323,11 +27,11 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
     Methods:
     """
 
-    def __init__(self, dev, consci_os_path):
+    def __init__(self, path, dev=False, consci_os_path=""):
         operating_system = platform.system()
 
         self.user = os.getenv("USER") or os.getenv("USERNAME")
-        self.path = os.path.dirname(os.path.realpath(__file__))
+        self.path = path
         self.save_manager = SaveManager()
         self.dev = dev
         self.consci_os_path = consci_os_path
@@ -342,11 +46,8 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
             inc = "C:\\Users\\"
             documents = "Documents"
 
-            arduino_lib_path = f"{inc}{self.user}{self.sep}\
-AppData{self.sep}Local{self.sep}Arduino15{self.sep}library_index.json"
-
-            arduino_board_path = f"{inc}{self.user}{self.sep}\
-AppData{self.sep}Local{self.sep}Arduino15{self.sep}package_index.json"
+            arduino15_path = f"{inc}{self.user}{self.sep}AppData{self.sep}Local{self.sep}Arduino15\
+{self.sep}"
 
         elif operating_system == "Darwin":
             self.arduino_cli = "arduino-cli-mac"
@@ -354,11 +55,7 @@ AppData{self.sep}Local{self.sep}Arduino15{self.sep}package_index.json"
             inc = "/Users/"
             documents = "documents"
 
-            arduino_lib_path = f"{inc}{self.user}{self.sep}\
-Library{self.sep}Arduino15{self.sep}library_index.json"
-
-            arduino_board_path = f"{inc}{self.user}{self.sep}\
-Library{self.sep}Arduino15{self.sep}package_index.json"
+            arduino15_path = f"{inc}{self.user}{self.sep}Library{self.sep}Arduino15{self.sep}"
 
         elif operating_system == "Linux":
 
@@ -367,11 +64,7 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
             inc = "/home/"
             documents = "Documents"
 
-            arduino_lib_path = f"{inc}{self.user}{self.sep}.arduino15\
-{self.sep}library_index.json"
-
-            arduino_board_path = f"{inc}{self.user}{self.sep}.arduino15\
-{self.sep}package_index.json"
+            arduino15_path = f"{inc}{self.user}{self.sep}.arduino15{self.sep}"
 
         else:
             raise OSError("Invalis OS. Shutting down.")
@@ -406,8 +99,8 @@ Library{self.sep}Arduino15{self.sep}package_index.json"
         self.load_boards_csv()
         self.update = True
 
-        super(FileManager, self).__init__(arduino_lib_path)
-        super(JsonLibraryManager, self).__init__(arduino_board_path)
+        super(FileManager, self).__init__(arduino15_path + "library_index.json")
+        super(JsonLibraryManager, self).__init__(arduino15_path, "package_", "_index.json")
 
     def create_sidekick_files(self):
         """
