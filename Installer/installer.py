@@ -3,8 +3,8 @@ This file has all of the functions necessary to install the SideKick GUI by sett
 the arduino cli.
 """
 import os
-import requests
 import platform
+import requests
 
 class SideKickInstaller():
     """
@@ -19,21 +19,21 @@ class SideKickInstaller():
 
         if self.os == "Windows":
             self.sep = "\\"
-            self.cli = "..\\Externals\\arduino-cli-windows.exe"
+            self.cli = ".\\SideKick\\Externals\\arduino-cli-windows.exe"
             self.documents = f"C:\\Users\\{self.user}\\Documents\\"
             self.arduino = f"C:\\Users\\{self.user}\\AppData\\Local\\Arduino15\\"
             self.type = ".bat"
 
         elif self.os == "Darwin":
             self.sep = "/"
-            self.cli = "../Externals/arduino-cli-mac"
+            self.cli = "./SideKick/Externals/arduino-cli-mac"
             self.documents = f"/Users/{self.user}/documents/"
             self.arduino = f"/Users/{self.user}/Library/Arduino15//"
             self.type = ".sh"
 
         elif self.os == "Linux":
             self.sep = "/"
-            self.cli = "../Externals/arduino-cli-linux.sh"
+            self.cli = "./SideKick/Externals/arduino-cli-linux.sh"
             self.documents = f"/home/{self.user}/Documents/"
             self.arduino = f"/home/{self.user}/.arduino15/"
             self.type = ".sh"
@@ -44,7 +44,7 @@ class SideKickInstaller():
 
         os.system(self.cli + " config init")
 
-        self.clone_teensy_package_file()
+        #self.clone_teensy_package_file()
 
     def clone_teensy_package_file(self):
         """
@@ -63,7 +63,8 @@ class SideKickInstaller():
         """
         print("<<< RUNNING >>> Updating the sidekick config")
 
-        with open(f".{self.sep}cli_yaml_example.yaml", "r", encoding="UTF-8") as yaml:
+        with open(
+            f".{self.sep}installer{self.sep}cli_yaml_example.yaml", "r", encoding="UTF-8") as yaml:
             yaml_file = yaml.read()
 
         downloads = self.arduino + "staging"
