@@ -42,7 +42,7 @@ class ManagerWidget(qtw.QTextBrowser):
         self.name = name
         self.index = index
         self.parent = parent
-        self.versions = versions
+        self.versions = reversed(versions)
 
         super().__init__(parent)
 
