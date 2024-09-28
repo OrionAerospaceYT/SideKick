@@ -360,6 +360,9 @@ class DeviceManager():
                 self.connect_serial(self.target)
                 time.sleep(1)
 
+        if len(available_ports) == 0:
+            available_ports = ["N/A"]
+
         return available_ports
 
     def reset_difference(self, data:list):

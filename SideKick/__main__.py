@@ -22,14 +22,14 @@ from SideKick.cli_manager import CliManager
 from SideKick.terminal_manager import Terminal
 from SideKick.message_handler import MessageHandler
 
-from SideKick.widgets import Graph
-from SideKick.widgets import RecordLight
-from SideKick.widgets import SideMenu
-from SideKick.widgets import SideKickLite
+from SideKick.widgets.graph import Graph
+from SideKick.widgets.widgets import RecordLight
+from SideKick.widgets.side_menu import SideMenu
+from SideKick.widgets.sidekicklite import SideKickLite
 
 from SideKick.globals import RECORD_LIGHT_QSS
 
-from SideKick.Ui.GraphingUi import Ui_MainWindow as main_window
+from SideKick.user_interface.GraphingUi import Ui_MainWindow as main_window
 
 DEV = False
 CONSCIOS_PATH = ""

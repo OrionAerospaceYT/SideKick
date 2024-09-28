@@ -76,7 +76,7 @@ class FileManager(JsonLibraryManager, JsonBoardsManager):
 "arduino" : f"{self.path}{self.sep}Externals{self.sep}{self.arduino_cli}",
 "actuator" : f"{self.path}{self.sep}Examples{self.sep}Actuators_Test{self.sep}Actuators_Test.ino",
 "images" : f"{self.path}{self.sep}Images{self.sep}".replace(f"{self.sep}", "/"),
-"stylesheet" : f"{self.path}{self.sep}Ui{self.sep}StyleSheet{self.sep}stylesheet.qss"}
+"stylesheet" : f"{self.path}{self.sep}user_interface{self.sep}StyleSheet{self.sep}stylesheet.qss"}
 
         self.paths["sidekick"] = f"""{self.paths["documents"]}{self.sep}SideKick"""
         self.paths["projects"] = f"""{self.paths["sidekick"]}{self.sep}Projects"""

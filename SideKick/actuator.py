@@ -8,7 +8,7 @@ from PyQt6 import QtCore as qtc
 from PyQt6 import QtWidgets as qtw
 from PyQt6 import QtGui as qtg
 
-from SideKick.Ui.ActuatorUi import Ui_MainWindow as actuator
+from SideKick.user_interface.ActuatorUi import Ui_MainWindow as actuator
 
 class Slider:
     """

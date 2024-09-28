@@ -7,7 +7,7 @@ import webbrowser
 from PyQt6 import QtCore as qtc
 from PyQt6 import QtWidgets as qtw
 
-from SideKick.Ui.ManagerUi import Ui_MainWindow as manager
+from SideKick.user_interface.ManagerUi import Ui_MainWindow as manager
 
 from SideKick.globals import SELECTED_WIDGET_QSS, NORMAL_WIDGET_QSS
 
