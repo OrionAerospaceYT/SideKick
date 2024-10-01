@@ -366,14 +366,13 @@ class MainGUI(qtw.QMainWindow):
         if folder_path:
             self.file_manager.add_new_project(folder_path)
 
-    def connect_device(self, port, last_device_flag=False):
+    def connect_device(self, port):
         """
         Connects new devices through device manager and updates com port in
         self.message_handler
 
         Args:
             port (string): the com port selected in the gui
-            last_device_flag (bool): flag for if last device com is used
         """
         self.clear_all_data()
 
