@@ -1,5 +1,6 @@
 import pyqtgraph as pg
 import numpy as np
+import re
 
 from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING
 from SideKick.globals import NUM_OF_DATA_PTS, COLOUR_ORDER
@@ -45,9 +46,8 @@ class Graph:
         # variable definitions
         self.resize = True
         self.key = key
-        self.graph_data = []
+        self.graph_data = {}
         self.plots = []
-        self.labels = []
         self.default_data = [0 for _ in range(NUM_OF_DATA_PTS)]
 
         # pyqtgraph definitions
@@ -72,9 +72,23 @@ class Graph:
         for item in self.plots:
             self.graph.removeItem(item)
 
-        self.graph_data = []
+        self.graph_data = {}
         self.plots = []
-        self.labels = []
+
+    def is_graphable(self, data):
+        """
+        Check if the data from the device is numeric and able to be graphed.
+
+        Args:
+            data (string): the data to be tested
+
+        Returns:
+            bool: whether the data is graphable or not
+        """
+        is_num = data.replace("-", "").replace(".", "").isnumeric()
+        if -1 < data.count("-") < 2 and -1 < data.count(".") < 2 and is_num:
+            return True
+        return False
 
     def decode_graph_data(self, raw_input:str) -> list:
         """
@@ -85,33 +99,29 @@ class Graph:
         Returns:
             graph_data (list): holds the values for the graph
         """
+        # Define the regex pattern
+        pattern = f'{GRAPH_BEGINNING}([^z]+),(\\d+),([^z]+){GRAPH_ENDING}'
+        decoded_data = re.findall(pattern, raw_input)
+        graph_data = [list(data) for data in decoded_data]
+        indeces_to_be_deleted = []
 
-        raw_list = []
-        graph_data = []
-        raw_input = raw_input.split(GRAPH_BEGINNING)
+        # Go through the list and remove unrelated data from this graph then
+        # check that the remaining data is graphable and remove the key
+        for i, graph in enumerate(graph_data):
 
-        for i, data in enumerate(raw_input):
-            if GRAPH_ENDING in data:
-                raw_list.append(raw_input[i].split(GRAPH_ENDING)[0])
-
-        for graph in raw_list:
-
-            graph = graph.split(",")
-            name, key, data = graph[0], graph[1], graph[2]
+            key, data = graph[1], graph[2]
 
             if key != self.key:
-                continue
+                indeces_to_be_deleted.append(i)
 
-            if name not in self.labels:
-                self.labels.append(name)
+            if not self.is_graphable(data):
+                graph_data[i][2] = np.nan
+                #print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
+            graph_data[i].pop(1)
 
-            is_num = data.replace("-", "").replace(".", "").isnumeric()
-
-            if -1 < data.count("-") < 2 and -1 < data.count(".") < 2 and is_num:
-                graph_data.append(float(data))
-            else:
-                graph_data.append(np.nan)
-                print(f"<<< ERROR >>> Decoding graph data! {raw_input}")
+        # Delete the unrelated data
+        for indx in reversed(indeces_to_be_deleted):
+            graph_data.pop(indx)
 
         return graph_data
 
@@ -126,24 +136,15 @@ class Graph:
         if not raw_data:
             return
 
-        plots = []
+        data = "".join(raw_data)
+        graph_data = self.decode_graph_data(data)
 
-        for data in raw_data:
-            data = self.decode_graph_data(data)
-            if data:
-                for i, point in enumerate(data):
-                    if i < len(plots):
-                        plots[i].append(point)
-                    else:
-                        plots.append([point])
-
-        for i, plot in enumerate(plots):
-            if i < len(self.graph_data):
-                self.graph_data[i] += plot
-                while len(self.graph_data[i]) > NUM_OF_DATA_PTS:
-                    self.graph_data[i].pop(0)
-            else:
-                self.graph_data.append(plot)
+        for label, data in graph_data:
+            if label not in self.graph_data.keys():
+                self.graph_data[label] = [np.nan for _ in range(NUM_OF_DATA_PTS)]
+            self.graph_data[label].append(data)
+            while len(self.graph_data[label]) > NUM_OF_DATA_PTS:
+                self.graph_data[label].pop(0)
 
     def update_plots(self, num_of_plots:int):
         """
@@ -157,34 +158,20 @@ class Graph:
             self.graph.removeItem(item)
 
         # add new graphs
-        for i in range(num_of_plots):
-            self.plots.append(self.graph.plot([0],[0], name=self.labels[i]))
-            self.graph_data[i] = self.default_data
+        for i, label in enumerate(self.graph_data.keys()):
+            self.plots.append(self.graph.plot([0],[0], name=label))
+            #self.graph_data[i] = self.default_data
 
     def update_graph(self):
         """
         To update the graphs displayed on the main GUI
         """
-        if len(self.graph_data) > 0:
-            print("INFO:")
-            print(len(self.graph_data))
-            print(len(self.graph_data[0]))
-
         # if there is a change in the number of plots, update
-        if len(self.graph_data) != len(self.plots):
+        if len(self.graph_data.keys()) != len(self.plots):
             self.update_plots(len(self.graph_data))
 
         # replace the data with the latest data
-        for index, plot in enumerate(self.plots):
-            # if the amount of plots is not equal throughout
-            # then delete all plots and break from the update loop
-            if len(self.graph_data)-1 < index:
-                self.update_plots(0)
-                self.plots = []
-                self.labels = []
-                self.graph_data = []
-                break
-            # update plot
-            pen = pg.mkPen(color=COLOUR_ORDER[index%len(COLOUR_ORDER)])
-            plot.setData(np.array(self.graph_data[index], dtype=float), pen=pen)
-            print(self.graph_data[index])
+        for indx, (plot, key) in enumerate(zip(self.plots, self.graph_data.keys())):
+            pen = pg.mkPen(color=COLOUR_ORDER[indx%len(COLOUR_ORDER)])
+            plot.setData(np.array(
+                self.graph_data[key], dtype=float), pen=pen)

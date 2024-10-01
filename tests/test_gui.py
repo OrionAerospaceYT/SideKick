@@ -1,6 +1,7 @@
 """
 Test the setup and run of the GUI as a whole system seperate from unittesting
 """
+import os
 import sys
 import time
 import unittest
@@ -12,7 +13,8 @@ from SideKick.__main__ import MainGUI
 from SideKick.file_manager import FileManager
 
 app = qtw.QApplication(sys.argv)
-gui = MainGUI(FileManager(False, ""))
+path = os.path.dirname(os.path.dirname(__file__)) + "/SideKick"
+gui = MainGUI(FileManager(path, False))
 
 INSTALLED_BOARDS = [
 "Select Board",

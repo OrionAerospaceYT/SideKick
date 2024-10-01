@@ -386,11 +386,10 @@ class MainGUI(qtw.QMainWindow):
         if self.device_manager.port is not None:
             self.device_manager.terminate_device()
 
+        port = self.main_ui.com_ports.itemText(port)
         if DEV and port == "emulate":
             self.device_manager.connect_serial(port, baud, dev=True)
         else:
-            if not last_device_flag:
-                port = self.main_ui.com_ports.itemText(port)
             self.device_manager.connect_serial(port, baud)
 
     def open_file_manager(self):
