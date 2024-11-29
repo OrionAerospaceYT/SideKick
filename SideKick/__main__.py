@@ -321,7 +321,9 @@ class MainGUI(qtw.QMainWindow):
             if self.upload and not self.cli_manager.get_status():
                 if self.actuator is not None:
                     self.actuator.done_upload()
-                self.connect_device(self.device_manager.last_port, last_device_flag=True)
+                index = self.main_ui.com_ports.findText((self.device_manager.last_port))
+                print(index)
+                self.connect_device(index)
                 self.upload = False
 
         # set labels

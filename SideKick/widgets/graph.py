@@ -160,7 +160,6 @@ class Graph:
         # add new graphs
         for i, label in enumerate(self.graph_data.keys()):
             self.plots.append(self.graph.plot([0],[0], name=label))
-            #self.graph_data[i] = self.default_data
 
     def update_graph(self):
         """
