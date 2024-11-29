@@ -1,6 +1,10 @@
-import pyqtgraph as pg
-import numpy as np
+"""
+TODO
+"""
 import re
+
+import numpy as np
+import pyqtgraph as pg
 
 from SideKick.globals import GRAPH_BEGINNING, GRAPH_ENDING
 from SideKick.globals import NUM_OF_DATA_PTS, COLOUR_ORDER
@@ -146,19 +150,16 @@ class Graph:
             while len(self.graph_data[label]) > NUM_OF_DATA_PTS:
                 self.graph_data[label].pop(0)
 
-    def update_plots(self, num_of_plots:int):
+    def update_plots(self):
         """
-        Adds or removes old plots.
-
-        Args:
-            num_of_plots (int): the number of plots
+        TODO
         """
         # remove all graphs
         for item in self.plots:
             self.graph.removeItem(item)
 
         # add new graphs
-        for i, label in enumerate(self.graph_data.keys()):
+        for _, label in enumerate(self.graph_data.keys()):
             self.plots.append(self.graph.plot([0],[0], name=label))
 
     def update_graph(self):
