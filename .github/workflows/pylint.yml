@@ -45,9 +45,9 @@ jobs:
       run: |
         pylint ./SideKick/device_manager.py --disable=R0902,R1732
         
-    - name: Analysing widgets.py
+    - name: Analysing widgets
       run: |
-        pylint ./SideKick/widgets.py --disable=R0903,C0103
+        pylint ./widgets --disable=R0903,C0103
         
     - name: Analysing library.py
       run: |
