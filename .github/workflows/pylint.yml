@@ -47,7 +47,7 @@ jobs:
         
     - name: Analysing widgets
       run: |
-        pylint ./widgets --disable=R0903,C0103
+        pylint ./SideKick/widgets --disable=R0903,C0103
         
     - name: Analysing library.py
       run: |
